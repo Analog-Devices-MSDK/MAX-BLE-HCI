@@ -51,7 +51,7 @@
 ##############################################################################
 
 from enum import Enum
-from ._hci_packet_utils import PacketTypes, OGF, OCF
+from .packet_defs import PacketTypes
 
 
 def _byte_length(num):
@@ -94,7 +94,7 @@ class CommandPacket:
 
         """
         if not isinstance(ogf, int):
-            if isinstance(ogf, OGF):
+            if isinstance(ogf, Enum):
                 ogf = ogf.value
             else:
                 raise TypeError(

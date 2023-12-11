@@ -59,7 +59,7 @@ housed in the Analog Devices MSDK.
 """
 
 from .hci_packets import CommandPacket, EventPacket, AsyncPacket, ExtendedPacket
-from ._hci_packet_utils import OGF, OCF, PacketTypes, ADI_PORT_BAUD_RATE
+from .packet_defs import OGF, OCF, PacketTypes, ADI_PORT_BAUD_RATE
 
 import datetime
 import sys
@@ -190,7 +190,7 @@ class BleHci:
                 sys.exit(1)
             except TypeError as err:
                 self.logger.error("%s: %s", type(err).__name__, err)
-        cmd = CommandPacket(self.ogf.VENDOR_SPEC, self.ocf.VENDOR_SPEC.SET_BD_ADDR, params=addr)
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.SET_BD_ADDR, params=addr)
         return self._send_command(cmd.to_bytes())
 
     def start_advertising(
@@ -320,8 +320,8 @@ class BleHci:
 
     def _send_command(
         self,
-        pkt: bytearray,
-        delay: float = 0x1,
+        pkt: CommandPacket,
+        delay: float = 0.1,
         timeout: int = 6
     ) -> Union[EventPacket, AsyncPacket]:
         """Sends a command to the test board and retrieves the response.
@@ -331,8 +331,10 @@ class BleHci:
         """
         self.logger.info("%s  %s>%s", datetime.datetime.now(), self.id_tag, pkt.hex())
 
-        self.port.write(pkt)
+        self.port.flush()
+        self.port.write(pkt.to_bytes())
         time.sleep(delay)
+
 
         return self._wait_single(timeout=timeout)
 
