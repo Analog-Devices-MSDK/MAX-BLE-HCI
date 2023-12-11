@@ -116,7 +116,7 @@ class ControllerOCF(Enum):
     WRITE_AUTH_PAYLOAD_TO = 0x7C
     CONFIG_DATA_PATH = 0x83
 
-class _InformationalOCF(Enum):
+class InformationalOCF(Enum):
     READ_LOCAL_VER_INFO = 0x01
     READ_LOCAL_SUP_CMDS = 0x02
     READ_LOCAL_SUP_FEAT = 0x03
@@ -314,7 +314,7 @@ class OCF:
     LINK_CONTROL = LinkControlOCF
     LINK_POLICY = None
     CONTROLLER = ControllerOCF
-    INFORMATIONAL = _InformationalOCF
+    INFORMATIONAL = InformationalOCF
     STATUS = StatusOCF
     TESTING = None
     LE_CONTROLLER = LEControllerOCF
