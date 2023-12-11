@@ -54,6 +54,7 @@ from enum import Enum
 
 ADI_PORT_BAUD_RATE = 115200
 
+
 class PacketTypes(Enum):
     """
     BT Standard Packet Types
@@ -65,10 +66,12 @@ class PacketTypes(Enum):
     EVENT = 0x4
     EXTENDED = 0x9
 
+
 class EventCodes(Enum):
     """
     BT Sig Defined HCI Event Codes
     """
+
     DICON_COMPLETE = 0x05
     ENC_CHANGE = 0x08
     READ_REMOTE_VERSION_INFO_COMPLETE = 0x0C
@@ -80,10 +83,12 @@ class EventCodes(Enum):
     ENC_KEY_REFRESH_COMPLEET = 0x30
     AUTH_PAYLOAD_TIMEOUT_EXPIRED = 0x57
 
+
 class OGF(Enum):
     """
     BLE Specified Command OFG Values
     """
+
     NOP = 0x00
     LINK_CONTROL = 0x01
     LINK_POLICY = 0x02
@@ -94,6 +99,8 @@ class OGF(Enum):
     LE_CONTROLLER = 0x08
     VENDOR_SPEC = 0x3F
 
+
+class NOpOCF(Enum):
 class _NOpOCF(Enum):
     NOP = 0x00
 
@@ -101,6 +108,7 @@ class _LinkControlOCF(Enum):
     """
     BLE Specified Link Control Command OCF Values
     """
+
     DISCONNECT = 0x06
     READ_REMOTE_VER_INFO = 0x1D
 
@@ -116,7 +124,8 @@ class _ControllerOCF(Enum):
     WRITE_AUTH_PAYLOAD_TO = 0x7C
     CONFIG_DATA_PATH = 0x83
 
-class _InformationalOCF(Enum):
+
+class InformationalOCF(Enum):
     READ_LOCAL_VER_INFO = 0x01
     READ_LOCAL_SUP_CMDS = 0x02
     READ_LOCAL_SUP_FEAT = 0x03
@@ -308,6 +317,7 @@ class _VendorSpecificOCF(Enum):
     CCA = 0x306
     PHY_EN = 0x307
     PHY_DIS = 0x308
+
 
 class OCF:
     NOP = _NOpOCF

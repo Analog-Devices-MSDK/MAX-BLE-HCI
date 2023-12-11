@@ -51,7 +51,8 @@
 ##############################################################################
 
 from enum import Enum
-from .packet_defs import PacketTypes
+
+from .packet_defs import OCF, OGF, PacketTypes
 
 
 def _byte_length(num):
@@ -62,17 +63,25 @@ class CommandPacket:
     """
     Command Packet Class
     """
-    LITTLE = 'little'
-    BIG = 'big'
-    def __init__(self, ogf, ocf, params=None) -> None:
-        self.opcode = CommandPacket.make_hci_opcode(ogf, ocf)
-        if params:
-            if not isinstance(params, list):
-                params = [params]
-        
+
+    LITTLE = "little"
+    BIG = "big"
+
+    def __init__(self, ocf, ogf, params=None) -> None:
+        self.ocf = self._enum_to_int(ocf)
+        self.ogf = self._enum_to_int(ogf)
+        self.opcode = CommandPacket.make_hci_opcode(self.ocf, self.ogf)
         self.params = params
+
     def __repr__(self):
         return str(self.__dict__)
+
+    def _enum_to_int(self, num):
+        if not isinstance(num, int):
+            return num.value
+        else:
+            return num
+
     @staticmethod
     def make_hci_opcode(ogf, ocf):
         """Makes an HCI opcode.
@@ -98,14 +107,16 @@ class CommandPacket:
                 ogf = ogf.value
             else:
                 raise TypeError(
-                    "Parameter 'ogf' must be an integer or an OGF enumeration.")
+                    "Parameter 'ogf' must be an integer or an OGF enumeration."
+                )
 
         if not isinstance(ocf, int):
             if isinstance(ocf, Enum):
                 ocf = ocf.value
             else:
                 raise TypeError(
-                    "Parameter 'ogf' must be an integer or an OCF enumeration.")
+                    "Parameter 'ogf' must be an integer or an OCF enumeration."
+                )
 
         return (ogf << 10) | ocf
 
@@ -142,7 +153,7 @@ class AsyncPacket:
     def __init__(self, data) -> None:
         self.handle = (data[0] & 0xF0) + (data[1] << 8)
         self.pb_flag = (data[0] & 0xC) >> 2
-        self.bc_flag = (data[0] & 0x3)
+        self.bc_flag = data[0] & 0x3
         self.length = data[2] + (data[3] << 8)
         self.data = data[4:] if data[4:] else None
 
@@ -155,25 +166,31 @@ class AsyncPacket:
 
 
 class EventPacket:
-    def __init__(self, data) -> None:
-        self.evt_code = data[0]
-        self.length = data[1]
-        self.num_cmds = data[2]
-        self.opcode = (data[4] << 8) | data[3]
-        self.status = data[5]
-        self.return_vals = data[6:] if data[6:] else None
-        self.raw_return = data[2:]
+    def __init__(
+        self, evt_code, length, num_cmds, opcode, status, return_vals, raw_return
+    ) -> None:
+        self.evt_code = evt_code
+        self.length = length
+        self.num_cmds = num_cmds
+        self.opcode = opcode
+        self.status = status
+        self.return_vals = return_vals
+        self.raw_return = raw_return
+
+    def __repr__(self):
+        return str(self.__dict__)
 
     @staticmethod
     def from_bytes(serialized_event):
-        EventPacket(
+        return EventPacket(
             evt_code=serialized_event[0],
             length=serialized_event[1],
             num_cmds=serialized_event[2],
             opcode=(serialized_event[4] << 8) | serialized_event[3],
             status=serialized_event[5],
             return_vals=serialized_event[6:] if serialized_event[6:] else None,
-            raw_return=serialized_event[2:])
+            raw_return=serialized_event[2:],
+        )
 
 
 class ExtendedPacket:
@@ -181,6 +198,8 @@ class ExtendedPacket:
         self.opcode = data[0] + (data[1] << 8)
         self.length = data[2] + (data[3] << 8)
         self.payload = data[4:] if data[4:] else None
+    def __repr__(self):
+        return str(self.__dict__)
 
     @staticmethod
     def from_bytes(serialized_event):

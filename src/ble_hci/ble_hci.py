@@ -99,11 +99,12 @@ class BleHci:
             Command name to opcode map.
 
     """
+
     def __init__(
         self,
         port_id: str,
         mon_port_id: Optional[str] = None,
-        baud = ADI_PORT_BAUD_RATE,
+        baud=ADI_PORT_BAUD_RATE,
         id_tag: str = 'DUT',
         log_level: Union[str, int] = 'INFO',
         logger_name: str = 'BLE-HCI'
@@ -111,7 +112,7 @@ class BleHci:
         self.port = None
         self.mon_port = None
         self.id_tag = id_tag
-        self.logger =  logging.Logger(logger_name)
+        self.logger = logging.Logger(logger_name)
 
         self._init_ports(port_id=port_id, mon_port_id=mon_port_id, baud=baud)
         self.set_log_level(log_level)
@@ -132,7 +133,7 @@ class BleHci:
 
     def set_log_level(self, level: Union[str, int]) -> None:
         """Sets log level.
-        
+
         Provides intermediary control over the logging level
         of the host-controller interface module logger. If
         necessary, desired log level is automatically converted
@@ -143,12 +144,12 @@ class BleHci:
         ----------
         level : Union[int, str]
             Desired log level.
-        
+
         """
         if isinstance(level, int):
             self.logger.setLevel(level)
             return
-        
+
         ll_str = level.upper()
         if ll_str == "DEBUG":
             self.logger.setLevel(logging.DEBUG)
@@ -237,9 +238,9 @@ class BleHci:
         baud: int = ADI_PORT_BAUD_RATE
     ) -> None:
         """Initializes serial ports.
-        
+
         PRIVATE
-        
+
         """
         if self.port is not None:
             if self.port.is_open:
@@ -347,13 +348,28 @@ class BleHci:
         
         data = [evt_code, param_len]
         
+        for _ in range(int(param_len)):    
+            data.append(int.from_bytes(self.port.read(), 'little'))
 
-        for i in range(param_len):
-            data.append(self.port.read())
+        return EventPacket.from_bytes(data)
+    
+    def write_command(self, command: CommandPacket) -> EventPacket:
+        self.port.flush()
+        self.port.write(command.to_bytes())
+        return self.read_event()
+    def write_command_raw(self, data):
+        self.port.flush()
+        self.port.write(data)
+        return self.read_event()
 
-        return EventPacket(data)
-    def reset(self) ->EventPacket:
-        return self._write_command(CommandPacket(ocf=3, ogf=3, params=[0]))
-        
-        
-        
+    def reset(self) -> EventPacket:
+        """Sets log level.
+        Resets the controller
+
+        Returns
+        ----------
+        Event: EventPacket
+
+        """
+        return self.write_command(CommandPacket(ocf=OCF.CONTROLLER.RESET,
+                                                 ogf=OGF.CONTROLLER, params=[0]))

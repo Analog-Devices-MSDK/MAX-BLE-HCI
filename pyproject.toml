@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 packages = ["src/ble_hci"]
 
 [project]
-name = "max_ble_hci"
+name = "ble_hci"
 version = "0.0.0"
 dependencies = [
     "pyserial"
