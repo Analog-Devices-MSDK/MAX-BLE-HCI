@@ -52,7 +52,7 @@
 
 from enum import Enum
 
-from ._hci_packet_utils import OCF, OGF, PacketTypes
+from .packet_defs import OCF, OGF, PacketTypes
 
 
 def _byte_length(num):
@@ -76,8 +76,8 @@ class CommandPacket:
     def __repr__(self):
         return str(self.__dict__)
 
-    def _enum_to_int(self, enum_type: Enum, num):
-        if isinstance(enum_type, num):
+    def _enum_to_int(self, num):
+        if not isinstance(num, int):
             return num.value
         else:
             return num
@@ -103,7 +103,7 @@ class CommandPacket:
 
         """
         if not isinstance(ogf, int):
-            if isinstance(ogf, OGFF):
+            if isinstance(ogf, OGF):
                 ogf = ogf.value
             else:
                 raise TypeError(
@@ -181,7 +181,7 @@ class EventPacket:
 
     @staticmethod
     def from_bytes(serialized_event):
-        EventPacket(
+        return EventPacket(
             evt_code=serialized_event[0],
             length=serialized_event[1],
             num_cmds=serialized_event[2],
@@ -197,6 +197,8 @@ class ExtendedPacket:
         self.opcode = data[0] + (data[1] << 8)
         self.length = data[2] + (data[3] << 8)
         self.payload = data[4:] if data[4:] else None
+    def __repr__(self):
+        return str(self.__dict__)
 
     @staticmethod
     def from_bytes(serialized_event):

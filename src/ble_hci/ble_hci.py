@@ -58,18 +58,17 @@ housed in the Analog Devices MSDK.
 
 """
 
+from .hci_packets import CommandPacket, EventPacket, AsyncPacket, ExtendedPacket
+from .packet_defs import OGF, OCF, PacketTypes, ADI_PORT_BAUD_RATE
+from .packet_defs import OCF, OGF
+
 import datetime
-import logging
 import sys
 import time
+import logging
 from typing import Dict, List, Optional, Tuple, Union
 
 import serial
-
-from ._hci_packet_utils import ADI_PORT_BAUD_RATE, OCF, OGF, PacketTypes
-from .hci_packets import (AsyncPacket, CommandPacket, EventPacket,
-                          ExtendedPacket)
-from .packet_defs import OCF, OGF
 
 
 class BleHci:
@@ -107,9 +106,9 @@ class BleHci:
         port_id: str,
         mon_port_id: Optional[str] = None,
         baud=ADI_PORT_BAUD_RATE,
-        id_tag: str = "DUT",
-        log_level: Union[str, int] = "INFO",
-        logger_name: str = "BLE-HCI",
+        id_tag: str = 'DUT',
+        log_level: Union[str, int] = 'INFO',
+        logger_name: str = 'BLE-HCI'
     ) -> None:
         self.port = None
         self.mon_port = None
@@ -166,14 +165,13 @@ class BleHci:
         else:
             self.logger.setLevel(logging.NOTSET)
             self.logger.warning(
-                f"Invalid log level string: {ll_str}, level set to 'logging.NOTSET'"
-            )
+                f"Invalid log level string: {ll_str}, level set to 'logging.NOTSET'")
 
     def _init_ports(
         self,
         port_id: Optional[str] = None,
         mon_port_id: Optional[str] = None,
-        baud: int = ADI_PORT_BAUD_RATE,
+        baud: int = ADI_PORT_BAUD_RATE
     ) -> None:
         """Initializes serial ports.
 
@@ -199,7 +197,7 @@ class BleHci:
                 bytesize=serial.EIGHTBITS,
                 rtscts=False,
                 dsrdtr=False,
-                timeout=2.0,
+                timeout=2.0
             )
             if mon_port_id:
                 self.mon_port = serial.Serial(
@@ -210,7 +208,7 @@ class BleHci:
                     bytesize=serial.EIGHTBITS,
                     rtscts=False,
                     dsrdtr=False,
-                    timeout=2.0,
+                    timeout=2.0
                 )
         except serial.SerialException as err:
             self.logger.error("%s: %s", type(err).__name__, err)
@@ -231,21 +229,36 @@ class BleHci:
 
         if evt_type == PacketTypes.ASYNC:
             pass
+    def read_event(self):
+        _  = int.from_bytes(self.port.read(1),'little') #packet type 
 
+        evt_code = int.from_bytes(self.port.read(1),'little')
+        param_len = int.from_bytes(self.port.read(1), 'little')
+
+        data = [evt_code, param_len]
+        
+        for _ in range(int(param_len)):    
+            data.append(int.from_bytes(self.port.read(), 'little'))
+
+        return EventPacket.from_bytes(data)
+    
     def write_command(self, command: CommandPacket) -> EventPacket:
         self.port.flush()
         self.port.write(command.to_bytes())
-        evt_code = self.port.read(1)
-        param_len = self.port.read(1)
-
-        data = [evt_code, param_len]
-
-        for i in range(param_len):
-            data.append(self.port.read())
-
-        return EventPacket(data)
+        return self.read_event()
+    def write_command_raw(self, data):
+        self.port.flush()
+        self.port.write(data)
+        return self.read_event()
 
     def reset(self) -> EventPacket:
-        return self._write_command(
-            CommandPacket(ocf=OCF.CONTROLLER.RESET, ogf=OGF.CONTROLLER, params=[0])
-        )
+        """Sets log level.
+        Resets the controller
+
+        Returns
+        ----------
+        Event: EventPacket
+
+        """
+        return self.write_command(CommandPacket(ocf=OCF.CONTROLLER.RESET,
+                                                 ogf=OGF.CONTROLLER, params=[0]))
