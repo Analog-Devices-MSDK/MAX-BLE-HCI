@@ -164,7 +164,72 @@ class BleHci:
             self.logger.setLevel(logging.NOTSET)
             self.logger.warning(
                 f"Invalid log level string: {ll_str}, level set to 'logging.NOTSET'")
-            
+
+    def set_address(self, addr: Union[List[int], bytearray]) -> EventPacket:
+        """Sets the BD address.
+
+        Function sets the chip BD address. Address can be given
+        as either a bytearray or as a list of integer values.
+
+        Parameters
+        ----------
+        addr : Union[List[int], bytearray]
+            Desired BD address.
+
+        Returns
+        -------
+        EventPacket
+            Object containing board return data.
+
+        """
+        if isinstance(addr, list):
+            try:
+                addr = bytearray(addr)
+            except ValueError as err:
+                self.logger.error("%s: %s", type(err).__name__, err)
+                sys.exit(1)
+            except TypeError as err:
+                self.logger.error("%s: %s", type(err).__name__, err)
+        cmd = CommandPacket(self.ogf.VENDOR_SPEC, self.ocf.VENDOR_SPEC.SET_BD_ADDR, params=addr)
+        return self._send_command(cmd.to_bytes())
+
+    def start_advertising(
+        self,
+        interval: int = 0x60,
+        connect: bool = True,
+        listen: Union[bool, int] = False
+    ) -> EventPacket:
+        """Command board to start advertising.
+
+        Sends a command to the board, telling it to start advertising
+        with the given interval. Advertising type can be either
+        scannable/connectable or non-connectable in accordance with
+        the `connect` argument. HCI can be directed to listen for
+        events for either a finite number or seconds or indefinitely
+        in accordance with the `listen` argument. Indefinite listening
+        can only be ended with `CTRL-C`. A test end function must be
+        called to end this process on the board.
+
+        Parameters
+        ----------
+        interval : int
+            The advertising interval.
+        connect : bool
+            Use scannable/connectable advertising type?
+        listen : Union[bool, int]
+            Listen (indefinitely or finite) for incoming events?
+
+        Returns
+        -------
+        EventPacket
+            Object containing board return data.
+
+        """
+        peer_addr = bytearray([0x0, 0x0, 0x0, 0x0, 0x0, 0x0])
+        self._setup_event_masks()
+
+        cmd = CommandPacket(self.ogf.LE_CONTROLLER, self.ocf.LE_CONTROLLER.SET_DEF_PHY)
+
     def _init_ports(
         self,
         port_id: Optional[str] = None,
@@ -216,7 +281,7 @@ class BleHci:
             self.logger.error("%s: %s", type(err).__name__, err)
             sys.exit(1)
 
-    def _wait_single(self, timeout: float = 6.0) -> EventPacket:
+    def _wait_single(self, timeout: float = 6.0) -> Union[EventPacket, AsyncPacket]:
         """Wait for a single event"""
         self.port.timeout = timeout
         evt_type = self.port.read(size=1)
@@ -225,8 +290,52 @@ class BleHci:
             self.port.flush()
             return None
 
+        ##TODO: get full event
+        evt = self.port.read()
+        self.logger.info("%s  %s<%s", datetime.datetime.now(), self.id_tag, evt.hex())
+
         if evt_type == PacketTypes.ASYNC:
-            pass
+            return AsyncPacket.from_bytes(evt)
+        if evt_type == PacketTypes.EVENT:
+            return EventPacket.from_bytes(evt)
+        
+    def _wait_multiple(self, seconds: int = 2) -> None:
+        """Wait for events from the test board for a few seconds.
+        
+        PRIVATE
+        
+        """
+        start_time = datetime.datetime.now()
+        delta = datetime.datetime.now() - start_time
+
+        while True:
+            if seconds != 0:
+                if delta.seconds > seconds:
+                    break
+            
+            self._wait_single(timeout=0.1)
+            delta = datetime.datetime.now() - start_time
+            if (delta.seconds > 30) and (delta.seconds % 30 == 0):
+                self.logger.info("%s |", datetime.datetime.now())
+
+    def _send_command(
+        self,
+        pkt: bytearray,
+        delay: float = 0x1,
+        timeout: int = 6
+    ) -> Union[EventPacket, AsyncPacket]:
+        """Sends a command to the test board and retrieves the response.
+        
+        PRIVATE
+        
+        """
+        self.logger.info("%s  %s>%s", datetime.datetime.now(), self.id_tag, pkt.hex())
+
+        self.port.write(pkt)
+        time.sleep(delay)
+
+        return self._wait_single(timeout=timeout)
+
 
     def write_command(self, command : CommandPacket) -> EventPacket:
         self.port.flush()

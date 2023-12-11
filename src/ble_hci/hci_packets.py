@@ -64,9 +64,12 @@ class CommandPacket:
     """
     LITTLE = 'little'
     BIG = 'big'
-
-    def __init__(self, ocf, ogf, params=None) -> None:
+    def __init__(self, ogf, ocf, params=None) -> None:
         self.opcode = CommandPacket.make_hci_opcode(ogf, ocf)
+        if params:
+            if not isinstance(params, list):
+                params = [params]
+        
         self.params = params
     def __repr__(self):
         return str(self.__dict__)
@@ -98,7 +101,7 @@ class CommandPacket:
                     "Parameter 'ogf' must be an integer or an OGF enumeration.")
 
         if not isinstance(ocf, int):
-            if isinstance(OCF, Enum):
+            if isinstance(ocf, Enum):
                 ocf = ocf.value
             else:
                 raise TypeError(
@@ -126,10 +129,11 @@ class CommandPacket:
         serialized_cmd.append(self.opcode & 0xFF)
         serialized_cmd.append((self.opcode & 0xFF00) >> 8)
 
-        for param in self.params:
-            num_bytes = _byte_length(param)
+        if self.params:
+            for param in self.params:
+                num_bytes = _byte_length(param)
 
-            serialized_cmd.extend(param.to_bytes(num_bytes, endianness))
+                serialized_cmd.extend(param.to_bytes(num_bytes, endianness))
 
         return serialized_cmd
 
@@ -151,16 +155,14 @@ class AsyncPacket:
 
 
 class EventPacket:
-    def __init__(self, evt_code, length, num_cmds, opcode, status, return_vals, raw_return) -> None:
-        self.evt_code = evt_code
-        self.length = length
-        self.num_cmds = num_cmds
-        self.opcode = opcode
-        self.status = status
-        self.return_vals = return_vals
-        self.raw_return = raw_return
-    def __repr__(self):
-        return str(self.__dict__)
+    def __init__(self, data) -> None:
+        self.evt_code = data[0]
+        self.length = data[1]
+        self.num_cmds = data[2]
+        self.opcode = (data[4] << 8) | data[3]
+        self.status = data[5]
+        self.return_vals = data[6:] if data[6:] else None
+        self.raw_return = data[2:]
 
     @staticmethod
     def from_bytes(serialized_event):
