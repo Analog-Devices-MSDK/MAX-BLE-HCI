@@ -58,7 +58,7 @@ housed in the Analog Devices MSDK.
 
 """
 
-from ._hci_packets import CommandPacket, EventPacket, AsyncPacket, ExtendedPacket
+from .hci_packets import CommandPacket, EventPacket, AsyncPacket, ExtendedPacket
 from ._hci_packet_utils import OGF, OCF, PacketTypes, ADI_PORT_BAUD_RATE
 
 import datetime
@@ -111,9 +111,7 @@ class BleHci:
         self.port = None
         self.mon_port = None
         self.id_tag = id_tag
-        self.logger: logging.Logger()
-        self.ogf = OGF()
-        self.ocf = OCF()
+        self.logger =  logging.Logger(logger_name)
 
         self._init_ports(port_id=port_id, mon_port_id=mon_port_id, baud=baud)
         self.set_log_level(log_level)
@@ -151,7 +149,7 @@ class BleHci:
             self.logger.setLevel(level)
             return
         
-        ll_str = ll_str.upper()
+        ll_str = level.upper()
         if ll_str == "DEBUG":
             self.logger.setLevel(logging.DEBUG)
         elif ll_str == "INFO":
@@ -229,3 +227,22 @@ class BleHci:
 
         if evt_type == PacketTypes.ASYNC:
             pass
+
+    def write_command(self, command : CommandPacket) -> EventPacket:
+        self.port.flush()
+        self.port.write(command.to_bytes())
+        evt_code = self.port.read(1)
+        param_len = self.port.read(1)    
+        
+        data = [evt_code, param_len]
+        
+
+        for i in range(param_len):
+            data.append(self.port.read())
+
+        return EventPacket(data)
+    def reset(self) ->EventPacket:
+        return self._write_command(CommandPacket(ocf=3, ogf=3, params=[0]))
+        
+        
+        
