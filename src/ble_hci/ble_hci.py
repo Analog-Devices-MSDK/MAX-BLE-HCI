@@ -58,16 +58,18 @@ housed in the Analog Devices MSDK.
 
 """
 
-from .hci_packets import CommandPacket, EventPacket, AsyncPacket, ExtendedPacket
-from ._hci_packet_utils import OGF, OCF, PacketTypes, ADI_PORT_BAUD_RATE
-
 import datetime
+import logging
 import sys
 import time
-import logging
 from typing import Dict, List, Optional, Tuple, Union
 
 import serial
+
+from ._hci_packet_utils import ADI_PORT_BAUD_RATE, OCF, OGF, PacketTypes
+from .hci_packets import (AsyncPacket, CommandPacket, EventPacket,
+                          ExtendedPacket)
+from .packet_defs import OCF, OGF
 
 
 class BleHci:
@@ -99,19 +101,20 @@ class BleHci:
             Command name to opcode map.
 
     """
+
     def __init__(
         self,
         port_id: str,
         mon_port_id: Optional[str] = None,
-        baud = ADI_PORT_BAUD_RATE,
-        id_tag: str = 'DUT',
-        log_level: Union[str, int] = 'INFO',
-        logger_name: str = 'BLE-HCI'
+        baud=ADI_PORT_BAUD_RATE,
+        id_tag: str = "DUT",
+        log_level: Union[str, int] = "INFO",
+        logger_name: str = "BLE-HCI",
     ) -> None:
         self.port = None
         self.mon_port = None
         self.id_tag = id_tag
-        self.logger =  logging.Logger(logger_name)
+        self.logger = logging.Logger(logger_name)
 
         self._init_ports(port_id=port_id, mon_port_id=mon_port_id, baud=baud)
         self.set_log_level(log_level)
@@ -132,7 +135,7 @@ class BleHci:
 
     def set_log_level(self, level: Union[str, int]) -> None:
         """Sets log level.
-        
+
         Provides intermediary control over the logging level
         of the host-controller interface module logger. If
         necessary, desired log level is automatically converted
@@ -143,12 +146,12 @@ class BleHci:
         ----------
         level : Union[int, str]
             Desired log level.
-        
+
         """
         if isinstance(level, int):
             self.logger.setLevel(level)
             return
-        
+
         ll_str = level.upper()
         if ll_str == "DEBUG":
             self.logger.setLevel(logging.DEBUG)
@@ -163,18 +166,19 @@ class BleHci:
         else:
             self.logger.setLevel(logging.NOTSET)
             self.logger.warning(
-                f"Invalid log level string: {ll_str}, level set to 'logging.NOTSET'")
-            
+                f"Invalid log level string: {ll_str}, level set to 'logging.NOTSET'"
+            )
+
     def _init_ports(
         self,
         port_id: Optional[str] = None,
         mon_port_id: Optional[str] = None,
-        baud: int = ADI_PORT_BAUD_RATE
+        baud: int = ADI_PORT_BAUD_RATE,
     ) -> None:
         """Initializes serial ports.
-        
+
         PRIVATE
-        
+
         """
         if self.port is not None:
             if self.port.is_open:
@@ -195,7 +199,7 @@ class BleHci:
                 bytesize=serial.EIGHTBITS,
                 rtscts=False,
                 dsrdtr=False,
-                timeout=2.0
+                timeout=2.0,
             )
             if mon_port_id:
                 self.mon_port = serial.Serial(
@@ -206,7 +210,7 @@ class BleHci:
                     bytesize=serial.EIGHTBITS,
                     rtscts=False,
                     dsrdtr=False,
-                    timeout=2.0
+                    timeout=2.0,
                 )
         except serial.SerialException as err:
             self.logger.error("%s: %s", type(err).__name__, err)
@@ -228,21 +232,20 @@ class BleHci:
         if evt_type == PacketTypes.ASYNC:
             pass
 
-    def write_command(self, command : CommandPacket) -> EventPacket:
+    def write_command(self, command: CommandPacket) -> EventPacket:
         self.port.flush()
         self.port.write(command.to_bytes())
         evt_code = self.port.read(1)
-        param_len = self.port.read(1)    
-        
+        param_len = self.port.read(1)
+
         data = [evt_code, param_len]
-        
 
         for i in range(param_len):
             data.append(self.port.read())
 
         return EventPacket(data)
-    def reset(self) ->EventPacket:
-        return self._write_command(CommandPacket(ocf=3, ogf=3, params=[0]))
-        
-        
-        
+
+    def reset(self) -> EventPacket:
+        return self._write_command(
+            CommandPacket(ocf=OCF.CONTROLLER.RESET, ogf=OGF.CONTROLLER, params=[0])
+        )

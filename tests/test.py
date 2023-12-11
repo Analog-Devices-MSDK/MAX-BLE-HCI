@@ -1,8 +1,8 @@
 
-
+from ble_hci import BleHci 
 import unittest
 
-class TestStringMethods(unittest.TestCase):
+class TestHci(unittest.TestCase):
 
     def test_upper(self):
         self.assertEqual('foo'.upper(), 'FOO')

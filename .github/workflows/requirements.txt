@@ -1,0 +1,9 @@
+matplotlib>=3.7.1
+numpy>=1.24.2
+pandas>=2.0.0
+pyserial>=3.4
+pyusb>=1.2.1
+PyVISA>=1.13.0
+PyVISA-py>=0.7.1
+reportlab>=3.5.34
+seaborn>=0.13.0

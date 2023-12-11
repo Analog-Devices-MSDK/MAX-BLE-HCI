@@ -54,6 +54,7 @@ from enum import Enum
 
 ADI_PORT_BAUD_RATE = 115200
 
+
 class PacketTypes(Enum):
     """
     BT Standard Packet Types
@@ -65,10 +66,12 @@ class PacketTypes(Enum):
     EVENT = 0x4
     EXTENDED = 0x9
 
+
 class EventCodes(Enum):
     """
     BT Sig Defined HCI Event Codes
     """
+
     DICON_COMPLETE = 0x05
     ENC_CHANGE = 0x08
     READ_REMOTE_VERSION_INFO_COMPLETE = 0x0C
@@ -80,10 +83,12 @@ class EventCodes(Enum):
     ENC_KEY_REFRESH_COMPLEET = 0x30
     AUTH_PAYLOAD_TIMEOUT_EXPIRED = 0x57
 
+
 class OGF(Enum):
     """
     BLE Specified Command OFG Values
     """
+
     NOP = 0x00
     LINK_CONTROL = 0x01
     LINK_POLICY = 0x02
@@ -94,15 +99,19 @@ class OGF(Enum):
     LE_CONTROLLER = 0x08
     VENDOR_SPEC = 0x3F
 
+
 class NOpOCF(Enum):
     NOP = 0x00
+
 
 class LinkControlOCF(Enum):
     """
     BLE Specified Link Control Command OCF Values
     """
+
     DISCONNECT = 0x06
     READ_REMOTE_VER_INFO = 0x1D
+
 
 class ControllerOCF(Enum):
     SET_EVENT_MASK = 0x01
@@ -116,6 +125,7 @@ class ControllerOCF(Enum):
     WRITE_AUTH_PAYLOAD_TO = 0x7C
     CONFIG_DATA_PATH = 0x83
 
+
 class InformationalOCF(Enum):
     READ_LOCAL_VER_INFO = 0x01
     READ_LOCAL_SUP_CMDS = 0x02
@@ -126,8 +136,10 @@ class InformationalOCF(Enum):
     READ_LOCAL_SUP_CODEC_CAP = 0x0E
     READ_LOCAL_SUP_CONTROLLER_DLY = 0x0F
 
+
 class StatusOCF(Enum):
     READ_RSSI = 0x05
+
 
 class LEControllerOCF(Enum):
     SET_EVENT_MASK = 0x01
@@ -252,6 +264,7 @@ class LEControllerOCF(Enum):
     SET_PATH_LOSS_REPORTING_ENABLE = 0x79
     SET_TX_POWER_REPORT_ENABLE = 0x7A
 
+
 class VendorSpecificOCF(Enum):
     SET_SCAN_CH_MAP = 0x3E0
     SET_EVENT_MASK = 0x3E1
@@ -308,6 +321,7 @@ class VendorSpecificOCF(Enum):
     CCA = 0x306
     PHY_EN = 0x307
     PHY_DIS = 0x308
+
 
 class OCF:
     NOP = NOpOCF
