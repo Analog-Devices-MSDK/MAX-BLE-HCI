@@ -57,17 +57,99 @@ functionality, and is designed to be used with the `BLE5_ctrl` example
 housed in the Analog Devices MSDK.
 
 """
-
-from .hci_packets import CommandPacket, EventPacket, AsyncPacket, ExtendedPacket
-from .packet_defs import OGF, OCF, PacketTypes, ADI_PORT_BAUD_RATE
-
 import datetime
 import sys
 import time
 import logging
+from enum import Enum
 from typing import Dict, List, Optional, Tuple, Union
 
 import serial
+
+# pylint: disable=unused-import
+from .hci_packets import (
+    AsyncPacket,
+    CommandPacket,
+    EventPacket,
+    ExtendedPacket,
+    _byte_length,
+)
+from .packet_defs import (
+    ADI_PORT_BAUD_RATE,
+    OCF,
+    OGF,
+    EventCode,
+    PacketType,
+    PubKeyValidateMode,
+)
+
+
+class PhyOption(Enum):
+    """PHY Options"""
+
+    P1M = 1
+    P2M = 2
+    PCODED = 3
+
+
+def _to_le_nbyte_list(value: int, n_bytes: int):
+    little_endian = []
+    for i in range(n_bytes):
+        num_masked = (value << 8 * i) >> (8 * i)
+        little_endian.append(num_masked)
+
+
+def _to_le16_list(value: int):
+    return [value & 0xFF, (value >> 8) & 0xFF]
+
+
+def _to_le16_list(value: int):
+    return [value & 0xFF, (value >> 8) & 0xFF]
+
+
+def _le_list_to_int(nums: List[int]) -> int:
+    full_num = 0
+    for i, num in enumerate(nums):
+        full_num |= num << 8 * i
+    return full_num
+
+
+def to_little_endian_list(value) -> List[int]:
+    """Convert an int to a list of byte components in little endian format
+    Parameters
+    ----------
+    vale: int
+        value to convert to little endian
+    Returns
+    -------
+    int
+       value as list little endian
+    """
+
+    big_endian_bytes = value.to_bytes((value.bit_length() + 7) // 8, byteorder="big")
+
+    little_endian_bytes = big_endian_bytes[::-1]
+
+    return [int.from_bytes(byte, byteorder="big") for byte in little_endian_bytes]
+
+
+def to_little_endian(value) -> int:
+    """Convert an int to a to little endian format
+    Parameters
+    ----------
+    vale: int
+        value to convert to little endian
+    Returns
+    -------
+    int
+       value as little endian
+    """
+
+    big_endian_bytes = value.to_bytes((value.bit_length() + 7) // 8, byteorder="big")
+
+    little_endian_bytes = big_endian_bytes[::-1]
+
+    return int.from_bytes(little_endian_bytes, byteorder="big")
 
 
 class BleHci:
@@ -111,12 +193,14 @@ class BleHci:
         baud=ADI_PORT_BAUD_RATE,
         id_tag: str = 'DUT',
         log_level: Union[str, int] = 'INFO',
-        logger_name: str = 'BLE-HCI'
+        logger_name: str = 'BLE-HCI',
+        retries: int = 0
     ) -> None:
         self.port = None
         self.mon_port = None
         self.id_tag = id_tag
         self.logger = logging.Logger(logger_name)
+        self.retries = retries
 
         self._init_ports(port_id=port_id, mon_port_id=mon_port_id, baud=baud)
         self.set_log_level(log_level)
@@ -231,7 +315,9 @@ class BleHci:
             Object containing board return data.
 
         """
-        self.set_event_mask()
+        self.set_event_mask(0xFFFFFFFFFFFFFFFF, mask_pg2=0xFFFFFFFFFFFFFFFF)
+        self.set_event_mask(0xFFFFFFFFFFFFFFFF)
+        self.set_event_mask_le(0xFFFFFFFFFFFFFFFF)
 
         cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.RESET_CONN_STATS, 0)
         self._send_command(cmd)
@@ -290,7 +376,9 @@ class BleHci:
             The scan interval.
 
         """
-        self.set_event_mask()
+        self.set_event_mask(0xFFFFFFFFFFFFFFFF, mask_pg2=0xFFFFFFFFFFFFFFFF)
+        self.set_event_mask(0xFFFFFFFFFFFFFFFF)
+        self.set_event_mask_le(0xFFFFFFFFFFFFFFFF)
 
         params = [
             0x1,                            # LE Scan Type
@@ -360,7 +448,9 @@ class BleHci:
                 self.logger.error("%s: %s", type(err).__name__, err)
                 sys,exit(1)
         
-        self.set_event_mask()
+        self.set_event_mask(0xFFFFFFFFFFFFFFFF, mask_pg2=0xFFFFFFFFFFFFFFFF)
+        self.set_event_mask(0xFFFFFFFFFFFFFFFF)
+        self.set_event_mask_le(0xFFFFFFFFFFFFFFFF)
 
         cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.RESET_CONN_STATS, 0x0)
         self._send_command(cmd)
@@ -423,16 +513,39 @@ class BleHci:
 
         return evt
 
-    def send_acl(self, packet_len: int, num_packets: int) -> EventPacket:
-        """Command board to send ACL data.
+    def enable_autogenerate_acl(self, enable) -> EventPacket:
+        #TODO: check params please
+        """Enable automatic generation of ACL packets.
 
-        Sends a command to the board telling it to send ACL data
+        Parameters
+        ----------
+        enable: bool
+            Enable automatic ACL packet generation?
+
+        Returns
+        -------
+        Event
+            Object containing board return data.
+
+        
+
+        """
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GENERATE_ACL, 1, params=int(enable))
+        evt = self._send_command(cmd)
+        return evt
+    
+    def generate_acl(self, handle: int, packet_len: int, num_packets: int) -> EventCode:
+        """Command board to generate ACL data.
+
+        Sends a command to the board telling it to generate/send ACL data
         in accordance with the provided packet length and number
         of packets. A test end function must be called to end this
         process on the board.
 
         Parameters
         ----------
+        handle : int
+            Connection handle.
         packet_len : int
             Desired packet length.
         num_packets : int
@@ -440,88 +553,59 @@ class BleHci:
 
         Returns
         -------
-        Event
-            Object containing board return data.
+        EventCode
+            Process status code.
+
+        Raises
+        ------
+        ValueError
+            If the handle is greater than 65535.
+        ValueError
+            If packet length greater than 65535.
+        ValueError
+            If number of packets greater than 255.
 
         """
+        if _byte_length(handle) > 2:
+            raise ValueError(f"Handle too large! {handle}")
+        
         if packet_len > 0xFFFF:
-            self.logger.error(f"Invalid packet length {packet_len}. Must be less than 65536.")
-            sys.exit(1)
+            raise ValueError(f"Invalid packet length {packet_len}. Must be less than 65536.")
 
         if num_packets > 0xFF:
-            self.logger.error(
+            raise ValueError(
                 f"Invalid number of packets: {num_packets}. Must be less than 256.")
-            sys.exit(1)
 
-        if num_packets == 0:
-            cmd = CommandPacket(
-                OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.ENA_AUTO_GEN_ACL, 2, params=packet_len)
-            evt = self._send_command(cmd)
-            return evt
-
-        cmd = CommandPacket(
-            OGF.VENDOR_SPEC,
-            OCF.VENDOR_SPEC.GENERATE_ACL,
-            5, 
-            params=[0x0000, packet_len, num_packets]
-        )
+        params = [
+            handle,
+            packet_len,
+            num_packets
+        ]
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GENERATE_ACL, 5, params=params)
         evt = self._send_command(cmd)
-        return evt
 
-    def sink_acl(self) -> EventPacket:
+        return evt.status
+
+    def enable_acl_sink(self, enable: bool) -> EventCode:
         """Command board to sink ACL data.
 
         Sends a command to the board, telling it to sink
         incoming ACL data.
 
+        Parameters
+        ----------
+        enable : bool
+            Enable ACL sink?
+
         Returns
         -------
         Event
             Object containing board return data.
 
         """
-        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.ENA_ACL_SINK, 1, params=0x1)
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.ENA_ACL_SINK, 1, params=int(enable))
         evt = self._send_command(cmd)
         return evt
-
-    def get_connection_stats(self, retries: int = 5) -> float:
-        """Gets and parses connection stats.
-
-        Sends a command to the board, telling it to return
-        a connection statistics packet. Function then attempts
-        to parse the packet and calculate the current connection
-        PER%. Function will attempt this process for the given
-        number of retries.
-
-        Parameters
-        ----------
-        retries : int
-            Amount of times to attempt to collect and parse the
-            connection statistics.
-
-        Returns
-        -------
-        float
-            The current connection PER as a percentage.
-
-        """
-        per = None,
-        clear = False
-        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GET_CONN_STATS, 0)
-
-        while per is None and retries > 0:
-            evt = self._send_command(cmd)
-            if clear:
-                self._wait(seconds=1)
-            else:
-                clear = True
-
-            per = self._parse_conn_stats_evt(evt)
-            retries -= 1
-        if retries == 0 and per is None:
-            self.logger.warning("Failed to get connection stats.")
-
-        return per
 
     def set_phy(self, phy: int = 1, timeout: int = 3) -> EventPacket:
         """Set the PHY.
@@ -862,7 +946,7 @@ class BleHci:
         Parameters
         ----------
         power : int
-            The desired TX power value.
+            The desired TX power value in dBm.
 
         Returns
         -------
@@ -870,7 +954,15 @@ class BleHci:
             Object containing board return data from setting the
             advertising power.
 
+        Raises
+        ------
+        ValueError
+            If desired TX power is not between -127dBm and 127dBm
+
         """
+        if not (-127 < tx_power < 127):
+            raise ValueError("TX power must be between -127 and 127.")
+
         cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.SET_ADV_TX_PWR, 1, params=tx_power)
         evt = self._send_command(cmd)
         return evt
@@ -894,7 +986,15 @@ class BleHci:
             Object containing board return data from setting the
             connection power.
 
+        Raises
+        ------
+        ValueError
+            If desired TX power is not between -127dBm and 127dBm
+
         """
+        if not (-127 < tx_power < 127):
+            raise ValueError("TX power must be between -127 and 127.")
+
         params = [
             handle,
             tx_power
@@ -929,9 +1029,8 @@ class BleHci:
     def set_channel_map(
         self,
         channels: Optional[Union[List[int], int]] = None,
-        mask: Optional[int] = None,
         handle: int = 0,
-    ) -> EventPacket:
+    ) -> EventCode:
         """Set the channel map.
 
         Creates a channel map/mask based on the given arguments
@@ -956,17 +1055,14 @@ class BleHci:
         if not isinstance(channels, list):
             channels = [channels]
 
-        if mask is None:
-            if channels is None:             # Use all channels
-                channel_mask = 0xFFFFFFFFFF
-            elif channels == 0:              # Use channels 0 and 1
-                channel_mask = 0x0000000003
-            else:                           # Mask the given channel(s)
-                channel_mask = 0x0000000001
-                for chan in channels:
-                    channel_mask = channel_mask | (1 << chan)
-        else:
-            channel_mask = mask
+        if channels is None:             # Use all channels
+            channel_mask = 0xFFFFFFFFFF
+        elif channels == 0:              # Use channels 0 and 1
+            channel_mask = 0x0000000003
+        else:                           # Mask the given channel(s)
+            channel_mask = 0x0000000001
+            for chan in channels:
+                channel_mask = channel_mask | (1 << chan)
 
         channel_mask = channel_mask & ~(0xE000000000)
         self.logger.info("Channel Mask: 0x%X", channel_mask)
@@ -978,54 +1074,7 @@ class BleHci:
         cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.SET_CHAN_MAP, 10, params=params)
         evt = self._send_command(cmd)
 
-        return evt
-
-    def command(
-        self,
-        command: CommandPacket,
-        listen: Union[bool, int] = False,
-        timeout: int = 6,
-    ) -> EventPacket:
-        """Send a custom command to the board.
-
-        Sends a custom HCI command to the board. Safeguarding is
-        not implemented, and therefore it is best to ensure desired
-        command is supported prior to sending, and no error will
-        be thrown for unsupported commands. The `command` argument will
-        accept either a string or an integer value, however, string values
-        must be in hex format, and integers must have originated from hex
-        numbers. HCI can be directed to listen for events for either a finite
-        number or seconds or indefinitely in accordance with the `listen`
-        argument. Indefinite listening can only be ended with `CTRL-C`.
-
-        Parameters
-        ----------
-        command : Union[str, int]
-            The command to give the board. Can be a string or an integer.
-            String input must be formatted as hex values.
-        listen : Union[bool, int]
-            Listen (finite or indefinite) for further events?
-        timeout : int
-            Command timeout. Set to None for indefinite.
-
-        Returns
-        -------
-        Event
-            Object containing board return data.
-
-        """
-        evt = self._send_command(command)
-
-        if not listen:
-            return evt
-        
-        if isinstance(listen, int):
-            self._wait(seconds=listen)
-        else:
-            while True:
-                self._wait(seconds=0)
-
-        return evt
+        return evt.status
 
     def read_register(self, addr: Union[List[int], bytearray], length: int) -> List[int]:
         """Read data from a specific register.
@@ -1137,39 +1186,1167 @@ class BleHci:
 
         return evt
 
-    def set_event_mask(self) -> int:
-        """Create/setup test board event masks.
+    def read_event(self, timeout: float = 1) -> EventPacket:
+        timeout_err = None
+        tries = self.retries
+        while tries >= 0:
+            try:
+                return self._retrieve_event(timeout=timeout)
+            except TimeoutError as err:
+                tries -= 1
+                timeout_err = err
+                self.logger.warning(
+                    f"Timeout occured. Retrying. {self.retries - tries} retries remaining.")
+        
+        raise TimeoutError("Timeout occured. No retries remaining.") from timeout_err
+
+    def write_command(
+        self,
+        command: CommandPacket,
+        listen: Union[bool, int] = False,
+        timeout: int = 6,
+    ) -> EventPacket:
+        """Send a custom command to the board.
+
+        Sends a custom HCI command to the board. Safeguarding is
+        not implemented, and therefore it is best to ensure desired
+        command is supported prior to sending, and no error will
+        be thrown for unsupported commands. The `command` argument will
+        accept either a string or an integer value, however, string values
+        must be in hex format, and integers must have originated from hex
+        numbers. HCI can be directed to listen for events for either a finite
+        number or seconds or indefinitely in accordance with the `listen`
+        argument. Indefinite listening can only be ended with `CTRL-C`.
+
+        Parameters
+        ----------
+        command : Union[str, int]
+            The command to give the board. Can be a string or an integer.
+            String input must be formatted as hex values.
+        listen : Union[bool, int]
+            Listen (finite or indefinite) for further events?
+        timeout : int
+            Command timeout. Set to None for indefinite.
 
         Returns
         -------
-        int
-            Process statuses, 0x0 if all done correctly. Else,
-            counts the number of failed processes.
+        Event
+            Object containing board return data.
 
         """
-        mask = 0xFFFFFFFFFFFFFFFF
-        status = 0
+        evt = self._send_command(command, timeout=timeout)
+
+        if not listen:
+            return evt
+        
+        if isinstance(listen, int):
+            self._wait(seconds=listen)
+        else:
+            while True:
+                self._wait(seconds=10)
+
+        return evt
+
+    def write_command_raw(
+        self,
+        data: bytearray,
+        listen: Union[bool, int] = False,
+        timeout: int = 6,
+    ) -> EventPacket:
+        """Send a custom bytearray command to the board.
+
+        Sends a custom HCI command to the board as a bytearray. Safeguarding
+        is not implemented, and therefore it is best to ensure desired
+        command is supported prior to sending, and no error will
+        be thrown for unsupported commands. The `command` argument will
+        accept either a string or an integer value, however, string values
+        must be in hex format, and integers must have originated from hex
+        numbers. HCI can be directed to listen for events for either a finite
+        number or seconds or indefinitely in accordance with the `listen`
+        argument. Indefinite listening can only be ended with `CTRL-C`.
+
+        Parameters
+        ----------
+        command : Union[str, int]
+            The command to give the board. Can be a string or an integer.
+            String input must be formatted as hex values.
+        listen : Union[bool, int]
+            Listen (finite or indefinite) for further events?
+        timeout : int
+            Command timeout. Set to None for indefinite.
+
+        Returns
+        -------
+        Event
+            Object containing board return data.
+
+        """
+        evt = self._send_command(data, timeout=timeout)
+
+        if not listen:
+            return evt
+        
+        if isinstance(listen, int):
+            self._wait(seconds=listen)
+        else:
+            while True:
+                self._wait(seconds=10)
+
+        return evt
+
+    def reset(self) -> EventPacket:
+        """Sets log level.
+        Resets the controller
+
+        Returns
+        ----------
+        Event: EventPacket
+
+        """
+        return self.write_command(
+            CommandPacket(
+                ocf=OCF.CONTROLLER.RESET,
+                ogf=OGF.CONTROLLER,
+            )
+        )
+
+    def set_scan_channel_map(self, channel_map: int) -> EventCode:
+        """Set the channel map used for scanning
+
+        Parameters
+        ----------
+        channel_map : int
+            channel map used for scanning
+
+        Returns
+        -------
+        EventCode
+
+        """
+        return self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.SET_SCAN_CH_MAP,
+                ogf=OGF.VENDOR_SPEC,
+                params=[channel_map],
+            )
+        ).evt_code
+
+    def set_event_mask(
+            self,
+            mask: int,
+            mask_pg2: Optional[int] = None
+    ) -> Union[EventCode, Tuple[EventCode, EventCode]]:
+        """Set event mask(s).
+
+        Sets the event masks using the Controller command group
+        Set Event Mask command. If a page 2 mask is provided,
+        then the Set Event Mask Page 2 command is also called.
+
+        Parameters
+        ----------
+        mask : int
+            event mask
+
+        Returns
+        -------
+        EventCode
+            The status of the event mask set operation.
+        Tuple[EventCode, EventCode]
+            The statuses of the both the event mask set and the
+            event mask page 2 set operation.
+
+        """
+        mask = to_little_endian_list(mask)
+
         cmd = CommandPacket(OGF.CONTROLLER, OCF.CONTROLLER.SET_EVENT_MASK, 8, params=mask)
         evt = self._send_command(cmd)
-        if evt.status:
-            status += 1
+        status = evt.status
 
-        cmd = CommandPacket(OGF.CONTROLLER, OCF.CONTROLLER.SET_EVENT_MASK_PAGE2, 8, params=mask)
-        evt = self._send_command(cmd)
-        if evt.status:
-            status += 1
+        if mask_pg2:
+            mask_pg2 = to_little_endian_list(mask_pg2)
+            cmd = CommandPacket(
+                OGF.CONTROLLER, OCF.CONTROLLER.SET_EVENT_MASK_PAGE2, 8, params=mask_pg2)
+            evt = self._send_command(cmd)
 
-        cmd = CommandPacket(OGF.CONTROLLER, OCF.CONTROLLER.SET_EVENT_MASK, 8, params=mask)
-        evt = self._send_command(cmd)
-        if evt.status:
-            status += 1
+            return status, evt.status
+        
+        return status
+            
+    def set_event_mask_le(self, mask: int) -> EventCode:
+        """LE controller set event mask
+
+        Parameters
+        ----------
+        mask : int
+            event mask
+        enable : _type_
+            whether the events should be enabled or disabled
+
+        Returns
+        -------
+        EventCode
+
+        """
+        mask = to_little_endian_list(mask)
 
         cmd = CommandPacket(OGF.LE_CONTROLLER, OCF.LE_CONTROLLER.SET_EVENT_MASK, 8, params=mask)
-        evt = self._send_command(cmd)
-        if evt.status:
-            status += 1
+        return self._send_command(cmd).status
 
-        return status
+    def set_event_mask_vs(self, mask: int, enable: bool) -> EventCode:
+        """Vendor specific set event mask
+
+        Parameters
+        ----------
+        mask : int
+            event mask
+        enable : _type_
+            whether the events should be enabled or disabled
+
+        Returns
+        -------
+        EventCode
+
+        """
+        data = to_little_endian_list(mask)
+
+        if enable:
+            data.append(0x1)
+        else:
+            data.append(0x0)
+
+        return self.write_command(
+            CommandPacket(ocf=OCF.VENDOR_SPEC.SET_EVENT_MASK, ogf=OGF.VENDOR_SPEC)
+        ).evt_code
+
+    def set_tx_test_err_pattern(self, pattern) -> EventCode:
+        """Set TX Test Error Pattern
+        Parameters
+        ----------
+        pattern: int
+            error pattern
+        Returns
+        -------
+        EventCode
+        """
+        return self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.SET_TX_TEST_ERR_PATT,
+                ogf=OGF.VENDOR_SPEC,
+                params=[pattern],
+            )
+        ).evt_code
+
+    def set_connection_op_flags(
+        self, handle: int, flags: int, enable: bool
+    ) -> EventCode:
+        """Set connection operation flags
+
+        Parameters
+        ----------
+        handle : int
+            Handle to connection
+        flags : int
+            flags to enable or disable
+        enable : bool
+            True to enable, False to disable
+
+        Returns
+        -------
+        EventCode
+
+        """
+        params = [handle & 0xFF, (handle >> 8) & 0xFF]
+        params.extend(to_little_endian_list(flags))
+        params.append(int(enable))
+
+        return self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.SET_TX_TEST_ERR_PATT,
+                ogf=OGF.VENDOR_SPEC,
+                params=params,
+            )
+        ).evt_code
+
+    def set_256_priv_key(self, key: List[int]) -> EventCode:
+        """Set the 256 Byte private key used
+
+        Parameters
+        ----------
+        key : list[int]
+            private key
+
+        Returns
+        -------
+        EventCode
+
+
+        Raises
+        ------
+        ValueError
+            If key is not 256 bytes long
+        """
+        if len(key.to_bytes()) != 8 * 32:
+            raise ValueError("Must had an array of 32 bytes")
+
+        return self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.SET_TX_TEST_ERR_PATT,
+                ogf=OGF.VENDOR_SPEC,
+                params=key,
+            )
+        ).evt_code
+
+    def get_channel_map_periodic_scan_adv(
+        self, handle: int, is_advertising: bool
+    ) -> EventPacket:
+        """Get the channel map used for periodic scanning
+
+        Parameters
+        ----------
+        handle : int
+            handle to connection
+        is_advertising : bool
+            True if advertiser, False if Scanner
+
+        Returns
+        -------
+        EventPacket
+
+        """
+
+        params = [handle & 0xFF, (handle >> 8) & 0xFF]
+        params.append(int(is_advertising))
+        return self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.GET_PER_CHAN_MAP, ogf=OGF.VENDOR_SPEC, params=params
+            )
+        ).evt_code
+
+    def get_acl_test_report(self) -> Dict[str, int]:
+        """Get ACL Test Report
+
+        Returns
+        -------
+        Dict[str, int]
+            ACL Test Report
+        """
+        evt = self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.GET_ACL_TEST_REPORT,
+                ogf=OGF.VENDOR_SPEC,
+            )
+        )
+
+        return {
+            "rx-acl-pkt-cnt": _le_list_to_int(evt.return_vals[:4]),
+            "rx-acl-oct-cnt": _le_list_to_int(evt.return_vals[4:8]),
+            "gen-acl-pkt-cnt": _le_list_to_int(evt.return_vals[8:12]),
+            "gen-acl-oct-cnt": _le_list_to_int(evt.return_vals[12:6]),
+        }
+
+    def set_local_num_min_used_channels(
+        self, phy: PhyOption, power_thresh: int, min_used: int
+    ) -> EventCode:
+        """Set local number of minimum used channels
+
+        Parameters
+        ----------
+        phy : PhyOption
+            Which PHY to set min num channels
+        power_thresh : int
+            Power threshold for min num channels
+        min_used : int
+            min num channels
+
+        Returns
+        -------
+        EventCode
+
+
+        Raises
+        ------
+        ValueError
+            min num channels must be between 1-37
+        ValueError
+            power threshold must be between +/-127
+        """
+        if min_used < 1 or min_used > 37:
+            raise ValueError("min_used must be between 1-37")
+        if power_thresh < -127 or power_thresh > 127:
+            raise ValueError("power_thresh must be between -127 and 127")
+
+        return self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.SET_LOCAL_MIN_USED_CHAN,
+                ogf=OGF.VENDOR_SPEC,
+                params=[phy.value, power_thresh, min_used],
+            )
+        ).evt_code
+
+    def get_peer_min_num_channels_used(self, handle: int) -> Dict[PhyOption, int]:
+        """Get minimum number of channels used by peer
+
+        Parameters
+        ----------
+        handle : int
+            handle to connection to peer
+
+        Returns
+        -------
+        Dict[PhyOption, int]
+            min num used channel map
+        """
+        evt = self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.GET_PEER_MIN_USED_CHAN,
+                ogf=OGF.VENDOR_SPEC,
+                params=[handle & 0xFF, (handle >> 0xFF) & 0xFF],
+            )
+        )
+        return {
+            PhyOption.P1M: evt.raw_return[0],
+            PhyOption.P2M: evt.raw_return[1],
+            PhyOption.PCODED: evt.raw_return[2],
+        }
+
+    def set_validate_pub_key_mode(self, mode: PubKeyValidateMode) -> EventCode:
+        """Set validate public key mode
+
+        Parameters
+        ----------
+        mode : PubKeyValidateMode
+            Mode to use for validation
+
+        Returns
+        -------
+        EventCode
+
+        """
+
+        return self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.VALIDATE_PUB_KEY_MODE,
+                ogf=OGF.VENDOR_SPEC,
+                params=[mode.value],
+            )
+        ).evt_code
+
+    def get_rand_address(self) -> List[int]:
+        """Gets a randomly generated address
+
+        Returns
+        -------
+        List[int]
+            6 Byte address
+        """
+        return self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.GET_RAND_ADDR,
+                ogf=OGF.VENDOR_SPEC,
+            )
+        ).raw_return
+
+    def set_local_feature(self, features: int) -> EventCode:
+        """Set local features
+
+        Parameters
+        ----------
+        features : int
+            Mask of local features
+
+        Returns
+        -------
+        EventCode
+
+        """
+        return self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.SET_LOCAL_FEAT,
+                ogf=OGF.VENDOR_SPEC,
+                params=[features],
+            )
+        ).evt_code
+
+    def set_operational_flags(self, flags: int, enable: bool) -> EventCode:
+        """Sets operational flags
+
+        Parameters
+        ----------
+        flags : int
+            Mask of flags to enable or disable
+        enable : bool
+            True to enable, False to disable
+
+        Returns
+        -------
+        EventCode
+
+        """
+        return self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.SET_OP_FLAGS,
+                ogf=OGF.VENDOR_SPEC,
+                params=[flags, int(enable)],
+            )
+        ).evt_code
+
+    def get_pdu_filter_stats(self) -> Dict[str, int]:
+        """Get PDU Filter Stats
+
+        Returns
+        -------
+        Dict[str, int]
+            Filter stats
+        """
+        evt = self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.GET_PDU_FILT_STATS,
+                ogf=OGF.VENDOR_SPEC,
+            )
+        )
+
+        return {
+            "fail-pdu": _le_list_to_int(evt.return_vals[:2]),
+            "pass-pdu": _le_list_to_int(evt.return_vals[2:4]),
+            "fail-whitelist": _le_list_to_int(evt.return_vals[4:6]),
+            "pass_whitellist": _le_list_to_int(evt.return_vals[6:8]),
+            "fail-peer-addr-match": _le_list_to_int(evt.return_vals[8:10]),
+            "pass-peer-addr-match": _le_list_to_int(evt.return_vals[10:12]),
+            "fail-local-addr-match": _le_list_to_int(evt.return_vals[12:14]),
+            "pass-local-addr-match": _le_list_to_int(evt.return_vals[14:16]),
+            "fail-peer-rpa-verify": _le_list_to_int(evt.return_vals[16:18]),
+            "pass-peer-rpa-verify": _le_list_to_int(evt.return_vals[18:20]),
+            "fail-peer-priv-addr": _le_list_to_int(evt.return_vals[20:22]),
+            "pass-peer-priv-addr": _le_list_to_int(evt.return_vals[22:24]),
+            "fail-local-priv-addr": _le_list_to_int(evt.return_vals[24:26]),
+            "pass-local-priv-addr": _le_list_to_int(evt.return_vals[26:28]),
+            "fail-peer-addr-res-req": _le_list_to_int(evt.return_vals[28:30]),
+            "pass-peer-addr-res-req": _le_list_to_int(evt.return_vals[30:32]),
+            "pass-local-addr-res-opt": _le_list_to_int(evt.return_vals[32:34]),
+            "peer-res-addr-pend": _le_list_to_int(evt.return_vals[32:34]),
+            "local-res-addr-pend": _le_list_to_int(evt.return_vals[34:36]),
+        }
+
+    def set_encryption_mode(
+        self, handle: int, enable: bool, noonce_mode: bool
+    ) -> EventCode:
+        """Set encryption mode
+
+        Parameters
+        ----------
+        handle : int
+            handle to connection
+        enable : bool
+            True to enable, False to disable
+        noonce_mode : bool
+            True for Noonce mode, False otherwise
+
+        Returns
+        -------
+        EventCode
+
+        """
+        params = _to_le16_list(handle)
+        params.append(int(enable))
+        params.append(int(noonce_mode))
+
+        return self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.SET_CONN_TX_PWR, ogf=OGF.VENDOR_SPEC, params=params
+            )
+        ).evt_code
+
+    def set_diagnostic_mode(self, enable: bool) -> EventCode:
+        """Set diagnostic mode
+
+        Parameters
+        ----------
+        enable : bool
+            True to enable, False to disable
+
+        Returns
+        -------
+        EventCode
+
+        """
+        return self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.SET_DIAG_MODE,
+                ogf=OGF.VENDOR_SPEC,
+                params=[int(enable)],
+            )
+        ).evt_code
+
+    def enable_sniffer_packet_forwarding(self, enable: bool) -> EventCode:
+        """Enable packet sniffer forwarding
+
+        Parameters
+        ----------
+        enable : bool
+            True to enable, False to disable
+
+        Returns
+        -------
+        EventCode
+
+        """
+        return self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.SET_SNIFFER_ENABLE,
+                ogf=OGF.VENDOR_SPEC,
+                params=[int(enable)],
+            )
+        ).evt_code
+
+    def get_memory_stats(self) -> Dict[str, int]:
+        """Get memory use stats
+
+        Returns
+        -------
+        Dict[str, int]
+            Memory use stats
+        """
+        evt = self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.GET_SYS_STATS,
+                ogf=OGF.VENDOR_SPEC,
+            )
+        )
+
+        assert (
+            len(evt.raw_return) == 46
+        ), f"Return length is wrong {len(evt.raw_return)}"
+
+        return {
+            "stack": _le_list_to_int(evt.raw_return[:2]),
+            "sys-assert-cnt": _le_list_to_int(evt.raw_return[2:4]),
+            "free-mem": _le_list_to_int(evt.raw_return[4:8]),
+            "used-mem": _le_list_to_int(evt.raw_return[8:12]),
+            "max-connections": _le_list_to_int(evt.raw_return[12:14]),
+            "conn-ctx-size": _le_list_to_int(evt.raw_return[14:16]),
+            "cs-watermark-lvl": _le_list_to_int(evt.raw_return[16:18]),
+            "ll-watermark-lvl": _le_list_to_int(evt.raw_return[18:20]),
+            "sch-watermark-lvl": _le_list_to_int(evt.raw_return[20:22]),
+            "lhci-watermark-lvl": _le_list_to_int(evt.raw_return[22:24]),
+            "max-adv-sets": _le_list_to_int(evt.raw_return[24:26]),
+            "adv-set-ctx-size": _le_list_to_int(evt.raw_return[26:28]),
+            "ext-scan-max": _le_list_to_int(evt.raw_return[28:30]),
+            "ext-scan-ctx-size": _le_list_to_int(evt.raw_return[30:32]),
+            "max-num-ext-init": _le_list_to_int(evt.raw_return[32:34]),
+            "exit-init-ctx-size": _le_list_to_int(evt.raw_return[34:36]),
+            "max-per-scanners": _le_list_to_int(evt.raw_return[36:38]),
+            "per-scan-ctz-size": _le_list_to_int(evt.raw_return[38:40]),
+            "max-cig": _le_list_to_int(evt.raw_return[40:42]),
+            "cig-ctx-size": _le_list_to_int(evt.raw_return[42:44]),
+            "cis-ctx-size": _le_list_to_int(evt.raw_return[44:46]),
+        }
+
+    def get_adv_stats(self) -> Dict[str, int]:
+        """Get advertising stats
+
+        Returns
+        -------
+        Dict[str, int]
+            Advertising stats
+        """
+        evt = self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.GET_ADV_STATS,
+                ogf=OGF.VENDOR_SPEC,
+            )
+        )
+        assert (
+            len(evt.raw_return) == 30
+        ), f"Return length is wrong {len(evt.raw_return)}"
+
+        return {
+            "tx-adv": _le_list_to_int(evt.raw_return[:4]),
+            "rx-req": _le_list_to_int(evt.raw_return[4:8]),
+            "rx-req-crc": _le_list_to_int(evt.raw_return[8:12]),
+            "rx-req-timeout": _le_list_to_int(evt.raw_return[12:14]),
+            "tx-resp": _le_list_to_int(evt.raw_return[14:18]),
+            "err-adv": _le_list_to_int(evt.raw_return[18:22]),
+            "rx-setup": _le_list_to_int(evt.raw_return[22:24]),
+            "tx-setup": _le_list_to_int(evt.raw_return[24:26]),
+            "rx-isr": _le_list_to_int(evt.raw_return[26:28]),
+            "tx-isr": _le_list_to_int(evt.raw_return[28:30]),
+        }
+
+    def get_scan_stats(self) -> Dict[str, int]:
+        """Get scanning stats
+
+        Returns
+        -------
+        Dict[str, int]
+            Scanning stats
+        """
+        evt = self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.GET_SCAN_STATS,
+                ogf=OGF.VENDOR_SPEC,
+            )
+        )
+
+        return {
+            "rx-adv": _le_list_to_int(evt.raw_return[:4]),
+            "rx-adv-crc": _le_list_to_int(evt.raw_return[4:8]),
+            "rx-adv-timeout": _le_list_to_int(evt.raw_return[8:12]),
+            "tx-req": _le_list_to_int(evt.raw_return[12:16]),
+            "rx-rsp": _le_list_to_int(evt.raw_return[16:20]),
+            "rx-rsp-crc": _le_list_to_int(evt.raw_return[20:24]),
+            "rx-rsp-timeout": _le_list_to_int(evt.raw_return[24:28]),
+            "err-scan": _le_list_to_int(evt.raw_return[28:32]),
+            "rx-setup": _le_list_to_int(evt.raw_return[32:34]),
+            "tx-setup": _le_list_to_int(evt.raw_return[34:36]),
+            "rx-isr": _le_list_to_int(evt.raw_return[36:38]),
+            "tx-isr": _le_list_to_int(evt.raw_return[38:40]),
+        }
+
+    def get_conn_stats(self) -> Dict[str, int]:
+        """Gets and parses connection stats.
+
+        Sends a command to the board, telling it to return
+        a connection statistics packet. Function then attempts
+        to parse the packet and calculate the current connection
+        PER%. Function will attempt this process for the given
+        number of retries.
+
+        Parameters
+        ----------
+        retries : int
+            Amount of times to attempt to collect and parse the
+            connection statistics.
+
+        Returns
+        -------
+        Dict[str, int]
+            The current connection statistics.
+
+        """
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GET_CONN_STATS, 0)
+        evt = self._send_command(cmd)
+
+        stats = {
+            "rx-data": _le_list_to_int(evt.raw_return[:4]),
+            "rx-data-crc": _le_list_to_int(evt.raw_return[4:8]),
+            "rx-data-timeout": _le_list_to_int(evt.raw_return[8:12]),
+            "tx-data": _le_list_to_int(evt.raw_return[12:16]),
+            "err-data": _le_list_to_int(evt.raw_return[16:20]),
+            "rx-setup": _le_list_to_int(evt.raw_return[20:24]),
+            "tx-setup": _le_list_to_int(evt.raw_return[24:28]),
+            "rx-isr": _le_list_to_int(evt.raw_return[28:32]),
+            "tx-isr": _le_list_to_int(evt.raw_return[32:36]),
+        }
+
+        return stats
+
+    def get_test_stats(self) -> Dict[str, int]:
+        """Get test stats
+
+        Returns
+        -------
+        Dict[str, int]
+            Test stats
+        """
+        evt = self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.GET_TEST_STATS,
+                ogf=OGF.VENDOR_SPEC,
+            )
+        )
+
+        return {
+            "rx-data": _le_list_to_int(evt.raw_return[:4]),
+            "rx-data-crc": _le_list_to_int(evt.raw_return[4:8]),
+            "rx-data-timeout": _le_list_to_int(evt.raw_return[8:12]),
+            "tx-data": _le_list_to_int(evt.raw_return[12:16]),
+            "err-data": _le_list_to_int(evt.raw_return[16:20]),
+            "rx-setup": _le_list_to_int(evt.raw_return[20:24]),
+            "tx-setup": _le_list_to_int(evt.raw_return[24:28]),
+            "rx-isr": _le_list_to_int(evt.raw_return[28:32]),
+            "tx-isr": _le_list_to_int(evt.raw_return[32:36]),
+        }
+
+    def get_pool_stats(self) -> Dict[str, int]:
+        """Get memory pool stats
+
+        Returns
+        -------
+        Dict[str, int]
+            memory pool stats
+        """
+        evt = self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.GET_POOL_STATS,
+                ogf=OGF.VENDOR_SPEC,
+            )
+        )
+
+        num_pool = evt.raw_return[0]
+        pool_stats = {"num-pool": num_pool}
+
+        data = evt.raw_return[1:]
+
+        for i in range(num_pool):
+            key = f"pool{i}"
+            pool_stats[key] = {
+                "buf-size": _le_list_to_int(data[0 * i : 2 * i]),
+                "num-buf": data[2 * i],
+                "num-alloc": data[3 * i],
+                "max-alloc": data[4 * i],
+                "max-req-len": data[5 * i : 7 * i :],
+            }
+
+        return pool_stats
+
+    def set_additional_aux_ptr_offset(self, delay: int, handle: int) -> EventCode:
+        """Set auxillary pointer delay
+
+        Parameters
+        ----------
+        delay : int
+            delay in microseconds. (0 to disable)
+        handle : int
+            handle to connection
+
+        Returns
+        -------
+        EventCode
+
+        """
+        return self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.SET_AUX_DELAY,
+                ogf=OGF.VENDOR_SPEC,
+                params=[to_little_endian(delay), handle],
+            )
+        ).evt_code
+
+    def set_ext_adv_data_fragmentation(
+        self, handle: int, frag_length: int
+    ) -> EventCode:
+        """Set extended advertising fragmentation length
+
+        Parameters
+        ----------
+        handle : int
+            advertising handle
+        frag_length : int
+            fragmentation length
+
+        Returnss
+        -------
+        EventCode
+
+        """
+        return self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.SET_EXT_ADV_FRAG_LEN,
+                ogf=OGF.VENDOR_SPEC,
+                params=[handle, frag_length],
+            )
+        ).evt_code
+
+    def set_extended_advertising_phy_opts(
+        self, handle: int, primary: int, secondary: int
+    ) -> EventCode:
+        """Set phy options used for extended advertsing
+
+        Parameters
+        ----------
+        handle : int
+            handle to connection
+        primary : int
+            primary options
+        secondary : int
+            secondary options
+
+        Returns
+        -------
+        EventCode
+
+        """
+        return self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.SET_EXT_ADV_PHY_OPTS,
+                ogf=OGF.VENDOR_SPEC,
+                params=[handle, primary, secondary],
+            )
+        ).evt_code
+
+    def set_extended_advertising_defaulty_phy_opts(
+        self, handle: int, primary: int, secondary: int
+    ) -> EventCode:
+        """Set default phy options used for extended advertsing
+
+        Parameters
+        ----------
+        handle : int
+            handle to connection
+        primary : int
+            primary options
+        secondary : int
+            secondary options
+
+        Returns
+        -------
+        EventCode
+
+        """
+        return self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.SET_EXT_ADV_DEF_PHY_OPTS,
+                ogf=OGF.VENDOR_SPEC,
+                params=[handle, primary, secondary],
+            )
+        ).evt_code
+
+    def generate_iso_packets(
+        self, handle: int, packet_length: int, num_packets: int
+    ) -> EventCode:
+        """Generate ISO packets
+
+        Parameters
+        ----------
+        handle : int
+            handle to connection
+        packet_length : int
+            length of iso packet
+        num_packets : int
+            number of iso packets per event
+
+        Returns
+        -------
+        EventCode
+
+        """
+        params = to_little_endian_list(handle)
+        params.extend(to_little_endian_list(packet_length))
+        params.append(num_packets)
+
+        return self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.GENERATE_ISO, ogf=OGF.VENDOR_SPEC, params=params
+            )
+        ).evt_code
+
+    def get_iso_test_report(self) -> Dict[str, int]:
+        """Get ISO test report
+
+        Returns
+        -------
+        Dict[str, int]
+            ISO test report
+        """
+        evt = self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.GET_ISO_TEST_REPORT,
+                ogf=OGF.VENDOR_SPEC,
+            )
+        )
+
+        return {
+            "rx-iso-pkt-cnt": _le_list_to_int(evt.raw_return[:4]),
+            "rx-iso-oct-cnt": _le_list_to_int(evt.raw_return[4:8]),
+            "gen-pkt-cnt": _le_list_to_int(evt.raw_return[8:12]),
+            "gen-oct-cnt": _le_list_to_int(evt.raw_return[12:14]),
+        }
+
+    def enable_iso_packet_sink(self, enable: bool) -> EventCode:
+        """Enable ISO packet sink
+
+        Parameters
+        ----------
+        enable : bool
+            True to enable, False to disable
+
+        Returns
+        -------
+        EventCode
+
+        """
+        return self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.ENA_ISO_SINK,
+                ogf=OGF.VENDOR_SPEC,
+                params=[int(enable)],
+            )
+        ).evt_code
+
+    def enable_autogen_iso_packets(self, packet_length: int) -> EventCode:
+        """Enable autogeneration of of ISO packets
+
+        Parameters
+        ----------
+        packet_length : int
+            Length of packet (0 to disable)
+
+        Returns
+        -------
+        EventCode
+
+
+        Raises
+        ------
+        ValueError
+            If value is more than 4 bytes
+        """
+        if packet_length > 0xFFFFFFFF:
+            raise ValueError(f"packet length ({packet_length}) must be 4 bytes")
+
+        return self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.ENA_AUTO_GEN_ISO,
+                ogf=OGF.VENDOR_SPEC,
+                params=_to_le_nbyte_list(packet_length, 4),
+            )
+        ).evt_code
+
+    def get_iso_connection_stats(self) -> Dict[str, int]:
+        """Get ISO connection stats
+
+        Returns
+        -------
+        Dict[str, int]
+            ISO connection stats
+        """
+        evt = self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.GET_ISO_TEST_REPORT,
+                ogf=OGF.VENDOR_SPEC,
+            )
+        )
+        return {
+            "rx-data": _le_list_to_int(evt.raw_return[:4]),
+            "rx-data-crc": _le_list_to_int(evt.raw_return[4:8]),
+            "rx-data-timeout": _le_list_to_int(evt.raw_return[8:12]),
+            "tx-data": _le_list_to_int(evt.raw_return[12:16]),
+            "err-data": _le_list_to_int(evt.raw_return[16:20]),
+            "rx-setup": _le_list_to_int(evt.raw_return[20:24]),
+            "tx-setup": _le_list_to_int(evt.raw_return[24:28]),
+            "rx-isr": _le_list_to_int(evt.raw_return[28:32]),
+            "tx-isr": _le_list_to_int(evt.raw_return[32:36]),
+        }
+
+    def get_aux_adv_stats(self) -> Dict[str, int]:
+        """Get auxillary advertising stats
+
+        Returns
+        -------
+        Dict[str, int]
+            AUX adv stats
+        """
+        evt = self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.GET_ISO_TEST_REPORT,
+                ogf=OGF.VENDOR_SPEC,
+            )
+        )
+        return {
+            "tx-adv": _le_list_to_int(evt.raw_return[:4]),
+            "rx-req": _le_list_to_int(evt.raw_return[4:8]),
+            "rx-req-crc": _le_list_to_int(evt.raw_return[8:12]),
+            "rx-req-timeout": _le_list_to_int(evt.raw_return[12:14]),
+            "tx-resp": _le_list_to_int(evt.raw_return[14:18]),
+            "tx-chain": _le_list_to_int(evt.raw_return[18:22]),
+            "err-adv": _le_list_to_int(evt.raw_return[22:26]),
+            "rx-setup": _le_list_to_int(evt.raw_return[26:28]),
+            "tx-setup": _le_list_to_int(evt.raw_return[28:30]),
+            "rx-isr": _le_list_to_int(evt.raw_return[30:32]),
+            "tx-isr": _le_list_to_int(evt.raw_return[32:34]),
+        }
+
+    def get_aux_scan_stats(self) -> Dict[str, int]:
+        """Get auxillary scanning stats
+
+        Returns
+        -------
+        Dict[str, int]
+            Aux scan stats
+        """
+        evt = self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.GET_AUX_ADV_STATS,
+                ogf=OGF.VENDOR_SPEC,
+            )
+        )
+
+        return {
+            "rx-adv": _le_list_to_int(evt.raw_return[:4]),
+            "rx-adv-crc": _le_list_to_int(evt.raw_return[4:8]),
+            "rx-adv-timeout": _le_list_to_int(evt.raw_return[8:12]),
+            "tx-req": _le_list_to_int(evt.raw_return[12:16]),
+            "rx-rsp": _le_list_to_int(evt.raw_return[16:20]),
+            "rx-rsp-crc": _le_list_to_int(evt.raw_return[20:24]),
+            "rx-rsp-timeout": _le_list_to_int(evt.raw_return[24:28]),
+            "rx-chain": _le_list_to_int(evt.raw_return[28:32]),
+            "rx-chain-crc": _le_list_to_int(evt.raw_return[32:36]),
+            "rx-chain-timeout": _le_list_to_int(evt.raw_return[36:40]),
+            "err-scan": _le_list_to_int(evt.raw_return[40:44]),
+            "rx-setup": _le_list_to_int(evt.raw_return[44:46]),
+            "tx-setup": _le_list_to_int(evt.raw_return[46:48]),
+            "rx-isr": _le_list_to_int(evt.raw_return[48:50]),
+            "tx-isr": _le_list_to_int(evt.raw_return[50:52]),
+        }
+
+    def get_periodic_scanning_stats(self) -> Dict[str, int]:
+        """Get periodic scanning stats
+
+        Returns
+        -------
+        Dict[str, int]
+            Periodic scanning stats
+        """
+        evt = self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.GET_PER_SCAN_STATS,
+                ogf=OGF.VENDOR_SPEC,
+            )
+        )
+
+        return {
+            "rx-adv": _le_list_to_int(evt.raw_return[:4]),
+            "rx-adv-crc": _le_list_to_int(evt.raw_return[4:8]),
+            "rx-adv-timeout": _le_list_to_int(evt.raw_return[8:12]),
+            "rx-chain": _le_list_to_int(evt.raw_return[12:16]),
+            "rx-chain-crc": _le_list_to_int(evt.raw_return[16:20]),
+            "rx-chain-timeout": _le_list_to_int(evt.raw_return[20:24]),
+            "err-scan": _le_list_to_int(evt.raw_return[24:28]),
+            "rx-setup": _le_list_to_int(evt.raw_return[28:30]),
+            "tx-setup": _le_list_to_int(evt.raw_return[30:32]),
+            "rx-isr": _le_list_to_int(evt.raw_return[32:34]),
+            "tx-isr": _le_list_to_int(evt.raw_return[34:36]),
+        }
+
+    def set_connection_phy_tx_power(
+        self, handle: int, power: int, phy: PhyOption
+    ) -> EventCode:
+        """Set TX Power for connection on given PHY
+
+        Parameters
+        ----------
+        handle : int
+            handle to connection
+        power : int
+            _description_
+        phy : PhyOption
+            PHY to apply power to
+
+        Returns
+        -------
+        EventCode
+
+        """
+        params = _to_le16_list(handle)
+        params.append(power)
+        params.append(phy.value)
+        return self.write_command(
+            CommandPacket(
+                ocf=OCF.VENDOR_SPEC.SET_CONN_PHY_TX_PWR,
+                ogf=OGF.VENDOR_SPEC,
+                params=params,
+            )
+        ).evt_code
 
     def exit(self) -> None:
         """Close the HCI connection.
@@ -1270,24 +2447,39 @@ class BleHci:
 
         return per
 
-    def _read_event(self, timeout: float = 6.0) -> EventPacket:
-        """Wait for a single event"""
+    def _retrieve_event(self, timeout: float = 1) -> Union[EventPacket, AsyncPacket]:
+        """Reads event from serial port.
+        Returns
+        ----------
+        Event: EventPacket
+
+        """
         self.port.timeout = timeout
-        evt_type = self.port.read(size=1)
+        pkt_type = int.from_bytes(self.port.read(1), "little")
+        if not pkt_type:
+            raise TimeoutError(
+                "Timeout occured before DUT could respond. Check connection and retry.")
 
-        if len(evt_type) == 0:
-            self.port.flush()
-            return None
+        if pkt_type == PacketType.ASYNC.value:
+            return self._get_async_packet()
 
-        ##TODO: get full event
-        evt = self.port.read()
-        self.logger.info("%s  %s<%s", datetime.datetime.now(), self.id_tag, evt.hex())
-
-        if evt_type == PacketTypes.ASYNC:
-            return None
-        if evt_type == PacketTypes.EVENT:
-            return EventPacket.from_bytes(evt)
+        if pkt_type == PacketType.EVENT.value:
+            return self._get_event_packet()
         
+        raise ValueError(f"Invalid packet type: {pkt_type}")
+
+    def _get_event_packet(self) -> EventPacket:
+        evt_code, param_len = self.port.read(2)
+
+        data = bytearray([evt_code, param_len])
+        data.extend(self.port.read(int.from_bytes(param_len, "little")))
+
+        return EventPacket.from_bytes(data)
+    
+    def _get_async_packet(self):
+         # TODO: HANDLE ASYNC
+        raise NotImplementedError("Support for ACL packets coming soon.")
+
     def _wait(self, seconds: int = 2) -> None:
         """Wait for events from the test board for a few seconds.
         
@@ -1310,7 +2502,6 @@ class BleHci:
     def _send_command(
         self,
         pkt: CommandPacket,
-        delay: float = 0.1,
         timeout: int = 6
     ) -> EventPacket:
         """Sends a command to the test board and retrieves the response.
@@ -1321,41 +2512,46 @@ class BleHci:
         self.logger.info("%s  %s>%s", datetime.datetime.now(), self.id_tag, pkt.to_bytes().hex())
 
         self.port.flush()
-        self.port.write(pkt.to_bytes())
-
-        return self._read_event(timeout=timeout)
-
-
-    # def write_command(self, command : CommandPacket) -> EventPacket:
-    #     self.port.flush()
-    #     self.port.write(command.to_bytes())
-    #     evt_code = self.port.read(1)
-    #     param_len = self.port.read(1)    
+        self.port.write(pkt)
         
-    #     data = [evt_code, param_len]
+        timeout_err = None
+        tries = self.retries
+        while tries >= 0:
+            try:
+                return self._retrieve_event(timeout=timeout)
+            except TimeoutError as err:
+                tries -= 1
+                timeout_err = err
+                self.logger.warning(
+                    f"Timeout occured. Retrying. {self.retries - tries} retries remaining.")
         
-    #     for _ in range(int(param_len)):    
-    #         data.append(int.from_bytes(self.port.read(), 'little'))
-
-    #     return EventPacket.from_bytes(data)
+        raise TimeoutError("Timeout occured. No retries remaining.") from timeout_err
     
-    # def write_command(self, command: CommandPacket) -> EventPacket:
-    #     self.port.flush()
-    #     self.port.write(command.to_bytes())
-    #     return self.read_event()
-    # def write_command_raw(self, data):
-    #     self.port.flush()
-    #     self.port.write(data)
-    #     return self.read_event()
+    def _send_command_raw(
+        self,
+        pkt: bytearray,
+        timeout: int = 6
+    ) -> EventPacket:
+        """Sends a data stream to the test board and retrieves the response.
+        
+        PRIVATE
+        
+        """
+        self.logger.info("%s  %s>%s", datetime.datetime.now(), self.id_tag, pkt.hex())
 
-    # def reset(self) -> EventPacket:
-    #     """Sets log level.
-    #     Resets the controller
+        self.port.flush()
+        self.port.write(pkt)
 
-    #     Returns
-    #     ----------
-    #     Event: EventPacket
+        timeout_err = None
+        tries = self.retries
+        while tries >= 0:
+            try:
+                return self._retrieve_event(timeout=timeout)
+            except TimeoutError as err:
+                tries -= 1
+                timeout_err = err
+                self.logger.warning(
+                    f"Timeout occured. Retrying. {self.retries - tries} retries remaining.")
+        
+        raise TimeoutError("Timeout occured. No retries remaining.") from timeout_err
 
-    #     """
-    #     return self.write_command(CommandPacket(ocf=OCF.CONTROLLER.RESET,
-    #                                              ogf=OGF.CONTROLLER, params=[0]))
