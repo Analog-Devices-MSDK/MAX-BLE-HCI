@@ -99,8 +99,6 @@ class OGF(Enum):
     LE_CONTROLLER = 0x08
     VENDOR_SPEC = 0x3F
 
-
-class NOpOCF(Enum):
 class _NOpOCF(Enum):
     NOP = 0x00
 
@@ -125,7 +123,7 @@ class _ControllerOCF(Enum):
     CONFIG_DATA_PATH = 0x83
 
 
-class InformationalOCF(Enum):
+class _InformationalOCF(Enum):
     READ_LOCAL_VER_INFO = 0x01
     READ_LOCAL_SUP_CMDS = 0x02
     READ_LOCAL_SUP_FEAT = 0x03
