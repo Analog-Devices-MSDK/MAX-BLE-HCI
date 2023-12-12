@@ -51,8 +51,9 @@
 ##############################################################################
 
 from enum import Enum
+from typing import List
 
-from .packet_defs import OCF, OGF, PacketTypes
+from .packet_defs import OCF, OGF, PacketType
 
 
 def _byte_length(num):
@@ -137,7 +138,7 @@ class CommandPacket:
 
         """
         serialized_cmd = bytearray()
-        serialized_cmd.append(PacketTypes.COMMAND.value)
+        serialized_cmd.append(PacketType.COMMAND.value)
         serialized_cmd.append(self.opcode & 0xFF)
         serialized_cmd.append((self.opcode & 0xFF00) >> 8)
         serialized_cmd.append(self.length)
@@ -185,14 +186,17 @@ class EventPacket:
     @staticmethod
     def from_bytes(serialized_event):
         return EventPacket(
-            evt_code=serialized_event[0],
-            length=serialized_event[1],
-            num_cmds=serialized_event[2],
-            opcode=(serialized_event[4] << 8) | serialized_event[3],
-            status=serialized_event[5],
-            return_vals=serialized_event[6:] if serialized_event[6:] else None,
-            raw_return=serialized_event[2:],
+            evt_code=int.from_bytes(serialized_event[0], "little"),
+            length=int.from_bytes(serialized_event[1], "little"),
+            num_cmds=int.from_bytes(serialized_event[2], "little"),
+            opcode=int.from_bytes(serialized_event[3:5], "little"),
+            status=int.from_bytes(serialized_event[5], "little"),
+            return_vals=serialized_event[2:]
         )
+    
+    def get_return_params(self, param_lens: List[int], use_raw: bool = False) -> List[int]:
+        pass
+
 
 
 class ExtendedPacket:

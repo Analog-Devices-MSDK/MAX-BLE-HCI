@@ -55,7 +55,7 @@ from enum import Enum
 ADI_PORT_BAUD_RATE = 115200
 
 
-class PacketTypes(Enum):
+class PacketType(Enum):
     """
     BT Standard Packet Types
     """
@@ -67,7 +67,7 @@ class PacketTypes(Enum):
     EXTENDED = 0x9
 
 
-class EventCodes(Enum):
+class EventCode(Enum):
     """
     BT Sig Defined HCI Event Codes
     """
@@ -316,6 +316,9 @@ class _VendorSpecificOCF(Enum):
     PHY_EN = 0x307
     PHY_DIS = 0x308
 
+class PubKeyValidateMode(Enum):
+    ALT1 = 0x0
+    ALT2 = 0x1
 
 class OCF:
     NOP = _NOpOCF
