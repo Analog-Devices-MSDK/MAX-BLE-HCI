@@ -67,9 +67,10 @@ class CommandPacket:
     LITTLE = "little"
     BIG = "big"
 
-    def __init__(self, ocf, ogf, params=None) -> None:
+    def __init__(self, ogf, ocf, length, params=None) -> None:
         self.ocf = self._enum_to_int(ocf)
         self.ogf = self._enum_to_int(ogf)
+        self.length = length
         self.opcode = CommandPacket.make_hci_opcode(self.ocf, self.ogf)
         self.params = params
 
@@ -103,7 +104,7 @@ class CommandPacket:
 
         """
         if not isinstance(ogf, int):
-            if isinstance(ogf, OGF):
+            if isinstance(ogf, Enum):
                 ogf = ogf.value
             else:
                 raise TypeError(
@@ -111,7 +112,7 @@ class CommandPacket:
                 )
 
         if not isinstance(ocf, int):
-            if isinstance(OCF, Enum):
+            if isinstance(ocf, Enum):
                 ocf = ocf.value
             else:
                 raise TypeError(
@@ -139,11 +140,13 @@ class CommandPacket:
         serialized_cmd.append(PacketTypes.COMMAND.value)
         serialized_cmd.append(self.opcode & 0xFF)
         serialized_cmd.append((self.opcode & 0xFF00) >> 8)
+        serialized_cmd.append(self.length)
 
-        for param in self.params:
-            num_bytes = _byte_length(param)
+        if self.params:
+            for param in self.params:
+                num_bytes = _byte_length(param)
 
-            serialized_cmd.extend(param.to_bytes(num_bytes, endianness))
+                serialized_cmd.extend(param.to_bytes(num_bytes, endianness))
 
         return serialized_cmd
 

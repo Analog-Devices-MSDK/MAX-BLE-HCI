@@ -99,12 +99,10 @@ class OGF(Enum):
     LE_CONTROLLER = 0x08
     VENDOR_SPEC = 0x3F
 
-
-class NOpOCF(Enum):
+class _NOpOCF(Enum):
     NOP = 0x00
 
-
-class LinkControlOCF(Enum):
+class _LinkControlOCF(Enum):
     """
     BLE Specified Link Control Command OCF Values
     """
@@ -112,8 +110,7 @@ class LinkControlOCF(Enum):
     DISCONNECT = 0x06
     READ_REMOTE_VER_INFO = 0x1D
 
-
-class ControllerOCF(Enum):
+class _ControllerOCF(Enum):
     SET_EVENT_MASK = 0x01
     RESET = 0x03
     READ_TX_PWR_LVL = 0x2D
@@ -126,7 +123,7 @@ class ControllerOCF(Enum):
     CONFIG_DATA_PATH = 0x83
 
 
-class InformationalOCF(Enum):
+class _InformationalOCF(Enum):
     READ_LOCAL_VER_INFO = 0x01
     READ_LOCAL_SUP_CMDS = 0x02
     READ_LOCAL_SUP_FEAT = 0x03
@@ -136,12 +133,10 @@ class InformationalOCF(Enum):
     READ_LOCAL_SUP_CODEC_CAP = 0x0E
     READ_LOCAL_SUP_CONTROLLER_DLY = 0x0F
 
-
-class StatusOCF(Enum):
+class _StatusOCF(Enum):
     READ_RSSI = 0x05
 
-
-class LEControllerOCF(Enum):
+class _LEControllerOCF(Enum):
     SET_EVENT_MASK = 0x01
     READ_BUF_SIZE = 0x02
     READ_LOCAL_SUP_FEAT = 0x03
@@ -264,8 +259,7 @@ class LEControllerOCF(Enum):
     SET_PATH_LOSS_REPORTING_ENABLE = 0x79
     SET_TX_POWER_REPORT_ENABLE = 0x7A
 
-
-class VendorSpecificOCF(Enum):
+class _VendorSpecificOCF(Enum):
     SET_SCAN_CH_MAP = 0x3E0
     SET_EVENT_MASK = 0x3E1
     SET_RSRC_MGR_MODE = 0x3E2
@@ -324,12 +318,12 @@ class VendorSpecificOCF(Enum):
 
 
 class OCF:
-    NOP = NOpOCF
-    LINK_CONTROL = LinkControlOCF
+    NOP = _NOpOCF
+    LINK_CONTROL = _LinkControlOCF
     LINK_POLICY = None
-    CONTROLLER = ControllerOCF
-    INFORMATIONAL = InformationalOCF
-    STATUS = StatusOCF
+    CONTROLLER = _ControllerOCF
+    INFORMATIONAL = _InformationalOCF
+    STATUS = _StatusOCF
     TESTING = None
-    LE_CONTROLLER = LEControllerOCF
-    VENDOR_SPEC = VendorSpecificOCF
+    LE_CONTROLLER = _LEControllerOCF
+    VENDOR_SPEC = _VendorSpecificOCF
