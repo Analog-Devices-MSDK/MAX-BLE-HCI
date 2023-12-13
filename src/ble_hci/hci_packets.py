@@ -72,8 +72,10 @@ class CommandPacket:
         self.ocf = self._enum_to_int(ocf)
         self.ogf = self._enum_to_int(ogf)
         self.length = self._get_length(params)
-        self.opcode = CommandPacket.make_hci_opcode(self.ocf, self.ogf)
+        self.opcode = CommandPacket.make_hci_opcode(ocf=self.ocf, ogf=self.ogf)
         self.params = params
+
+        print(params)
 
     def __repr__(self):
         return str(self.__dict__)
@@ -88,8 +90,10 @@ class CommandPacket:
         if params is None:
             return 0
         else:
-            return params.__sizeof__()
-        
+            length = 0
+            for value in params:
+                length += _byte_length(value) 
+            return length
 
     @staticmethod
     def make_hci_opcode(ogf: OGF, ocf: OCF):
@@ -148,14 +152,18 @@ class CommandPacket:
         serialized_cmd.append(PacketType.COMMAND.value)
         serialized_cmd.append(self.opcode & 0xFF)
         serialized_cmd.append((self.opcode & 0xFF00) >> 8)
+        
+        
         serialized_cmd.append(self.length)
 
         if self.params:
             for param in self.params:
                 num_bytes = _byte_length(param)
+                values = param.to_bytes(num_bytes, endianness)
+                
+                serialized_cmd.extend(values)
 
-                serialized_cmd.extend(param.to_bytes(num_bytes, endianness))
-
+        
         return serialized_cmd
 
 

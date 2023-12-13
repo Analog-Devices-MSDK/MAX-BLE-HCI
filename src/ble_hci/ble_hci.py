@@ -741,7 +741,7 @@ class BleHci:
             phy
         ]
         cmd = CommandPacket(
-            OGF.LE_CONTROLLER, OCF.LE_CONTROLLER.ENHANCED_TRANSMITTER_TEST, 4, params=params)
+            OGF.LE_CONTROLLER, OCF.LE_CONTROLLER.ENHANCED_TRANSMITTER_TEST, params=params)
         evt = self._send_command(cmd)
 
         return evt.status
@@ -899,10 +899,10 @@ class BleHci:
             it is likely that a test error occured.
 
         """
-        cmd = CommandPacket(OGF.LE_CONTROLLER, OCF.LE_CONTROLLER.TEST_END, 0)
+        cmd = CommandPacket(OGF.LE_CONTROLLER, OCF.LE_CONTROLLER.TEST_END)
         evt = self._send_command(cmd)
-
-        return evt
+        rx_packets = evt.get_return_params(param_lens=[4], use_raw=False)
+        return rx_packets 
     
     def end_test_vs(self) -> EventPacket:
         """Command board to end the current test (vendor-specific).
@@ -921,10 +921,16 @@ class BleHci:
             test error occured.
 
         """
-        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.END_TEST, 0)
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.END_TEST)
         evt = self._send_command(cmd)
-
-        return evt
+        report = evt.get_return_params([4, 4, 4,4], False)
+        
+        return {
+            'tx':report[0],
+            'rx': report[1],
+            'rx-crc':report[2],
+            'rx-timeout':report[3],
+        }
 
     def set_adv_tx_power(self, tx_power: int) -> StatusCode:
         """Set the advertising TX power.
@@ -2453,7 +2459,7 @@ class BleHci:
         PRIVATE
         
         """
-        self.logger.info("%s  %s>%s", datetime.datetime.now(), self.id_tag, pkt.to_bytes().hex())
+        
         return self._send_command_raw(pkt.to_bytes())
     
     def _send_command_raw(
