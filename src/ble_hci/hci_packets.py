@@ -75,7 +75,6 @@ class CommandPacket:
         self.opcode = CommandPacket.make_hci_opcode(ocf=self.ocf, ogf=self.ogf)
         self.params = params
 
-        print(params)
 
     def __repr__(self):
         return str(self.__dict__)
@@ -90,10 +89,7 @@ class CommandPacket:
         if params is None:
             return 0
         else:
-            length = 0
-            for value in params:
-                length += _byte_length(value) 
-            return length
+            return sum(_byte_length(value) for value in params)
 
     @staticmethod
     def make_hci_opcode(ogf: OGF, ocf: OCF):
