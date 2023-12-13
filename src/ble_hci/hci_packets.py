@@ -79,6 +79,7 @@ class CommandPacket:
         else:
             self.params = None
 
+
     def __repr__(self):
         return str(self.__dict__)
 
@@ -154,12 +155,13 @@ class CommandPacket:
         serialized_cmd.append(PacketType.COMMAND.value)
         serialized_cmd.append(self.opcode & 0xFF)
         serialized_cmd.append((self.opcode & 0xFF00) >> 8)
+        
+        
         serialized_cmd.append(self.length)
 
         if self.params:
             for param in self.params:
                 num_bytes = _byte_length(param)
-
                 serialized_cmd.extend(param.to_bytes(num_bytes, endianness.value))
 
         return serialized_cmd
