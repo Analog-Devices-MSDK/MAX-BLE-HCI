@@ -66,24 +66,6 @@ class PacketType(Enum):
     EVENT = 0x4
     EXTENDED = 0x9
 
-
-class EventCode(Enum):
-    """
-    BT Sig Defined HCI Event Codes
-    """
-
-    DICON_COMPLETE = 0x05
-    ENC_CHANGE = 0x08
-    READ_REMOTE_VERSION_INFO_COMPLETE = 0x0C
-    COMMAND_COMPLETE = 0x0E
-    COMMAND_STATUS = 0x0F
-    HARDWARE_ERROR = 0x10
-    NUM_COMPLETED_PACKETS = 0x13
-    DATA_BUFF_OVERFLOW = 0x1A
-    ENC_KEY_REFRESH_COMPLEET = 0x30
-    AUTH_PAYLOAD_TIMEOUT_EXPIRED = 0x57
-
-
 class OGF(Enum):
     """
     BLE Specified Command OFG Values

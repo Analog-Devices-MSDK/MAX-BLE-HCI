@@ -51,7 +51,7 @@
 ##############################################################################
 
 from enum import Enum
-from typing import List
+from typing import List, Optional, Union
 
 from .packet_defs import OCF, OGF, PacketType
 
@@ -59,14 +59,14 @@ from .packet_defs import OCF, OGF, PacketType
 def _byte_length(num):
     return max((num.bit_length() + 7) // 8, 1)
 
+class Endian(Enum):
+    LITTLE = "little",
+    BIG = "big"
 
 class CommandPacket:
     """
     Command Packet Class
     """
-
-    LITTLE = "little"
-    BIG = "big"
 
     def __init__(self, ogf, ocf, length, params=None) -> None:
         self.ocf = self._enum_to_int(ocf)
@@ -79,13 +79,13 @@ class CommandPacket:
         return str(self.__dict__)
 
     def _enum_to_int(self, num):
-        if not isinstance(num, int):
+        if isinstance(num, Enum):
             return num.value
         else:
             return num
 
     @staticmethod
-    def make_hci_opcode(ogf, ocf):
+    def make_hci_opcode(ogf: OGF, ocf: OCF):
         """Makes an HCI opcode.
 
         Function creates an HCI opcode from the given
@@ -122,14 +122,14 @@ class CommandPacket:
 
         return (ogf << 10) | ocf
 
-    def to_bytes(self, endianness=LITTLE):
+    def to_bytes(self, endianness: Endian = Endian.LITTLE) -> bytearray:
         """Serializes a command packet to a byte array.
 
         Parameters
         ----------
         endianness : int
-            `CommandPacket.LITTLE` or `0` for little endian serialization,
-            `CommandPacket.BIG` or `1` for big endian serialization.
+            `Endian.LITTLE` for little endian serialization,
+            `Endian.BIG` for big endian serialization.
 
         Returns
         -------
@@ -147,7 +147,7 @@ class CommandPacket:
             for param in self.params:
                 num_bytes = _byte_length(param)
 
-                serialized_cmd.extend(param.to_bytes(num_bytes, endianness))
+                serialized_cmd.extend(param.to_bytes(num_bytes, endianness.value))
 
         return serialized_cmd
 
@@ -184,20 +184,43 @@ class EventPacket:
         return str(self.__dict__)
 
     @staticmethod
-    def from_bytes(serialized_event):
+    def from_bytes(serialized_event, endianness=Endian.LITTLE):
         return EventPacket(
-            evt_code=int.from_bytes(serialized_event[0], "little"),
-            length=int.from_bytes(serialized_event[1], "little"),
-            num_cmds=int.from_bytes(serialized_event[2], "little"),
-            opcode=int.from_bytes(serialized_event[3:5], "little"),
-            status=int.from_bytes(serialized_event[5], "little"),
+            evt_code=int.from_bytes(serialized_event[0], endianness.value),
+            length=int.from_bytes(serialized_event[1], endianness.value),
+            num_cmds=int.from_bytes(serialized_event[2], endianness.value),
+            opcode=int.from_bytes(serialized_event[3:5], endianness.value),
+            status=int.from_bytes(serialized_event[5], endianness.value),
             return_vals=serialized_event[2:]
         )
     
-    def get_return_params(self, param_lens: List[int], use_raw: bool = False) -> List[int]:
-        pass
+    def get_return_params(
+        self,
+        param_lens: Optional[List[int]] = None,
+        endianness: Endian = Endian.LITTLE,
+        use_raw: bool = False
+    ) -> Union[List[int], int]:
+        if use_raw:
+            param_bytes = self.return_vals
+        else:
+            param_bytes = self.return_vals[4:]
 
+        if not param_lens:
+            return int.from_bytes(param_bytes, endianness.value)
 
+        if sum(param_lens) > len(param_bytes):
+            raise ValueError(
+                "Expected and actual number of return bytes do not match. "
+                f"Expected={sum(param_lens)}, Actual={len(param_bytes)}"
+            )
+
+        return_params = []
+        p_idx = 0
+        for p_len in param_lens:
+            return_params.append(int.from_bytes(param_bytes[p_idx:p_idx+p_len], endianness.value))
+            p_idx += p_len
+        
+        return return_params
 
 class ExtendedPacket:
     def __init__(self, data):

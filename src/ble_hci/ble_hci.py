@@ -78,9 +78,12 @@ from .packet_defs import (
     ADI_PORT_BAUD_RATE,
     OCF,
     OGF,
-    EventCode,
     PacketType,
     PubKeyValidateMode,
+)
+from .packet_codes import (
+    EventCode,
+    StatusCode
 )
 
 
@@ -254,7 +257,7 @@ class BleHci:
             self.logger.warning(
                 f"Invalid log level string: {ll_str}, level set to 'logging.NOTSET'")
 
-    def set_address(self, addr: Union[List[int], bytearray]) -> EventPacket:
+    def set_address(self, addr: Union[List[int], bytearray]) -> StatusCode:
         """Sets the BD address.
 
         Function sets the chip BD address. Address can be given
@@ -280,14 +283,16 @@ class BleHci:
             except TypeError as err:
                 self.logger.error("%s: %s", type(err).__name__, err)
         cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.SET_BD_ADDR, 6, params=addr)
-        return self._send_command(cmd)
+        evt = self._send_command(cmd)
+        
+        return evt.status
 
     def start_advertising(
         self,
         interval: int = 0x60,
         connect: bool = True,
         listen: Union[bool, int] = False
-    ) -> EventPacket:
+    ) -> StatusCode:
         #TODO: more options?
         """Command board to start advertising.
 
@@ -351,11 +356,11 @@ class BleHci:
         evt = self._send_command(cmd)
 
         if not listen:
-            return evt
+            return evt.status
         
         if isinstance(listen, int):
             self._wait(seconds=listen)
-            return evt
+            return evt.status
         
         while True:
             self._wait(seconds=10)
@@ -406,7 +411,7 @@ class BleHci:
         interval: int = 0x6,
         timeout: int = 0x64,
         listen: Union[bool, int] = False,
-    ) -> EventPacket:
+    ) -> StatusCode:
         """Command board to initialize a connection.
 
         Sends a sequence of commands to the board, telling it to
@@ -481,17 +486,17 @@ class BleHci:
         evt = self._send_command(cmd)
 
         if not listen:
-            return evt
+            return evt.status
         
         if isinstance(listen, int):
             self._wait(seconds=listen)
-            return evt
+            return evt.status
         
         while True:
             self._wait(seconds=10)
             self.get_connection_stats()
 
-    def set_data_len(self) -> EventPacket:
+    def set_data_len(self) -> StatusCode:
         """Command board to set data length to the max value.
 
         Sends a command to the board, telling it to set its internal
@@ -511,9 +516,9 @@ class BleHci:
         cmd = CommandPacket(OGF.LE_CONTROLLER, OCF.LE_CONTROLLER.SET_DATA_LEN, 6, params=params)
         evt = self._send_command(cmd)
 
-        return evt
+        return evt.status
 
-    def enable_autogenerate_acl(self, enable) -> EventPacket:
+    def enable_autogenerate_acl(self, enable) -> StatusCode:
         #TODO: check params please
         """Enable automatic generation of ACL packets.
 
@@ -532,9 +537,9 @@ class BleHci:
         """
         cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GENERATE_ACL, 1, params=int(enable))
         evt = self._send_command(cmd)
-        return evt
+        return evt.status
     
-    def generate_acl(self, handle: int, packet_len: int, num_packets: int) -> EventCode:
+    def generate_acl(self, handle: int, packet_len: int, num_packets: int) -> StatusCode:
         """Command board to generate ACL data.
 
         Sends a command to the board telling it to generate/send ACL data
@@ -586,7 +591,7 @@ class BleHci:
 
         return evt.status
 
-    def enable_acl_sink(self, enable: bool) -> EventCode:
+    def enable_acl_sink(self, enable: bool) -> StatusCode:
         """Command board to sink ACL data.
 
         Sends a command to the board, telling it to sink
@@ -605,9 +610,9 @@ class BleHci:
         """
         cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.ENA_ACL_SINK, 1, params=int(enable))
         evt = self._send_command(cmd)
-        return evt
+        return evt.status
 
-    def set_phy(self, phy: int = 1, timeout: int = 3) -> EventPacket:
+    def set_phy(self, phy: int = 1, timeout: int = 3) -> StatusCode:
         """Set the PHY.
 
         Sends a command to the board, telling it to set the
@@ -654,24 +659,7 @@ class BleHci:
         cmd = CommandPacket(OGF.LE_CONTROLLER, OCF.LE_CONTROLLER.SET_PHY, 7, params=params)
         evt = self._send_command(cmd)
 
-        return evt
-    
-    def reset(self) -> EventPacket:
-        """Reset test board.
-
-        Sends a command to the board, telling it to reset the
-        link layer internal control.
-
-        Returns
-        -------
-        Event
-            Object containing board return data.
-
-        """
-        cmd = CommandPacket(OGF.CONTROLLER, OCF.CONTROLLER.RESET, 0)
-        evt = self._send_command(cmd)
-
-        return evt
+        return evt.status
 
     def listen(self, time: int = 0) -> float:
         """Listen for events and monitor connection stats.
@@ -712,7 +700,7 @@ class BleHci:
 
     def tx_test(
         self, channel: int = 0, phy: int = 1, payload: int = 0, packet_len: int = 0
-    ) -> EventPacket:
+    ) -> StatusCode:
         """Command board to being transmitting.
 
         Sends a command to the board, telling it to begin transmitting
@@ -755,7 +743,7 @@ class BleHci:
             OGF.LE_CONTROLLER, OCF.LE_CONTROLLER.ENHANCED_TRANSMITTER_TEST, 4, params=params)
         evt = self._send_command(cmd)
 
-        return evt
+        return evt.status
 
     def tx_test_vs(
         self,
@@ -764,7 +752,7 @@ class BleHci:
         payload: int = 0,
         packet_len: int = 0,
         num_packets: int = 0,
-    ) -> EventPacket:
+    ) -> StatusCode:
         """Command board to being transmitting (vendor-specific).
 
         Sends a command to the board, telling it to begin transmitting
@@ -809,9 +797,9 @@ class BleHci:
         cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.TX_TEST, 6, params=params)
         evt = self._send_command(cmd)
 
-        return evt
+        return evt.status
 
-    def rx_test(self, channel: int = 0, phy: int = 1, modulation_idx: float = 0) -> EventPacket:
+    def rx_test(self, channel: int = 0, phy: int = 1, modulation_idx: float = 0) -> StatusCode:
         """Command board to begin receiving.
 
         Sends a command to the board, telling it to begin receiving
@@ -846,7 +834,7 @@ class BleHci:
             OGF.LE_CONTROLLER, OCF.LE_CONTROLLER.ENHANCED_RECEIVER_TEST, 3, params=params)
         evt = self._send_command(cmd)
 
-        return evt
+        return evt.status
 
     def rx_test_vs(
         self,
@@ -854,7 +842,7 @@ class BleHci:
         phy: int = 1,
         num_packets: int = 0,
         modulation_idx: float = 0
-    ) -> EventPacket:
+    ) -> StatusCode:
         """Command board to begin receiving (vendor-specific).
 
         Sends a command to the board, telling it to begin receiving
@@ -893,7 +881,7 @@ class BleHci:
         cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.RX_TEST, 5, params=params)
         evt = self._send_command(cmd)
 
-        return evt
+        return evt.status
 
     def end_test(self) -> EventPacket:
         """Command board to end the current test.
@@ -937,7 +925,7 @@ class BleHci:
 
         return evt
 
-    def set_adv_tx_power(self, tx_power: int) -> EventPacket:
+    def set_adv_tx_power(self, tx_power: int) -> StatusCode:
         """Set the advertising TX power.
 
         Sends a command to the board, telling
@@ -965,9 +953,9 @@ class BleHci:
 
         cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.SET_ADV_TX_PWR, 1, params=tx_power)
         evt = self._send_command(cmd)
-        return evt
+        return evt.status
     
-    def set_conn_tx_power(self, tx_power: int, handle: int) -> EventPacket:
+    def set_conn_tx_power(self, tx_power: int, handle: int) -> StatusCode:
         """Set the connection TX power.
 
         Sends a command to the board, telling
@@ -1001,9 +989,9 @@ class BleHci:
         ]
         cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.SET_CONN_TX_PWR, 3, params=params)
         evt = self._send_command(cmd)
-        return evt
+        return evt.status
 
-    def disconnect(self) -> EventPacket:
+    def disconnect(self) -> StatusCode:
         """Command board to disconnect from an initialized connection.
 
         Sends a command to the board, telling it to break a currently
@@ -1024,13 +1012,13 @@ class BleHci:
         cmd = CommandPacket(OGF.LINK_CONTROL, OCF.LINK_CONTROL.DISCONNECT, 3, params=params)
         evt = self._send_command(cmd)
 
-        return evt
+        return evt.status
 
     def set_channel_map(
         self,
         channels: Optional[Union[List[int], int]] = None,
         handle: int = 0,
-    ) -> EventCode:
+    ) -> StatusCode:
         """Set the channel map.
 
         Creates a channel map/mask based on the given arguments
@@ -1136,7 +1124,7 @@ class BleHci:
 
         return read_data
 
-    def write_register(self, addr: str, data: int) -> EventPacket:
+    def write_register(self, addr: str, data: int) -> StatusCode:
         """Write data to a specific register.
 
         Sends a command to the board, telling it to write the
@@ -1184,7 +1172,7 @@ class BleHci:
             OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.REG_WRITE, write_length + 5, params=params)
         evt = self._send_command(cmd)
 
-        return evt
+        return evt.status
 
     def read_event(self, timeout: float = 1) -> EventPacket:
         timeout_err = None
@@ -1205,7 +1193,7 @@ class BleHci:
         command: CommandPacket,
         listen: Union[bool, int] = False,
         timeout: int = 6,
-    ) -> EventPacket:
+    ) -> StatusCode:
         """Send a custom command to the board.
 
         Sends a custom HCI command to the board. Safeguarding is
@@ -1245,14 +1233,14 @@ class BleHci:
             while True:
                 self._wait(seconds=10)
 
-        return evt
+        return evt.status
 
     def write_command_raw(
         self,
         data: bytearray,
         listen: Union[bool, int] = False,
         timeout: int = 6,
-    ) -> EventPacket:
+    ) -> StatusCode:
         """Send a custom bytearray command to the board.
 
         Sends a custom HCI command to the board as a bytearray. Safeguarding
@@ -1292,9 +1280,9 @@ class BleHci:
             while True:
                 self._wait(seconds=10)
 
-        return evt
+        return evt.status
 
-    def reset(self) -> EventPacket:
+    def reset(self) -> StatusCode:
         """Sets log level.
         Resets the controller
 
@@ -1303,14 +1291,12 @@ class BleHci:
         Event: EventPacket
 
         """
-        return self.write_command(
-            CommandPacket(
-                ocf=OCF.CONTROLLER.RESET,
-                ogf=OGF.CONTROLLER,
-            )
-        )
+        cmd = CommandPacket(OGF.CONTROLLER, OCF.CONTROLLER.RESET)
+        evt = self._send_command(cmd)
 
-    def set_scan_channel_map(self, channel_map: int) -> EventCode:
+        return evt.status
+
+    def set_scan_channel_map(self, channel_map: int) -> StatusCode:
         """Set the channel map used for scanning
 
         Parameters
@@ -1323,13 +1309,10 @@ class BleHci:
         EventCode
 
         """
-        return self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.SET_SCAN_CH_MAP,
-                ogf=OGF.VENDOR_SPEC,
-                params=[channel_map],
-            )
-        ).evt_code
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.SET_SCAN_CH_MAP, params=channel_map)
+        evt = self._send_command(cmd)
+
+        return evt.status
 
     def set_event_mask(
             self,
@@ -1372,7 +1355,7 @@ class BleHci:
         
         return status
             
-    def set_event_mask_le(self, mask: int) -> EventCode:
+    def set_event_mask_le(self, mask: int) -> StatusCode:
         """LE controller set event mask
 
         Parameters
@@ -1392,7 +1375,7 @@ class BleHci:
         cmd = CommandPacket(OGF.LE_CONTROLLER, OCF.LE_CONTROLLER.SET_EVENT_MASK, 8, params=mask)
         return self._send_command(cmd).status
 
-    def set_event_mask_vs(self, mask: int, enable: bool) -> EventCode:
+    def set_event_mask_vs(self, mask: int, enable: bool) -> StatusCode:
         """Vendor specific set event mask
 
         Parameters
@@ -1418,7 +1401,7 @@ class BleHci:
             CommandPacket(ocf=OCF.VENDOR_SPEC.SET_EVENT_MASK, ogf=OGF.VENDOR_SPEC)
         ).evt_code
 
-    def set_tx_test_err_pattern(self, pattern) -> EventCode:
+    def set_tx_test_err_pattern(self, pattern) -> StatusCode:
         """Set TX Test Error Pattern
         Parameters
         ----------
@@ -1428,17 +1411,14 @@ class BleHci:
         -------
         EventCode
         """
-        return self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.SET_TX_TEST_ERR_PATT,
-                ogf=OGF.VENDOR_SPEC,
-                params=[pattern],
-            )
-        ).evt_code
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.SET_TX_TEST_ERR_PATT, params=pattern)
+        evt = self._send_command(cmd)
+
+        return evt.status
 
     def set_connection_op_flags(
         self, handle: int, flags: int, enable: bool
-    ) -> EventCode:
+    ) -> StatusCode:
         """Set connection operation flags
 
         Parameters
@@ -1459,15 +1439,12 @@ class BleHci:
         params.extend(to_little_endian_list(flags))
         params.append(int(enable))
 
-        return self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.SET_TX_TEST_ERR_PATT,
-                ogf=OGF.VENDOR_SPEC,
-                params=params,
-            )
-        ).evt_code
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.SET_CONN_OP_FLAGS, params=params)
+        evt = self._send_command(cmd)
 
-    def set_256_priv_key(self, key: List[int]) -> EventCode:
+        return evt.status
+
+    def set_256_priv_key(self, key: List[int]) -> StatusCode:
         """Set the 256 Byte private key used
 
         Parameters
@@ -1488,17 +1465,14 @@ class BleHci:
         if len(key.to_bytes()) != 8 * 32:
             raise ValueError("Must had an array of 32 bytes")
 
-        return self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.SET_TX_TEST_ERR_PATT,
-                ogf=OGF.VENDOR_SPEC,
-                params=key,
-            )
-        ).evt_code
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.SET_P256_PRIV_KEY, params=key)
+        evt = self._send_command(cmd)
+
+        return evt.status
 
     def get_channel_map_periodic_scan_adv(
         self, handle: int, is_advertising: bool
-    ) -> EventPacket:
+    ) -> StatusCode:
         """Get the channel map used for periodic scanning
 
         Parameters
@@ -1516,11 +1490,11 @@ class BleHci:
 
         params = [handle & 0xFF, (handle >> 8) & 0xFF]
         params.append(int(is_advertising))
-        return self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.GET_PER_CHAN_MAP, ogf=OGF.VENDOR_SPEC, params=params
-            )
-        ).evt_code
+
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GET_PER_CHAN_MAP, params=params)
+        evt = self._send_command(cmd)
+
+        return evt.status
 
     def get_acl_test_report(self) -> Dict[str, int]:
         """Get ACL Test Report
@@ -1530,23 +1504,22 @@ class BleHci:
         Dict[str, int]
             ACL Test Report
         """
-        evt = self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.GET_ACL_TEST_REPORT,
-                ogf=OGF.VENDOR_SPEC,
-            )
-        )
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GET_ACL_TEST_REPORT)
+        evt = self._send_command(cmd)
 
-        return {
-            "rx-acl-pkt-cnt": _le_list_to_int(evt.return_vals[:4]),
-            "rx-acl-oct-cnt": _le_list_to_int(evt.return_vals[4:8]),
-            "gen-acl-pkt-cnt": _le_list_to_int(evt.return_vals[8:12]),
-            "gen-acl-oct-cnt": _le_list_to_int(evt.return_vals[12:6]),
+        vals = evt.get_return_params(param_lens=[4, 4, 4, 4])
+
+        stats = {
+            "rx-acl-pkt-cnt": vals[0],
+            "rx-acl-oct-cnt": vals[1],
+            "gen-acl-pkt-cnt": vals[2],
+            "gen-acl-oct-cnt": vals[3]
         }
+        return stats
 
     def set_local_num_min_used_channels(
         self, phy: PhyOption, power_thresh: int, min_used: int
-    ) -> EventCode:
+    ) -> StatusCode:
         """Set local number of minimum used channels
 
         Parameters
@@ -1575,13 +1548,12 @@ class BleHci:
         if power_thresh < -127 or power_thresh > 127:
             raise ValueError("power_thresh must be between -127 and 127")
 
-        return self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.SET_LOCAL_MIN_USED_CHAN,
-                ogf=OGF.VENDOR_SPEC,
-                params=[phy.value, power_thresh, min_used],
-            )
-        ).evt_code
+        params = [phy.value, power_thresh, min_used]
+        cmd = CommandPacket(
+            OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.SET_LOCAL_MIN_USED_CHAN, params=params)
+        evt = self._send_command(cmd)
+        
+        return evt.status
 
     def get_peer_min_num_channels_used(self, handle: int) -> Dict[PhyOption, int]:
         """Get minimum number of channels used by peer
@@ -1596,20 +1568,22 @@ class BleHci:
         Dict[PhyOption, int]
             min num used channel map
         """
-        evt = self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.GET_PEER_MIN_USED_CHAN,
-                ogf=OGF.VENDOR_SPEC,
-                params=[handle & 0xFF, (handle >> 0xFF) & 0xFF],
-            )
-        )
-        return {
-            PhyOption.P1M: evt.raw_return[0],
-            PhyOption.P2M: evt.raw_return[1],
-            PhyOption.PCODED: evt.raw_return[2],
+        params = _to_le16_list(handle)
+        cmd = CommandPacket(
+            OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GET_PEER_MIN_USED_CHAN, params=params)
+        evt = self._send_command(cmd)
+
+        vals = evt.get_return_params(param_lens=[1, 1, 1])
+
+        min_used_map = {
+            PhyOption.P1M: vals[0],
+            PhyOption.P2M: vals[1],
+            PhyOption.PCODED: vals[2]
         }
 
-    def set_validate_pub_key_mode(self, mode: PubKeyValidateMode) -> EventCode:
+        return min_used_map
+
+    def set_validate_pub_key_mode(self, mode: PubKeyValidateMode) -> StatusCode:
         """Set validate public key mode
 
         Parameters
@@ -1622,14 +1596,10 @@ class BleHci:
         EventCode
 
         """
-
-        return self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.VALIDATE_PUB_KEY_MODE,
-                ogf=OGF.VENDOR_SPEC,
-                params=[mode.value],
-            )
-        ).evt_code
+        cmd = CommandPacket(
+            OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.VALIDATE_PUB_KEY_MODE, params=mode.value)
+        evt = self._send_command(cmd)
+        return evt.status
 
     def get_rand_address(self) -> List[int]:
         """Gets a randomly generated address
@@ -1639,14 +1609,13 @@ class BleHci:
         List[int]
             6 Byte address
         """
-        return self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.GET_RAND_ADDR,
-                ogf=OGF.VENDOR_SPEC,
-            )
-        ).raw_return
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GET_RAND_ADDR)
+        evt = self._send_command(cmd)
 
-    def set_local_feature(self, features: int) -> EventCode:
+        addr = _to_le_nbyte_list(evt.get_return_params(), 6)
+        return addr
+
+    def set_local_feature(self, features: int) -> StatusCode:
         """Set local features
 
         Parameters
@@ -1659,15 +1628,12 @@ class BleHci:
         EventCode
 
         """
-        return self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.SET_LOCAL_FEAT,
-                ogf=OGF.VENDOR_SPEC,
-                params=[features],
-            )
-        ).evt_code
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.SET_LOCAL_FEAT, params=features)
+        evt = self._send_command(cmd)
 
-    def set_operational_flags(self, flags: int, enable: bool) -> EventCode:
+        return evt.status
+
+    def set_operational_flags(self, flags: int, enable: bool) -> StatusCode:
         """Sets operational flags
 
         Parameters
@@ -1682,13 +1648,11 @@ class BleHci:
         EventCode
 
         """
-        return self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.SET_OP_FLAGS,
-                ogf=OGF.VENDOR_SPEC,
-                params=[flags, int(enable)],
-            )
-        ).evt_code
+        params = [flags, int(enable)]
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.SET_OP_FLAGS, params=params)
+        evt = self._send_command(cmd)
+
+        return evt.status
 
     def get_pdu_filter_stats(self) -> Dict[str, int]:
         """Get PDU Filter Stats
@@ -1698,38 +1662,39 @@ class BleHci:
         Dict[str, int]
             Filter stats
         """
-        evt = self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.GET_PDU_FILT_STATS,
-                ogf=OGF.VENDOR_SPEC,
-            )
-        )
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GET_PDU_FILT_STATS)
+        evt = self._send_command(cmd)
 
-        return {
-            "fail-pdu": _le_list_to_int(evt.return_vals[:2]),
-            "pass-pdu": _le_list_to_int(evt.return_vals[2:4]),
-            "fail-whitelist": _le_list_to_int(evt.return_vals[4:6]),
-            "pass_whitellist": _le_list_to_int(evt.return_vals[6:8]),
-            "fail-peer-addr-match": _le_list_to_int(evt.return_vals[8:10]),
-            "pass-peer-addr-match": _le_list_to_int(evt.return_vals[10:12]),
-            "fail-local-addr-match": _le_list_to_int(evt.return_vals[12:14]),
-            "pass-local-addr-match": _le_list_to_int(evt.return_vals[14:16]),
-            "fail-peer-rpa-verify": _le_list_to_int(evt.return_vals[16:18]),
-            "pass-peer-rpa-verify": _le_list_to_int(evt.return_vals[18:20]),
-            "fail-peer-priv-addr": _le_list_to_int(evt.return_vals[20:22]),
-            "pass-peer-priv-addr": _le_list_to_int(evt.return_vals[22:24]),
-            "fail-local-priv-addr": _le_list_to_int(evt.return_vals[24:26]),
-            "pass-local-priv-addr": _le_list_to_int(evt.return_vals[26:28]),
-            "fail-peer-addr-res-req": _le_list_to_int(evt.return_vals[28:30]),
-            "pass-peer-addr-res-req": _le_list_to_int(evt.return_vals[30:32]),
-            "pass-local-addr-res-opt": _le_list_to_int(evt.return_vals[32:34]),
-            "peer-res-addr-pend": _le_list_to_int(evt.return_vals[32:34]),
-            "local-res-addr-pend": _le_list_to_int(evt.return_vals[34:36]),
+        vals = evt.get_return_params(
+            param_lens=[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2])
+
+        stats = {
+            "fail-pdu": vals[0],
+            "pass-pdu": vals[1],
+            "fail-whitelist": vals[2],
+            "pass_whitellist": vals[3],
+            "fail-peer-addr-match": vals[4],
+            "pass-peer-addr-match": vals[5],
+            "fail-local-addr-match": vals[6],
+            "pass-local-addr-match": vals[7],
+            "fail-peer-rpa-verify": vals[8],
+            "pass-peer-rpa-verify": vals[9],
+            "fail-peer-priv-addr": vals[10],
+            "pass-peer-priv-addr": vals[11],
+            "fail-local-priv-addr": vals[12],
+            "pass-local-priv-addr": vals[13],
+            "fail-peer-addr-res-req": vals[14],
+            "pass-peer-addr-res-req": vals[15],
+            "pass-local-addr-res-opt": vals[16],
+            "peer-res-addr-pend": vals[17],
+            "local-res-addr-pend": vals[18]
         }
+
+        return stats
 
     def set_encryption_mode(
         self, handle: int, enable: bool, noonce_mode: bool
-    ) -> EventCode:
+    ) -> StatusCode:
         """Set encryption mode
 
         Parameters
@@ -1750,13 +1715,12 @@ class BleHci:
         params.append(int(enable))
         params.append(int(noonce_mode))
 
-        return self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.SET_CONN_TX_PWR, ogf=OGF.VENDOR_SPEC, params=params
-            )
-        ).evt_code
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.SET_ENC_MODE, params=params)
+        evt = self._send_command(cmd)
 
-    def set_diagnostic_mode(self, enable: bool) -> EventCode:
+        return evt.status
+
+    def set_diagnostic_mode(self, enable: bool) -> StatusCode:
         """Set diagnostic mode
 
         Parameters
@@ -1769,15 +1733,12 @@ class BleHci:
         EventCode
 
         """
-        return self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.SET_DIAG_MODE,
-                ogf=OGF.VENDOR_SPEC,
-                params=[int(enable)],
-            )
-        ).evt_code
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.SET_DIAG_MODE, params=int(enable))
+        evt = self._send_command(cmd)
 
-    def enable_sniffer_packet_forwarding(self, enable: bool) -> EventCode:
+        return evt.status
+
+    def enable_sniffer_packet_forwarding(self, enable: bool) -> StatusCode:
         """Enable packet sniffer forwarding
 
         Parameters
@@ -1790,13 +1751,11 @@ class BleHci:
         EventCode
 
         """
-        return self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.SET_SNIFFER_ENABLE,
-                ogf=OGF.VENDOR_SPEC,
-                params=[int(enable)],
-            )
-        ).evt_code
+        cmd = CommandPacket(
+            OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.SET_SNIFFER_ENABLE, params=int(enable))
+        evt = self._send_command(cmd)
+
+        return evt.status
 
     def get_memory_stats(self) -> Dict[str, int]:
         """Get memory use stats
@@ -1806,40 +1765,36 @@ class BleHci:
         Dict[str, int]
             Memory use stats
         """
-        evt = self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.GET_SYS_STATS,
-                ogf=OGF.VENDOR_SPEC,
-            )
-        )
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GET_SYS_STATS)
+        evt = self._send_command(cmd)
 
-        assert (
-            len(evt.raw_return) == 46
-        ), f"Return length is wrong {len(evt.raw_return)}"
+        vals = evt.get_return_params(
+            param_lens=[2, 2, 4, 4, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2])
 
-        return {
-            "stack": _le_list_to_int(evt.raw_return[:2]),
-            "sys-assert-cnt": _le_list_to_int(evt.raw_return[2:4]),
-            "free-mem": _le_list_to_int(evt.raw_return[4:8]),
-            "used-mem": _le_list_to_int(evt.raw_return[8:12]),
-            "max-connections": _le_list_to_int(evt.raw_return[12:14]),
-            "conn-ctx-size": _le_list_to_int(evt.raw_return[14:16]),
-            "cs-watermark-lvl": _le_list_to_int(evt.raw_return[16:18]),
-            "ll-watermark-lvl": _le_list_to_int(evt.raw_return[18:20]),
-            "sch-watermark-lvl": _le_list_to_int(evt.raw_return[20:22]),
-            "lhci-watermark-lvl": _le_list_to_int(evt.raw_return[22:24]),
-            "max-adv-sets": _le_list_to_int(evt.raw_return[24:26]),
-            "adv-set-ctx-size": _le_list_to_int(evt.raw_return[26:28]),
-            "ext-scan-max": _le_list_to_int(evt.raw_return[28:30]),
-            "ext-scan-ctx-size": _le_list_to_int(evt.raw_return[30:32]),
-            "max-num-ext-init": _le_list_to_int(evt.raw_return[32:34]),
-            "exit-init-ctx-size": _le_list_to_int(evt.raw_return[34:36]),
-            "max-per-scanners": _le_list_to_int(evt.raw_return[36:38]),
-            "per-scan-ctz-size": _le_list_to_int(evt.raw_return[38:40]),
-            "max-cig": _le_list_to_int(evt.raw_return[40:42]),
-            "cig-ctx-size": _le_list_to_int(evt.raw_return[42:44]),
-            "cis-ctx-size": _le_list_to_int(evt.raw_return[44:46]),
+        stats = {
+            "stack": vals[0],
+            "sys-assert-cnt": vals[1],
+            "free-mem": vals[2],
+            "used-mem": vals[3],
+            "max-connections": vals[4],
+            "conn-ctx-size": vals[5],
+            "cs-watermark-lvl": vals[6],
+            "ll-watermark-lvl": vals[7],
+            "sch-watermark-lvl": vals[8],
+            "lhci-watermark-lvl": vals[9],
+            "max-adv-sets": vals[10],
+            "adv-set-ctx-size": vals[11],
+            "ext-scan-max": vals[12],
+            "ext-scan-ctx-size": vals[13],
+            "max-num-ext-init": vals[14],
+            "exit-init-ctx-size": vals[15],
+            "max-per-scanners": vals[16],
+            "per-scan-ctz-size": vals[17],
+            "max-cig": vals[18],
+            "cig-ctx-size": vals[19],
+            "cis-ctx-size": vals[20]
         }
+        return stats
 
     def get_adv_stats(self) -> Dict[str, int]:
         """Get advertising stats
@@ -1849,28 +1804,24 @@ class BleHci:
         Dict[str, int]
             Advertising stats
         """
-        evt = self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.GET_ADV_STATS,
-                ogf=OGF.VENDOR_SPEC,
-            )
-        )
-        assert (
-            len(evt.raw_return) == 30
-        ), f"Return length is wrong {len(evt.raw_return)}"
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GET_ADV_STATS)
+        evt = self._send_command(cmd)
+        
+        vals = evt.get_return_params(param_lens=[4, 4, 4, 2, 4, 4, 2, 2, 2, 2])
 
-        return {
-            "tx-adv": _le_list_to_int(evt.raw_return[:4]),
-            "rx-req": _le_list_to_int(evt.raw_return[4:8]),
-            "rx-req-crc": _le_list_to_int(evt.raw_return[8:12]),
-            "rx-req-timeout": _le_list_to_int(evt.raw_return[12:14]),
-            "tx-resp": _le_list_to_int(evt.raw_return[14:18]),
-            "err-adv": _le_list_to_int(evt.raw_return[18:22]),
-            "rx-setup": _le_list_to_int(evt.raw_return[22:24]),
-            "tx-setup": _le_list_to_int(evt.raw_return[24:26]),
-            "rx-isr": _le_list_to_int(evt.raw_return[26:28]),
-            "tx-isr": _le_list_to_int(evt.raw_return[28:30]),
+        stats = {
+            "tx-adv": vals[0],
+            "rx-req": vals[1],
+            "rx-req-crc": vals[2],
+            "rx-req-timeout": vals[3],
+            "tx-resp": vals[4],
+            "err-adv": vals[5],
+            "rx-setup": vals[6],
+            "tx-setup": vals[7],
+            "rx-isr": vals[8],
+            "tx-isr": vals[9]
         }
+        return stats
 
     def get_scan_stats(self) -> Dict[str, int]:
         """Get scanning stats
@@ -1880,27 +1831,27 @@ class BleHci:
         Dict[str, int]
             Scanning stats
         """
-        evt = self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.GET_SCAN_STATS,
-                ogf=OGF.VENDOR_SPEC,
-            )
-        )
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GET_SCAN_STATS)
+        evt = self.write_command(cmd)
 
-        return {
-            "rx-adv": _le_list_to_int(evt.raw_return[:4]),
-            "rx-adv-crc": _le_list_to_int(evt.raw_return[4:8]),
-            "rx-adv-timeout": _le_list_to_int(evt.raw_return[8:12]),
-            "tx-req": _le_list_to_int(evt.raw_return[12:16]),
-            "rx-rsp": _le_list_to_int(evt.raw_return[16:20]),
-            "rx-rsp-crc": _le_list_to_int(evt.raw_return[20:24]),
-            "rx-rsp-timeout": _le_list_to_int(evt.raw_return[24:28]),
-            "err-scan": _le_list_to_int(evt.raw_return[28:32]),
-            "rx-setup": _le_list_to_int(evt.raw_return[32:34]),
-            "tx-setup": _le_list_to_int(evt.raw_return[34:36]),
-            "rx-isr": _le_list_to_int(evt.raw_return[36:38]),
-            "tx-isr": _le_list_to_int(evt.raw_return[38:40]),
+        vals = evt.get_return_params(param_lens=[4, 4, 4, 4, 4, 4, 4, 4, 2, 2, 2, 2])
+
+        stats = {
+            "rx-adv": vals[0],
+            "rx-adv-crc": vals[1],
+            "rx-adv-timeout": vals[2],
+            "tx-req": vals[3],
+            "rx-rsp": vals[4],
+            "rx-rsp-crc": vals[5],
+            "rx-rsp-timeout": vals[6],
+            "err-scan": vals[7],
+            "rx-setup": vals[8],
+            "tx-setup": vals[9],
+            "rx-isr": vals[10],
+            "tx-isr": vals[11]
         }
+
+        return stats
 
     def get_conn_stats(self) -> Dict[str, int]:
         """Gets and parses connection stats.
@@ -1948,24 +1899,23 @@ class BleHci:
         Dict[str, int]
             Test stats
         """
-        evt = self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.GET_TEST_STATS,
-                ogf=OGF.VENDOR_SPEC,
-            )
-        )
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GET_TEST_STATS)
+        evt = self._send_command(cmd)
 
-        return {
-            "rx-data": _le_list_to_int(evt.raw_return[:4]),
-            "rx-data-crc": _le_list_to_int(evt.raw_return[4:8]),
-            "rx-data-timeout": _le_list_to_int(evt.raw_return[8:12]),
-            "tx-data": _le_list_to_int(evt.raw_return[12:16]),
-            "err-data": _le_list_to_int(evt.raw_return[16:20]),
-            "rx-setup": _le_list_to_int(evt.raw_return[20:24]),
-            "tx-setup": _le_list_to_int(evt.raw_return[24:28]),
-            "rx-isr": _le_list_to_int(evt.raw_return[28:32]),
-            "tx-isr": _le_list_to_int(evt.raw_return[32:36]),
+        vals = evt.get_return_params(param_lens=[4, 4, 4, 4, 4, 4, 4, 4, 4])
+
+        stats = {
+            "rx-data": vals[0],
+            "rx-data-crc": vals[1],
+            "rx-data-timeout": vals[2],
+            "tx-data": vals[3],
+            "err-data": vals[4],
+            "rx-setup": vals[5],
+            "tx-setup": vals[6],
+            "rx-isr": vals[7],
+            "tx-isr": vals[8],
         }
+        return stats
 
     def get_pool_stats(self) -> Dict[str, int]:
         """Get memory pool stats
@@ -1975,13 +1925,11 @@ class BleHci:
         Dict[str, int]
             memory pool stats
         """
-        evt = self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.GET_POOL_STATS,
-                ogf=OGF.VENDOR_SPEC,
-            )
-        )
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GET_POOL_STATS)
+        evt = self._send_command(cmd)
 
+        #TODO: Whaaaaat?
+        
         num_pool = evt.raw_return[0]
         pool_stats = {"num-pool": num_pool}
 
@@ -1999,7 +1947,7 @@ class BleHci:
 
         return pool_stats
 
-    def set_additional_aux_ptr_offset(self, delay: int, handle: int) -> EventCode:
+    def set_additional_aux_ptr_offset(self, delay: int, handle: int) -> StatusCode:
         """Set auxillary pointer delay
 
         Parameters
@@ -2014,17 +1962,16 @@ class BleHci:
         EventCode
 
         """
-        return self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.SET_AUX_DELAY,
-                ogf=OGF.VENDOR_SPEC,
-                params=[to_little_endian(delay), handle],
-            )
-        ).evt_code
+        params = [to_little_endian(delay), handle]
+        
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.SET_AUX_DELAY, params=params)
+        evt = self._send_command(cmd)
+
+        return evt.status
 
     def set_ext_adv_data_fragmentation(
         self, handle: int, frag_length: int
-    ) -> EventCode:
+    ) -> StatusCode:
         """Set extended advertising fragmentation length
 
         Parameters
@@ -2039,17 +1986,17 @@ class BleHci:
         EventCode
 
         """
-        return self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.SET_EXT_ADV_FRAG_LEN,
-                ogf=OGF.VENDOR_SPEC,
-                params=[handle, frag_length],
-            )
-        ).evt_code
+        params = _to_le16_list(handle)
+        params.append(frag_length)
+        
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.SET_EXT_ADV_FRAG_LEN, params=params)
+        evt = self._send_command(cmd)
+
+        return evt.status
 
     def set_extended_advertising_phy_opts(
         self, handle: int, primary: int, secondary: int
-    ) -> EventCode:
+    ) -> StatusCode:
         """Set phy options used for extended advertsing
 
         Parameters
@@ -2066,17 +2013,18 @@ class BleHci:
         EventCode
 
         """
-        return self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.SET_EXT_ADV_PHY_OPTS,
-                ogf=OGF.VENDOR_SPEC,
-                params=[handle, primary, secondary],
-            )
-        ).evt_code
+        params = _to_le16_list(handle)
+        params.append(primary)
+        params.append(secondary)
 
-    def set_extended_advertising_defaulty_phy_opts(
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.SET_EXT_ADV_PHY_OPTS, params=params)
+        evt = self._send_command(cmd)
+
+        return evt.status
+
+    def set_extended_advertising_default_phy_opts(
         self, handle: int, primary: int, secondary: int
-    ) -> EventCode:
+    ) -> StatusCode:
         """Set default phy options used for extended advertsing
 
         Parameters
@@ -2093,17 +2041,19 @@ class BleHci:
         EventCode
 
         """
-        return self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.SET_EXT_ADV_DEF_PHY_OPTS,
-                ogf=OGF.VENDOR_SPEC,
-                params=[handle, primary, secondary],
-            )
-        ).evt_code
+        params = _to_le16_list(handle)
+        params.append(primary)
+        params.append(secondary)
+
+        cmd = CommandPacket(
+            OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.SET_EXT_ADV_DEF_PHY_OPTS, params=params)
+        evt = self._send_command(cmd)
+
+        return evt.status
 
     def generate_iso_packets(
         self, handle: int, packet_length: int, num_packets: int
-    ) -> EventCode:
+    ) -> StatusCode:
         """Generate ISO packets
 
         Parameters
@@ -2124,11 +2074,10 @@ class BleHci:
         params.extend(to_little_endian_list(packet_length))
         params.append(num_packets)
 
-        return self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.GENERATE_ISO, ogf=OGF.VENDOR_SPEC, params=params
-            )
-        ).evt_code
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GENERATE_ISO, params=params)
+        evt = self._send_command(cmd)
+
+        return evt.status
 
     def get_iso_test_report(self) -> Dict[str, int]:
         """Get ISO test report
@@ -2138,21 +2087,21 @@ class BleHci:
         Dict[str, int]
             ISO test report
         """
-        evt = self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.GET_ISO_TEST_REPORT,
-                ogf=OGF.VENDOR_SPEC,
-            )
-        )
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GET_ISO_TEST_REPORT)
+        evt = self._send_command(cmd)
 
-        return {
-            "rx-iso-pkt-cnt": _le_list_to_int(evt.raw_return[:4]),
-            "rx-iso-oct-cnt": _le_list_to_int(evt.raw_return[4:8]),
-            "gen-pkt-cnt": _le_list_to_int(evt.raw_return[8:12]),
-            "gen-oct-cnt": _le_list_to_int(evt.raw_return[12:14]),
+        vals = evt.return_vals(param_lens=[4, 4, 4, 2])
+
+        stats = {
+            "rx-iso-pkt-cnt": vals[0],
+            "rx-iso-oct-cnt": vals[1],
+            "gen-pkt-cnt": vals[2],
+            "gen-oct-cnt": vals[3],
         }
 
-    def enable_iso_packet_sink(self, enable: bool) -> EventCode:
+        return stats
+
+    def enable_iso_packet_sink(self, enable: bool) -> StatusCode:
         """Enable ISO packet sink
 
         Parameters
@@ -2165,15 +2114,12 @@ class BleHci:
         EventCode
 
         """
-        return self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.ENA_ISO_SINK,
-                ogf=OGF.VENDOR_SPEC,
-                params=[int(enable)],
-            )
-        ).evt_code
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.ENA_ISO_SINK, params=int(enable))
+        evt = self._send_command(cmd)
 
-    def enable_autogen_iso_packets(self, packet_length: int) -> EventCode:
+        return evt.status
+
+    def enable_autogen_iso_packets(self, packet_length: int) -> StatusCode:
         """Enable autogeneration of of ISO packets
 
         Parameters
@@ -2192,15 +2138,15 @@ class BleHci:
             If value is more than 4 bytes
         """
         if packet_length > 0xFFFFFFFF:
-            raise ValueError(f"packet length ({packet_length}) must be 4 bytes")
-
-        return self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.ENA_AUTO_GEN_ISO,
-                ogf=OGF.VENDOR_SPEC,
-                params=_to_le_nbyte_list(packet_length, 4),
-            )
-        ).evt_code
+            raise ValueError(
+                f"Invalid packet length {packet_length}. Must be maximum 4 bytes in size.")
+        
+        packet_length = _to_le_nbyte_list(packet_length, 4)
+        cmd = CommandPacket(
+            OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.ENA_AUTO_GEN_ISO, params=packet_length)
+        
+        evt = self._send_command(cmd)
+        return evt.status
 
     def get_iso_connection_stats(self) -> Dict[str, int]:
         """Get ISO connection stats
@@ -2210,23 +2156,24 @@ class BleHci:
         Dict[str, int]
             ISO connection stats
         """
-        evt = self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.GET_ISO_TEST_REPORT,
-                ogf=OGF.VENDOR_SPEC,
-            )
-        )
-        return {
-            "rx-data": _le_list_to_int(evt.raw_return[:4]),
-            "rx-data-crc": _le_list_to_int(evt.raw_return[4:8]),
-            "rx-data-timeout": _le_list_to_int(evt.raw_return[8:12]),
-            "tx-data": _le_list_to_int(evt.raw_return[12:16]),
-            "err-data": _le_list_to_int(evt.raw_return[16:20]),
-            "rx-setup": _le_list_to_int(evt.raw_return[20:24]),
-            "tx-setup": _le_list_to_int(evt.raw_return[24:28]),
-            "rx-isr": _le_list_to_int(evt.raw_return[28:32]),
-            "tx-isr": _le_list_to_int(evt.raw_return[32:36]),
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GET_ISO_TEST_REPORT)
+        evt = self._send_command(cmd)
+
+        vals = evt.get_return_params(param_lens=[4, 4, 4, 4, 4, 4, 4, 4, 4])
+
+        stats = {
+            "rx-data": vals[0],
+            "rx-data-crc": vals[1],
+            "rx-data-timeout": vals[2],
+            "tx-data": vals[3],
+            "err-data": vals[4],
+            "rx-setup": vals[5],
+            "tx-setup": vals[6],
+            "rx-isr": vals[7],
+            "tx-isr": vals[8]
         }
+
+        return stats
 
     def get_aux_adv_stats(self) -> Dict[str, int]:
         """Get auxillary advertising stats
@@ -2236,24 +2183,23 @@ class BleHci:
         Dict[str, int]
             AUX adv stats
         """
-        evt = self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.GET_ISO_TEST_REPORT,
-                ogf=OGF.VENDOR_SPEC,
-            )
-        )
-        return {
-            "tx-adv": _le_list_to_int(evt.raw_return[:4]),
-            "rx-req": _le_list_to_int(evt.raw_return[4:8]),
-            "rx-req-crc": _le_list_to_int(evt.raw_return[8:12]),
-            "rx-req-timeout": _le_list_to_int(evt.raw_return[12:14]),
-            "tx-resp": _le_list_to_int(evt.raw_return[14:18]),
-            "tx-chain": _le_list_to_int(evt.raw_return[18:22]),
-            "err-adv": _le_list_to_int(evt.raw_return[22:26]),
-            "rx-setup": _le_list_to_int(evt.raw_return[26:28]),
-            "tx-setup": _le_list_to_int(evt.raw_return[28:30]),
-            "rx-isr": _le_list_to_int(evt.raw_return[30:32]),
-            "tx-isr": _le_list_to_int(evt.raw_return[32:34]),
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GET_AUX_ADV_STATS)
+        evt = self._send_command(cmd)
+
+        vals = evt.get_return_params(param_lens=[4, 4, 4, 2, 4, 4, 4, 2, 2, 2, 2])
+
+        stats = {
+            "tx-adv": vals[0],
+            "rx-req": vals[1],
+            "rx-req-crc": vals[2],
+            "rx-req-timeout": vals[3],
+            "tx-resp": vals[4],
+            "tx-chain": vals[5],
+            "err-adv": vals[6],
+            "rx-setup": vals[7],
+            "tx-setup": vals[8],
+            "rx-isr": vals[9],
+            "tx-isr": vals[10]
         }
 
     def get_aux_scan_stats(self) -> Dict[str, int]:
@@ -2264,30 +2210,29 @@ class BleHci:
         Dict[str, int]
             Aux scan stats
         """
-        evt = self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.GET_AUX_ADV_STATS,
-                ogf=OGF.VENDOR_SPEC,
-            )
-        )
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GET_AUX_SCAN_STATS)
+        evt = self._send_command(cmd)
 
-        return {
-            "rx-adv": _le_list_to_int(evt.raw_return[:4]),
-            "rx-adv-crc": _le_list_to_int(evt.raw_return[4:8]),
-            "rx-adv-timeout": _le_list_to_int(evt.raw_return[8:12]),
-            "tx-req": _le_list_to_int(evt.raw_return[12:16]),
-            "rx-rsp": _le_list_to_int(evt.raw_return[16:20]),
-            "rx-rsp-crc": _le_list_to_int(evt.raw_return[20:24]),
-            "rx-rsp-timeout": _le_list_to_int(evt.raw_return[24:28]),
-            "rx-chain": _le_list_to_int(evt.raw_return[28:32]),
-            "rx-chain-crc": _le_list_to_int(evt.raw_return[32:36]),
-            "rx-chain-timeout": _le_list_to_int(evt.raw_return[36:40]),
-            "err-scan": _le_list_to_int(evt.raw_return[40:44]),
-            "rx-setup": _le_list_to_int(evt.raw_return[44:46]),
-            "tx-setup": _le_list_to_int(evt.raw_return[46:48]),
-            "rx-isr": _le_list_to_int(evt.raw_return[48:50]),
-            "tx-isr": _le_list_to_int(evt.raw_return[50:52]),
+        vals = evt.get_return_params(param_lens=[4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 2, 2, 2, 2])
+
+        stats = {
+            "rx-adv": vals[0],
+            "rx-adv-crc": vals[1],
+            "rx-adv-timeout": vals[2],
+            "tx-req": vals[3],
+            "rx-rsp": vals[4],
+            "rx-rsp-crc": vals[5],
+            "rx-rsp-timeout": vals[6],
+            "rx-chain": vals[7],
+            "rx-chain-crc": vals[8],
+            "rx-chain-timeout": vals[9],
+            "err-scan": vals[10],
+            "rx-setup": vals[11],
+            "tx-setup": vals[12],
+            "rx-isr": vals[13],
+            "tx-isr": vals[14]
         }
+        return stats
 
     def get_periodic_scanning_stats(self) -> Dict[str, int]:
         """Get periodic scanning stats
@@ -2297,30 +2242,30 @@ class BleHci:
         Dict[str, int]
             Periodic scanning stats
         """
-        evt = self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.GET_PER_SCAN_STATS,
-                ogf=OGF.VENDOR_SPEC,
-            )
-        )
 
-        return {
-            "rx-adv": _le_list_to_int(evt.raw_return[:4]),
-            "rx-adv-crc": _le_list_to_int(evt.raw_return[4:8]),
-            "rx-adv-timeout": _le_list_to_int(evt.raw_return[8:12]),
-            "rx-chain": _le_list_to_int(evt.raw_return[12:16]),
-            "rx-chain-crc": _le_list_to_int(evt.raw_return[16:20]),
-            "rx-chain-timeout": _le_list_to_int(evt.raw_return[20:24]),
-            "err-scan": _le_list_to_int(evt.raw_return[24:28]),
-            "rx-setup": _le_list_to_int(evt.raw_return[28:30]),
-            "tx-setup": _le_list_to_int(evt.raw_return[30:32]),
-            "rx-isr": _le_list_to_int(evt.raw_return[32:34]),
-            "tx-isr": _le_list_to_int(evt.raw_return[34:36]),
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GET_PER_SCAN_STATS)
+        evt = self._send_command(cmd)
+        
+        vals = evt.get_return_params(param_lens=[4, 4, 4, 4, 4, 4, 4, 2, 2, 2, 2])
+
+        stats = {
+            "rx-adv": vals[0],
+            "rx-adv-crc": vals[1],
+            "rx-adv-timeout": vals[2],
+            "rx-chain": vals[3],
+            "rx-chain-crc": vals[4],
+            "rx-chain-timeout": vals[5],
+            "err-scan": vals[6],
+            "rx-setup": vals[7],
+            "tx-setup": vals[8],
+            "rx-isr": vals[9],
+            "tx-isr": vals[10],
         }
+        return stats
 
     def set_connection_phy_tx_power(
         self, handle: int, power: int, phy: PhyOption
-    ) -> EventCode:
+    ) -> StatusCode:
         """Set TX Power for connection on given PHY
 
         Parameters
@@ -2340,13 +2285,11 @@ class BleHci:
         params = _to_le16_list(handle)
         params.append(power)
         params.append(phy.value)
-        return self.write_command(
-            CommandPacket(
-                ocf=OCF.VENDOR_SPEC.SET_CONN_PHY_TX_PWR,
-                ogf=OGF.VENDOR_SPEC,
-                params=params,
-            )
-        ).evt_code
+
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.SET_CONN_PHY_TX_PWR, params=params)
+        evt = self._send_command(cmd)
+
+        return evt.status
 
     def exit(self) -> None:
         """Close the HCI connection.
@@ -2469,12 +2412,12 @@ class BleHci:
         raise ValueError(f"Invalid packet type: {pkt_type}")
 
     def _get_event_packet(self) -> EventPacket:
-        evt_code, param_len = self.port.read(2)
+        read_data = self.port.read(2)
+        param_len = int.from_bytes(read_data[1], "little")
 
-        data = bytearray([evt_code, param_len])
-        data.extend(self.port.read(int.from_bytes(param_len, "little")))
+        read_data += self.port.read(param_len)
 
-        return EventPacket.from_bytes(data)
+        return EventPacket.from_bytes(read_data)
     
     def _get_async_packet(self):
          # TODO: HANDLE ASYNC
@@ -2494,7 +2437,7 @@ class BleHci:
                 if delta.seconds > seconds:
                     break
             
-            self._wait_single(timeout=0.1)
+            self._retrieve_event(timeout=0.1)
             delta = datetime.datetime.now() - start_time
             if (delta.seconds > 30) and (delta.seconds % 30 == 0):
                 self.logger.info("%s |", datetime.datetime.now())
