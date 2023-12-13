@@ -198,13 +198,15 @@ class BleHci:
         id_tag: str = 'DUT',
         log_level: Union[str, int] = 'INFO',
         logger_name: str = 'BLE-HCI',
-        retries: int = 0
+        retries: int = 0,
+        timeout: float = 1.0
     ) -> None:
         self.port = None
         self.mon_port = None
         self.id_tag = id_tag
         self.logger = get_formatted_logger(log_level=log_level, name=logger_name)
         self.retries = retries
+        self.timeout = timeout
 
         self._init_ports(port_id=port_id, mon_port_id=mon_port_id, baud=baud)
         self.set_log_level(log_level)
@@ -410,7 +412,7 @@ class BleHci:
         self,
         addr: Union[List[int], bytearray],
         interval: int = 0x6,
-        timeout: int = 0x64,
+        sup_timeout: int = 0x64,
         listen: Union[bool, int] = False,
     ) -> StatusCode:
         """Command board to initialize a connection.
@@ -479,7 +481,7 @@ class BleHci:
             interval,                       # Connection Interval Min.
             interval,                       # Connection Interval Max.
             0x0000,                         # Max. Latency
-            timeout,                        # Supervision Timeout
+            sup_timeout,                        # Supervision Timeout
             0x0F10,                         # Min. CE Length
             0x0F10                          # Max. CE Length
         ]
@@ -495,7 +497,7 @@ class BleHci:
         
         while True:
             self._wait(seconds=10)
-            self.get_connection_stats()
+            self.get_conn_stats()
 
     def set_data_len(self) -> StatusCode:
         """Command board to set data length to the max value.
@@ -613,7 +615,7 @@ class BleHci:
         evt = self._send_command(cmd)
         return evt.status
 
-    def set_phy(self, phy: int = 1, timeout: int = 3) -> StatusCode:
+    def set_phy(self, phy: int = 1) -> StatusCode:
         """Set the PHY.
 
         Sends a command to the board, telling it to set the
@@ -1175,12 +1177,14 @@ class BleHci:
 
         return evt.status
 
-    def read_event(self, timeout: float = 1) -> EventPacket:
+    def read_event(self, timeout: Optional[float] = None) -> EventPacket:
         timeout_err = None
         tries = self.retries
+        if not timeout:
+            timeout = self.timeout
         while tries >= 0:
             try:
-                return self._retrieve_event(timeout=timeout)
+                return self._retrieve_event(timeout=self.timeout)
             except TimeoutError as err:
                 tries -= 1
                 timeout_err = err
@@ -1193,7 +1197,7 @@ class BleHci:
         self,
         command: CommandPacket,
         listen: Union[bool, int] = False,
-        timeout: int = 6,
+        timeout: Optional[float] = None,
     ) -> StatusCode:
         """Send a custom command to the board.
 
@@ -1223,6 +1227,8 @@ class BleHci:
             Object containing board return data.
 
         """
+        if not timeout:
+            timeout = self.timeout
         evt = self._send_command(command, timeout=timeout)
 
         if not listen:
@@ -1240,7 +1246,7 @@ class BleHci:
         self,
         data: bytearray,
         listen: Union[bool, int] = False,
-        timeout: int = 6,
+        timeout: Optional[float] = None,
     ) -> StatusCode:
         """Send a custom bytearray command to the board.
 
@@ -1270,6 +1276,8 @@ class BleHci:
             Object containing board return data.
 
         """
+        if not timeout:
+            timeout = self.timeout
         evt = self._send_command(data, timeout=timeout)
 
         if not listen:
@@ -2391,14 +2399,14 @@ class BleHci:
 
         return per
 
-    def _retrieve_event(self, timeout: float = 1) -> Union[EventPacket, AsyncPacket]:
+    def _retrieve_event(self, timeout: Optional[float] = None) -> Union[EventPacket, AsyncPacket]:
         """Reads event from serial port.
         Returns
         ----------
         Event: EventPacket
 
         """
-        self.port.timeout = timeout
+        self.port.timeout = timeout if timeout else self.timeout
         pkt_type = self.port.read(1)
         if not pkt_type:
             raise TimeoutError(
@@ -2446,7 +2454,7 @@ class BleHci:
     def _send_command(
         self,
         pkt: CommandPacket,
-        timeout: int = 6
+        timeout: Optional[float] = None
     ) -> EventPacket:
         """Sends a command to the test board and retrieves the response.
         
@@ -2454,12 +2462,12 @@ class BleHci:
         
         """
         self.logger.info("%s  %s>%s", datetime.datetime.now(), self.id_tag, pkt.to_bytes().hex())
-        return self._send_command_raw(pkt.to_bytes())
+        return self._send_command_raw(pkt.to_bytes(), timeout=timeout)
     
     def _send_command_raw(
         self,
         pkt: bytearray,
-        timeout: int = 6
+        timeout: Optional[float] = None
     ) -> EventPacket:
         """Sends a data stream to the test board and retrieves the response.
         
