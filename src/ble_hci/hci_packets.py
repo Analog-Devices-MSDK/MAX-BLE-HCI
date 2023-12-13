@@ -53,8 +53,8 @@
 from enum import Enum
 from typing import List, Optional, Union
 
-from .packet_defs import OCF, OGF, PacketType
 from .packet_codes import EventCode, StatusCode
+from .packet_defs import OCF, OGF, PacketType
 
 
 def _byte_length(num):

@@ -58,13 +58,15 @@ housed in the Analog Devices MSDK.
 
 """
 import datetime
+import logging
 import sys
 import time
-import logging
 from enum import Enum
 from typing import Dict, List, Optional, Tuple, Union
 
 import serial
+
+from ._hci_logger import get_formatted_logger
 
 # pylint: disable=unused-import
 from .hci_packets import (
@@ -74,15 +76,8 @@ from .hci_packets import (
     ExtendedPacket,
     _byte_length,
 )
-from .packet_defs import (
-    ADI_PORT_BAUD_RATE,
-    OCF,
-    OGF,
-    PacketType,
-    PubKeyValidateMode,
-)
 from .packet_codes import EventCode, StatusCode
-from ._hci_logger import get_formatted_logger
+from .packet_defs import ADI_PORT_BAUD_RATE, OCF, OGF, PacketType, PubKeyValidateMode
 
 _MAX_U32 = 2**32
 _MAX_U64 = 2**64
