@@ -43,6 +43,7 @@ hci_logger : logging.Logger
 import logging
 from typing import Dict
 
+
 class _CustomFormatter(logging.Formatter):
     """Log message formatting class.
 
@@ -111,7 +112,7 @@ class _CustomFormatter(logging.Formatter):
         log_fmt = self.FORMATS.get(record.levelno)
         formatter = logging.Formatter(log_fmt)
         return formatter.format(record)
-    
+
 
 def get_formatted_logger(log_level=logging.INFO, name="BLE-Logger") -> logging.Logger:
     """Gets logger with basic custom format

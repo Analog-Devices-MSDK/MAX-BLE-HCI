@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class EventCode(Enum):
     """
     BT Sig Defined HCI Event Codes

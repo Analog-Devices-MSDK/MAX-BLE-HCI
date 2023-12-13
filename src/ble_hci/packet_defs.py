@@ -66,6 +66,7 @@ class PacketType(Enum):
     EVENT = 0x4
     EXTENDED = 0x9
 
+
 class OGF(Enum):
     """
     BLE Specified Command OFG Values
@@ -81,8 +82,10 @@ class OGF(Enum):
     LE_CONTROLLER = 0x08
     VENDOR_SPEC = 0x3F
 
+
 class _NOpOCF(Enum):
     NOP = 0x00
+
 
 class _LinkControlOCF(Enum):
     """
@@ -91,6 +94,7 @@ class _LinkControlOCF(Enum):
 
     DISCONNECT = 0x06
     READ_REMOTE_VER_INFO = 0x1D
+
 
 class _ControllerOCF(Enum):
     SET_EVENT_MASK = 0x01
@@ -115,8 +119,10 @@ class _InformationalOCF(Enum):
     READ_LOCAL_SUP_CODEC_CAP = 0x0E
     READ_LOCAL_SUP_CONTROLLER_DLY = 0x0F
 
+
 class _StatusOCF(Enum):
     READ_RSSI = 0x05
+
 
 class _LEControllerOCF(Enum):
     SET_EVENT_MASK = 0x01
@@ -241,6 +247,7 @@ class _LEControllerOCF(Enum):
     SET_PATH_LOSS_REPORTING_ENABLE = 0x79
     SET_TX_POWER_REPORT_ENABLE = 0x7A
 
+
 class _VendorSpecificOCF(Enum):
     SET_SCAN_CH_MAP = 0x3E0
     SET_EVENT_MASK = 0x3E1
@@ -298,9 +305,11 @@ class _VendorSpecificOCF(Enum):
     PHY_EN = 0x307
     PHY_DIS = 0x308
 
+
 class PubKeyValidateMode(Enum):
     ALT1 = 0x0
     ALT2 = 0x1
+
 
 class OCF:
     NOP = _NOpOCF
