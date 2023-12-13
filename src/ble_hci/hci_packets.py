@@ -54,12 +54,13 @@ from enum import Enum
 from typing import List, Optional, Union
 
 from .packet_defs import OCF, OGF, PacketType
+from .packet_codes import EventCode, StatusCode
 
 
 def _byte_length(num):
     return max((num.bit_length() + 7) // 8, 1)
 
-class Endian:
+class Endian(Enum):
     LITTLE = "little"
     BIG = "big"
 
@@ -69,11 +70,14 @@ class CommandPacket:
     """
 
     def __init__(self, ogf, ocf, params=None) -> None:
-        self.ocf = self._enum_to_int(ocf)
         self.ogf = self._enum_to_int(ogf)
+        self.ocf = self._enum_to_int(ocf)
         self.length = self._get_length(params)
-        self.opcode = CommandPacket.make_hci_opcode(self.ocf, self.ogf)
-        self.params = params
+        self.opcode = CommandPacket.make_hci_opcode(self.ogf, self.ocf)
+        if params:
+            self.params = params if isinstance(params, list) else [params]
+        else:
+            self.params = None
 
     def __repr__(self):
         return str(self.__dict__)
@@ -87,8 +91,10 @@ class CommandPacket:
     def _get_length(self, params):
         if params is None:
             return 0
-        else:
-            return params.__sizeof__()
+        if isinstance(params, int):
+            return _byte_length(params)
+        
+        return sum([_byte_length(x) for x in params])
         
 
     @staticmethod
@@ -154,7 +160,7 @@ class CommandPacket:
             for param in self.params:
                 num_bytes = _byte_length(param)
 
-                serialized_cmd.extend(param.to_bytes(num_bytes, endianness))
+                serialized_cmd.extend(param.to_bytes(num_bytes, endianness.value))
 
         return serialized_cmd
 
@@ -179,11 +185,11 @@ class EventPacket:
     def __init__(
         self, evt_code, length, num_cmds, opcode, status, return_vals
     ) -> None:
-        self.evt_code = evt_code
+        self.evt_code = EventCode(evt_code)
         self.length = length
         self.num_cmds = num_cmds
         self.opcode = opcode
-        self.status = status
+        self.status = StatusCode(status)
         self.return_vals = return_vals
 
     def __repr__(self):
@@ -195,7 +201,7 @@ class EventPacket:
             evt_code=serialized_event[0],
             length=serialized_event[1],
             num_cmds=serialized_event[2],
-            opcode=int.from_bytes(serialized_event[3:5], endianness),
+            opcode=int.from_bytes(serialized_event[3:5], endianness.value),
             status=serialized_event[5],
             return_vals=serialized_event[2:]
         )
@@ -212,7 +218,7 @@ class EventPacket:
             param_bytes = self.return_vals[4:]
 
         if not param_lens:
-            return int.from_bytes(param_bytes, endianness)
+            return int.from_bytes(param_bytes, endianness.value)
 
         if sum(param_lens) > len(param_bytes):
             raise ValueError(
@@ -223,7 +229,7 @@ class EventPacket:
         return_params = []
         p_idx = 0
         for p_len in param_lens:
-            return_params.append(int.from_bytes(param_bytes[p_idx:p_idx+p_len], endianness))
+            return_params.append(int.from_bytes(param_bytes[p_idx:p_idx+p_len], endianness.value))
             p_idx += p_len
         
         return return_params

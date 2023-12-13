@@ -743,7 +743,7 @@ class BleHci:
             phy
         ]
         cmd = CommandPacket(
-            OGF.LE_CONTROLLER, OCF.LE_CONTROLLER.ENHANCED_TRANSMITTER_TEST, 4, params=params)
+            OGF.LE_CONTROLLER, OCF.LE_CONTROLLER.ENHANCED_TRANSMITTER_TEST, params=params)
         evt = self._send_command(cmd)
 
         return evt.status
@@ -834,7 +834,7 @@ class BleHci:
             modulation_idx
         ]
         cmd = CommandPacket(
-            OGF.LE_CONTROLLER, OCF.LE_CONTROLLER.ENHANCED_RECEIVER_TEST, 3, params=params)
+            OGF.LE_CONTROLLER, OCF.LE_CONTROLLER.ENHANCED_RECEIVER_TEST, params=params)
         evt = self._send_command(cmd)
 
         return evt.status
@@ -901,12 +901,13 @@ class BleHci:
             it is likely that a test error occured.
 
         """
-        cmd = CommandPacket(OGF.LE_CONTROLLER, OCF.LE_CONTROLLER.TEST_END, 0)
+        cmd = CommandPacket(OGF.LE_CONTROLLER, OCF.LE_CONTROLLER.TEST_END)
         evt = self._send_command(cmd)
 
-        return evt
+        rx_ok = evt.get_return_params()
+        return rx_ok
     
-    def end_test_vs(self) -> EventPacket:
+    def reset_test_stats(self) -> EventPacket:
         """Command board to end the current test (vendor-specific).
 
         Sends a command to the board, telling it to end whatever test
@@ -923,10 +924,10 @@ class BleHci:
             test error occured.
 
         """
-        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.END_TEST, 0)
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.RESET_TEST_STATS)
         evt = self._send_command(cmd)
 
-        return evt
+        return evt.status
 
     def set_adv_tx_power(self, tx_power: int) -> StatusCode:
         """Set the advertising TX power.
@@ -1911,7 +1912,7 @@ class BleHci:
         cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GET_TEST_STATS)
         evt = self._send_command(cmd)
 
-        vals = evt.get_return_params(param_lens=[4, 4, 4, 4, 4, 4, 4, 4, 4])
+        vals = evt.get_return_params(param_lens=[4, 4, 4, 4, 4, 2, 2, 2, 2])
 
         stats = {
             "rx-data": vals[0],
@@ -2425,6 +2426,10 @@ class BleHci:
         param_len = read_data[1]
 
         read_data += self.port.read(param_len)
+        self.logger.info(
+            "%s  %s<%02X%s",
+            datetime.datetime.now(), self.id_tag, PacketType.EVENT.value, read_data.hex()
+        )
 
         return EventPacket.from_bytes(read_data)
     
@@ -2461,7 +2466,6 @@ class BleHci:
         PRIVATE
         
         """
-        self.logger.info("%s  %s>%s", datetime.datetime.now(), self.id_tag, pkt.to_bytes().hex())
         return self._send_command_raw(pkt.to_bytes(), timeout=timeout)
     
     def _send_command_raw(
@@ -2474,14 +2478,12 @@ class BleHci:
         PRIVATE
         
         """
-        self.logger.info("%s  %s>%s", datetime.datetime.now(), self.id_tag, pkt.hex())
-
-        self.port.flush()
-        self.port.write(pkt)
-
-        timeout_err = None
         tries = self.retries
+        self.logger.info("%s  %s>%s", datetime.datetime.now(), self.id_tag, pkt.hex())
+        timeout_err = None
         while tries >= 0:
+            self.port.flush()
+            self.port.write(pkt)
             try:
                 return self._retrieve_event(timeout=timeout)
             except TimeoutError as err:
@@ -2490,5 +2492,6 @@ class BleHci:
                 self.logger.warning(
                     f"Timeout occured. Retrying. {self.retries - tries} retries remaining.")
         
+        self.port.reset_input_buffer()
         raise TimeoutError("Timeout occured. No retries remaining.") from timeout_err
 

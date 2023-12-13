@@ -292,7 +292,7 @@ class _VendorSpecificOCF(Enum):
     REG_READ = 0x301
     RESET_CONN_STATS = 0x302
     TX_TEST = 0x303
-    END_TEST = 0x304
+    RESET_TEST_STATS = 0x304
     RX_TEST = 0x305
     CCA = 0x306
     PHY_EN = 0x307
