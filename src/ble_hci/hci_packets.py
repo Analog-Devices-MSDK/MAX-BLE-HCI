@@ -59,8 +59,8 @@ from .packet_defs import OCF, OGF, PacketType
 def _byte_length(num):
     return max((num.bit_length() + 7) // 8, 1)
 
-class Endian(Enum):
-    LITTLE = "little",
+class Endian:
+    LITTLE = "little"
     BIG = "big"
 
 class CommandPacket:
@@ -68,10 +68,10 @@ class CommandPacket:
     Command Packet Class
     """
 
-    def __init__(self, ogf, ocf, length, params=None) -> None:
+    def __init__(self, ogf, ocf, params=None) -> None:
         self.ocf = self._enum_to_int(ocf)
         self.ogf = self._enum_to_int(ogf)
-        self.length = length
+        self.length = self._get_length(params)
         self.opcode = CommandPacket.make_hci_opcode(self.ocf, self.ogf)
         self.params = params
 
@@ -83,6 +83,13 @@ class CommandPacket:
             return num.value
         else:
             return num
+        
+    def _get_length(self, params):
+        if params is None:
+            return 0
+        else:
+            return params.__sizeof__()
+        
 
     @staticmethod
     def make_hci_opcode(ogf: OGF, ocf: OCF):
@@ -147,7 +154,7 @@ class CommandPacket:
             for param in self.params:
                 num_bytes = _byte_length(param)
 
-                serialized_cmd.extend(param.to_bytes(num_bytes, endianness.value))
+                serialized_cmd.extend(param.to_bytes(num_bytes, endianness))
 
         return serialized_cmd
 
@@ -170,7 +177,7 @@ class AsyncPacket:
 
 class EventPacket:
     def __init__(
-        self, evt_code, length, num_cmds, opcode, status, return_vals, raw_return
+        self, evt_code, length, num_cmds, opcode, status, return_vals
     ) -> None:
         self.evt_code = evt_code
         self.length = length
@@ -178,7 +185,6 @@ class EventPacket:
         self.opcode = opcode
         self.status = status
         self.return_vals = return_vals
-        self.raw_return = raw_return
 
     def __repr__(self):
         return str(self.__dict__)
@@ -186,11 +192,11 @@ class EventPacket:
     @staticmethod
     def from_bytes(serialized_event, endianness=Endian.LITTLE):
         return EventPacket(
-            evt_code=int.from_bytes(serialized_event[0], endianness.value),
-            length=int.from_bytes(serialized_event[1], endianness.value),
-            num_cmds=int.from_bytes(serialized_event[2], endianness.value),
-            opcode=int.from_bytes(serialized_event[3:5], endianness.value),
-            status=int.from_bytes(serialized_event[5], endianness.value),
+            evt_code=serialized_event[0],
+            length=serialized_event[1],
+            num_cmds=serialized_event[2],
+            opcode=int.from_bytes(serialized_event[3:5], endianness),
+            status=serialized_event[5],
             return_vals=serialized_event[2:]
         )
     
@@ -206,7 +212,7 @@ class EventPacket:
             param_bytes = self.return_vals[4:]
 
         if not param_lens:
-            return int.from_bytes(param_bytes, endianness.value)
+            return int.from_bytes(param_bytes, endianness)
 
         if sum(param_lens) > len(param_bytes):
             raise ValueError(
@@ -217,7 +223,7 @@ class EventPacket:
         return_params = []
         p_idx = 0
         for p_len in param_lens:
-            return_params.append(int.from_bytes(param_bytes[p_idx:p_idx+p_len], endianness.value))
+            return_params.append(int.from_bytes(param_bytes[p_idx:p_idx+p_len], endianness))
             p_idx += p_len
         
         return return_params

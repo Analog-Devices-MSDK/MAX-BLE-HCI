@@ -2398,22 +2398,22 @@ class BleHci:
 
         """
         self.port.timeout = timeout
-        pkt_type = int.from_bytes(self.port.read(1), "little")
+        pkt_type = self.port.read(1)
         if not pkt_type:
             raise TimeoutError(
                 "Timeout occured before DUT could respond. Check connection and retry.")
 
-        if pkt_type == PacketType.ASYNC.value:
+        if pkt_type[0] == PacketType.ASYNC.value:
             return self._get_async_packet()
 
-        if pkt_type == PacketType.EVENT.value:
+        if pkt_type[0] == PacketType.EVENT.value:
             return self._get_event_packet()
         
         raise ValueError(f"Invalid packet type: {pkt_type}")
 
     def _get_event_packet(self) -> EventPacket:
         read_data = self.port.read(2)
-        param_len = int.from_bytes(read_data[1], "little")
+        param_len = read_data[1]
 
         read_data += self.port.read(param_len)
 
@@ -2453,22 +2453,7 @@ class BleHci:
         
         """
         self.logger.info("%s  %s>%s", datetime.datetime.now(), self.id_tag, pkt.to_bytes().hex())
-
-        self.port.flush()
-        self.port.write(pkt)
-        
-        timeout_err = None
-        tries = self.retries
-        while tries >= 0:
-            try:
-                return self._retrieve_event(timeout=timeout)
-            except TimeoutError as err:
-                tries -= 1
-                timeout_err = err
-                self.logger.warning(
-                    f"Timeout occured. Retrying. {self.retries - tries} retries remaining.")
-        
-        raise TimeoutError("Timeout occured. No retries remaining.") from timeout_err
+        return self._send_command_raw(pkt.to_bytes())
     
     def _send_command_raw(
         self,
