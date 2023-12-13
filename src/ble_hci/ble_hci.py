@@ -901,10 +901,10 @@ class BleHci:
         """
         cmd = CommandPacket(OGF.LE_CONTROLLER, OCF.LE_CONTROLLER.TEST_END)
         evt = self._send_command(cmd)
-        rx_packets = evt.get_return_params(param_lens=[4], use_raw=False)
+        rx_packets = evt.get_return_params(param_lens=[2], use_raw=False)
         return rx_packets 
     
-    def end_test_vs(self) -> EventPacket:
+    def reset_test_stats(self) -> EventPacket:
         """Command board to end the current test (vendor-specific).
 
         Sends a command to the board, telling it to end whatever test
@@ -921,16 +921,9 @@ class BleHci:
             test error occured.
 
         """
-        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.END_TEST)
-        evt = self._send_command(cmd)
-        report = evt.get_return_params([4, 4, 4,4], False)
-        
-        return {
-            'tx':report[0],
-            'rx': report[1],
-            'rx-crc':report[2],
-            'rx-timeout':report[3],
-        }
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.RESET_TEST_STATS)
+        return self._send_command(cmd).status
+
 
     def set_adv_tx_power(self, tx_power: int) -> StatusCode:
         """Set the advertising TX power.
@@ -1909,7 +1902,7 @@ class BleHci:
         cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GET_TEST_STATS)
         evt = self._send_command(cmd)
 
-        vals = evt.get_return_params(param_lens=[4, 4, 4, 4, 4, 4, 4, 4, 4])
+        vals = evt.get_return_params(param_lens=[4, 4, 4, 4, 4, 2, 2, 2, 2])
 
         stats = {
             "rx-data": vals[0],
