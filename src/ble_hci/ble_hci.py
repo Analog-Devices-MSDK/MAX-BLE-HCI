@@ -85,6 +85,7 @@ from .packet_codes import (
     EventCode,
     StatusCode
 )
+from ._hci_logger import get_formatted_logger
 
 
 class PhyOption(Enum):
@@ -202,7 +203,7 @@ class BleHci:
         self.port = None
         self.mon_port = None
         self.id_tag = id_tag
-        self.logger = logging.Logger(logger_name)
+        self.logger = get_formatted_logger(log_level=log_level, name=logger_name)
         self.retries = retries
 
         self._init_ports(port_id=port_id, mon_port_id=mon_port_id, baud=baud)
