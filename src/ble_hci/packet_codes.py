@@ -89,3 +89,7 @@ class StatusCode(Enum):
     LL_ERROR_CODE_LIMIT_REACHED = 0x43
     LL_ERROR_CODE_OP_CANCELLED_BY_HOST = 0x44
     LL_ERROR_CODE_PKT_TOO_LONG = 0x45
+
+    # Cordio returns an 0xFF when the status isnt properly set
+    # Most likely the feature is not conditionally compiled in
+    LL_DECODE_FAILURE = 0xFF

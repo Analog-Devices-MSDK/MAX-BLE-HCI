@@ -58,13 +58,15 @@ housed in the Analog Devices MSDK.
 
 """
 import datetime
+import logging
 import sys
 import time
-import logging
 from enum import Enum
 from typing import Dict, List, Optional, Tuple, Union
-
+from threading import Thread, Lock
 import serial
+
+from ._hci_logger import get_formatted_logger
 
 # pylint: disable=unused-import
 from .hci_packets import (
@@ -75,15 +77,12 @@ from .hci_packets import (
     Endian,
     _byte_length,
 )
-from .packet_defs import (
-    ADI_PORT_BAUD_RATE,
-    OCF,
-    OGF,
-    PacketType,
-    PubKeyValidateMode,
-)
 from .packet_codes import EventCode, StatusCode
-from ._hci_logger import get_formatted_logger
+from .packet_defs import ADI_PORT_BAUD_RATE, OCF, OGF, PacketType, PubKeyValidateMode
+
+_MAX_U16 = 2**16 - 1
+_MAX_U32 = 2**32 - 1
+_MAX_U64 = 2**64 - 1
 
 
 class PhyOption(Enum):
@@ -99,6 +98,7 @@ def _to_le_nbyte_list(value: int, n_bytes: int):
     for i in range(n_bytes):
         num_masked = (value & (0xFF << 8 * i)) >> (8 * i)
         little_endian.append(num_masked)
+    return little_endian
 
     return little_endian
 
@@ -112,25 +112,6 @@ def _le_list_to_int(nums: List[int]) -> int:
     for i, num in enumerate(nums):
         full_num |= num << 8 * i
     return full_num
-
-
-def to_little_endian_list(value) -> List[int]:
-    """Convert an int to a list of byte components in little endian format
-    Parameters
-    ----------
-    vale: int
-        value to convert to little endian
-    Returns
-    -------
-    int
-       value as list little endian
-    """
-
-    big_endian_bytes = value.to_bytes((value.bit_length() + 7) // 8, byteorder="big")
-
-    little_endian_bytes = big_endian_bytes[::-1]
-
-    return [int.from_bytes(byte, byteorder="big") for byte in little_endian_bytes]
 
 
 def to_little_endian(value) -> int:
@@ -205,8 +186,54 @@ class BleHci:
         self.retries = retries
         self.timeout = timeout
 
+        self._event_packets = []
+        self._async_packets = []
+        self._read_thread = Thread(target=self._read_process, daemon=True)
+        self._kill_thread = False
+        self._lock = Lock()
+
+        # self._read_thread.start()
+
         self._init_ports(port_id=port_id, mon_port_id=mon_port_id, baud=baud)
         self.set_log_level(log_level)
+    
+    def __del__(self):
+        self._kill_thread = True
+        # self._read_thread.join()
+    
+    def _read_async(self):
+        async_pkt = self._get_async_packet()
+        self._lock.acquire()
+        self._async_packets.append(async_pkt)
+        self._lock.release()    
+
+    def _read_event(self):
+        evt = self._get_event_packet()
+        self._lock.acquire()
+        self._event_packets.append(evt)
+        self._lock.release()
+        
+    def _read_process(self):
+        self.logger.info("Starting read")
+        
+        while not self._kill_thread:
+            try:
+                packet_type = PacketType(self.port.read(1))
+                if packet_type == PacketType.ASYNC:
+                    self._read_async()
+                else:
+                    self.logger.info("Got EVT")
+                    self._read_event()
+            except:
+                pass
+
+    def get_data(self, n: int):
+        self._lock.acquire()
+        data = self._serial_data[:n]
+        del self._serial_data[:n]
+        self._lock.release()
+
+        return data
 
     def get_log_level(self) -> str:
         level = self.logger.level
@@ -1081,7 +1108,7 @@ class BleHci:
 
         """
         if channels is None:  # Use all channels
-            channel_mask = 0xFFFFFFFFFF
+            channel_mask = _MAX_U32
         elif channels == 0:  # Use channels 0 and 1
             channel_mask = 0x0000000003
         else:  # Mask the given channel(s)
@@ -1176,7 +1203,7 @@ class BleHci:
         command: CommandPacket,
         listen: Union[bool, int] = False,
         timeout: Optional[float] = None,
-    ) -> StatusCode:
+    ) -> EventPacket:
         """Send a custom command to the board.
 
         Sends a custom HCI command to the board. Safeguarding is
@@ -1218,7 +1245,7 @@ class BleHci:
             while True:
                 self._wait(seconds=10)
 
-        return evt.status
+        return evt
 
     def write_command_raw(
         self,
@@ -1388,18 +1415,29 @@ class BleHci:
 
         return evt.status
 
-    def set_tx_test_err_pattern(self, pattern) -> StatusCode:
-        """Set TX Test Error Pattern
+    def set_tx_test_err_pattern(self, pattern: int) -> StatusCode:
+        """Set the TX test error pattern
+
         Parameters
         ----------
-        pattern: int
-            error pattern
+        pattern : int
+            32-bit error pattern
+
         Returns
         -------
-        EventCode
+        StatusCode
+
+        Raises
+        ------
+        ValueError
+            If pattern > 32-bit
         """
+
+        if pattern > _MAX_U32:
+            raise ValueError("Pattern expected to be 32-bit number!")
+
         cmd = CommandPacket(
-            OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.SET_TX_TEST_ERR_PATT, params=pattern
+            OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.SET_TX_TEST_ERR_PATT, params=[pattern]
         )
         evt = self._send_command(cmd)
 
@@ -1425,7 +1463,8 @@ class BleHci:
 
         """
         params = [handle & 0xFF, (handle >> 8) & 0xFF]
-        params.extend(to_little_endian_list(flags))
+        flags = _to_le_nbyte_list(flags, 4)
+        params.extend(flags)
         params.append(int(enable))
 
         cmd = CommandPacket(
@@ -1453,7 +1492,7 @@ class BleHci:
         ValueError
             If key is not 256 bytes long
         """
-        if len(key.to_bytes()) != 8 * 32:
+        if len(bytearray(key)) != 32:
             raise ValueError("Must had an array of 32 bytes")
 
         cmd = CommandPacket(
@@ -1465,7 +1504,7 @@ class BleHci:
 
     def get_channel_map_periodic_scan_adv(
         self, handle: int, is_advertising: bool
-    ) -> StatusCode:
+    ) -> Tuple[int, StatusCode]:
         """Get the channel map used for periodic scanning
 
         Parameters
@@ -1487,11 +1526,13 @@ class BleHci:
         cmd = CommandPacket(
             OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GET_PER_CHAN_MAP, params=params
         )
+
         evt = self._send_command(cmd)
+        channel_map = evt.get_return_params()
 
-        return evt.status
+        return channel_map, evt.status
 
-    def get_acl_test_report(self) -> Dict[str, int]:
+    def get_acl_test_report(self) -> Tuple[Dict[str, int], StatusCode]:
         """Get ACL Test Report
 
         Returns
@@ -1510,7 +1551,8 @@ class BleHci:
             "gen-acl-pkt-cnt": vals[2],
             "gen-acl-oct-cnt": vals[3],
         }
-        return stats
+
+        return stats, evt.status
 
     def set_local_num_min_used_channels(
         self, phy: PhyOption, power_thresh: int, min_used: int
@@ -1551,7 +1593,9 @@ class BleHci:
 
         return evt.status
 
-    def get_peer_min_num_channels_used(self, handle: int) -> Dict[PhyOption, int]:
+    def get_peer_min_num_channels_used(
+        self, handle: int
+    ) -> Tuple[Dict[PhyOption, int], StatusCode]:
         """Get minimum number of channels used by peer
 
         Parameters
@@ -1578,7 +1622,7 @@ class BleHci:
             PhyOption.PCODED: vals[2],
         }
 
-        return min_used_map
+        return min_used_map, evt.status
 
     def set_validate_pub_key_mode(self, mode: PubKeyValidateMode) -> StatusCode:
         """Set validate public key mode
@@ -1594,12 +1638,15 @@ class BleHci:
 
         """
         cmd = CommandPacket(
-            OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.VALIDATE_PUB_KEY_MODE, params=mode.value
+            ogf=OGF.VENDOR_SPEC,
+            ocf=OCF.VENDOR_SPEC.VALIDATE_PUB_KEY_MODE,
+            params=[mode.value],
         )
+
         evt = self._send_command(cmd)
         return evt.status
 
-    def get_rand_address(self) -> List[int]:
+    def get_rand_address(self) -> Tuple[List[int], StatusCode]:
         """Gets a randomly generated address
 
         Returns
@@ -1611,7 +1658,7 @@ class BleHci:
         evt = self._send_command(cmd)
 
         addr = _to_le_nbyte_list(evt.get_return_params(), 6)
-        return addr
+        return addr, evt.status
 
     def set_local_feature(self, features: int) -> StatusCode:
         """Set local features
@@ -1619,36 +1666,60 @@ class BleHci:
         Parameters
         ----------
         features : int
-            Mask of local features
+            64-Bit Mask of features
 
         Returns
         -------
-        EventCode
+        StatusCode
 
+
+        Raises
+        ------
+        ValueError
+            If features > 2^64
         """
+        if features > 2**64:
+            raise ValueError("Feature mask is a 64-Bit number!")
+
+        features = _to_le_nbyte_list(features, 8)
+
         cmd = CommandPacket(
-            OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.SET_LOCAL_FEAT, params=features
+            ogf=OGF.VENDOR_SPEC, ocf=OCF.VENDOR_SPEC.SET_LOCAL_FEAT, params=features
         )
         evt = self._send_command(cmd)
 
         return evt.status
 
     def set_operational_flags(self, flags: int, enable: bool) -> StatusCode:
-        """Sets operational flags
+        """Set operational flags
 
         Parameters
         ----------
         flags : int
-            Mask of flags to enable or disable
+            32-Bit mask of flags
         enable : bool
             True to enable, False to disable
 
         Returns
         -------
-        EventCode
+        StatusCode
 
+
+        Raises
+        ------
+        ValueError
+            If flags is greater than 32-Bit
         """
-        params = [flags, int(enable)]
+
+        if flags > _MAX_U32:
+            raise ValueError("Flags must be a 32-bit number")
+
+        flags = _to_le_nbyte_list(flags, 4)
+
+        params = []
+        params.extend(flags)
+        params.append(int(enable))
+
         cmd = CommandPacket(
             OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.SET_OP_FLAGS, params=params
         )
@@ -1656,7 +1727,7 @@ class BleHci:
 
         return evt.status
 
-    def get_pdu_filter_stats(self) -> Dict[str, int]:
+    def get_pdu_filter_stats(self) -> Tuple[Dict[str, int], StatusCode]:
         """Get PDU Filter Stats
 
         Returns
@@ -1693,7 +1764,7 @@ class BleHci:
             "local-res-addr-pend": vals[18],
         }
 
-        return stats
+        return stats, evt.status
 
     def set_encryption_mode(
         self, handle: int, enable: bool, noonce_mode: bool
@@ -1758,14 +1829,17 @@ class BleHci:
         EventCode
 
         """
+        out_method = 0  # HCI Through Tokens (Only option available)
         cmd = CommandPacket(
-            OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.SET_SNIFFER_ENABLE, params=int(enable)
+            OGF.VENDOR_SPEC,
+            OCF.VENDOR_SPEC.SET_SNIFFER_ENABLE,
+            params=[out_method, int(enable)],
         )
         evt = self._send_command(cmd)
 
         return evt.status
 
-    def get_memory_stats(self) -> Dict[str, int]:
+    def get_memory_stats(self) -> Tuple[Dict[str, int], StatusCode]:
         """Get memory use stats
 
         Returns
@@ -1803,9 +1877,9 @@ class BleHci:
             "cig-ctx-size": vals[19],
             "cis-ctx-size": vals[20],
         }
-        return stats
+        return stats, evt.status
 
-    def get_adv_stats(self) -> Dict[str, int]:
+    def get_adv_stats(self) -> Tuple[Dict[str, int], StatusCode]:
         """Get advertising stats
 
         Returns
@@ -1830,9 +1904,9 @@ class BleHci:
             "rx-isr": vals[8],
             "tx-isr": vals[9],
         }
-        return stats
+        return stats, evt.status
 
-    def get_scan_stats(self) -> Dict[str, int]:
+    def get_scan_stats(self) -> Tuple[Dict[str, int], StatusCode]:
         """Get scanning stats
 
         Returns
@@ -1860,9 +1934,9 @@ class BleHci:
             "tx-isr": vals[11],
         }
 
-        return stats
+        return stats, evt.status
 
-    def get_conn_stats(self) -> Dict[str, int]:
+    def get_conn_stats(self) -> Tuple[Dict[str, int], StatusCode]:
         """Gets and parses connection stats.
 
         Sends a command to the board, telling it to return
@@ -1883,24 +1957,23 @@ class BleHci:
             The current connection statistics.
 
         """
-        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GET_CONN_STATS, 0)
+        cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GET_CONN_STATS)
         evt = self._send_command(cmd)
-
+        report = evt.get_return_params([4, 4, 4, 4, 4, 2, 2, 2, 2])
         stats = {
-            "rx-data": _le_list_to_int(evt.raw_return[:4]),
-            "rx-data-crc": _le_list_to_int(evt.raw_return[4:8]),
-            "rx-data-timeout": _le_list_to_int(evt.raw_return[8:12]),
-            "tx-data": _le_list_to_int(evt.raw_return[12:16]),
-            "err-data": _le_list_to_int(evt.raw_return[16:20]),
-            "rx-setup": _le_list_to_int(evt.raw_return[20:24]),
-            "tx-setup": _le_list_to_int(evt.raw_return[24:28]),
-            "rx-isr": _le_list_to_int(evt.raw_return[28:32]),
-            "tx-isr": _le_list_to_int(evt.raw_return[32:36]),
+            "rx-data": report[0],
+            "rx-data-crc": report[1],
+            "tx-data": report[2],
+            "err-data": report[3],
+            "rx-setup": report[4],
+            "tx-setup": report[5],
+            "rx-isr": report[6],
+            "tx-isr": report[7],
         }
 
-        return stats
+        return stats, evt.status
 
-    def get_test_stats(self) -> Dict[str, int]:
+    def get_test_stats(self) -> Tuple[Dict[str, int], StatusCode]:
         """Get test stats
 
         Returns
@@ -1924,9 +1997,9 @@ class BleHci:
             "rx-isr": vals[7],
             "tx-isr": vals[8],
         }
-        return stats
+        return stats, evt.status
 
-    def get_pool_stats(self) -> Dict[str, int]:
+    def get_pool_stats(self) -> Tuple[Dict[str, int], StatusCode]:
         """Get memory pool stats
 
         Returns
@@ -1954,7 +2027,7 @@ class BleHci:
                 "max-req-len": data[5 * i : 7 * i :],
             }
 
-        return pool_stats
+        return pool_stats, evt.status
 
     def set_additional_aux_ptr_offset(self, delay: int, handle: int) -> StatusCode:
         """Set auxillary pointer delay
@@ -2086,8 +2159,8 @@ class BleHci:
         EventCode
 
         """
-        params = to_little_endian_list(handle)
-        params.extend(to_little_endian_list(packet_length))
+        params = _to_le_nbyte_list(handle, 2)
+        params.extend(_to_le_nbyte_list(packet_length, 2))
         params.append(num_packets)
 
         cmd = CommandPacket(
@@ -2097,7 +2170,8 @@ class BleHci:
 
         return evt.status
 
-    def get_iso_test_report(self) -> Dict[str, int]:
+    def get_iso_test_report(self) -> Tuple[Dict[str, int], StatusCode]:
+        # TODO
         """Get ISO test report
 
         Returns
@@ -2108,16 +2182,19 @@ class BleHci:
         cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GET_ISO_TEST_REPORT)
         evt = self._send_command(cmd)
 
-        vals = evt.return_vals(param_lens=[4, 4, 4, 2])
+        if evt.status == StatusCode.LL_SUCCESS:
+            vals = evt.get_return_params(param_lens=[4, 4, 4, 4])
 
-        stats = {
-            "rx-iso-pkt-cnt": vals[0],
-            "rx-iso-oct-cnt": vals[1],
-            "gen-pkt-cnt": vals[2],
-            "gen-oct-cnt": vals[3],
-        }
+            stats = {
+                "rx-iso-pkt-cnt": vals[0],
+                "rx-iso-oct-cnt": vals[1],
+                "gen-pkt-cnt": vals[2],
+                "gen-oct-cnt": vals[3],
+            }
+        else:
+            stats = None
 
-        return stats
+        return stats, evt.status
 
     def enable_iso_packet_sink(self, enable: bool) -> StatusCode:
         """Enable ISO packet sink
@@ -2157,7 +2234,7 @@ class BleHci:
         ValueError
             If value is more than 4 bytes
         """
-        if packet_length > 0xFFFFFFFF:
+        if packet_length > _MAX_U32:
             raise ValueError(
                 f"Invalid packet length {packet_length}. Must be maximum 4 bytes in size."
             )
@@ -2181,7 +2258,7 @@ class BleHci:
         cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GET_ISO_TEST_REPORT)
         evt = self._send_command(cmd)
 
-        vals = evt.get_return_params(param_lens=[4, 4, 4, 4, 4, 4, 4, 4, 4])
+        vals = evt.get_return_params(param_lens=[4, 4, 4, 4, 4, 2, 2, 2, 2])
 
         stats = {
             "rx-data": vals[0],
@@ -2197,7 +2274,7 @@ class BleHci:
 
         return stats
 
-    def get_aux_adv_stats(self) -> Dict[str, int]:
+    def get_aux_adv_stats(self) -> Tuple[Dict[str, int], StatusCode]:
         """Get auxillary advertising stats
 
         Returns
@@ -2224,7 +2301,9 @@ class BleHci:
             "tx-isr": vals[10],
         }
 
-    def get_aux_scan_stats(self) -> Dict[str, int]:
+        return stats, evt.status
+
+    def get_aux_scan_stats(self) -> Tuple[Dict[str, int], StatusCode]:
         """Get auxillary scanning stats
 
         Returns
@@ -2256,9 +2335,9 @@ class BleHci:
             "rx-isr": vals[13],
             "tx-isr": vals[14],
         }
-        return stats
+        return stats, evt.status
 
-    def get_periodic_scanning_stats(self) -> Dict[str, int]:
+    def get_periodic_scanning_stats(self) -> Tuple[Dict[str, int], StatusCode]:
         """Get periodic scanning stats
 
         Returns
@@ -2285,7 +2364,7 @@ class BleHci:
             "rx-isr": vals[9],
             "tx-isr": vals[10],
         }
-        return stats
+        return stats, evt.status
 
     def set_connection_phy_tx_power(
         self, handle: int, power: int, phy: PhyOption
@@ -2316,6 +2395,24 @@ class BleHci:
         evt = self._send_command(cmd)
 
         return evt.status
+
+    def get_rssi_vs(self, channel: int = 0):
+        if channel > 39:
+            raise ValueError("Channel must be between 0-39")
+
+        cmd = CommandPacket(
+            ogf=OGF.VENDOR_SPEC, ocf=OCF.VENDOR_SPEC.GET_RSSI, params=[channel]
+        )
+        evt = self._send_command(cmd)
+        rssi = evt.get_return_params()
+
+        # RSSI is 8 bit signed
+        SIGN_BIT = 1 << 13
+        if rssi & SIGN_BIT:
+            rssi &= ~SIGN_BIT
+            rssi *= -1
+
+        return rssi, evt.status
 
     def exit(self) -> None:
         """Close the HCI connection.
@@ -2499,9 +2596,19 @@ class BleHci:
         tries = self.retries
         self.logger.info("%s  %s>%s", datetime.datetime.now(), self.id_tag, pkt.hex())
         timeout_err = None
+
+        
+        self.port.flush()
+        self.port.write(pkt)
+        
         while tries >= 0:
-            self.port.flush()
-            self.port.write(pkt)
+            # if len(self._event_packets):
+            #     self._lock.acquire()
+            #     evt  = self._event_packets.pop(0)
+            #     self._lock.release()
+                
+            #     return evt
+
             try:
                 return self._retrieve_event(timeout=timeout)
             except TimeoutError as err:
@@ -2511,5 +2618,5 @@ class BleHci:
                     f"Timeout occured. Retrying. {self.retries - tries} retries remaining."
                 )
 
-        self.port.reset_input_buffer()
-        raise TimeoutError("Timeout occured. No retries remaining.") from timeout_err
+        # self.port.reset_input_buffer()
+        # raise TimeoutError("Timeout occured. No retries remaining.") from timeout_err
