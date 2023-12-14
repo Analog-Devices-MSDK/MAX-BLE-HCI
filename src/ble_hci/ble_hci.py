@@ -63,7 +63,7 @@ import sys
 import time
 from enum import Enum
 from typing import Dict, List, Optional, Tuple, Union
-
+import threading
 import serial
 
 from ._hci_logger import get_formatted_logger
@@ -79,8 +79,9 @@ from .hci_packets import (
 from .packet_codes import EventCode, StatusCode
 from .packet_defs import ADI_PORT_BAUD_RATE, OCF, OGF, PacketType, PubKeyValidateMode
 
-_MAX_U32 = 2**32
-_MAX_U64 = 2**64
+_MAX_U16 = 2**16 - 1
+_MAX_U32 = 2**32 - 1
+_MAX_U64 = 2**64 - 1
 
 
 class PhyOption(Enum):
@@ -178,6 +179,7 @@ class BleHci:
         logger_name: str = "BLE-HCI",
         retries: int = 0,
         timeout: float = 1.0,
+        is_async: bool = False
     ) -> None:
         self.port = None
         self.mon_port = None
@@ -186,8 +188,22 @@ class BleHci:
         self.retries = retries
         self.timeout = timeout
 
+        self._read_thread = threading.Thread(target=self._read_process)
+        self._read_thread.start()
+
+    
         self._init_ports(port_id=port_id, mon_port_id=mon_port_id, baud=baud)
         self.set_log_level(log_level)
+    
+        
+    def _read_process(self):
+        
+        self.logger.info('Read thread online')
+
+
+        time.sleep(1)
+
+
 
     def get_log_level(self) -> str:
         level = self.logger.level
