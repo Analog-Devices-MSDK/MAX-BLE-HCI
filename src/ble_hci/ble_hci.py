@@ -63,7 +63,7 @@ import sys
 import time
 from enum import Enum
 from typing import Dict, List, Optional, Tuple, Union
-import threading
+from threading import Thread, Lock
 import serial
 
 from ._hci_logger import get_formatted_logger
@@ -179,7 +179,6 @@ class BleHci:
         logger_name: str = "BLE-HCI",
         retries: int = 0,
         timeout: float = 1.0,
-        is_async: bool = False
     ) -> None:
         self.port = None
         self.mon_port = None
@@ -188,22 +187,54 @@ class BleHci:
         self.retries = retries
         self.timeout = timeout
 
-        self._read_thread = threading.Thread(target=self._read_process)
-        self._read_thread.start()
+        self._event_packets = []
+        self._async_packets = []
+        self._read_thread = Thread(target=self._read_process, daemon=True)
+        self._kill_thread = False
+        self._lock = Lock()
 
-    
+        # self._read_thread.start()
+
         self._init_ports(port_id=port_id, mon_port_id=mon_port_id, baud=baud)
         self.set_log_level(log_level)
     
+    def __del__(self):
+        self._kill_thread = True
+        # self._read_thread.join()
+    
+    def _read_async(self):
+        async_pkt = self._get_async_packet()
+        self._lock.acquire()
+        self._async_packets.append(async_pkt)
+        self._lock.release()    
+
+    def _read_event(self):
+        evt = self._get_event_packet()
+        self._lock.acquire()
+        self._event_packets.append(evt)
+        self._lock.release()
         
     def _read_process(self):
+        self.logger.info("Starting read")
         
-        self.logger.info('Read thread online')
+        while not self._kill_thread:
+            try:
+                packet_type = PacketType(self.port.read(1))
+                if packet_type == PacketType.ASYNC:
+                    self._read_async()
+                else:
+                    self.logger.info("Got EVT")
+                    self._read_event()
+            except:
+                pass
 
+    def get_data(self, n: int):
+        self._lock.acquire()
+        data = self._serial_data[:n]
+        del self._serial_data[:n]
+        self._lock.release()
 
-        time.sleep(1)
-
-
+        return data
 
     def get_log_level(self) -> str:
         level = self.logger.level
@@ -1054,7 +1085,7 @@ class BleHci:
             channels = [channels]
 
         if channels is None:  # Use all channels
-            channel_mask = 0xFFFFFFFFFF
+            channel_mask = _MAX_U32
         elif channels == 0:  # Use channels 0 and 1
             channel_mask = 0x0000000003
         else:  # Mask the given channel(s)
@@ -1436,7 +1467,7 @@ class BleHci:
             If pattern > 32-bit
         """
 
-        if pattern > 0xFFFFFFFF:
+        if pattern > _MAX_U32:
             raise ValueError("Pattern expected to be 32-bit number!")
 
         cmd = CommandPacket(
@@ -2185,14 +2216,17 @@ class BleHci:
         cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GET_ISO_TEST_REPORT)
         evt = self._send_command(cmd)
 
-        vals = evt.return_vals(param_lens=[4, 4, 4, 4])
+        if evt.status == StatusCode.LL_SUCCESS:
+            vals = evt.get_return_params(param_lens=[4, 4, 4, 4])
 
-        stats = {
-            "rx-iso-pkt-cnt": vals[0],
-            "rx-iso-oct-cnt": vals[1],
-            "gen-pkt-cnt": vals[2],
-            "gen-oct-cnt": vals[3],
-        }
+            stats = {
+                "rx-iso-pkt-cnt": vals[0],
+                "rx-iso-oct-cnt": vals[1],
+                "gen-pkt-cnt": vals[2],
+                "gen-oct-cnt": vals[3],
+            }
+        else:
+            stats = None
 
         return stats, evt.status
 
@@ -2234,7 +2268,7 @@ class BleHci:
         ValueError
             If value is more than 4 bytes
         """
-        if packet_length > 0xFFFFFFFF:
+        if packet_length > _MAX_U32:
             raise ValueError(
                 f"Invalid packet length {packet_length}. Must be maximum 4 bytes in size."
             )
@@ -2258,7 +2292,7 @@ class BleHci:
         cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GET_ISO_TEST_REPORT)
         evt = self._send_command(cmd)
 
-        vals = evt.get_return_params(param_lens=[4, 4, 4, 4, 4, 4, 4, 4, 4])
+        vals = evt.get_return_params(param_lens=[4, 4, 4, 4, 4, 2, 2, 2, 2])
 
         stats = {
             "rx-data": vals[0],
@@ -2395,6 +2429,24 @@ class BleHci:
         evt = self._send_command(cmd)
 
         return evt.status
+
+    def get_rssi_vs(self, channel: int = 0):
+        if channel > 39:
+            raise ValueError("Channel must be between 0-39")
+
+        cmd = CommandPacket(
+            ogf=OGF.VENDOR_SPEC, ocf=OCF.VENDOR_SPEC.GET_RSSI, params=[channel]
+        )
+        evt = self._send_command(cmd)
+        rssi = evt.get_return_params()
+
+        # RSSI is 8 bit signed
+        SIGN_BIT = 1 << 13
+        if rssi & SIGN_BIT:
+            rssi &= ~SIGN_BIT
+            rssi *= -1
+
+        return rssi, evt.status
 
     def exit(self) -> None:
         """Close the HCI connection.
@@ -2578,9 +2630,19 @@ class BleHci:
         tries = self.retries
         self.logger.info("%s  %s>%s", datetime.datetime.now(), self.id_tag, pkt.hex())
         timeout_err = None
+
+        
+        self.port.flush()
+        self.port.write(pkt)
+        
         while tries >= 0:
-            self.port.flush()
-            self.port.write(pkt)
+            # if len(self._event_packets):
+            #     self._lock.acquire()
+            #     evt  = self._event_packets.pop(0)
+            #     self._lock.release()
+                
+            #     return evt
+
             try:
                 return self._retrieve_event(timeout=timeout)
             except TimeoutError as err:
@@ -2590,5 +2652,5 @@ class BleHci:
                     f"Timeout occured. Retrying. {self.retries - tries} retries remaining."
                 )
 
-        self.port.reset_input_buffer()
-        raise TimeoutError("Timeout occured. No retries remaining.") from timeout_err
+        # self.port.reset_input_buffer()
+        # raise TimeoutError("Timeout occured. No retries remaining.") from timeout_err

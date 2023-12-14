@@ -301,7 +301,7 @@ class _VendorSpecificOCF(Enum):
     TX_TEST = 0x303
     RESET_TEST_STATS = 0x304
     RX_TEST = 0x305
-    CCA = 0x306
+    GET_RSSI = 0x306
     PHY_EN = 0x307
     PHY_DIS = 0x308
 

@@ -1,7 +1,7 @@
-import secrets
 import unittest
-
-from ble_hci import BleHci, ble_hci
+import secrets
+from ble_hci import BleHci
+from ble_hci import ble_hci
 from ble_hci import packet_codes as pc
 from ble_hci import packet_defs as pd
 
@@ -20,9 +20,7 @@ class TestHci(unittest.TestCase):
     def test_commands(self):
         hci.reset()
 
-        self.assertEqual(
-            hci.set_tx_test_err_pattern(0xAAAAAAAA), pc.StatusCode.LL_SUCCESS
-        )
+        self.assertEqual(hci.set_tx_test_err_pattern(A32), pc.StatusCode.LL_SUCCESS)
         self.assertIsNotNone(hci.set_connection_op_flags(1, MAX_U32, True))
 
         key = list(secrets.token_bytes(32))
@@ -89,21 +87,23 @@ class TestHci(unittest.TestCase):
             pc.StatusCode.LL_ERROR_CODE_UNKNOWN_CONN_ID,
         )
 
-    def failing_tests_debug_later(self):
-        # stats, status = hci.get_periodic_scanning_stats()
-        # self.assertTrue(stats is not None and status ==
-        #                 pc.StatusCode.LL_SUCCESS)
+        stats, status = hci.get_periodic_scanning_stats()
+        self.assertTrue(stats is not None and status == pc.StatusCode.LL_SUCCESS)
 
-        # stats, status = hci.get_iso_test_report()
-        # self.assertTrue(stats is not None and status ==
-        #                 pc.StatusCode.LL_SUCCESS)
-        # self.assertEqual(hci.enable_iso_packet_sink(True), pc.StatusCode.LL_SUCCESS)
+    def test_iso(self):
+        _, status = hci.get_iso_test_report()
+        if status == pc.StatusCode.LL_DECODE_FAILURE:
+            # ISO not enabled
+            return
 
-        # self.assertEqual(hci.enable_autogen_iso_packets(100), pc.StatusCode.LL_SUCCESS)
+        status = hci.enable_iso_packet_sink(True)
+        self.assertEqual(status, pc.StatusCode.LL_SUCCESS)
 
-        # stats, status = hci.get_iso_connection_stats()
-        # self.assertTrue(stats is not None and status ==
-        #                 pc.StatusCode.LL_SUCCESS)
+        status = hci.enable_autogen_iso_packets(100)
+        self.assertEqual(status, pc.StatusCode.LL_SUCCESS)
+
+        _, status = hci.get_iso_connection_stats()
+        self.assertEqual(status, pc.StatusCode.LL_SUCCESS)
 
         pass
 
