@@ -76,7 +76,7 @@ class CommandPacket:
         self.ocf = self._enum_to_int(ocf)
         self.length = self._get_length(params)
         self.opcode = CommandPacket.make_hci_opcode(self.ogf, self.ocf)
-        if params:
+        if params is not None:
             self.params = params if isinstance(params, list) else [params]
         else:
             self.params = None
@@ -158,10 +158,13 @@ class CommandPacket:
 
         serialized_cmd.append(self.length)
 
-        if self.params:
+        if self.params is not None:
             for param in self.params:
                 num_bytes = _byte_length(param)
-                serialized_cmd.extend(param.to_bytes(num_bytes, endianness.value))
+                try:
+                    serialized_cmd.extend(param.to_bytes(num_bytes, endianness.value))
+                except OverflowError:
+                    serialized_cmd.extend(param.to_bytes(num_bytes, endianness.value, signed=True))
 
         return serialized_cmd
 
