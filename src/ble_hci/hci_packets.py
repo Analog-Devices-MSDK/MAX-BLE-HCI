@@ -170,19 +170,25 @@ class CommandPacket:
 
 
 class AsyncPacket:
-    def __init__(self, data) -> None:
-        self.handle = (data[0] & 0xF0) + (data[1] << 8)
-        self.pb_flag = (data[0] & 0xC) >> 2
-        self.bc_flag = data[0] & 0x3
-        self.length = data[2] + (data[3] << 8)
-        self.data = data[4:] if data[4:] else None
+    def __init__(self, handle, pb_flag, bc_flag, length, data) -> None:
+        self.handle = handle
+        self.pb_flag = pb_flag
+        self.bc_flag = bc_flag
+        self.length = length
+        self.data = data
 
     def __repr__(self):
         return str(self.__dict__)
 
     @staticmethod
-    def from_bytes(serialized_event):
-        return AsyncPacket(serialized_event)
+    def from_bytes(pkt):
+        return AsyncPacket(
+            handle=(pkt[0] & 0xF0) + (pkt[1] << 8),
+            pb_flag=(pkt[0] & 0xC) >> 2,
+            bc_flag=pkt[0] & 0x3,
+            length=pkt[2] + (pkt[3] << 8),
+            data=pkt[4:] if pkt[4:] else None
+        )
 
 
 class EventPacket:

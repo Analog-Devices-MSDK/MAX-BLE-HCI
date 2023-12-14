@@ -64,6 +64,7 @@ import time
 from enum import Enum
 from typing import Dict, List, Optional, Tuple, Union
 from threading import Thread, Lock
+from multiprocessing import Process, Event
 import serial
 
 from ._hci_logger import get_formatted_logger
@@ -100,19 +101,11 @@ def _to_le_nbyte_list(value: int, n_bytes: int):
         little_endian.append(num_masked)
     return little_endian
 
-    return little_endian
-
-
-def _to_le16_list(value: int):
-    return [value & 0xFF, (value >> 8) & 0xFF]
-
-
 def _le_list_to_int(nums: List[int]) -> int:
     full_num = 0
     for i, num in enumerate(nums):
         full_num |= num << 8 * i
     return full_num
-
 
 def to_little_endian(value) -> int:
     """Convert an int to a to little endian format
@@ -188,53 +181,18 @@ class BleHci:
 
         self._event_packets = []
         self._async_packets = []
-        self._read_thread = Thread(target=self._read_process, daemon=True)
+        self._read_thread = None
         self._kill_thread = False
-        self._lock = Lock()
+        self._lock = None
 
-        # self._read_thread.start()
-
-        self._init_ports(port_id=port_id, mon_port_id=mon_port_id, baud=baud)
         self.set_log_level(log_level)
-    
+        self._init_ports(port_id=port_id, mon_port_id=mon_port_id, baud=baud)
+        self._init_read_thread()
+
     def __del__(self):
         self._kill_thread = True
         # self._read_thread.join()
     
-    def _read_async(self):
-        async_pkt = self._get_async_packet()
-        self._lock.acquire()
-        self._async_packets.append(async_pkt)
-        self._lock.release()    
-
-    def _read_event(self):
-        evt = self._get_event_packet()
-        self._lock.acquire()
-        self._event_packets.append(evt)
-        self._lock.release()
-        
-    def _read_process(self):
-        self.logger.info("Starting read")
-        
-        while not self._kill_thread:
-            try:
-                packet_type = PacketType(self.port.read(1))
-                if packet_type == PacketType.ASYNC:
-                    self._read_async()
-                else:
-                    self.logger.info("Got EVT")
-                    self._read_event()
-            except:
-                pass
-
-    def get_data(self, n: int):
-        self._lock.acquire()
-        data = self._serial_data[:n]
-        del self._serial_data[:n]
-        self._lock.release()
-
-        return data
-
     def get_log_level(self) -> str:
         level = self.logger.level
         if level == logging.DEBUG:
@@ -1608,7 +1566,7 @@ class BleHci:
         Dict[PhyOption, int]
             min num used channel map
         """
-        params = _to_le16_list(handle)
+        params = _to_le_nbyte_list(handle, 2)
         cmd = CommandPacket(
             OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GET_PEER_MIN_USED_CHAN, params=params
         )
@@ -1785,7 +1743,7 @@ class BleHci:
         EventCode
 
         """
-        params = _to_le16_list(handle)
+        params = _to_le_nbyte_list(handle, 2)
         params.append(int(enable))
         params.append(int(noonce_mode))
 
@@ -2044,7 +2002,8 @@ class BleHci:
         EventCode
 
         """
-        params = [to_little_endian(delay), handle]
+        params = _to_le_nbyte_list(delay, 4)
+        params.append(handle)
 
         cmd = CommandPacket(
             OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.SET_AUX_DELAY, params=params
@@ -2070,7 +2029,7 @@ class BleHci:
         EventCode
 
         """
-        params = _to_le16_list(handle)
+        params = _to_le_nbyte_list(handle, 2)
         params.append(frag_length)
 
         cmd = CommandPacket(
@@ -2099,7 +2058,7 @@ class BleHci:
         EventCode
 
         """
-        params = _to_le16_list(handle)
+        params = _to_le_nbyte_list(handle, 2)
         params.append(primary)
         params.append(secondary)
 
@@ -2129,7 +2088,7 @@ class BleHci:
         EventCode
 
         """
-        params = _to_le16_list(handle)
+        params = _to_le_nbyte_list(handle, 2)
         params.append(primary)
         params.append(secondary)
 
@@ -2385,7 +2344,7 @@ class BleHci:
         EventCode
 
         """
-        params = _to_le16_list(handle)
+        params = _to_le_nbyte_list(handle, 2)
         params.append(power)
         params.append(phy.value)
 
@@ -2476,6 +2435,13 @@ class BleHci:
             self.logger.error("%s: %s", type(err).__name__, err)
             sys.exit(1)
 
+    def _init_read_thread(self):
+        self._read_thread = Thread(target=self._read_process, daemon=True)
+        self._kill_thread = False
+        self._lock = Lock()
+
+        self._read_thread.start()
+
     def _parse_conn_stats_evt(self, evt: EventPacket) -> float:
         """Parse connection statistics packet.
 
@@ -2512,6 +2478,15 @@ class BleHci:
             self.logger.info("PER         : %i%%", per)
 
         return per
+           
+    def _read_process(self):
+        while not self._kill_thread:
+            if self.port.in_waiting:
+                pkt_type = self.port.read(1)
+                if pkt_type[0] == PacketType.ASYNC.value:
+                    self._get_async_packet()
+                else:
+                    self._get_event_packet()
 
     def _retrieve_event(
         self, timeout: Optional[float] = None
@@ -2522,20 +2497,33 @@ class BleHci:
         Event: EventPacket
 
         """
-        self.port.timeout = timeout if timeout else self.timeout
-        pkt_type = self.port.read(1)
-        if not pkt_type:
+        if timeout is None:
+            timeout = self.timeout
+
+        def _wait_timeout():
+            time.sleep(timeout)
+            return 0
+
+        timeout_process = Process(target=_wait_timeout)
+        timeout_process.start()
+
+        while True:
+            if len(self._event_packets):
+                timeout_process.terminate()
+                timeout_process.join()
+                timeout_process.close()
+                break
+            if timeout_process.exitcode is None:
+                continue
             raise TimeoutError(
                 "Timeout occured before DUT could respond. Check connection and retry."
             )
+        
+        self._lock.acquire()
+        evt = self._event_packets.pop(0)
+        self._lock.release()
 
-        if pkt_type[0] == PacketType.ASYNC.value:
-            return self._get_async_packet()
-
-        if pkt_type[0] == PacketType.EVENT.value:
-            return self._get_event_packet()
-
-        raise ValueError(f"Invalid packet type: {pkt_type}")
+        return evt
 
     def _get_event_packet(self) -> EventPacket:
         read_data = self.port.read(2)
@@ -2550,11 +2538,26 @@ class BleHci:
             read_data.hex(),
         )
 
-        return EventPacket.from_bytes(read_data)
+        self._lock.acquire()
+        self._event_packets.append(EventPacket.from_bytes(read_data))
+        self._lock.release()
 
     def _get_async_packet(self):
-        # TODO: HANDLE ASYNC
-        raise NotImplementedError("Support for ACL packets coming soon.")
+        read_data = self.port.read(4)
+        data_len = read_data[2] | (read_data[3] << 8)
+
+        read_data += self.port.read(data_len)
+        self.logger.info(
+            "%s  %s<%02X%s",
+            datetime.datetime.now(),
+            self.id_tag,
+            PacketType.ASYNC.value,
+            read_data.hex()
+        )
+        
+        self._lock.acquire()
+        self._async_packets.append(AsyncPacket.from_bytes(read_data))
+        self._lock.release()
 
     def _wait(self, seconds: int = 2) -> None:
         """Wait for events from the test board for a few seconds.
@@ -2600,15 +2603,7 @@ class BleHci:
         
         self.port.flush()
         self.port.write(pkt)
-        
         while tries >= 0:
-            # if len(self._event_packets):
-            #     self._lock.acquire()
-            #     evt  = self._event_packets.pop(0)
-            #     self._lock.release()
-                
-            #     return evt
-
             try:
                 return self._retrieve_event(timeout=timeout)
             except TimeoutError as err:
@@ -2618,5 +2613,4 @@ class BleHci:
                     f"Timeout occured. Retrying. {self.retries - tries} retries remaining."
                 )
 
-        # self.port.reset_input_buffer()
-        # raise TimeoutError("Timeout occured. No retries remaining.") from timeout_err
+        raise TimeoutError("Timeout occured. No retries remaining.") from timeout_err
