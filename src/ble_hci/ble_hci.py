@@ -63,8 +63,8 @@ import sys
 import time
 from enum import Enum
 from typing import Dict, List, Optional, Tuple, Union
-from threading import Thread, Lock
-from multiprocessing import Process, Event
+from threading import Thread, Lock, Event
+from multiprocessing import Process
 import serial
 
 from ._hci_logger import get_formatted_logger
@@ -84,6 +84,8 @@ from .packet_defs import ADI_PORT_BAUD_RATE, OCF, OGF, PacketType, PubKeyValidat
 _MAX_U16 = 2**16 - 1
 _MAX_U32 = 2**32 - 1
 _MAX_U64 = 2**64 - 1
+
+TEST_VAL = 0
 
 
 class PhyOption(Enum):
@@ -170,7 +172,7 @@ class BleHci:
         log_level: Union[str, int] = "INFO",
         logger_name: str = "BLE-HCI",
         retries: int = 0,
-        timeout: float = 1.0,
+        timeout: float = 1.0
     ) -> None:
         self.port = None
         self.mon_port = None
@@ -182,7 +184,7 @@ class BleHci:
         self._event_packets = []
         self._async_packets = []
         self._read_thread = None
-        self._kill_thread = False
+        self._kill_evt = None
         self._lock = None
 
         self.set_log_level(log_level)
@@ -190,8 +192,9 @@ class BleHci:
         self._init_read_thread()
 
     def __del__(self):
-        self._kill_thread = True
-        # self._read_thread.join()
+        print('DELETE')
+        self._kill_evt.set()
+        self._read_thread.join()
     
     def get_log_level(self) -> str:
         level = self.logger.level
@@ -2436,8 +2439,9 @@ class BleHci:
             sys.exit(1)
 
     def _init_read_thread(self):
-        self._read_thread = Thread(target=self._read_process, daemon=True)
-        self._kill_thread = False
+        print("INIT THREAD")
+        self._kill_evt = Event()
+        self._read_thread = Thread(target=self._read_process, args=(self._kill_evt,), daemon=True)
         self._lock = Lock()
 
         self._read_thread.start()
@@ -2479,8 +2483,10 @@ class BleHci:
 
         return per
            
-    def _read_process(self):
-        while not self._kill_thread:
+    def _read_process(self, kill_evt: Event):
+        while True:
+            if kill_evt.is_set():
+                break
             if self.port.in_waiting:
                 pkt_type = self.port.read(1)
                 if pkt_type[0] == PacketType.ASYNC.value:
@@ -2610,7 +2616,7 @@ class BleHci:
                 tries -= 1
                 timeout_err = err
                 self.logger.warning(
-                    f"Timeout occured. Retrying. {self.retries - tries} retries remaining."
+                    f"Timeout occured. Retrying. {tries+1} retries remaining."
                 )
 
         raise TimeoutError("Timeout occured. No retries remaining.") from timeout_err
