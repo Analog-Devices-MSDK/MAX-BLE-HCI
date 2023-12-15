@@ -132,6 +132,8 @@ def get_formatted_logger(log_level=logging.INFO, name="BLE-Logger") -> logging.L
     custom_handler = logging.StreamHandler()
     custom_handler.setLevel(log_level)
     custom_handler.setFormatter(_CustomFormatter())
-    logger.addHandler(custom_handler)
+
+    if not logger.handlers:
+        logger.addHandler(custom_handler)
 
     return logger

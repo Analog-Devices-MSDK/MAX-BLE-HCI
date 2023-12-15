@@ -164,7 +164,9 @@ class CommandPacket:
                 try:
                     serialized_cmd.extend(param.to_bytes(num_bytes, endianness.value))
                 except OverflowError:
-                    serialized_cmd.extend(param.to_bytes(num_bytes, endianness.value, signed=True))
+                    serialized_cmd.extend(
+                        param.to_bytes(num_bytes, endianness.value, signed=True)
+                    )
 
         return serialized_cmd
 
@@ -187,7 +189,7 @@ class AsyncPacket:
             pb_flag=(pkt[0] & 0xC) >> 2,
             bc_flag=pkt[0] & 0x3,
             length=pkt[2] + (pkt[3] << 8),
-            data=pkt[4:] if pkt[4:] else None
+            data=pkt[4:] if pkt[4:] else None,
         )
 
 
@@ -219,6 +221,7 @@ class EventPacket:
         param_lens: Optional[List[int]] = None,
         endianness: Endian = Endian.LITTLE,
         use_raw: bool = False,
+        signed: bool = False,
     ) -> Union[List[int], int]:
         if use_raw:
             param_bytes = self.return_vals
@@ -226,7 +229,7 @@ class EventPacket:
             param_bytes = self.return_vals[4:]
 
         if not param_lens:
-            return int.from_bytes(param_bytes, endianness.value)
+            return int.from_bytes(param_bytes, endianness.value, signed=signed)
 
         if sum(param_lens) > len(param_bytes):
             raise ValueError(
