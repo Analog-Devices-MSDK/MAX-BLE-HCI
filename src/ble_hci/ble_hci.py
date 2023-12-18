@@ -131,13 +131,14 @@ def to_little_endian(value) -> int:
     little_endian_bytes = big_endian_bytes[::-1]
 
     return int.from_bytes(little_endian_bytes, byteorder="big")
+
+
 @dataclass
 class PortConfig:
     port_id: str
     mon_port_id: Optional[str] = None
     baud: int = ADI_PORT_BAUD_RATE
-    timeout: float=  1.0
-
+    timeout: float = 1.0
 
 
 class BleHci:
@@ -180,22 +181,16 @@ class BleHci:
     _instance_lock = Lock()
 
     def __new__(cls, *args, **kwargs):
-
-        serial_port =  kwargs.get('port_id', args[0])
+        serial_port = kwargs.get("port_id", args[0])
 
         with cls._instance_lock:
             if serial_port not in cls._instances:
                 cls.instance = super(BleHci, cls).__new__(cls)
             else:
-                with cls.instance._port_lock:
-                    cls.instance._kill_evt.set()
-                    cls.instance._read_thread.join()
-                    cls.instance.port.flush()
-                
-        
+                cls.instance.stop()
+                cls.instance.port.flush()
+
         cls._instances[serial_port] = cls.instance
-
-
 
         return cls.instance
 
@@ -212,7 +207,7 @@ class BleHci:
     ) -> None:
         if logger_name == "":
             logger_name = port_id
-
+        self.port_id = port_id
         self.port = None
         self.mon_port = None
         self.id_tag = id_tag
@@ -227,15 +222,13 @@ class BleHci:
         self._data_lock = None
         self._port_lock = None
 
-
         self.set_log_level(log_level)
         self._init_ports(port_id=port_id, mon_port_id=mon_port_id, baud=baud)
 
-
-
         self._init_read_thread()
-    
+
     def __exit__(self, exc_type, exc_value, traceback):
+        print("EXIT")
         with self._port_lock:
             self.stop()
             self.port.close()
@@ -245,16 +238,15 @@ class BleHci:
         return self
 
     def __del__(self):
-        self._kill_evt.set()
-        self._read_thread.join()
-
+        if self._read_thread.is_alive():
+            self.stop()
     def start(self):
         self._read_thread.start()
 
-
     def stop(self):
-        self._read_thread.join()
+        print(f'{self.port_id} stopping')
         self._kill_evt.set()
+        self._read_thread.join()
 
     def get_log_level(self) -> str:
         level = self.logger.level
@@ -548,7 +540,7 @@ class BleHci:
         Returns
         -------
         StatusCode
-            
+
         """
         cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.RESET_CONN_STATS)
         evt = self._send_command(cmd)
@@ -566,7 +558,7 @@ class BleHci:
         Returns
         -------
         StatusCode
-            
+
         """
         params = _to_le_nbyte_list(conn_params.scan_interval, 2)
         params.extend(_to_le_nbyte_list(conn_params.scan_window, 2))
@@ -605,7 +597,7 @@ class BleHci:
         Returns
         -------
         StatusCode
-            
+
         """
         params = [all_phys, tx_phys, rx_phys]
 
@@ -2563,9 +2555,7 @@ class BleHci:
         )
         self._data_lock = Lock()
         self._port_lock = Lock()
-        self.start()
-
-        
+        # self.start()
 
     def _parse_conn_stats_evt(self, evt: EventPacket) -> float:
         """Parse connection statistics packet.
@@ -2603,12 +2593,11 @@ class BleHci:
             self.logger.info("PER         : %i%%", per)
 
         return per
-    
-    def _locked_read(self, num_bytes:int):
+
+    def _locked_read(self, num_bytes: int):
         with self._port_lock:
             data = self.port.read(num_bytes)
         return data
-
 
     def _read_process(self, kill_evt: Event):
         while True:
@@ -2642,7 +2631,7 @@ class BleHci:
         timeout_process = Process(target=_wait_timeout)
         timeout_process.start()
 
-        while True:
+        while True and self._read_thread.is_alive():
             if self._event_packets:
                 timeout_process.terminate()
                 timeout_process.join()
@@ -2718,8 +2707,8 @@ class BleHci:
         PRIVATE
 
         """
-        if not self._read_thread.is_alive:
-            raise ValueError("HCI Must be started to work!")
+        if not self._read_thread.is_alive():
+            raise ValueError(f"{self.port_id} HCI Must be started to work!")
 
         return self._send_command_raw(pkt.to_bytes(), timeout=timeout)
 
