@@ -178,17 +178,16 @@ class BleHci:
     PHY_S2 = 4
 
     _instances = {}
-    _instance_lock = Lock()
 
     def __new__(cls, *args, **kwargs):
         serial_port = kwargs.get("port_id", args[0])
 
-        with cls._instance_lock:
-            if serial_port not in cls._instances:
-                cls.instance = super(BleHci, cls).__new__(cls)
-            else:
-                cls.instance.stop()
-                cls.instance.port.flush()
+        if serial_port not in cls._instances:
+            cls.instance = super(BleHci, cls).__new__(cls)
+        else:
+            cls._instances[serial_port].stop()
+            cls._instances[serial_port].port.flush()
+            cls.instance = super(BleHci, cls).__new__(cls)
 
         cls._instances[serial_port] = cls.instance
 
@@ -198,7 +197,7 @@ class BleHci:
         self,
         port_id: str,
         mon_port_id: Optional[str] = None,
-        baud=ADI_PORT_BAUD_RATE,
+        baud: int = ADI_PORT_BAUD_RATE,
         id_tag: str = "DUT",
         log_level: Union[str, int] = "INFO",
         logger_name: str = "",
@@ -207,6 +206,7 @@ class BleHci:
     ) -> None:
         if logger_name == "":
             logger_name = port_id
+        print("INIT")
         self.port_id = port_id
         self.port = None
         self.mon_port = None
@@ -228,7 +228,6 @@ class BleHci:
         self._init_read_thread()
 
     def __exit__(self, exc_type, exc_value, traceback):
-        print("EXIT")
         with self._port_lock:
             self.stop()
             self.port.close()
@@ -244,7 +243,6 @@ class BleHci:
         self._read_thread.start()
 
     def stop(self):
-        print(f'{self.port_id} stopping')
         self._kill_evt.set()
         self._read_thread.join()
 
@@ -375,7 +373,7 @@ class BleHci:
             self._wait(seconds=10)
             self.get_conn_stats()
 
-    def set_adv_params(self, adv_params: AdvParams) -> StatusCode:
+    def set_adv_params(self, adv_params: AdvParams=AdvParams()) -> StatusCode:
         params = [
             adv_params.interval_min,  # Advertising Interval Min.
             adv_params.interval_max,  # Advertising Interval Max.
@@ -1125,9 +1123,7 @@ class BleHci:
         params = _to_le_nbyte_list(handle, 2)
         params.append(reason)
 
-        cmd = CommandPacket(
-            OGF.LINK_CONTROL, OCF.LINK_CONTROL.DISCONNECT, params=params
-        )
+        cmd = CommandPacket(OGF.LINK_CONTROL, OCF.LINK_CONTROL.DISCONNECT, params=params)
         evt = self._send_command(cmd)
 
         return evt.status
@@ -2551,11 +2547,11 @@ class BleHci:
     def _init_read_thread(self):
         self._kill_evt = Event()
         self._read_thread = Thread(
-            target=self._read_process, args=(self._kill_evt,), daemon=True
+            target=self._read_process, args=(self._kill_evt,), daemon=True, name=f'Thread-{self.id_tag}'
         )
         self._data_lock = Lock()
         self._port_lock = Lock()
-        # self.start()
+        self.start()
 
     def _parse_conn_stats_evt(self, evt: EventPacket) -> float:
         """Parse connection statistics packet.
@@ -2600,15 +2596,14 @@ class BleHci:
         return data
 
     def _read_process(self, kill_evt: Event):
-        while True:
-            if kill_evt.is_set():
-                break
+        while not kill_evt.is_set():
             if self.port and self.port.in_waiting:
-                pkt_type = self._locked_read(1)
-                if pkt_type[0] == PacketType.ASYNC.value:
-                    self._get_async_packet()
-                else:
-                    self._get_event_packet()
+                if self._port_lock.acquire(blocking=False):
+                    pkt_type = self.port.read(1)
+                    if pkt_type[0] == PacketType.ASYNC.value:
+                        self._get_async_packet()
+                    else:
+                        self._get_event_packet()
             elif self.port is None:
                 return
 
@@ -2649,10 +2644,14 @@ class BleHci:
         return evt
 
     def _get_event_packet(self) -> EventPacket:
-        read_data = self._locked_read(2)
+        #read_data = self._locked_read(2)
+        read_data = self.port.read(2)
         param_len = read_data[1]
 
-        read_data += self._locked_read(param_len)
+        # read_data += self._locked_read(param_len)
+        read_data += self.port.read(param_len)
+        self._port_lock.release()
+        #self.logger.info('PORT: %s', self.port_id)
         self.logger.info(
             "%s  %s<%02X%s",
             datetime.datetime.now(),
