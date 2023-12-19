@@ -206,7 +206,7 @@ class BleHci:
     ) -> None:
         if logger_name == "":
             logger_name = port_id
-        print("INIT")
+        
         self.port_id = port_id
         self.port = None
         self.mon_port = None
