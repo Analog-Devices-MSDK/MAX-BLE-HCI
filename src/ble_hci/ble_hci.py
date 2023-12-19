@@ -239,6 +239,7 @@ class BleHci:
     def __del__(self):
         if self._read_thread.is_alive():
             self.stop()
+
     def start(self):
         self._read_thread.start()
 
@@ -373,7 +374,7 @@ class BleHci:
             self._wait(seconds=10)
             self.get_conn_stats()
 
-    def set_adv_params(self, adv_params: AdvParams=AdvParams()) -> StatusCode:
+    def set_adv_params(self, adv_params: AdvParams = AdvParams()) -> StatusCode:
         params = [
             adv_params.interval_min,  # Advertising Interval Min.
             adv_params.interval_max,  # Advertising Interval Max.
@@ -1123,7 +1124,9 @@ class BleHci:
         params = _to_le_nbyte_list(handle, 2)
         params.append(reason)
 
-        cmd = CommandPacket(OGF.LINK_CONTROL, OCF.LINK_CONTROL.DISCONNECT, params=params)
+        cmd = CommandPacket(
+            OGF.LINK_CONTROL, OCF.LINK_CONTROL.DISCONNECT, params=params
+        )
         evt = self._send_command(cmd)
 
         return evt.status
@@ -2547,7 +2550,10 @@ class BleHci:
     def _init_read_thread(self):
         self._kill_evt = Event()
         self._read_thread = Thread(
-            target=self._read_process, args=(self._kill_evt,), daemon=True, name=f'Thread-{self.id_tag}'
+            target=self._read_process,
+            args=(self._kill_evt,),
+            daemon=True,
+            name=f"Thread-{self.id_tag}",
         )
         self._data_lock = Lock()
         self._port_lock = Lock()
@@ -2644,14 +2650,14 @@ class BleHci:
         return evt
 
     def _get_event_packet(self) -> EventPacket:
-        #read_data = self._locked_read(2)
+        # read_data = self._locked_read(2)
         read_data = self.port.read(2)
         param_len = read_data[1]
 
         # read_data += self._locked_read(param_len)
         read_data += self.port.read(param_len)
         self._port_lock.release()
-        #self.logger.info('PORT: %s', self.port_id)
+        # self.logger.info('PORT: %s', self.port_id)
         self.logger.info(
             "%s  %s<%02X%s",
             datetime.datetime.now(),
