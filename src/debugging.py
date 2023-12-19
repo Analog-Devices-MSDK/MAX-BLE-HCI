@@ -30,8 +30,8 @@ if __name__ == "__main__":
     status = slave.start_advertising(connect=True)
     assert status == StatusCode.LL_SUCCESS, f"Failed to start advertising {status}"
     status = master.init_connection(addr=slave_addr)
-    assert status == StatusCode.LL_SUCCESS, f'Failed to init {status}'
-    print('****************************************************')
+    assert status == StatusCode.LL_SUCCESS, f"Failed to init {status}"
+    print("****************************************************")
     while True:
         time.sleep(10)
         slave_stats, pstatus = slave.get_conn_stats()
@@ -39,4 +39,3 @@ if __name__ == "__main__":
 
         print(slave_stats, pstatus)
         print(master_stats, mstatus)
-

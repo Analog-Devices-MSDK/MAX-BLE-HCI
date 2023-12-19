@@ -19,8 +19,6 @@ class TestHci(unittest.TestCase):
         self.assertEqual(hci1.reset(), pc.StatusCode.LL_SUCCESS)
         self.assertEqual(hci2.reset(), pc.StatusCode.LL_SUCCESS)
 
-
-
     def test_commands(self):
         hci1.reset()
 
@@ -94,6 +92,7 @@ class TestHci(unittest.TestCase):
 
         # stats, status = hci1.get_periodic_scanning_stats()
         # self.assertTrue(stats is not None and status == pc.StatusCode.LL_SUCCESS)
+
     def test_dtm(self):
         TX_POWER = -10
         NUM_PACKETS = 100
@@ -151,8 +150,7 @@ class TestHci(unittest.TestCase):
         self.assertEqual(status, pc.StatusCode.LL_SUCCESS)
         status = master.init_connection(addr=slave_addr)
         self.assertEqual(status, pc.StatusCode.LL_SUCCESS)
-        
-        
+
         while True:
             slave_stats, _ = slave.get_conn_stats()
             master_stats, _ = master.get_conn_stats()
@@ -161,10 +159,11 @@ class TestHci(unittest.TestCase):
                 break
             time.sleep(0.5)
 
-
         self.assertEqual(master.disconnect(), pc.StatusCode.LL_SUCCESS)
-        self.assertEqual(slave.disconnect(), pc.StatusCode.LL_ERROR_CODE_CONN_TERM_BY_LOCAL_HOST)
-        
+        self.assertEqual(
+            slave.disconnect(), pc.StatusCode.LL_ERROR_CODE_CONN_TERM_BY_LOCAL_HOST
+        )
+
         master.reset()
         slave.reset()
 
