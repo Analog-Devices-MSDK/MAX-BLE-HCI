@@ -59,7 +59,10 @@ class TestHci(unittest.TestCase):
             self.assertEqual(stats_periph[key], 0)
 
 
+    def test_connection(self):
+        pass
 
+    
     def test_commands(self):
         hci1.reset()
 
