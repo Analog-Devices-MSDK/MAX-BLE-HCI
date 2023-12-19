@@ -91,6 +91,36 @@ _MAX_U32 = 2**32 - 1
 _MAX_U64 = 2**64 - 1
 
 
+class DataPktStats:
+    def __init__(
+        self,
+        rx_data,
+        rx_data_crc,
+        rx_timeout,
+        tx_data,
+        err_data,
+        rx_setup,
+        tx_setup,
+        rx_isr,
+        tx_isr,
+    ) -> None:
+        self.rx_data = rx_data
+        self.rx_data_crc = rx_data_crc
+        self.rx_timeout = rx_timeout
+        self.tx_data = tx_data
+        self.err_data = err_data
+        self.rx_setup = rx_setup
+        self.tx_setup = tx_setup
+        self.rx_isr = rx_isr
+        self.tx_isr = tx_isr
+
+    def __repr__(self):
+        return str(self.__dict__)
+
+    def per(self):
+        return self.rx_data / (self.rx_data + self.rx_data_crc + self.rx_timeout)
+
+
 class PhyOption(Enum):
     """PHY Options"""
 
@@ -206,7 +236,7 @@ class BleHci:
     ) -> None:
         if logger_name == "":
             logger_name = port_id
-        
+
         self.port_id = port_id
         self.port = None
         self.mon_port = None
@@ -215,8 +245,8 @@ class BleHci:
         self.retries = retries
         self.timeout = timeout
 
-        self._event_packets = []
-        self._async_packets = []
+        self._event_packets: EventPacket = []
+        self._async_packets: AsyncPacket = []
         self._read_thread = None
         self._kill_evt = None
         self._data_lock = None
@@ -323,7 +353,6 @@ class BleHci:
     def start_advertising(
         self,
         connect: bool = True,
-        listen: Union[bool, int] = False,
     ) -> StatusCode:
         # TODO: more options?
         """Command board to start advertising.
@@ -357,22 +386,10 @@ class BleHci:
         self.set_default_phy(all_phys=0, tx_phys=7, rx_phys=7)
 
         adv_type = 0 if connect else 3
-
         adv_params = AdvParams(adv_type=adv_type)
         self.set_adv_params(adv_params)
 
-        status = self.enable_adv(True)
-
-        if not listen:
-            return status
-
-        if isinstance(listen, int):
-            self._wait(seconds=listen)
-            return status
-
-        while True:
-            self._wait(seconds=10)
-            self.get_conn_stats()
+        return self.enable_advertising(True)
 
     def set_adv_params(self, adv_params: AdvParams = AdvParams()) -> StatusCode:
         params = [
@@ -395,13 +412,14 @@ class BleHci:
             OGF.LE_CONTROLLER, OCF.LE_CONTROLLER.SET_ADV_PARAM, params=params
         )
         evt = self._send_command(cmd)
+
         return evt.status
 
-    def enable_adv(self, enable: bool) -> StatusCode:
+    def enable_advertising(self, enable: bool) -> StatusCode:
         cmd = CommandPacket(
             OGF.LE_CONTROLLER, OCF.LE_CONTROLLER.SET_ADV_ENABLE, params=int(enable)
         )
-        return self._send_command(cmd)
+        return self._send_command(cmd).status
 
     def enable_scanning(
         self, enable: bool, filter_duplicates: bool = False
@@ -460,10 +478,9 @@ class BleHci:
 
     def init_connection(
         self,
-        addr: Union[List[int], bytearray],
+        addr: int,
         interval: int = 0x6,
         sup_timeout: int = 0x64,
-        listen: Union[bool, int] = False,
     ) -> StatusCode:
         """Command board to initialize a connection.
 
@@ -496,19 +513,9 @@ class BleHci:
             Object containing board return data.
 
         """
-        if isinstance(addr, list):
-            try:
-                addr = bytearray(addr)
-            except ValueError as err:
-                self.logger.error("%s: %s", type(err).__name__, err)
-                sys.exit(1)
-            except TypeError as err:
-                self.logger.error("%s: %s", type(err).__name__, err)
-                sys.exit(1)
 
-        # self.set_event_mask(0xFFFFFFFFFFFFFFFF, mask_pg2=0xFFFFFFFFFFFFFFFF)
-        # self.set_event_mask(0xFFFFFFFFFFFFFFFF)
-        # self.set_event_mask_le(0xFFFFFFFFFFFFFFFF)
+        if addr > 2**48 - 1:
+            raise ValueError("Addr must be able to be represented in 6 Bytes")
 
         self.reset_connection_stats()
         self.set_default_phy()
@@ -519,19 +526,9 @@ class BleHci:
             conn_interval_min=interval,
             sup_timeout=sup_timeout,
         )
-
         status = self.create_connection(conn_params)
-
-        if not listen:
-            return status
-
-        if isinstance(listen, int):
-            self._wait(seconds=listen)
-            return status
-
-        while True:
-            self._wait(seconds=10)
-            self.get_conn_stats()
+        
+        return status
 
     def reset_connection_stats(self) -> StatusCode:
         """Reset accumulated connection stats
@@ -603,9 +600,7 @@ class BleHci:
         cmd = CommandPacket(
             OGF.LE_CONTROLLER, OCF.LE_CONTROLLER.SET_DEF_PHY, params=params
         )
-        evt = self._send_command(cmd)
-
-        return evt.status
+        return self._send_command(cmd).status
 
     def set_data_len(
         self, handle: int = 0x0000, tx_octets: int = 0xFB00, tx_time: int = 0x9042
@@ -650,8 +645,7 @@ class BleHci:
         cmd = CommandPacket(
             OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GENERATE_ACL, params=int(enable)
         )
-        evt = self._send_command(cmd)
-        return evt.status
+        return self._send_command(cmd).status
 
     def generate_acl(
         self, handle: int, packet_len: int, num_packets: int
@@ -705,9 +699,7 @@ class BleHci:
         cmd = CommandPacket(
             OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GENERATE_ACL, params=params
         )
-        evt = self._send_command(cmd)
-
-        return evt.status
+        return self._send_command(cmd).status
 
     def enable_acl_sink(self, enable: bool) -> StatusCode:
         # TODO: implement
@@ -782,7 +774,7 @@ class BleHci:
 
         return evt.status
 
-    def listen(self, listen_time: int = 0) -> float:
+    def listen(self, listen_time: int = 10) -> float:
         """Listen for events and monitor connection stats.
 
         Listens for events and monitors connection stats for
@@ -805,15 +797,10 @@ class BleHci:
         per = 100.0
         start_time = datetime.datetime.now()
         while True:
-            if listen_time == 0:
-                self._wait(10)
-            else:
-                self._wait(listen_time)
+            self._wait(listen_time)
 
-            cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GET_CONN_STATS, 0)
-            evt = self._send_command(cmd)
+            per = self.get_conn_stats()[0].per()
 
-            per = self._parse_conn_stats_evt(evt)
             time_now = datetime.datetime.now()
 
             if (
@@ -1320,7 +1307,6 @@ class BleHci:
     def write_command_raw(
         self,
         data: bytearray,
-        listen: Union[bool, int] = False,
         timeout: Optional[float] = None,
     ) -> StatusCode:
         """Send a custom bytearray command to the board.
@@ -1353,18 +1339,7 @@ class BleHci:
         """
         if not timeout:
             timeout = self.timeout
-        evt = self._send_command(data, timeout=timeout)
-
-        if not listen:
-            return evt
-
-        if isinstance(listen, int):
-            self._wait(seconds=listen)
-        else:
-            while True:
-                self._wait(seconds=10)
-
-        return evt.status
+        return self._send_command(data, timeout=timeout).status
 
     def reset(self) -> StatusCode:
         """Sets log level.
@@ -2032,21 +2007,30 @@ class BleHci:
         """
         cmd = CommandPacket(OGF.VENDOR_SPEC, OCF.VENDOR_SPEC.GET_CONN_STATS)
         evt = self._send_command(cmd)
-        report = evt.get_return_params([4, 4, 4, 4, 4, 2, 2, 2, 2])
-        stats = {
-            "rx-data": report[0],
-            "rx-data-crc": report[1],
-            "tx-data": report[2],
-            "err-data": report[3],
-            "rx-setup": report[4],
-            "tx-setup": report[5],
-            "rx-isr": report[6],
-            "tx-isr": report[7],
-        }
+
+
+        
+        
+        # print(evt)
+
+
+        vals = evt.get_return_params(param_lens=[4, 4, 4, 4, 4, 2, 2, 2, 2])
+
+        stats = DataPktStats(
+            rx_data=vals[0],
+            rx_data_crc=vals[1],
+            rx_timeout=vals[2],
+            tx_data=vals[3],
+            err_data=vals[4],
+            rx_setup=vals[5],
+            tx_setup=vals[6],
+            rx_isr=vals[7],
+            tx_isr=vals[8],
+        )
 
         return stats, evt.status
 
-    def get_test_stats(self) -> Tuple[Dict[str, int], StatusCode]:
+    def get_test_stats(self) -> Tuple[DataPktStats, StatusCode]:
         """Get test stats
 
         Returns
@@ -2059,17 +2043,18 @@ class BleHci:
 
         vals = evt.get_return_params(param_lens=[4, 4, 4, 4, 4, 2, 2, 2, 2])
 
-        stats = {
-            "rx-data": vals[0],
-            "rx-data-crc": vals[1],
-            "rx-data-timeout": vals[2],
-            "tx-data": vals[3],
-            "err-data": vals[4],
-            "rx-setup": vals[5],
-            "tx-setup": vals[6],
-            "rx-isr": vals[7],
-            "tx-isr": vals[8],
-        }
+        stats = DataPktStats(
+            rx_data=vals[0],
+            rx_data_crc=vals[1],
+            rx_timeout=vals[2],
+            tx_data=vals[3],
+            err_data=vals[4],
+            rx_setup=vals[5],
+            tx_setup=vals[6],
+            rx_isr=vals[7],
+            tx_isr=vals[8],
+        )
+
         return stats, evt.status
 
     def get_pool_stats(self) -> Tuple[Dict[str, int], StatusCode]:
@@ -2641,13 +2626,49 @@ class BleHci:
             if timeout_process.exitcode is None:
                 continue
             raise TimeoutError(
-                "Timeout occured before DUT could respond. Check connection and retry."
+                f"Timeout occured before {self.id_tag} could respond. Check connection and retry."
             )
 
         with self._data_lock:
             evt = self._event_packets.pop(0)
 
         return evt
+
+    def _retrieve_async(
+        self, timeout: Optional[float] = None
+    ) -> Union[EventPacket, AsyncPacket]:
+        """Reads event from serial port.
+        Returns
+        ----------
+        Event: EventPacket
+
+        """
+        if timeout is None:
+            timeout = self.timeout
+
+        def _wait_timeout():
+            time.sleep(timeout)
+            return 0
+
+        timeout_process = Process(target=_wait_timeout)
+        timeout_process.start()
+
+        while True and self._read_thread.is_alive():
+            if self._event_packets:
+                timeout_process.terminate()
+                timeout_process.join()
+                timeout_process.close()
+                break
+            if timeout_process.exitcode is None:
+                continue
+            raise TimeoutError(
+                f"Timeout occured before {self.id_tag} could respond. Check connection and retry."
+            )
+
+        with self._data_lock:
+            pkt = self._async_packets.pop(0)
+
+        return pkt
 
     def _get_event_packet(self) -> EventPacket:
         # read_data = self._locked_read(2)
@@ -2695,11 +2716,14 @@ class BleHci:
         delta = datetime.datetime.now() - start_time
 
         while True:
-            if seconds != 0:
-                if delta.seconds > seconds:
-                    break
+            if seconds != 0 and delta.seconds > seconds:
+                break
 
-            self._retrieve_event(timeout=0.1)
+            try:
+                self._retrieve_async(timeout=0.1)
+            except:
+                pass
+
             delta = datetime.datetime.now() - start_time
             if (delta.seconds > 30) and (delta.seconds % 30 == 0):
                 self.logger.info("%s |", datetime.datetime.now())

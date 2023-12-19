@@ -15,8 +15,10 @@ class EventCode(Enum):
     NUM_COMPLETED_PACKETS = 0x13
     DATA_BUFF_OVERFLOW = 0x1A
     ENC_KEY_REFRESH_COMPLEET = 0x30
+    LE_META = 0x3E
+    
     AUTH_PAYLOAD_TIMEOUT_EXPIRED = 0x57
-
+    VENDOR_SPEC = 0xFF
 
 class StatusCode(Enum):
     LL_SUCCESS = 0x00
