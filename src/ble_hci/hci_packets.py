@@ -56,10 +56,8 @@ from typing import List, Optional, Union
 from .packet_codes import EventCode, StatusCode
 from .packet_defs import OCF, OGF, PacketType
 
-
-def _byte_length(num):
+def _byte_length(num: int):
     return max((num.bit_length() + 7) // 8, 1)
-
 
 class Endian(Enum):
     LITTLE = "little"
