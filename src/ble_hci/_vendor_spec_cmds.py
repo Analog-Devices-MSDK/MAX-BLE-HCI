@@ -10,7 +10,15 @@ from ._utils import (
     SerialUartTransport
 )
 from ._hci_logger import get_formatted_logger
-from .data_params import AdvParams, ConnParams, ScanParams
+from .data_params import (
+    DataPktStats,
+    ScanPktStats,
+    AdvPktStats,
+    MemPktStats,
+    PduPktStats,
+    TestReport,
+    PoolStats
+)
 from .hci_packets import (
     AsyncPacket,
     CommandPacket,
@@ -599,7 +607,7 @@ class VendorSpecificCmds:
         
         return evt.status, evt.get_return_params()
     
-    def get_acl_test_report(self) -> Tuple[Dict[str, int], StatusCode]:
+    def get_acl_test_report(self) -> Tuple[TestReport, StatusCode]:
         """Get ACL Test Report
 
         Returns
@@ -611,12 +619,12 @@ class VendorSpecificCmds:
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_ACL_TEST_REPORT)
         data = evt.get_return_params(param_lens=[4, 4, 4, 4])
 
-        stats = {
-            "rx-acl-pkt-cnt": data[0],
-            "rx-acl-oct-cnt": data[1],
-            "gen-acl-pkt-cnt": data[2],
-            "gen-acl-oct-cnt": data[3]
-        }
+        stats = TestReport(
+            rx_pkt_count=data[0],
+            rx_oct_count=data[1],
+            gen_pkt_count=data[2],
+            gen_oct_count=data[3]
+        )
 
         return stats, evt.status
     
@@ -770,7 +778,7 @@ class VendorSpecificCmds:
         params.append(int(enable))
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_OP_FLAGS, params=params)
     
-    def get_pdu_filter_stats(self) -> Tuple[Dict[str, int], StatusCode]:
+    def get_pdu_filter_stats(self) -> Tuple[PduPktStats, StatusCode]:
         """Get PDU Filter Stats
 
         Returns
@@ -782,27 +790,27 @@ class VendorSpecificCmds:
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_PDU_FILT_STATS, return_evt=True)
         data = evt.get_return_params(param_lens=[2]*19)
 
-        stats = {
-            "fail-pdu": data[0],
-            "pass-pdu": data[1],
-            "fail-whitelist": data[2],
-            "pass_whitellist": data[3],
-            "fail-peer-addr-match": data[4],
-            "pass-peer-addr-match": data[5],
-            "fail-local-addr-match": data[6],
-            "pass-local-addr-match": data[7],
-            "fail-peer-rpa-verify": data[8],
-            "pass-peer-rpa-verify": data[9],
-            "fail-peer-priv-addr": data[10],
-            "pass-peer-priv-addr": data[11],
-            "fail-local-priv-addr": data[12],
-            "pass-local-priv-addr": data[13],
-            "fail-peer-addr-res-req": data[14],
-            "pass-peer-addr-res-req": data[15],
-            "pass-local-addr-res-opt": data[16],
-            "peer-res-addr-pend": data[17],
-            "local-res-addr-pend": data[18]
-        }
+        stats = PduPktStats(
+            fail_pdu=data[0],
+            pass_pdu=data[1],
+            fail_whitelist=data[2],
+            pass_whitelist=data[3],
+            fail_peer_addr_match=data[4],
+            pass_peer_addr_match=data[5],
+            fail_local_addr_match=data[6],
+            pass_local_addr_match=data[7],
+            fail_peer_rpa_verify=data[8],
+            pass_peer_rpa_verify=data[9],
+            fail_peer_priv_addr=data[10],
+            pass_peer_priv_addr=data[11],
+            fail_local_priv_addr=data[12],
+            pass_local_priv_addr=data[13],
+            fail_peer_addr_res_req=data[14],
+            pass_peer_addr_res_req=data[15],
+            pass_local_addr_res_opt=data[16],
+            peer_res_addr_pend=data[17],
+            local_res_addr_pend=data[18]
+        )
 
         return stats, evt.status
     
@@ -870,7 +878,7 @@ class VendorSpecificCmds:
         params = [out_method, int(enable)]
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_SNIFFER_ENABLE, params=params)
 
-    def get_memory_stats(self) -> Tuple[Dict[str, int], StatusCode]:
+    def get_memory_stats(self) -> Tuple[MemPktStats, StatusCode]:
         """Get memory use stats
 
         Returns
@@ -883,33 +891,33 @@ class VendorSpecificCmds:
         data = evt.get_return_params(
             param_lens=[2, 2, 4, 4, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2])
         
-        stats = {
-            "stack": data[0],
-            "sys-assert-cnt": data[1],
-            "free-mem": data[2],
-            "used-mem": data[3],
-            "max-connections": data[4],
-            "conn-ctx-size": data[5],
-            "cs-watermark-lvl": data[6],
-            "ll-watermark-lvl": data[7],
-            "sch-watermark-lvl": data[8],
-            "lhci-watermark-lvl": data[9],
-            "max-adv-sets": data[10],
-            "adv-set-ctx-size": data[11],
-            "ext-scan-max": data[12],
-            "ext-scan-ctx-size": data[13],
-            "max-num-ext-init": data[14],
-            "exit-init-ctx-size": data[15],
-            "max-per-scanners": data[16],
-            "per-scan-ctz-size": data[17],
-            "max-cig": data[18],
-            "cig-ctx-size": data[19],
-            "cis-ctx-size": data[20]
-        }
+        stats = MemPktStats(
+            stack=data[0],
+            sys_assert_cnt=data[1],
+            free_mem=data[2],
+            used_mem=data[3],
+            max_connections=data[4],
+            conn_ctx_size=data[5],
+            cs_watermark_lvl=data[6],
+            ll_watermark_lvl=data[7],
+            sch_watermark_lvl=data[8],
+            lhci_watermark_lvl=data[9],
+            max_adv_sets=data[10],
+            adv_set_ctx_size=data[11],
+            ext_scan_max=data[12],
+            ext_scan_ctx_size=data[13],
+            max_num_ext_init=data[14],
+            exit_init_ctx_size=data[15],
+            max_per_scanners=data[16],
+            per_scan_ctx_size=data[17],
+            max_cig=data[18],
+            cig_ctx_size=data[19],
+            cis_ctx_size=data[20]
+        )
 
         return stats, evt.status
     
-    def get_adv_stats(self) -> Tuple[Dict[str, int], StatusCode]:
+    def get_adv_stats(self) -> Tuple[AdvPktStats, StatusCode]:
         """Get advertising stats
 
         Returns
@@ -921,22 +929,22 @@ class VendorSpecificCmds:
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_ADV_STATS, return_evt=True)
         data = evt.get_return_params(param_lens=[4, 4, 4, 2, 4, 4, 2, 2, 2, 2])
 
-        stats = {
-            "tx-adv": data[0],
-            "rx-req": data[1],
-            "rx-req-crc": data[2],
-            "rx-req-timeout": data[3],
-            "tx-resp": data[4],
-            "err-adv": data[5],
-            "rx-setup": data[6],
-            "tx-setup": data[7],
-            "rx-isr": data[8],
-            "tx-isr": data[9]
-        }
+        stats = AdvPktStats(
+            tx_adv=data[0],
+            rx_req=data[1],
+            rx_req_crc=data[2],
+            rx_req_timeout=data[3],
+            tx_resp=data[4],
+            err_adv=data[5],
+            rx_setup=data[6],
+            tx_setup=data[7],
+            rx_isr=data[8],
+            tx_isr=data[9]
+        )
 
         return stats, evt.status
     
-    def get_conn_stats(self) -> Tuple[Dict[str, int], StatusCode]:
+    def get_conn_stats(self) -> Tuple[DataPktStats, StatusCode]:
         """Gets and parses connection stats.
 
         Sends a command to the board, telling it to return
@@ -960,20 +968,21 @@ class VendorSpecificCmds:
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_CONN_STATS, return_evt=True)
         data = evt.get_return_params(param_lens=[4, 4, 4, 4, 4, 2, 2, 2, 2])
 
-        stats = {
-            "rx-data": data[0],
-            "rx-data-crc": data[1],
-            "tx-data": data[2],
-            "err-data": data[3],
-            "rx-setup": data[4],
-            "tx-setup": data[5],
-            "rx-isr": data[6],
-            "tx-isr": data[7]
-        }
+        stats = DataPktStats(
+            rx_data=data[0],
+            rx_data_crc=data[1],
+            rx_timeout=data[2],
+            tx_data=data[3],
+            err_data=data[4],
+            rx_setup=data[5],
+            tx_setup=data[6],
+            rx_isr=data[7],
+            tx_isr=data[8]
+        )
 
         return stats, evt.status
     
-    def get_test_stats(self) -> Tuple[Dict[str, int], StatusCode]:
+    def get_test_stats(self) -> Tuple[DataPktStats, StatusCode]:
         """Get test stats
 
         Returns
@@ -985,21 +994,21 @@ class VendorSpecificCmds:
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_TEST_STATS, return_evt=True)
         data = evt.get_return_params(param_lens=[4, 4, 4, 4, 4, 2, 2, 2, 2])
 
-        stats = {
-            "rx-data": data[0],
-            "rx-data-crc": data[1],
-            "rx-data-timeout": data[2],
-            "tx-data": data[3],
-            "err-data": data[4],
-            "rx-setup": data[5],
-            "tx-setup": data[6],
-            "rx-isr": data[7],
-            "tx-isr": data[8],
-        }
+        stats = DataPktStats(
+            rx_data=data[0],
+            rx_data_crc=data[1],
+            rx_timeout=data[2],
+            tx_data=data[3],
+            err_data=data[4],
+            rx_setup=data[5],
+            tx_setup=data[6],
+            rx_isr=data[7],
+            tx_isr=data[8]
+        )
 
         return stats, evt.status
     
-    def get_pool_stats(self) -> Tuple[Dict[str, int], StatusCode]:
+    def get_pool_stats(self) -> Tuple[List[PoolStats], StatusCode]:
         """Get memory pool stats
 
         Returns
@@ -1009,22 +1018,25 @@ class VendorSpecificCmds:
 
         """
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_POOL_STATS, return_evt=True)
-        num_pools = evt.return_vals[0]
+        num_pools = evt.evt_params[0]
 
         param_lens = [1]
         param_lens.extend([2, 1, 1, 1, 2]*num_pools)
 
         data = evt.get_return_params(param_lens=param_lens, use_raw=True)
 
-        stats = {"num-pools": data.pop(0)}
-        for pool in range(num_pools):
-            stats[f"pool{pool}"] = {
-                "buf-size" : data.pop(0),
-                "num-buf" : data.pop(0),
-                "num-alloc" : data.pop(0),
-                "max-alloc" : data.pop(0),
-                "max-req-len" : data.pop(0)
-            }
+        stats = []
+        num_pools = data.pop(0)
+        for _ in range(num_pools):
+            stats.append(
+                PoolStats(
+                    buf_size=data.pop(0),
+                    num_buf=data.pop(0),
+                    num_alloc=data.pop(0),
+                    max_alloc=data.pop(0),
+                    max_req_len=data.pop(0)
+                )
+            )
 
         return stats, evt.status
     
@@ -1156,7 +1168,7 @@ class VendorSpecificCmds:
         params.append(num_packets)
         return self.send_vs_command(OCF.VENDOR_SPEC.GENERATE_ISO, params=params)
 
-    def get_iso_test_report(self) -> Tuple[Dict[str, int], StatusCode]:
+    def get_iso_test_report(self) -> Tuple[TestReport, StatusCode]:
         """Get ISO test report
 
         Returns
@@ -1168,12 +1180,12 @@ class VendorSpecificCmds:
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_ISO_TEST_REPORT, return_evt=True)
         data = evt.get_return_params(param_lens=[4, 4, 4, 4])
 
-        stats = {
-            "rx-iso-pkt-cnt": data[0],
-            "rx-iso-oct-cnt": data[1],
-            "gen-pkt-cnt": data[2],
-            "gen-oct-cnt": data[3]
-        }
+        stats = TestReport(
+            rx_pkt_count=data[0],
+            rx_oct_count=data[1],
+            gen_pkt_count=data[2],
+            gen_oct_count=data[3]
+        )
         
         return stats, evt.status
     
@@ -1218,7 +1230,7 @@ class VendorSpecificCmds:
         params = to_le_nbyte_list(packet_len, 4)
         return self.send_vs_command(OCF.VENDOR_SPEC.ENA_AUTO_GEN_ISO, params=params)
     
-    def get_iso_connection_stats(self) -> Tuple[Dict[str, int], StatusCode]:
+    def get_iso_connection_stats(self) -> Tuple[DataPktStats, StatusCode]:
         """Get ISO connection stats
 
         Returns
@@ -1229,21 +1241,21 @@ class VendorSpecificCmds:
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_ISO_TEST_REPORT, return_evt=True)
         data = evt.get_return_params(param_lens=[4, 4, 4, 4, 4, 2, 2, 2, 2])
 
-        stats = {
-            "rx-data": data[0],
-            "rx-data-crc": data[1],
-            "rx-data-timeout": data[2],
-            "tx-data": data[3],
-            "err-data": data[4],
-            "rx-setup": data[5],
-            "tx-setup": data[6],
-            "rx-isr": data[7],
-            "tx-isr": data[8],
-        }
+        stats = DataPktStats(
+            rx_data=data[0],
+            rx_data_crc=data[1],
+            rx_data_timeout=data[2],
+            tx_data=data[3],
+            err_data=data[4],
+            rx_setup=data[5],
+            tx_setup=data[6],
+            rx_isr=data[7],
+            tx_isr=data[8]
+        )
 
         return stats, evt.status
     
-    def get_aux_adv_stats(self) -> Tuple[Dict[str, int], StatusCode]:
+    def get_aux_adv_stats(self) -> Tuple[AdvPktStats, StatusCode]:
         """Get auxillary advertising stats
 
         Returns
@@ -1255,23 +1267,23 @@ class VendorSpecificCmds:
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_AUX_ADV_STATS, return_evt=True)
         data = evt.get_return_params(param_lens=[4, 4, 4, 2, 4, 4, 4, 2, 2, 2, 2])
 
-        stats = {
-            "tx-adv": data[0],
-            "rx-req": data[1],
-            "rx-req-crc": data[2],
-            "rx-req-timeout": data[3],
-            "tx-resp": data[4],
-            "tx-chain": data[5],
-            "err-adv": data[6],
-            "rx-setup": data[7],
-            "tx-setup": data[8],
-            "rx-isr": data[9],
-            "tx-isr": data[10],
-        }
+        stats = AdvPktStats(
+            tx_adv=data[0],
+            rx_req=data[1],
+            rx_req_crc=data[2],
+            rx_req_timeout=data[3],
+            tx_resp=data[4],
+            tx_chain=data[5],
+            err_adv=data[6],
+            rx_setup=data[7],
+            tx_setup=data[8],
+            rx_isr=data[9],
+            tx_isr=data[10]
+        )
 
         return stats, evt.status
     
-    def get_aux_scan_stats(self) -> Tuple[Dict[str, int], StatusCode]:
+    def get_aux_scan_stats(self) -> Tuple[ScanPktStats, StatusCode]:
         """Get auxillary scanning stats
 
         Returns
@@ -1285,26 +1297,26 @@ class VendorSpecificCmds:
             param_lens=[4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 2, 2, 2, 2]
         )
 
-        stats = {
-            "rx-adv": data[0],
-            "rx-adv-crc": data[1],
-            "rx-adv-timeout": data[2],
-            "tx-req": data[3],
-            "rx-rsp": data[4],
-            "rx-rsp-crc": data[5],
-            "rx-rsp-timeout": data[6],
-            "rx-chain": data[7],
-            "rx-chain-crc": data[8],
-            "rx-chain-timeout": data[9],
-            "err-scan": data[10],
-            "rx-setup": data[11],
-            "tx-setup": data[12],
-            "rx-isr": data[13],
-            "tx-isr": data[14],
-        }
+        stats = ScanPktStats(
+            rx_adv=data[0],
+            rx_adv_crc=data[1],
+            rx_adv_timeout=data[2],
+            tx_req=data[3],
+            rx_rsp=data[4],
+            rx_rsp_crc=data[5],
+            rx_rsp_timeout=data[6],
+            rx_chain=data[7],
+            rx_chain_crc=data[8],
+            rx_chain_timeout=data[9],
+            err_scan=data[10],
+            rx_setup=data[11],
+            tx_setup=data[12],
+            rx_isr=data[13],
+            tx_isr=data[14]
+        )
         return stats, evt.status
     
-    def get_periodic_scanning_stats(self) -> Tuple[Dict[str, int], StatusCode]:
+    def get_periodic_scanning_stats(self) -> Tuple[ScanPktStats, StatusCode]:
         """Get periodic scanning stats
 
         Returns
@@ -1316,19 +1328,19 @@ class VendorSpecificCmds:
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_PER_SCAN_STATS, return_evt=True)
         data = evt.get_return_params(param_lens=[4, 4, 4, 4, 4, 4, 4, 2, 2, 2, 2])
 
-        stats = {
-            "rx-adv": data[0],
-            "rx-adv-crc": data[1],
-            "rx-adv-timeout": data[2],
-            "rx-chain": data[3],
-            "rx-chain-crc": data[4],
-            "rx-chain-timeout": data[5],
-            "err-scan": data[6],
-            "rx-setup": data[7],
-            "tx-setup": data[8],
-            "rx-isr": data[9],
-            "tx-isr": data[10],
-        }
+        stats = ScanPktStats(
+            rx_adv=data[0],
+            rx_adv_crc=data[1],
+            rx_adv_timeout=data[2],
+            rx_chain=data[3],
+            rx_chain_crc=data[4],
+            rx_chain_timeout=data[5],
+            err_scan=data[6],
+            rx_setup=data[7],
+            tx_setup=data[8],
+            rx_isr=data[9],
+            tx_isr=data[10]
+        )
         return stats, evt.status
     
     def set_connection_phy_tx_power(

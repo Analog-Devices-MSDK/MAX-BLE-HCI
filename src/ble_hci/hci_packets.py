@@ -53,7 +53,7 @@
 from enum import Enum
 from typing import List, Optional, Union
 
-from .packet_codes import EventCode, StatusCode
+from .packet_codes import EventCode, StatusCode, EventSubcode
 from .packet_defs import OCF, OGF, PacketType
 
 def _byte_length(num: int):
@@ -192,36 +192,67 @@ class AsyncPacket:
 
 
 class EventPacket:
-    def __init__(self, evt_code, length, num_cmds, opcode, status, return_vals) -> None:
+    def __init__(self, evt_code, length, status, evt_params, evt_subcode=None) -> None:
         self.evt_code = EventCode(evt_code)
         self.length = length
-        self.num_cmds = num_cmds
-        self.opcode = opcode
-        self.status = StatusCode(status)
-        self.return_vals = return_vals
+        self.status = StatusCode(status) if status else None
+        self.evt_subcode = EventSubcode(evt_subcode) if evt_subcode else None
+        self.evt_params = evt_params
 
     def __repr__(self):
         return str(self.__dict__)
 
     @staticmethod
     def from_bytes(serialized_event, endianness=Endian.LITTLE):
-        if serialized_event[0] == EventCode.COMMAND_STATUS.value:
+        if serialized_event[0] == EventCode.COMMAND_COMPLETE.value:
             return EventPacket(
                 evt_code=serialized_event[0],
                 length=serialized_event[1],
-                status=serialized_event[2],
-                num_cmds=serialized_event[3],
-                opcode=int.from_bytes(serialized_event[4:6], endianness.value),
-                return_vals=serialized_event[2:],
+                status=serialized_event[5],
+                evt_params=serialized_event[2:]
             )
-
+        if serialized_event[0] == EventCode.HARDWARE_ERROR.value:
+            return EventPacket(
+                evt=serialized_event[0],
+                length=serialized_event[1],
+                status=StatusCode.LL_ERROR_CODE_HW_FAILURE.value,
+                evt_params=serialized_event[2:]
+            )
+        if serialized_event[0] == EventCode.NUM_COMPLETED_PACKETS.value:
+            return EventPacket(
+                evt_code=serialized_event[0],
+                length=serialized_event[1],
+                status=StatusCode.LL_SUCCESS.value,
+                evt_params=serialized_event[2:]
+            )
+        if serialized_event[0] == EventCode.DATA_BUFF_OVERFLOW.value:
+            return EventPacket(
+                evt_code=serialized_event[0],
+                length=serialized_event[1],
+                status=None,
+                evt_params=serialized_event[2:]
+            )
+        if serialized_event[0] == EventCode.LE_META.value:
+            return EventPacket(
+                evt_code=serialized_event[0],
+                length=serialized_event[1],
+                status=None,
+                evt_params=serialized_event[3:],
+                evt_subcode=serialized_event[2]
+            )
+        if serialized_event[0] == EventCode.AUTH_PAYLOAD_TIMEOUT_EXPIRED.value:
+            return EventPacket(
+                evt_code=serialized_event[0],
+                length=serialized_event[1],
+                status=None,
+                evt_params=serialized_event[2:]
+            )
+        
         return EventPacket(
             evt_code=serialized_event[0],
             length=serialized_event[1],
-            num_cmds=serialized_event[2],
-            opcode=int.from_bytes(serialized_event[3:5], endianness.value),
-            status=serialized_event[5],
-            return_vals=serialized_event[2:],
+            status=serialized_event[2],
+            evt_params=serialized_event[3:]
         )
 
     def get_return_params(
@@ -232,9 +263,9 @@ class EventPacket:
         signed: bool = False,
     ) -> Union[List[int], int]:
         if use_raw:
-            param_bytes = self.return_vals
+            param_bytes = self.evt_params
         else:
-            param_bytes = self.return_vals[4:]
+            param_bytes = self.evt_params[4:]
 
         if not param_lens:
             return int.from_bytes(param_bytes, endianness.value, signed=signed)
