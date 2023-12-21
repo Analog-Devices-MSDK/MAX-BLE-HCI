@@ -205,6 +205,16 @@ class EventPacket:
 
     @staticmethod
     def from_bytes(serialized_event, endianness=Endian.LITTLE):
+        if serialized_event[0] == EventCode.COMMAND_STATUS.value:
+            return EventPacket(
+                evt_code=serialized_event[0],
+                length=serialized_event[1],
+                status=serialized_event[2],
+                num_cmds=serialized_event[3],
+                opcode=int.from_bytes(serialized_event[4:6], endianness.value),
+                return_vals=serialized_event[2:],
+            )
+
         return EventPacket(
             evt_code=serialized_event[0],
             length=serialized_event[1],
