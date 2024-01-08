@@ -86,6 +86,7 @@ class OGF(Enum):
 
 class _NOpOCF(Enum):
     """DOCSTRING"""
+
     NOP = 0x00
 
 
@@ -100,6 +101,7 @@ class _LinkControlOCF(Enum):
 
 class _ControllerOCF(Enum):
     """DOCSTRING"""
+
     SET_EVENT_MASK = 0x01
     RESET = 0x03
     READ_TX_PWR_LVL = 0x2D
@@ -114,6 +116,7 @@ class _ControllerOCF(Enum):
 
 class _InformationalOCF(Enum):
     """DOCSTRING"""
+
     READ_LOCAL_VER_INFO = 0x01
     READ_LOCAL_SUP_CMDS = 0x02
     READ_LOCAL_SUP_FEAT = 0x03
@@ -126,11 +129,13 @@ class _InformationalOCF(Enum):
 
 class _StatusOCF(Enum):
     """DOCSTRING"""
+
     READ_RSSI = 0x05
 
 
 class _LEControllerOCF(Enum):
     """DOCSTRING"""
+
     SET_EVENT_MASK = 0x01
     READ_BUF_SIZE = 0x02
     READ_LOCAL_SUP_FEAT = 0x03
@@ -256,6 +261,7 @@ class _LEControllerOCF(Enum):
 
 class _VendorSpecificOCF(Enum):
     """DOCSTRING"""
+
     SET_SCAN_CH_MAP = 0x3E0
     SET_EVENT_MASK = 0x3E1
     SET_RSRC_MGR_MODE = 0x3E2
@@ -315,12 +321,15 @@ class _VendorSpecificOCF(Enum):
 
 class PubKeyValidateMode(Enum):
     """DOCSTRING"""
+
     ALT1 = 0x0
     ALT2 = 0x1
+
 
 @dataclass
 class OCF:
     """DOCSTRING"""
+
     NOP = _NOpOCF
     LINK_CONTROL = _LinkControlOCF
     LINK_POLICY = None

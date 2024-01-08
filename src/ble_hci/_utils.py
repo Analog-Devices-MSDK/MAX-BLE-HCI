@@ -1,5 +1,5 @@
 """DOCSTRING"""
-#pylint: disable=too-many-instance-attributes, too-many-arguments
+# pylint: disable=too-many-instance-attributes, too-many-arguments
 from typing import Optional, Union, List, Callable, Any
 from enum import Enum
 from multiprocessing import Process
@@ -13,12 +13,9 @@ import serial
 
 from ._hci_logger import get_formatted_logger
 from .packet_defs import ADI_PORT_BAUD_RATE, PacketType
-from .hci_packets import (
-    AsyncPacket,
-    CommandPacket,
-    EventPacket
-)
+from .hci_packets import AsyncPacket, CommandPacket, EventPacket
 from .packet_codes import EventCode
+
 
 def to_le_nbyte_list(value: int, n_bytes: int):
     """DOCSTRING"""
@@ -36,12 +33,15 @@ def le_list_to_int(nums: List[int]) -> int:
         full_num |= num << 8 * i
     return full_num
 
+
 _MAX_U16 = 2**16 - 1
 _MAX_U32 = 2**32 - 1
 _MAX_U64 = 2**64 - 1
 
+
 class PhyOption(Enum):
     """DOCSTRING"""
+
     PHY_1M = 0x1
     PHY_2M = 0x2
     PHY_CODED = 0x3
@@ -51,6 +51,7 @@ class PhyOption(Enum):
 
 class SerialUartTransport:
     """DOCSTRING"""
+
     def __new__(cls, *args, **kwargs):
         if "instances" not in cls.__dict__:
             cls.instances = weakref.WeakValueDictionary()
@@ -210,10 +211,7 @@ class SerialUartTransport:
                         elif self.evt_callback:
                             self.evt_callback(pkt)
 
-    def _retrieve(
-        self,
-        timeout: Optional[float]
-    ) -> Union[EventPacket, AsyncPacket]:
+    def _retrieve(self, timeout: Optional[float]) -> Union[EventPacket, AsyncPacket]:
         """Reads event from serial port.
         Returns
         ----------

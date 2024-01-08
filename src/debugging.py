@@ -16,7 +16,7 @@ if __name__ == "__main__":
     master = BleHci(PORT_ID2, log_level="INFO", retries=1, timeout=1, id_tag="master")
 
     master.reset()
-    #slave.reset()
+    # slave.reset()
 
     master_addr = 0x001234887733
     slave_addr = 0x111234887733

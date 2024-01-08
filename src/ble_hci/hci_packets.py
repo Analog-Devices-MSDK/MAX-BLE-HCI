@@ -57,12 +57,15 @@ from typing import List, Optional, Union
 from .packet_codes import EventCode, StatusCode, EventSubcode
 from .packet_defs import OCF, OGF, PacketType
 
+
 def _byte_length(num: int):
     """DOCSTRING"""
     return max((num.bit_length() + 7) // 8, 1)
 
+
 class Endian(Enum):
     """DOCSTRING"""
+
     LITTLE = "little"
     BIG = "big"
 
@@ -71,6 +74,7 @@ class CommandPacket:
     """
     Command Packet Class
     """
+
     def __init__(self, ogf, ocf, params=None) -> None:
         self.ogf = self._enum_to_int(ogf)
         self.ocf = self._enum_to_int(ocf)
@@ -172,6 +176,7 @@ class CommandPacket:
 
 class AsyncPacket:
     """DOCSTRING"""
+
     def __init__(self, handle, pb_flag, bc_flag, length, data) -> None:
         self.handle = handle
         self.pb_flag = pb_flag
@@ -196,6 +201,7 @@ class AsyncPacket:
 
 class EventPacket:
     """DOCSTRING"""
+
     def __init__(self, evt_code, length, status, evt_params, evt_subcode=None) -> None:
         self.evt_code = EventCode(evt_code)
         self.length = length
@@ -214,28 +220,28 @@ class EventPacket:
                 evt_code=serialized_event[0],
                 length=serialized_event[1],
                 status=serialized_event[5],
-                evt_params=serialized_event[2:]
+                evt_params=serialized_event[2:],
             )
         elif serialized_event[0] == EventCode.HARDWARE_ERROR.value:
             pkt = EventPacket(
                 evt_code=serialized_event[0],
                 length=serialized_event[1],
                 status=StatusCode.LL_ERROR_CODE_HW_FAILURE.value,
-                evt_params=serialized_event[2:]
+                evt_params=serialized_event[2:],
             )
         elif serialized_event[0] == EventCode.NUM_COMPLETED_PACKETS.value:
             pkt = EventPacket(
                 evt_code=serialized_event[0],
                 length=serialized_event[1],
                 status=StatusCode.LL_SUCCESS.value,
-                evt_params=serialized_event[2:]
+                evt_params=serialized_event[2:],
             )
         elif serialized_event[0] == EventCode.DATA_BUFF_OVERFLOW.value:
             pkt = EventPacket(
                 evt_code=serialized_event[0],
                 length=serialized_event[1],
                 status=None,
-                evt_params=serialized_event[2:]
+                evt_params=serialized_event[2:],
             )
         elif serialized_event[0] == EventCode.LE_META.value:
             pkt = EventPacket(
@@ -243,21 +249,21 @@ class EventPacket:
                 length=serialized_event[1],
                 status=None,
                 evt_params=serialized_event[3:],
-                evt_subcode=serialized_event[2]
+                evt_subcode=serialized_event[2],
             )
         elif serialized_event[0] == EventCode.AUTH_PAYLOAD_TIMEOUT_EXPIRED.value:
             pkt = EventPacket(
                 evt_code=serialized_event[0],
                 length=serialized_event[1],
                 status=None,
-                evt_params=serialized_event[2:]
+                evt_params=serialized_event[2:],
             )
         elif serialized_event[0] == EventCode.VENDOR_SPEC:
             pkt = EventPacket(
                 evt_code=serialized_event[0],
                 length=serialized_event[1],
                 status=serialized_event[2],
-                evt_params=serialized_event[3:]
+                evt_params=serialized_event[3:],
             )
         else:
             raise ValueError(f"Invalid event code ({serialized_event[0]}) received.")
@@ -293,8 +299,10 @@ class EventPacket:
 
         return return_params
 
+
 class ExtendedPacket:
     """DOCSTRING"""
+
     def __init__(self, data):
         self.opcode = data[0] + (data[1] << 8)
         self.length = data[2] + (data[3] << 8)
