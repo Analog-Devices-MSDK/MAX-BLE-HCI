@@ -77,6 +77,7 @@ from .hci_packets import (
 from .packet_codes import StatusCode
 from .packet_defs import ADI_PORT_BAUD_RATE
 
+
 class BleHci(BleStandardCmds, VendorSpecificCmds):
     """Host-controller interface for ADI BLE-compatible microchips.
 
@@ -122,7 +123,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         retries: int = 0,
         timeout: float = 1.0,
         async_callback: Optional[Callable[[AsyncPacket], Any]] = None,
-        evt_callback: Optional[Callable[[EventPacket], Any]] = None
+        evt_callback: Optional[Callable[[EventPacket], Any]] = None,
     ) -> None:
         self.port_id = port_id
         self.port = None
@@ -385,5 +386,5 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
             retries=self.retries,
             timeout=self.timeout,
             async_callback=async_callback,
-            evt_callback=evt_callback
+            evt_callback=evt_callback,
         )

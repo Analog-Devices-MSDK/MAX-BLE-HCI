@@ -20,8 +20,10 @@ class EventCode(Enum):
     AUTH_PAYLOAD_TIMEOUT_EXPIRED = 0x57
     VENDOR_SPEC = 0xFF
 
+
 class EventSubcode(Enum):
     """DOCSTRING"""
+
     CONNECTION_COMPLETE = 0x1
     ADVERTISING_REPORT = 0x2
     CONNECTION_UPDATE = 0x3
@@ -57,8 +59,10 @@ class EventSubcode(Enum):
     TRANSMIT_POWER_REPORTING = 0x21
     BIG_INFO_ADVERTISING_REPORT = 0x22
 
+
 class StatusCode(Enum):
     """DOCSTRING"""
+
     LL_SUCCESS = 0x00
     LL_ERROR_CODE_UNKNOWN_HCI_CMD = 0x01
     LL_ERROR_CODE_UNKNOWN_CONN_ID = 0x2

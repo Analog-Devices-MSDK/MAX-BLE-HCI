@@ -50,18 +50,49 @@
 #
 ##############################################################################
 """
-hello_hci.py
+dtm.py
 
-Description: Bare minimum example of using the BleHci class
-
+Description: Simple example showing direct test mode between two devices 
+             and printing the packet error rate
 """
+import time
+
 from ble_hci import BleHci
 
 
-# Path to serial port used for HCI
-PORT = ""
+# Switch out for serial port used to connect over HCI
+RX_HCI_PORT = ""
+TX_HCI_PORT = ""
 
-controller = BleHci(PORT)
-event = controller.reset()
 
-print(event)
+def main():
+    """MAIN"""
+    tx_power = -10
+    num_packets = 100
+
+    rx_hci = BleHci(RX_HCI_PORT)
+    tx_hci = BleHci(RX_HCI_PORT)
+
+    tx_hci.set_adv_tx_power(tx_power)
+    tx_hci.reset_test_stats()
+    rx_hci.reset_test_stats()
+
+    rx_hci.rx_test()
+
+    tx_hci.tx_test_vs(num_packets=num_packets)
+
+    time.sleep(0.1)
+
+    tx_hci.end_test()
+    rx_hci.end_test()
+
+    tx_stats, _ = tx_hci.get_test_stats()
+    rx_stats, _ = rx_hci.get_test_stats()
+
+    per = rx_stats.per(tx_stats)
+
+    print(per)
+
+
+if __name__ == "__main__":
+    main()

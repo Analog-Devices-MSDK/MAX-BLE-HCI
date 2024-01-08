@@ -50,18 +50,54 @@
 #
 ##############################################################################
 """
-hello_hci.py
+connection.py
 
-Description: Bare minimum example of using the BleHci class
+Description: Simple example showing creation of a connection and getting packet error metrics
 
 """
+
+import time
+
 from ble_hci import BleHci
 
+# Switch out for serial port used to connect over HCI
+MASTER_HCI_PORT = ""
+SLAVE_HCI_PORT = ""
 
-# Path to serial port used for HCI
-PORT = ""
 
-controller = BleHci(PORT)
-event = controller.reset()
+def main():
+    """MAIN"""
+    master = BleHci(MASTER_HCI_PORT)
+    slave = BleHci(SLAVE_HCI_PORT)
 
-print(event)
+    master.reset()
+    slave.reset()
+
+    master_addr = 0x001234887733
+    slave_addr = 0x111234887733
+
+    master.set_adv_tx_power(-10)
+    slave.set_adv_tx_power(-10)
+
+    slave.set_address(slave_addr)
+    master.set_address(master_addr)
+
+    slave.start_advertising(connect=True)
+    master.init_connection(addr=slave_addr)
+
+    while True:
+        slave_stats, _ = slave.get_conn_stats()
+        master_stats, _ = master.get_conn_stats()
+
+        if slave_stats.rx_data and master_stats.rx_data:
+            print(f"Slave PER {slave_stats.per()}")
+            print(f"Master PER {master_stats.per()}")
+            break
+
+        time.sleep(0.5)
+
+    master.disconnect()
+    slave.disconnect()
+
+    master.reset()
+    slave.reset()
