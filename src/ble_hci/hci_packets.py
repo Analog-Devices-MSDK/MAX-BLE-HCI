@@ -259,12 +259,9 @@ class EventPacket:
         self,
         param_lens: Optional[List[int]] = None,
         endianness: Endian = Endian.LITTLE,
-        use_raw: bool = False,
         signed: bool = False,
     ) -> Union[List[int], int]:
-        if use_raw:
-            param_bytes = self.evt_params
-        else:
+        if self.evt_code == EventCode.COMMAND_COMPLETE:
             param_bytes = self.evt_params[4:]
 
         if not param_lens:
@@ -285,7 +282,6 @@ class EventPacket:
             p_idx += p_len
 
         return return_params
-
 
 class ExtendedPacket:
     def __init__(self, data):

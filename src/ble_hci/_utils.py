@@ -19,6 +19,7 @@ from .hci_packets import (
     ExtendedPacket,
     _byte_length
 )
+from .packet_codes import EventCode
 
 def to_le_nbyte_list(value: int, n_bytes: int):
     little_endian = []
@@ -69,7 +70,9 @@ class SerialUartTransport:
         id_tag: str = "DUT",
         logger_name: str = "BLE-HCI",
         retries: int = 0,
-        timeout: float = 1.0
+        timeout: float = 1.0,
+        async_callback: Optional[function] = None,
+        evt_callback: Optional[function] = None,
     ):
         self.port_id = port_id
         self.port = None
@@ -77,9 +80,10 @@ class SerialUartTransport:
         self.logger = get_formatted_logger(name=logger_name)
         self.retries = retries
         self.timeout = timeout
+        self.async_callback = async_callback
+        self.evt_callback = evt_callback
 
         self._event_packets = []
-        self._async_packets = []
         self._read_thread = None
         self._kill_evt = None
         self._data_lock = None
@@ -180,12 +184,19 @@ class SerialUartTransport:
                 )
 
                 with self._data_lock:
-                    if pkt_type[0] == PacketType.ASYNC.value:
-                        self._async_packets.append(AsyncPacket.from_bytes(read_data))
+                    if pkt_type[0] == PacketType.ASYNC.value and self.async_callback:
+                            self.async_callback(AsyncPacket.from_bytes(read_data))
                     else:
-                        self._event_packets.append(EventPacket.from_bytes(read_data))
+                        pkt = EventPacket.from_bytes(read_data)
+                        if pkt.evt_code == EventCode.COMMAND_COMPLETE:
+                            self._event_packets.append(pkt)
+                        elif self.evt_callback:
+                            self.evt_callback(pkt)
 
-    def _retrieve(self, timeout: Optional[float]) -> Union[EventPacket, AsyncPacket]:
+    def _retrieve(
+        self,
+        timeout: Optional[float]
+    ) -> Union[EventPacket, AsyncPacket]:
         """Reads event from serial port.
         Returns
         ----------
