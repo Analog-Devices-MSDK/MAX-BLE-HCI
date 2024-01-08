@@ -1,4 +1,6 @@
-from typing import Optional, Union, List
+"""DOCSTRING"""
+#pylint: disable=too-many-instance-attributes, too-many-arguments
+from typing import Optional, Union, List, Callable, Any
 from enum import Enum
 from multiprocessing import Process
 from threading import Event, Lock, Thread
@@ -14,14 +16,12 @@ from .packet_defs import ADI_PORT_BAUD_RATE, PacketType
 from .hci_packets import (
     AsyncPacket,
     CommandPacket,
-    Endian,
-    EventPacket,
-    ExtendedPacket,
-    _byte_length
+    EventPacket
 )
 from .packet_codes import EventCode
 
 def to_le_nbyte_list(value: int, n_bytes: int):
+    """DOCSTRING"""
     little_endian = []
     for i in range(n_bytes):
         num_masked = (value & (0xFF << 8 * i)) >> (8 * i)
@@ -30,6 +30,7 @@ def to_le_nbyte_list(value: int, n_bytes: int):
 
 
 def le_list_to_int(nums: List[int]) -> int:
+    """DOCSTRING"""
     full_num = 0
     for i, num in enumerate(nums):
         full_num |= num << 8 * i
@@ -39,25 +40,26 @@ _MAX_U16 = 2**16 - 1
 _MAX_U32 = 2**32 - 1
 _MAX_U64 = 2**64 - 1
 
-
 class PhyOption(Enum):
-    """PHY Options"""
-
-    P1M = 1
-    P2M = 2
-    PCODED = 3
+    """DOCSTRING"""
+    PHY_1M = 0x1
+    PHY_2M = 0x2
+    PHY_CODED = 0x3
+    PHY_CODED_S8 = 0x3
+    PHY_CODED_S2 = 0x4
 
 
 class SerialUartTransport:
+    """DOCSTRING"""
     def __new__(cls, *args, **kwargs):
         if "instances" not in cls.__dict__:
             cls.instances = weakref.WeakValueDictionary()
-        
+
         serial_port = kwargs.get("port_id", args[0])
         if serial_port in cls.instances:
             cls.instances[serial_port].stop()
             cls.instances[serial_port].port.flush()
-        
+
         cls.instance = super(SerialUartTransport, cls).__new__(cls)
         cls.instances[serial_port] = cls.instance
 
@@ -71,8 +73,8 @@ class SerialUartTransport:
         logger_name: str = "BLE-HCI",
         retries: int = 0,
         timeout: float = 1.0,
-        async_callback: Optional[function] = None,
-        evt_callback: Optional[function] = None,
+        async_callback: Optional[Callable[[AsyncPacket], Any]] = None,
+        evt_callback: Optional[Callable[[EventPacket], Any]] = None,
     ):
         self.port_id = port_id
         self.port = None
@@ -106,11 +108,22 @@ class SerialUartTransport:
             self.stop()
 
     def start(self):
+        """DOCSTRING"""
         self._read_thread.start()
 
     def stop(self):
+        """DOCSTRING"""
         self._kill_evt.set()
         self._read_thread.join()
+
+    def exit(self):
+        """DOCSTRING"""
+        if self._read_thread.is_alive():
+            self.stop()
+
+        if self.port.is_open:
+            self.port.flush()
+            self.port.close()
 
     def send_command(
         self, pkt: CommandPacket, timeout: Optional[float] = None
@@ -121,11 +134,13 @@ class SerialUartTransport:
 
         """
         return self._write(pkt.to_bytes(), timeout)
-    
+
     def retrieve_packet(self, timeout: Optional[float] = None):
+        """DOCSTRING"""
         return self._retrieve(timeout)
 
     def _init_read_thread(self) -> None:
+        """DOCSTRING"""
         self._kill_evt = Event()
         self._read_thread = Thread(
             target=self._read,
@@ -163,7 +178,9 @@ class SerialUartTransport:
             sys.exit(1)
 
     def _read(self, kill_evt: Event) -> None:
+        """DOCSTRING"""
         while not kill_evt.is_set():
+            # pylint: disable=consider-using-with
             if self.port.in_waiting and self._port_lock.acquire(blocking=False):
                 pkt_type = self.port.read(1)
                 if pkt_type[0] == PacketType.ASYNC.value:
@@ -185,7 +202,7 @@ class SerialUartTransport:
 
                 with self._data_lock:
                     if pkt_type[0] == PacketType.ASYNC.value and self.async_callback:
-                            self.async_callback(AsyncPacket.from_bytes(read_data))
+                        self.async_callback(AsyncPacket.from_bytes(read_data))
                     else:
                         pkt = EventPacket.from_bytes(read_data)
                         if pkt.evt_code == EventCode.COMMAND_COMPLETE:
@@ -213,7 +230,7 @@ class SerialUartTransport:
         timeout_process = Process(target=_wait_timeout)
         timeout_process.start()
 
-        while True and self._read_thread.is_alive():
+        while self._read_thread.is_alive():
             if self._event_packets:
                 timeout_process.terminate()
                 timeout_process.join()

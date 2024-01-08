@@ -1,27 +1,21 @@
+"""DOCSTRING"""
 from typing import Optional, Tuple, Union, List
 from ._utils import (
-    _MAX_U16,
-    _MAX_U32,
-    _MAX_U64,
     to_le_nbyte_list,
-    le_list_to_int,
-    PhyOption,
-    SerialUartTransport
+    SerialUartTransport,
+    PhyOption
 )
 from ._hci_logger import get_formatted_logger
 from .data_params import AdvParams, ConnParams, ScanParams
 from .hci_packets import (
-    AsyncPacket,
     CommandPacket,
-    Endian,
-    EventPacket,
-    ExtendedPacket,
-    _byte_length
+    EventPacket
 )
-from .packet_codes import EventCode, StatusCode
-from .packet_defs import ADI_PORT_BAUD_RATE, OCF, OGF, PacketType, PubKeyValidateMode
+from .packet_codes import StatusCode
+from .packet_defs import OCF, OGF
 
 class BleStandardCmds:
+    """DOCSTRING"""
     def __init__(self, port: SerialUartTransport, logger_name: str):
         self.port = port
         self.logger = get_formatted_logger(name=logger_name)
@@ -32,30 +26,33 @@ class BleStandardCmds:
         params: List[int] = None,
         return_evt: bool = False
     ) -> Union[StatusCode, EventPacket]:
+        """DOCSTRING"""
         cmd = CommandPacket(OGF.LE_CONTROLLER, ocf, params=params)
         if return_evt:
             return self.port.send_command(cmd)
 
         return self.port.send_command(cmd).status
-    
+
     def send_link_control_command(
         self,
         ocf: OCF,
         params: List[int] = None,
         return_evt: bool = False
     ) -> Union[StatusCode, EventPacket]:
+        """DOCSTRING"""
         cmd = CommandPacket(OGF.LINK_CONTROL, ocf, params=params)
         if return_evt:
             return self.port.send_command(cmd)
 
         return self.port.send_command(cmd).status
-    
+
     def send_controller_command(
         self,
         ocf: OCF,
         params: List[int] = None,
         return_evt: bool = False
     ) -> Union[StatusCode, EventPacket]:
+        """DOCSTRING"""
         cmd = CommandPacket(OGF.CONTROLLER, ocf, params=params)
         if return_evt:
             return self.port.send_command(cmd)
@@ -63,6 +60,7 @@ class BleStandardCmds:
         return self.port.send_command(cmd).status
 
     def set_adv_params(self, adv_params: AdvParams = AdvParams()) -> StatusCode:
+        """DOCSTRING"""
         params = [
             adv_params.interval_min,  # Advertising Interval Min.
             adv_params.interval_max,  # Advertising Interval Max.
@@ -80,10 +78,11 @@ class BleStandardCmds:
         ]
 
         return self.send_le_controller_command(OCF.LE_CONTROLLER.SET_ADV_PARAM, params=params)
-    
+
     def enable_adv(self, enable: bool) -> StatusCode:
+        """DOCSTRING"""
         return self.send_le_controller_command(OCF.LE_CONTROLLER, params=int(enable))
-    
+
     def enable_scanning(
         self, enable: bool, filter_duplicates: bool = False
     ) -> StatusCode:
@@ -124,7 +123,7 @@ class BleStandardCmds:
         params.append(scan_params.filter_policy)
 
         return self.send_le_controller_command(OCF.LE_CONTROLLER.SET_SCAN_PARAM, params=params)
-    
+
     def create_connection(self, conn_params: ConnParams) -> StatusCode:
         """Create a connection to peer device
 
@@ -152,7 +151,7 @@ class BleStandardCmds:
         params.extend(to_le_nbyte_list(conn_params.max_ce_length, 2))
 
         return self.send_le_controller_command(OCF.LE_CONTROLLER.CREATE_CONN, params=params)
-    
+
     def set_default_phy(
         self, all_phys: int = 0x0, tx_phys: int = 0x7, rx_phys: int = 0x7
     ) -> StatusCode:
@@ -174,7 +173,7 @@ class BleStandardCmds:
         """
         params = [all_phys, tx_phys, rx_phys]
         return self.send_le_controller_command(OCF.LE_CONTROLLER.SET_DEF_PHY, params=params)
-    
+
     def set_data_len(
         self, handle: int = 0x0000, tx_octets: int = 0xFB00, tx_time: int = 0x9042
     ) -> StatusCode:
@@ -193,8 +192,12 @@ class BleStandardCmds:
         params.extend(to_le_nbyte_list(tx_octets, 2))
         params.extend(to_le_nbyte_list(tx_time, 2))
         return self.send_le_controller_command(OCF.LE_CONTROLLER.SET_DATA_LEN, params=params)
-    
-    def set_phy(self, phy: int = 1, handle: int = 0x0000) -> StatusCode:
+
+    def set_phy(
+        self,
+        phy: PhyOption = PhyOption.PHY_1M,
+        handle: int = 0x0000
+    ) -> StatusCode:
         """Set the PHY.
 
         Sends a command to the board, telling it to set the
@@ -219,29 +222,29 @@ class BleStandardCmds:
         """
         params = to_le_nbyte_list(handle, 2)
         params.append(0x0)
-        if phy == self.PHY_1M:
+        if phy == PhyOption.PHY_1M:
             params.append(0x0)
             params.append(0x0)
             params.extend(to_le_nbyte_list(0x0, 2))
-        elif phy == self.PHY_2M:
+        elif phy == PhyOption.PHY_2M:
             params.append(0x2)
             params.append(0x2)
             params.extend(to_le_nbyte_list(0x0, 2))
-        elif phy == self.PHY_S8:
+        elif phy == PhyOption.PHY_CODED_S8:
             params.append(0x4)
             params.append(0x4)
             params.extend(to_le_nbyte_list(0x2, 2))
-        elif phy == self.PHY_S2:
+        elif phy == PhyOption.PHY_CODED_S2:
             params.append(0x4)
             params.append(0x4)
             params.extend(to_le_nbyte_list(0x1, 2))
         else:
-            self.logger.warning("Invalid PHY selection = %i, using 1M.", phy)
+            self.logger.warning("Invalid PHY selection (%s), defaulting to PHY_1M.", phy)
 
         return self.send_le_controller_command(OCF.LE_CONTROLLER.SET_PHY, params=params)
-    
+
     def tx_test(
-        self, channel: int = 0, phy: int = 1, payload: int = 0, packet_len: int = 0
+        self, channel: int = 0, phy: PhyOption = PhyOption.PHY_1M, payload: int = 0, packet_len: int = 0
     ) -> StatusCode:
         """Command board to being transmitting.
 
@@ -275,12 +278,12 @@ class BleStandardCmds:
             Object containing board return data.
 
         """
-        params = [channel, packet_len, payload, phy]
+        params = [channel, packet_len, payload, phy.value]
         return self.send_le_controller_command(
             OCF.LE_CONTROLLER.ENHANCED_TRANSMITTER_TEST, params=params)
-    
+
     def rx_test(
-        self, channel: int = 0, phy: int = 1, modulation_idx: float = 0
+        self, channel: int = 0, phy: PhyOption = PhyOption.PHY_1M, modulation_idx: float = 0
     ) -> StatusCode:
         """Command board to begin receiving.
 
@@ -304,13 +307,13 @@ class BleStandardCmds:
             Object containing board return data.
 
         """
-        if phy == self.PHY_S2: #TODO: Fix
-            phy = self.PHY_S8
+        if phy == PhyOption.PHY_CODED_S2:
+            phy = PhyOption.PHY_CODED_S8
 
-        params = [channel, phy, modulation_idx]
+        params = [channel, phy.value, modulation_idx]
         return self.send_le_controller_command(
             OCF.LE_CONTROLLER.ENHANCED_RECEIVER_TEST, params=params)
-    
+
     def end_test(self) -> Tuple[StatusCode, int]:
         """Command board to end the current test.
 
@@ -330,7 +333,7 @@ class BleStandardCmds:
         rx_ok = evt.get_return_params()
 
         return rx_ok
-    
+
     def disconnect(self, handle: int = 0x0000, reason: int = 0x16) -> StatusCode:
         """Command board to disconnect from an initialized connection.
 
@@ -348,7 +351,7 @@ class BleStandardCmds:
         params = to_le_nbyte_list(handle, 2)
         params.append(reason)
         return self.send_link_control_command(OCF.LINK_CONTROL.DISCONNECT, params=params)
-    
+
     def reset(self) -> StatusCode:
         """Sets log level.
         Resets the controller
@@ -359,7 +362,7 @@ class BleStandardCmds:
 
         """
         return self.send_controller_command(OCF.CONTROLLER.RESET)
-    
+
     def set_event_mask(
         self, mask: int, mask_pg2: Optional[int] = None
     ) -> Union[StatusCode, Tuple[StatusCode, StatusCode]]:
@@ -394,7 +397,7 @@ class BleStandardCmds:
             )
 
         return status
-    
+
     def set_event_mask_le(self, mask: int) -> StatusCode:
         """LE controller set event mask
 

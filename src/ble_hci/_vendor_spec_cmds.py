@@ -1,11 +1,9 @@
+"""DOCSTRING"""
+# pylint: disable=too-many-lines, too-many-arguments, too-many-public-methods
 from typing import Optional, Tuple, Union, Dict, List
-import datetime
 from ._utils import (
-    _MAX_U16,
     _MAX_U32,
-    _MAX_U64,
     to_le_nbyte_list,
-    le_list_to_int,
     PhyOption,
     SerialUartTransport
 )
@@ -20,17 +18,15 @@ from .data_params import (
     PoolStats
 )
 from .hci_packets import (
-    AsyncPacket,
     CommandPacket,
-    Endian,
     EventPacket,
-    ExtendedPacket,
     _byte_length
 )
-from .packet_codes import EventCode, StatusCode
-from .packet_defs import ADI_PORT_BAUD_RATE, OCF, OGF, PacketType, PubKeyValidateMode
+from .packet_codes import StatusCode
+from .packet_defs import OCF, OGF, PubKeyValidateMode
 
 class VendorSpecificCmds:
+    """DOCSTRING"""
     def __init__(self, port: SerialUartTransport, logger_name: str):
         self.port = port
         self.logger = get_formatted_logger(name=logger_name)
@@ -41,10 +37,11 @@ class VendorSpecificCmds:
             params: List[int] = None,
             return_evt: bool = False
     ) -> Union[EventPacket, StatusCode]:
+        """DOCSTRING"""
         cmd = CommandPacket(OGF.VENDOR_SPEC, ocf, params=params)
         if return_evt:
             return self.port.send_command(cmd)
-        
+
         return self.port.send_command(cmd).status
 
     def set_address(self, addr: int) -> StatusCode:
@@ -66,7 +63,7 @@ class VendorSpecificCmds:
         """
         params = to_le_nbyte_list(addr, 6)
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_BD_ADDR, params=params)
-    
+
     def reset_connection_stats(self) -> StatusCode:
         """Reset accumulated connection stats
 
@@ -76,9 +73,8 @@ class VendorSpecificCmds:
 
         """
         return self.send_vs_command(OCF.VENDOR_SPEC.RESET_CONN_STATS)
-    
+
     def enable_autogenerate_acl(self, enable) -> StatusCode:
-        # TODO: implement/check params @eric
         """Enable automatic generation of ACL packets.
 
         Parameters
@@ -93,7 +89,7 @@ class VendorSpecificCmds:
 
         """
         return self.send_vs_command(OCF.VENDOR_SPEC.GENERATE_ACL, params=int(enable))
-    
+
     def generate_acl(
         self, handle: int, packet_len: int, num_packets: int
     ) -> StatusCode:
@@ -139,9 +135,8 @@ class VendorSpecificCmds:
         params.append(packet_len)
         params.extend(to_le_nbyte_list(num_packets, 2))
         return self.send_vs_command(OCF.VENDOR_SPEC.GENERATE_ACL, params=params)
-    
+
     def enable_acl_sink(self, enable: bool) -> StatusCode:
-        # TODO: implement
         """Command board to sink ACL data.
 
         Sends a command to the board, telling it to sink
@@ -160,7 +155,7 @@ class VendorSpecificCmds:
         """
         params = int(enable)
         return self.send_vs_command(OCF.VENDOR_SPEC.ENA_ACL_SINK, params=params)
-        
+
     def tx_test_vs(
         self,
         channel: int = 0,
@@ -213,7 +208,7 @@ class VendorSpecificCmds:
 
         """
         if not 0 <= channel < 40:
-            raise ValueError(f"Channel (channel) out of bandwidth, must be in range [0, 40).")
+            raise ValueError(f"Channel out of bandwidth ({channel}), must be in range [0, 40).")
         if packet_len > 0xFF:
             raise ValueError(f"Packet length too large ({packet_len}), must be 255 or less.")
         if num_packets > 0xFFFF:
@@ -223,7 +218,7 @@ class VendorSpecificCmds:
         params = [channel, packet_len, payload, phy]
         params.extend(to_le_nbyte_list(num_packets, 2))
         return self.send_vs_command(OCF.VENDOR_SPEC.TX_TEST, params=params)
-    
+
     def rx_test_vs(
         self,
         channel: int = 0,
@@ -264,7 +259,7 @@ class VendorSpecificCmds:
 
         """
         if not 0 <= channel < 40:
-            raise ValueError(f"Channel (channel) out of bandwidth, must be in range [0, 40).")
+            raise ValueError(f"Channel out of bandwidth ({channel}), must be in range [0, 40).")
         if num_packets > 0xFFFF:
             raise ValueError(f"Num packets too large ({num_packets}), must be 65535 or less.")
 
@@ -291,7 +286,7 @@ class VendorSpecificCmds:
 
         """
         return self.send_vs_command(OCF.VENDOR_SPEC.RESET_TEST_STATS)
-    
+
     def set_adv_tx_power(self, tx_power: int) -> StatusCode:
         """Set the advertising TX power.
 
@@ -319,7 +314,7 @@ class VendorSpecificCmds:
             raise ValueError(f"TX power ({tx_power}) out of range, must be in range [-127, 127].")
 
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_ADV_TX_PWR, params=tx_power)
-    
+
     def set_conn_tx_power(self, tx_power: int, handle: int = 0x0000) -> StatusCode:
         """Set the connection TX power.
 
@@ -355,7 +350,7 @@ class VendorSpecificCmds:
         params = to_le_nbyte_list(handle, 2)
         params.append(tx_power)
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_CONN_TX_PWR, params=params)
-    
+
     def set_channel_map(
         self,
         channels: Optional[Union[List[int], int]] = None,
@@ -404,7 +399,7 @@ class VendorSpecificCmds:
         params.extend(to_le_nbyte_list(channel_mask, 5))
 
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_CHAN_MAP, params=params)
-    
+
     def read_register(
             self,
             addr: int,
@@ -441,7 +436,7 @@ class VendorSpecificCmds:
         if not length % 4 == 0:
             param_lens.append(length % 4)
         read_data = evt.get_return_params(param_lens=param_lens)
-        
+
         if print_data:
             for idx, plen in enumerate(param_lens):
                 if plen == 1:
@@ -456,7 +451,7 @@ class VendorSpecificCmds:
                 addr += 4
 
         return evt.status, read_data
-    
+
     def set_scan_channel_map(self, channel_map: int) -> StatusCode:
         """Set the channel map used for scanning
 
@@ -471,7 +466,7 @@ class VendorSpecificCmds:
 
         """
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_SCAN_CH_MAP, params=channel_map)
-    
+
     def set_event_mask_vs(self, mask: int, enable: bool) -> StatusCode:
         """Vendor specific set event mask
 
@@ -490,7 +485,7 @@ class VendorSpecificCmds:
         params = to_le_nbyte_list(mask, 8)
         params.append(int(enable))
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_EVENT_MASK, params=params)
-    
+
     def set_tx_test_err_pattern(self, pattern: int) -> StatusCode:
         """Set the TX test error pattern
 
@@ -514,7 +509,7 @@ class VendorSpecificCmds:
 
         params = to_le_nbyte_list(pattern, 4)
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_TX_TEST_ERR_PATT, params=params)
-    
+
     def set_connection_op_flags(
         self, handle: int, flags: int, enable: bool
     ) -> StatusCode:
@@ -574,7 +569,7 @@ class VendorSpecificCmds:
 
         params = to_le_nbyte_list(priv_key, 32)
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_P256_PRIV_KEY, params=params)
-    
+
     def get_channel_map_periodic_scan_adv(
         self, handle: int, is_advertising: bool
     ) -> Tuple[int, StatusCode]:
@@ -604,9 +599,9 @@ class VendorSpecificCmds:
         params.append(int(is_advertising))
         evt = self.send_vs_command(
             OCF.VENDOR_SPEC.GET_PER_CHAN_MAP, params=params, return_evt=True)
-        
+
         return evt.status, evt.get_return_params()
-    
+
     def get_acl_test_report(self) -> Tuple[TestReport, StatusCode]:
         """Get ACL Test Report
 
@@ -627,7 +622,7 @@ class VendorSpecificCmds:
         )
 
         return stats, evt.status
-    
+
     def set_local_num_min_used_channels(
         self, phy: PhyOption, pwr_thresh: int, min_used: int
     ) -> StatusCode:
@@ -660,9 +655,12 @@ class VendorSpecificCmds:
         if not 0 < min_used <= 37:
             raise ValueError(f"Min used ({min_used}) out of range, must be in range [1, 37].")
 
+        if phy == PhyOption.PHY_CODED_S2:
+            phy = PhyOption.PHY_CODED
+
         params = [phy.value, pwr_thresh, min_used]
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_LOCAL_MIN_USED_CHAN, params=params)
-    
+
     def get_peer_min_num_channels_used(
         self, handle: int
     ) -> Tuple[Dict[PhyOption, int], StatusCode]:
@@ -693,13 +691,13 @@ class VendorSpecificCmds:
         data = evt.get_return_params(param_lens=[1, 1, 1])
 
         min_used_map = {
-            PhyOption.P1M: data[0],
-            PhyOption.P2M: data[1],
-            PhyOption.PCODED: data[2]
+            PhyOption.PHY_1M: data[0],
+            PhyOption.PHY_2M: data[1],
+            PhyOption.PHY_CODED: data[2]
         }
 
         return min_used_map, evt.status
-    
+
     def set_validate_pub_key_mode(self, mode: PubKeyValidateMode) -> StatusCode:
         """Set validate public key mode
 
@@ -714,7 +712,7 @@ class VendorSpecificCmds:
 
         """
         return self.send_vs_command(OCF.VENDOR_SPEC.VALIDATE_PUB_KEY_MODE, params=[mode.value])
-    
+
     def get_rand_address(self) -> Tuple[int, StatusCode]:
         """Gets a randomly generated address
 
@@ -726,7 +724,7 @@ class VendorSpecificCmds:
         """
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_RAND_ADDR, return_evt=True)
         return evt.get_return_params(), evt.status
-    
+
     def set_local_feature(self, features: int) -> StatusCode:
         """Set local features
 
@@ -750,7 +748,7 @@ class VendorSpecificCmds:
 
         params = to_le_nbyte_list(features, 8)
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_LOCAL_FEAT, params=params)
-    
+
     def set_operational_flags(self, flags: int, enable: bool) -> StatusCode:
         """Set operational flags
 
@@ -777,7 +775,7 @@ class VendorSpecificCmds:
         params = to_le_nbyte_list(flags, 4)
         params.append(int(enable))
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_OP_FLAGS, params=params)
-    
+
     def get_pdu_filter_stats(self) -> Tuple[PduPktStats, StatusCode]:
         """Get PDU Filter Stats
 
@@ -813,7 +811,7 @@ class VendorSpecificCmds:
         )
 
         return stats, evt.status
-    
+
     def set_encryption_mode(
         self, handle: int, enable: bool, nonce_mode: bool
     ) -> StatusCode:
@@ -845,7 +843,7 @@ class VendorSpecificCmds:
         params.append(int(enable))
         params.append(int(nonce_mode))
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_ENC_MODE, params=params)
-    
+
     def set_diagnostic_mode(self, enable: bool) -> StatusCode:
         """Set diagnostic mode
 
@@ -860,7 +858,7 @@ class VendorSpecificCmds:
 
         """
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_DIAG_MODE, params=int(enable))
-    
+
     def enable_sniffer_packet_forwarding(self, enable: bool) -> StatusCode:
         """Enable packet sniffer forwarding
 
@@ -890,7 +888,7 @@ class VendorSpecificCmds:
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_SYS_STATS, return_evt=True)
         data = evt.get_return_params(
             param_lens=[2, 2, 4, 4, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2])
-        
+
         stats = MemPktStats(
             stack=data[0],
             sys_assert_cnt=data[1],
@@ -907,7 +905,7 @@ class VendorSpecificCmds:
             ext_scan_max=data[12],
             ext_scan_ctx_size=data[13],
             max_num_ext_init=data[14],
-            exit_init_ctx_size=data[15],
+            ext_init_ctx_size=data[15],
             max_per_scanners=data[16],
             per_scan_ctx_size=data[17],
             max_cig=data[18],
@@ -916,7 +914,7 @@ class VendorSpecificCmds:
         )
 
         return stats, evt.status
-    
+
     def get_adv_stats(self) -> Tuple[AdvPktStats, StatusCode]:
         """Get advertising stats
 
@@ -943,7 +941,7 @@ class VendorSpecificCmds:
         )
 
         return stats, evt.status
-    
+
     def get_conn_stats(self) -> Tuple[DataPktStats, StatusCode]:
         """Gets and parses connection stats.
 
@@ -971,7 +969,7 @@ class VendorSpecificCmds:
         stats = DataPktStats(
             rx_data=data[0],
             rx_data_crc=data[1],
-            rx_timeout=data[2],
+            rx_data_timeout=data[2],
             tx_data=data[3],
             err_data=data[4],
             rx_setup=data[5],
@@ -981,7 +979,7 @@ class VendorSpecificCmds:
         )
 
         return stats, evt.status
-    
+
     def get_test_stats(self) -> Tuple[DataPktStats, StatusCode]:
         """Get test stats
 
@@ -997,7 +995,7 @@ class VendorSpecificCmds:
         stats = DataPktStats(
             rx_data=data[0],
             rx_data_crc=data[1],
-            rx_timeout=data[2],
+            rx_data_timeout=data[2],
             tx_data=data[3],
             err_data=data[4],
             rx_setup=data[5],
@@ -1007,7 +1005,7 @@ class VendorSpecificCmds:
         )
 
         return stats, evt.status
-    
+
     def get_pool_stats(self) -> Tuple[List[PoolStats], StatusCode]:
         """Get memory pool stats
 
@@ -1039,7 +1037,7 @@ class VendorSpecificCmds:
             )
 
         return stats, evt.status
-    
+
     def set_additional_aux_ptr_offset(self, delay: int, handle: int) -> StatusCode:
         """Set auxillary pointer delay
 
@@ -1086,7 +1084,7 @@ class VendorSpecificCmds:
         """
         params = [handle, frag_length]
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_EXT_ADV_FRAG_LEN, params=params)
-    
+
     def set_extended_advertising_phy_opts(
         self, handle: int, primary: int, secondary: int
     ) -> StatusCode:
@@ -1130,7 +1128,7 @@ class VendorSpecificCmds:
         """
         params = [handle, primary, secondary]
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_EXT_ADV_DEF_PHY_OPTS, params=params)
-    
+
     def generate_iso_packets(
         self, handle: int, packet_len: int, num_packets: int
     ) -> StatusCode:
@@ -1186,9 +1184,9 @@ class VendorSpecificCmds:
             gen_pkt_count=data[2],
             gen_oct_count=data[3]
         )
-        
+
         return stats, evt.status
-    
+
     def enable_iso_packet_sink(self, enable: bool) -> StatusCode:
         """Enable ISO packet sink
 
@@ -1203,7 +1201,7 @@ class VendorSpecificCmds:
 
         """
         return self.send_vs_command(OCF.VENDOR_SPEC.ENA_ISO_SINK, params=int(enable))
-    
+
     def enable_autogen_iso_packets(self, packet_len: int) -> StatusCode:
         """Enable autogeneration of of ISO packets
 
@@ -1226,10 +1224,10 @@ class VendorSpecificCmds:
         if packet_len > _MAX_U32:
             raise ValueError(
                 f"Packet length ({packet_len}) is too large, must be 4 bytes or less.")
-        
+
         params = to_le_nbyte_list(packet_len, 4)
         return self.send_vs_command(OCF.VENDOR_SPEC.ENA_AUTO_GEN_ISO, params=params)
-    
+
     def get_iso_connection_stats(self) -> Tuple[DataPktStats, StatusCode]:
         """Get ISO connection stats
 
@@ -1254,7 +1252,7 @@ class VendorSpecificCmds:
         )
 
         return stats, evt.status
-    
+
     def get_aux_adv_stats(self) -> Tuple[AdvPktStats, StatusCode]:
         """Get auxillary advertising stats
 
@@ -1282,7 +1280,7 @@ class VendorSpecificCmds:
         )
 
         return stats, evt.status
-    
+
     def get_aux_scan_stats(self) -> Tuple[ScanPktStats, StatusCode]:
         """Get auxillary scanning stats
 
@@ -1315,7 +1313,7 @@ class VendorSpecificCmds:
             tx_isr=data[14]
         )
         return stats, evt.status
-    
+
     def get_periodic_scanning_stats(self) -> Tuple[ScanPktStats, StatusCode]:
         """Get periodic scanning stats
 
@@ -1342,7 +1340,7 @@ class VendorSpecificCmds:
             tx_isr=data[10]
         )
         return stats, evt.status
-    
+
     def set_connection_phy_tx_power(
         self, handle: int, power: int, phy: PhyOption
     ) -> StatusCode:
@@ -1370,12 +1368,16 @@ class VendorSpecificCmds:
         if _byte_length(handle) > 2:
             raise ValueError(f"Handle ({handle}) is too large, must be 2 bytes or less.")
 
+        if phy == PhyOption.PHY_CODED_S2:
+            phy = PhyOption.PHY_CODED
+
         params = to_le_nbyte_list(handle, 2)
         params.append(power)
         params.append(phy.value)
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_CONN_PHY_TX_PWR, params=params)
-    
+
     def get_rssi_vs(self, channel: int = 0):
+        """DOCSTRING"""
         if channel > 39:
             raise ValueError("Channel must be between 0-39")
 

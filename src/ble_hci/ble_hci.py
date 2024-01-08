@@ -57,35 +57,27 @@ functionality, and is designed to be used with the `BLE5_ctrl` example
 housed in the Analog Devices MSDK.
 
 """
-from dataclasses import dataclass
-import datetime
+# pylint: disable=too-many-arguments
 import logging
-import sys
-import time
-from enum import Enum
 
-from typing import List, Optional, Union
+from typing import Optional, Union, Callable, Any
 
-from .data_params import AdvParams, ConnParams, ScanParams
+from .data_params import AdvParams, ConnParams
 
 from ._hci_logger import get_formatted_logger
 from ._ble_standard_cmds import BleStandardCmds
 from ._vendor_spec_cmds import VendorSpecificCmds
 from ._utils import SerialUartTransport
 
-# pylint: disable=unused-import
 from .hci_packets import (
     AsyncPacket,
     CommandPacket,
-    Endian,
     EventPacket,
-    ExtendedPacket
 )
-from .packet_codes import EventCode, StatusCode
-from .packet_defs import ADI_PORT_BAUD_RATE, OCF, OGF, PacketType, PubKeyValidateMode
+from .packet_codes import StatusCode
+from .packet_defs import ADI_PORT_BAUD_RATE
 
 class BleHci(BleStandardCmds, VendorSpecificCmds):
-    # pylint: disable=too-many-public-methods
     """Host-controller interface for ADI BLE-compatible microchips.
 
     The BleHci object defines a host-controller interface for
@@ -123,14 +115,15 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
     def __init__(
         self,
         port_id: str,
-        mon_port_id: Optional[str] = None,
         baud: int = ADI_PORT_BAUD_RATE,
         id_tag: str = "DUT",
         log_level: Union[str, int] = "INFO",
         logger_name: str = "BLE-HCI",
         retries: int = 0,
         timeout: float = 1.0,
-    ) -> None:        
+        async_callback: Optional[Callable[[AsyncPacket], Any]] = None,
+        evt_callback: Optional[Callable[[EventPacket], Any]] = None
+    ) -> None:
         self.port_id = port_id
         self.port = None
         self.mon_port = None
@@ -139,10 +132,11 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         self.retries = retries
         self.timeout = timeout
 
-        self._init_ports(port_id, baud, logger_name)
+        self._init_ports(port_id, baud, logger_name, async_callback, evt_callback)
         super().__init__(self.port, logger_name)
 
     def get_log_level(self) -> str:
+        """DOCSTRING"""
         level = self.logger.level
         if level == logging.DEBUG:
             return "DEBUG"
@@ -368,18 +362,15 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         the test board.
 
         """
-        if self._read_thread.is_alive():
-            self.stop()
-
-        if self.port.is_open:
-            self.port.flush()
-            self.port.close()
+        self.port.exit()
 
     def _init_ports(
         self,
         port_id: str,
         baud: int,
-        logger_name: str
+        logger_name: str,
+        async_callback: Optional[Callable[[AsyncPacket], Any]],
+        evt_callback: Optional[Callable[[EventPacket], Any]],
     ) -> None:
         """Initializes serial ports.
 
@@ -392,6 +383,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
             id_tag=self.id_tag,
             logger_name=logger_name,
             retries=self.retries,
-            timeout=self.timeout
+            timeout=self.timeout,
+            async_callback=async_callback,
+            evt_callback=evt_callback
         )
-
