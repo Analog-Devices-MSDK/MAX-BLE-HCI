@@ -114,7 +114,7 @@ class _CustomFormatter(logging.Formatter):
         return formatter.format(record)
 
 
-def get_formatted_logger(log_level=logging.INFO, name="BLE-Logger") -> logging.Logger:
+def get_formatted_logger(log_level=logging.INFO, name="BLE-HCI") -> logging.Logger:
     """Gets logger with basic custom format
 
     The custom formatted logger applies basic coloring
@@ -127,6 +127,10 @@ def get_formatted_logger(log_level=logging.INFO, name="BLE-Logger") -> logging.L
         Any defined logging level such as logging.INFO
     """
     logger = logging.getLogger(name)
+
+    if logger.hasHandlers():
+        return logger
+
     logger.setLevel(log_level)
 
     custom_handler = logging.StreamHandler()
