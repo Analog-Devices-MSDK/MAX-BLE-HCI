@@ -21,7 +21,7 @@ jobs:
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
-        python-version: ${{ matrix.python-version }}
-    - run: |
-          dir
-          install.bat
+        python-version: ${{ matrix.python-version }}    
+    - name: Run Installer
+      shell: cmd
+      run: install.bat
