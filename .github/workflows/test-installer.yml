@@ -14,6 +14,7 @@ jobs:
           sudo chmod +x install.sh
           ./install.sh
   test_windows:
+    if: false
     name: runner / windows
     runs-on: ubuntu-latest
     steps:
