@@ -1,8 +1,8 @@
 """DOCSTRING"""
 # pylint: disable=too-many-arguments,too-many-locals,too-many-instance-attributes
-from typing import Optional
 from dataclasses import dataclass
 from enum import Enum
+from typing import Optional
 
 
 @dataclass

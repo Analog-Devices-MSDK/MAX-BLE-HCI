@@ -59,21 +59,14 @@ housed in the Analog Devices MSDK.
 """
 # pylint: disable=too-many-arguments
 import logging
+from typing import Any, Callable, Optional, Union
 
-from typing import Optional, Union, Callable, Any
-
-from .data_params import AdvParams, ConnParams
-
-from ._hci_logger import get_formatted_logger
 from ._ble_standard_cmds import BleStandardCmds
+from ._hci_logger import get_formatted_logger
+from ._transport import SerialUartTransport
 from ._vendor_spec_cmds import VendorSpecificCmds
-from ._utils import SerialUartTransport
-
-from .hci_packets import (
-    AsyncPacket,
-    CommandPacket,
-    EventPacket,
-)
+from .data_params import AdvParams, ConnParams
+from .hci_packets import AsyncPacket, CommandPacket, EventPacket
 from .packet_codes import StatusCode
 from .packet_defs import ADI_PORT_BAUD_RATE
 

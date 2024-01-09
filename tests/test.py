@@ -1,6 +1,7 @@
 import secrets
-import unittest
 import time
+import unittest
+
 from ble_hci import BleHci, ble_hci
 from ble_hci import packet_codes as pc
 from ble_hci import packet_defs as pd

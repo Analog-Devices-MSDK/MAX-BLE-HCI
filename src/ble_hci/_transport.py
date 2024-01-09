@@ -1,20 +1,21 @@
 """DOCSTRING"""
 # pylint: disable=too-many-instance-attributes, too-many-arguments
-from typing import Optional, Union, List, Callable, Any
-from enum import Enum
-from multiprocessing import Process
-from threading import Event, Lock, Thread
-import sys
 import datetime
+import sys
 import time
 import weakref
+from multiprocessing import Process
+from threading import Event, Lock, Thread
+from typing import Any, Callable, List, Optional, Union
 
 import serial
 
 from ._hci_logger import get_formatted_logger
-from .packet_defs import ADI_PORT_BAUD_RATE, PacketType
 from .hci_packets import AsyncPacket, CommandPacket, EventPacket
 from .packet_codes import EventCode
+from .packet_defs import ADI_PORT_BAUD_RATE, PacketType
+
+_MAX_U32 = 2**32 - 1
 
 
 def to_le_nbyte_list(value: int, n_bytes: int):
@@ -32,21 +33,6 @@ def le_list_to_int(nums: List[int]) -> int:
     for i, num in enumerate(nums):
         full_num |= num << 8 * i
     return full_num
-
-
-_MAX_U16 = 2**16 - 1
-_MAX_U32 = 2**32 - 1
-_MAX_U64 = 2**64 - 1
-
-
-class PhyOption(Enum):
-    """DOCSTRING"""
-
-    PHY_1M = 0x1
-    PHY_2M = 0x2
-    PHY_CODED = 0x3
-    PHY_CODED_S8 = 0x3
-    PHY_CODED_S2 = 0x4
 
 
 class SerialUartTransport:

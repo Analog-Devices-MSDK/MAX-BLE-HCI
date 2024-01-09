@@ -59,7 +59,6 @@ import time
 
 from ble_hci import BleHci
 
-
 # Switch out for serial port used to connect over HCI
 RX_HCI_PORT = ""
 TX_HCI_PORT = ""

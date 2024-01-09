@@ -1,16 +1,18 @@
 """DOCSTRING"""
 # pylint: disable=too-many-lines, too-many-arguments, too-many-public-methods
-from typing import Optional, Tuple, Union, Dict, List
-from ._utils import _MAX_U32, to_le_nbyte_list, PhyOption, SerialUartTransport
+from typing import Dict, List, Optional, Tuple, Union
+
 from ._hci_logger import get_formatted_logger
+from ._transport import _MAX_U32, SerialUartTransport, to_le_nbyte_list
+from .constants import PhyOption
 from .data_params import (
-    DataPktStats,
-    ScanPktStats,
     AdvPktStats,
+    DataPktStats,
     MemPktStats,
     PduPktStats,
-    TestReport,
     PoolStats,
+    ScanPktStats,
+    TestReport,
 )
 from .hci_packets import CommandPacket, EventPacket, _byte_length
 from .packet_codes import StatusCode

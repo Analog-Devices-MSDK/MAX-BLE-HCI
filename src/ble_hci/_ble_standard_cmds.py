@@ -1,7 +1,9 @@
 """DOCSTRING"""
-from typing import Optional, Tuple, Union, List
-from ._utils import to_le_nbyte_list, SerialUartTransport, PhyOption
+from typing import List, Optional, Tuple, Union
+
 from ._hci_logger import get_formatted_logger
+from ._transport import SerialUartTransport, to_le_nbyte_list
+from .constants import PhyOption
 from .data_params import AdvParams, ConnParams, ScanParams
 from .hci_packets import CommandPacket, EventPacket
 from .packet_codes import StatusCode

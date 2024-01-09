@@ -57,7 +57,6 @@ Description: Bare minimum example of using the BleHci class
 """
 from ble_hci import BleHci
 
-
 # Path to serial port used for HCI
 PORT = ""
 
