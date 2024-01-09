@@ -1,5 +1,5 @@
 name: test-installer
-on: [push]
+on: [pull_request]
 jobs:
   test_linux:
     name: runner / linux
@@ -23,4 +23,5 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - run: |
+          dir
           install.bat
