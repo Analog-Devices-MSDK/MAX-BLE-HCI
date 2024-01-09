@@ -1,5 +1,5 @@
 name: test-installer
-on: [pull_request]
+on: [push]
 jobs:
   test_linux:
     name: runner / linux
