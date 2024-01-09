@@ -1,16 +1,18 @@
 """DOCSTRING"""
 # pylint: disable=too-many-lines, too-many-arguments, too-many-public-methods
-from typing import Optional, Tuple, Union, Dict, List
-from ._utils import _MAX_U32, to_le_nbyte_list, PhyOption, SerialUartTransport
+from typing import Dict, List, Optional, Tuple, Union
+
 from ._hci_logger import get_formatted_logger
+from ._transport import _MAX_U32, SerialUartTransport, to_le_nbyte_list
+from .constants import PhyOption, Payload
 from .data_params import (
-    DataPktStats,
-    ScanPktStats,
     AdvPktStats,
+    DataPktStats,
     MemPktStats,
     PduPktStats,
-    TestReport,
     PoolStats,
+    ScanPktStats,
+    TestReport,
 )
 from .hci_packets import CommandPacket, EventPacket, _byte_length
 from .packet_codes import StatusCode
@@ -155,8 +157,8 @@ class VendorSpecificCmds:
     def tx_test_vs(
         self,
         channel: int = 0,
-        phy: int = 1,
-        payload: int = 0,
+        phy: PhyOption = PhyOption.PHY_1M,
+        payload: Payload = Payload.PRBS15,
         packet_len: int = 0,
         num_packets: int = 0,
     ) -> StatusCode:
@@ -179,9 +181,9 @@ class VendorSpecificCmds:
         ----------
         channel : int
             The channel to transmit on.
-        phy : int
+        phy : PhyOption
             The PHY to use.
-        payload : int
+        payload : Payload
             The payload type to use.
         packet_len : int
             The TX packet length.
@@ -216,14 +218,14 @@ class VendorSpecificCmds:
                 f"Num packets too large ({num_packets}), must be 65535 or less."
             )
 
-        params = [channel, packet_len, payload, phy]
+        params = [channel, packet_len, payload.value, phy.value]
         params.extend(to_le_nbyte_list(num_packets, 2))
         return self.send_vs_command(OCF.VENDOR_SPEC.TX_TEST, params=params)
 
     def rx_test_vs(
         self,
         channel: int = 0,
-        phy: int = 1,
+        phy: PhyOption = PhyOption.PHY_1M,
         num_packets: int = 0,
         modulation_idx: float = 0,
     ) -> StatusCode:
@@ -241,7 +243,7 @@ class VendorSpecificCmds:
         ----------
         channel : int
             The channel to receive on.
-        phy : int
+        phy : PhyOption
             The PHY to use.
         num_packets : int
             The number of packets to expect to receive.
@@ -268,7 +270,7 @@ class VendorSpecificCmds:
                 f"Num packets too large ({num_packets}), must be 65535 or less."
             )
 
-        params = [channel, phy, modulation_idx]
+        params = [channel, phy.value, modulation_idx]
         params.extend(to_le_nbyte_list(num_packets, 2))
         return self.send_vs_command(OCF.VENDOR_SPEC.RX_TEST, params=params)
 

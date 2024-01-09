@@ -1,7 +1,9 @@
 """DOCSTRING"""
-from typing import Optional, Tuple, Union, List
-from ._utils import to_le_nbyte_list, SerialUartTransport, PhyOption
+from typing import List, Optional, Tuple, Union
+
 from ._hci_logger import get_formatted_logger
+from ._transport import SerialUartTransport, to_le_nbyte_list
+from .constants import PhyOption, Payload
 from .data_params import AdvParams, ConnParams, ScanParams
 from .hci_packets import CommandPacket, EventPacket
 from .packet_codes import StatusCode
@@ -245,7 +247,7 @@ class BleStandardCmds:
         self,
         channel: int = 0,
         phy: PhyOption = PhyOption.PHY_1M,
-        payload: int = 0,
+        payload: Payload = Payload.PRBS15,
         packet_len: int = 0,
     ) -> StatusCode:
         """Command board to being transmitting.
@@ -269,7 +271,7 @@ class BleStandardCmds:
             The channel to transmit on.
         phy : int
             The PHY to use.
-        payload : int
+        payload : Payload
             The payload type to use.
         packet_len : int
             The TX packet length.
@@ -280,7 +282,8 @@ class BleStandardCmds:
             Object containing board return data.
 
         """
-        params = [channel, packet_len, payload, phy.value]
+
+        params = [channel, packet_len, payload.value, phy.value]
         return self.send_le_controller_command(
             OCF.LE_CONTROLLER.ENHANCED_TRANSMITTER_TEST, params=params
         )

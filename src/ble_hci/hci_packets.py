@@ -54,7 +54,7 @@
 from enum import Enum
 from typing import List, Optional, Union
 
-from .packet_codes import EventCode, StatusCode, EventSubcode
+from .packet_codes import EventCode, EventSubcode, StatusCode
 from .packet_defs import OCF, OGF, PacketType
 
 
