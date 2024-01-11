@@ -28,9 +28,9 @@ if __name__ == "__main__":
     master.set_address(master_addr)
 
     status = slave.start_advertising(connect=True)
-    assert status == StatusCode.LL_SUCCESS, f"Failed to start advertising {status}"
+    assert status == StatusCode.SUCCESS, f"Failed to start advertising {status}"
     status = master.init_connection(addr=slave_addr)
-    assert status == StatusCode.LL_SUCCESS, f"Failed to init {status}"
+    assert status == StatusCode.SUCCESS, f"Failed to init {status}"
     print("****************************************************")
     while True:
         time.sleep(10)
