@@ -1,9 +1,64 @@
-"""DOCSTRING"""
+#! /usr/bin/env python3
+###############################################################################
+#
+#
+# Copyright (C) 2023 Maxim Integrated Products, Inc., All Rights Reserved.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+# OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+# IN NO EVENT SHALL MAXIM INTEGRATED BE LIABLE FOR ANY CLAIM, DAMAGES
+# OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+# Except as contained in this notice, the name of Maxim Integrated
+# Products, Inc. shall not be used except as stated in the Maxim Integrated
+# Products, Inc. Branding Policy.
+#
+# The mere transfer of this software does not imply any licenses
+# of trade secrets, proprietary technology, copyrights, patents,
+# trademarks, maskwork rights, or any other form of intellectual
+# property whatsoever. Maxim Integrated Products, Inc. retains all
+# ownership rights.
+#
+##############################################################################
+#
+# Copyright 2023 Analog Devices, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+##############################################################################
+"""
+Module contains definitions for BLE standard HCI commands.
+"""
+#pylint: disable=too-many-arguments
 from typing import Optional, Tuple, Union, List
 from ._utils import (
     to_le_nbyte_list,
     SerialUartTransport,
-    PhyOption
+    PhyOption,
+    PayloadOption
 )
 from ._hci_logger import get_formatted_logger
 from .data_params import AdvParams, ConnParams, ScanParams
@@ -15,7 +70,27 @@ from .packet_codes import StatusCode
 from .packet_defs import OCF, OGF
 
 class BleStandardCmds:
-    """DOCSTRING"""
+    """Definitions for BLE standard HCI commands.
+    
+    Class contains functions used to implement BLE standard HCI
+    commands. Used as a parent for the full Analog Devices BLE
+    HCI class.
+
+    Arguments
+    ---------
+    port : SerialUartTransport
+        Serial port interfacing object.
+    logger_name: str
+        Name used to reference the HCI logger.
+
+    Attributes
+    ----------
+    port : SerialUartTransport
+        Serial port interfacing object.
+    logger : logging.Logger
+        HCI logging object referenced by the `name` argument.
+    
+    """
     def __init__(self, port: SerialUartTransport, logger_name: str):
         self.port = port
         self.logger = get_formatted_logger(name=logger_name)
@@ -26,7 +101,29 @@ class BleStandardCmds:
         params: List[int] = None,
         return_evt: bool = False
     ) -> Union[StatusCode, EventPacket]:
-        """DOCSTRING"""
+        """Send an LE Controller command to the test board.
+
+        Sends a command from the OGF LE Controller subgroup to the DUT.
+
+        Parameters
+        ----------
+        ocf : OCF
+            Opcode command field value for the desired HCI command.
+        params : List[int], optional
+            Command parameters as single-byte values.
+        return_evt : bool, optional
+            If true, function returns full `EventPacket` object. If
+            false, function returns only the status code.
+
+        Returns
+        -------
+        Union[StatusCode, EventPacket]
+            If `return_evt` argument is true, the full return packet
+            from the DUT. If `return_evt` argument is false, the return
+            packet status code.
+
+
+        """
         cmd = CommandPacket(OGF.LE_CONTROLLER, ocf, params=params)
         if return_evt:
             return self.port.send_command(cmd)
@@ -39,7 +136,29 @@ class BleStandardCmds:
         params: List[int] = None,
         return_evt: bool = False
     ) -> Union[StatusCode, EventPacket]:
-        """DOCSTRING"""
+        """Send a Link Control command to the test board.
+
+        Sends a command from the OGF Link Control subgroup to the DUT.
+
+        Parameters
+        ----------
+        ocf : OCF
+            Opcode command field value for the desired HCI command.
+        params : List[int], optional
+            Command parameters as single-byte values.
+        return_evt : bool, optional
+            If true, function returns full `EventPacket` object. If
+            false, function returns only the status code.
+
+        Returns
+        -------
+        Union[StatusCode, EventPacket]
+            If `return_evt` argument is true, the full return packet
+            from the DUT. If `return_evt` argument is false, the return
+            packet status code.
+
+
+        """
         cmd = CommandPacket(OGF.LINK_CONTROL, ocf, params=params)
         if return_evt:
             return self.port.send_command(cmd)
@@ -52,7 +171,29 @@ class BleStandardCmds:
         params: List[int] = None,
         return_evt: bool = False
     ) -> Union[StatusCode, EventPacket]:
-        """DOCSTRING"""
+        """Send a Controller command to the test board.
+
+        Sends a command from the OGF Controller subgroup to the DUT.
+
+        Parameters
+        ----------
+        ocf : OCF
+            Opcode command field value for the desired HCI command.
+        params : List[int], optional
+            Command parameters as single-byte values.
+        return_evt : bool, optional
+            If true, function returns full `EventPacket` object. If
+            false, function returns only the status code.
+
+        Returns
+        -------
+        Union[StatusCode, EventPacket]
+            If `return_evt` argument is true, the full return packet
+            from the DUT. If `return_evt` argument is false, the return
+            packet status code.
+
+
+        """
         cmd = CommandPacket(OGF.CONTROLLER, ocf, params=params)
         if return_evt:
             return self.port.send_command(cmd)
@@ -60,60 +201,65 @@ class BleStandardCmds:
         return self.port.send_command(cmd).status
 
     def set_adv_params(self, adv_params: AdvParams = AdvParams()) -> StatusCode:
-        """DOCSTRING"""
-        params = [
-            adv_params.interval_min,  # Advertising Interval Min.
-            adv_params.interval_max,  # Advertising Interval Max.
-            adv_params.adv_type,  # Advertisiing Type
-            adv_params.own_addr_type,  # Own Address Type
-            adv_params.peer_addr_type,  # Peer Address Type
-            0x0,
-            0x0,
-            0x0,
-            0x0,
-            0x0,
-            adv_params.peer_addr,  # Peer Address
-            adv_params.channel_map,  # Advertising Channel Map
-            adv_params.filter_policy,  # Advertising Filter Policy
-        ]
+        """Set test board advertising parameters.
 
-        return self.send_le_controller_command(OCF.LE_CONTROLLER.SET_ADV_PARAM, params=params)
-
-    def enable_adv(self, enable: bool) -> StatusCode:
-        """DOCSTRING"""
-        return self.send_le_controller_command(OCF.LE_CONTROLLER, params=int(enable))
-
-    def enable_scanning(
-        self, enable: bool, filter_duplicates: bool = False
-    ) -> StatusCode:
-        """Command board to start scanning for connections.
-
-        Sends a command to the board, telling it to start scanning with
-        the given interval for potential connections. Function then
-        listens for events indefinitely. The listening can only be
-        stopped with `CTRL-C`. A test end function must be called to end
-        this process on the board.
+        Sends a command to the DUT, telling it to set the advertising
+        parameters to the given values.
 
         Parameters
         ----------
-        interval : int
-            The scan interval.
-
-        """
-        params = [int(enable), int(filter_duplicates)]
-        return self.send_le_controller_command(OCF.LE_CONTROLLER.SET_SCAN_ENABLE, params=params)
-
-    def set_scan_params(self, scan_params: ScanParams) -> StatusCode:
-        """Set parameters used for scanning
-
-        Parameters
-        ----------
-        scan_params : ScanParams
-            Scan paramters used for scanning
+        adv_params : AdvParams, optional
+            Dataclass object containing the desired advertising
+            parameters.
 
         Returns
         -------
         StatusCode
+            The return packet status code.
+
+        """
+        params = to_le_nbyte_list(adv_params.interval_min, 2)
+        params.extend(to_le_nbyte_list(adv_params.interval_max, 2))
+        params.extend([adv_params.adv_type, adv_params.own_addr_type, adv_params.peer_addr_type])
+        params.extend(to_le_nbyte_list(adv_params.peer_addr, 6))
+        params.extend([adv_params.channel_map, adv_params.filter_policy])
+
+        return self.send_le_controller_command(OCF.LE_CONTROLLER.SET_ADV_PARAM, params=params)
+
+    def enable_adv(self, enable: bool) -> StatusCode:
+        """Command board to start/stop advertising.
+
+        Sends a command to the DUT, telling it to either start or
+        stop advertising based on the the `enable` argument.
+
+        Parameters
+        ----------
+        enable : bool
+            Enable advertising?
+
+        Returns
+        -------
+        StatusCode
+            The return packet status code.
+
+        """
+        return self.send_le_controller_command(OCF.LE_CONTROLLER, params=int(enable))
+
+    def set_scan_params(self, scan_params: ScanParams = ScanParams()) -> StatusCode:
+        """Set test board scanning parameters.
+
+        Sends a command to the DUT, telling it to set the scanning
+        parameters to the given values.
+
+        Parameters
+        ----------
+        scan_params : ScanParams, optional
+            Dataclass object containing the desired scanning parameters.
+
+        Returns
+        -------
+        StatusCode
+            The return packet status code.
 
         """
         params = [scan_params.scan_type]
@@ -124,17 +270,47 @@ class BleStandardCmds:
 
         return self.send_le_controller_command(OCF.LE_CONTROLLER.SET_SCAN_PARAM, params=params)
 
-    def create_connection(self, conn_params: ConnParams) -> StatusCode:
-        """Create a connection to peer device
+    def enable_scanning(
+        self,
+        enable: bool,
+        filter_duplicates: bool = False
+    ) -> StatusCode:
+        """Command board to start/stop scanning.
+
+        Sends a command to the DUT, telling it to either start or
+        stop scanning based on the `enable` argument.
 
         Parameters
         ----------
-        conn_params : ConnParams
-            Parameters to attempt connection with
+        enable : bool
+            Enable scanning?
+        filter_duplicates : bool, optional
+            Filter duplicates?
 
         Returns
         -------
         StatusCode
+            The return packet status code.
+
+        """
+        params = [int(enable), int(filter_duplicates)]
+        return self.send_le_controller_command(OCF.LE_CONTROLLER.SET_SCAN_ENABLE, params=params)
+
+    def create_connection(self, conn_params: ConnParams = ConnParams()) -> StatusCode:
+        """Command board to connect with a peer device.
+
+        Sends a command to the DUT, telling it to create a connection
+        to a peer device based on the given connection parameters.
+
+        Parameters
+        ----------
+        conn_params : ConnParams, optional
+            Dataclass object containing the desired connection parameters.
+
+        Returns
+        -------
+        StatusCode
+            The return packet status code.
 
         """
         params = to_le_nbyte_list(conn_params.scan_interval, 2)
@@ -155,20 +331,24 @@ class BleStandardCmds:
     def set_default_phy(
         self, all_phys: int = 0x0, tx_phys: int = 0x7, rx_phys: int = 0x7
     ) -> StatusCode:
-        """Set the default PHY used for tx, rx, or both
+        """Set defaults for ALL, TX, and RX PHYs.
+
+        Sends a command to the DUT, telling it to set the default behavior
+        for ALL, TX, and RX PHYs in accordance with the given values.
 
         Parameters
         ----------
         all_phys : int, optional
-            Default PHY for both TX and RX, by default 0x0
+            Value describing desired behavior of all PHYs.
         tx_phys : int, optional
-            Default TX PHY, by default 0x7
+            Value describing desired behavior of TX PHYs.
         rx_phys : int, optional
-            Default RX PHY, by default 0x7
+            Value describing desired behavior of RX PHYs.
 
         Returns
         -------
         StatusCode
+            The return packet status code.
 
         """
         params = [all_phys, tx_phys, rx_phys]
@@ -177,15 +357,24 @@ class BleStandardCmds:
     def set_data_len(
         self, handle: int = 0x0000, tx_octets: int = 0xFB00, tx_time: int = 0x9042
     ) -> StatusCode:
-        """Command board to set data length to the max value.
+        """Set the maximum TX payload size and transmit time.
 
-        Sends a command to the board, telling it to set its internal
-        data length parameter to the maximum value.
+        Sends a command to the DUT, telling it to set the maximum TX
+        payload size and transmit time to the given values.
+
+        Parameters
+        ----------
+        handle : int, optional
+            Connection handle.
+        tx_octets : int, optional
+            Desired maximum number of payload octets.
+        tx_time : int, optional
+            Desired maximum TX time.
 
         Returns
         -------
-        Event
-            Object containing board return data.
+        StatusCode
+            The return packet status code.
 
         """
         params = to_le_nbyte_list(handle, 2)
@@ -195,116 +384,123 @@ class BleStandardCmds:
 
     def set_phy(
         self,
-        phy: PhyOption = PhyOption.PHY_1M,
-        handle: int = 0x0000
+        handle: int = 0x0000,
+        all_phys: int = 0x0,
+        tx_phys: int = 0x7,
+        rx_phys: int = 0x7,
+        phy_opts: int = 0x0
     ) -> StatusCode:
-        """Set the PHY.
+        """Set the PHY preferences for a connection.
 
-        Sends a command to the board, telling it to set the
-        PHY to the given selection. PHY must be one of the
-        values 1, 2, 3 or 4. Alternatively, PHY selection
-        values are declared in `utils/constants.py` as
-        ADI_PHY_1M (1), ADI_PHY_2M (2), ADI_PHY_S8 (3), and
-        ADI_PHY_S2 (4).
+        Sends a command to the DUT, telling it to set the PHY preferences
+        for the indicated connection in accordance with the given values.
 
         Parameters
         ----------
-        phy_sel : int
-            Desired PHY.
-        timeout : int
-            Process timeout.
+        handle : int, optional
+            The handle to the desired connection.
+        all_phys : int, optional
+            Behavior settings for all PHYs. Indicates if a PHY preference
+            exists for both RX and TX PHYs.
+        tx_phys : PhyOption, optional
+            PHY preference for TX PHYs.
+        rx_phys : PhyOption, optional
+            PHY preference for RX PHYs.
 
         Returns
         -------
-        Event
-            Object containing board return data.
+        StatusCode
+            The return packet status code.
 
         """
+        if not 0 <= all_phys <= 3:
+            self.logger.warning(
+                "Invalid all PHYs option (%i), must be between 0x0 and 0x3. Defaulting to 0x0.",
+                all_phys
+            )
+        if all_phys in (1, 3) and not 0 < tx_phys <= 7:
+            self.logger.warning(
+                "Invalid TX PHY option (%i), must be between 0x1 and 0x7. Defaulting to 0x7.",
+                tx_phys
+            )
+            tx_phys = 0x7
+        if all_phys in (2, 3) and not 0 < rx_phys <= 7:
+            self.logger.warning(
+                "Invalid RX PHY option (%i), must be between 0x1 and 0x7. Defaulting to 0x7.",
+                rx_phys
+            )
+            rx_phys = 0x7
+        if phy_opts not in (0, 1, 2, 4):
+            self.logger.warning(
+                "Invalid PHY options (%i), must be 0x0, 0x1, 0x2, or 0x4. Defaulting to 0x0.",
+                phy_opts
+            )
+            phy_opts = 0x0
+
         params = to_le_nbyte_list(handle, 2)
-        params.append(0x0)
-        if phy == PhyOption.PHY_1M:
-            params.append(0x0)
-            params.append(0x0)
-            params.extend(to_le_nbyte_list(0x0, 2))
-        elif phy == PhyOption.PHY_2M:
-            params.append(0x2)
-            params.append(0x2)
-            params.extend(to_le_nbyte_list(0x0, 2))
-        elif phy == PhyOption.PHY_CODED_S8:
-            params.append(0x4)
-            params.append(0x4)
-            params.extend(to_le_nbyte_list(0x2, 2))
-        elif phy == PhyOption.PHY_CODED_S2:
-            params.append(0x4)
-            params.append(0x4)
-            params.extend(to_le_nbyte_list(0x1, 2))
-        else:
-            self.logger.warning("Invalid PHY selection (%s), defaulting to PHY_1M.", phy)
+        params.extend([all_phys, tx_phys, rx_phys])
+        params.extend(to_le_nbyte_list(phy_opts, 2))
 
         return self.send_le_controller_command(OCF.LE_CONTROLLER.SET_PHY, params=params)
 
     def tx_test(
-        self, channel: int = 0, phy: PhyOption = PhyOption.PHY_1M, payload: int = 0, packet_len: int = 0
+        self,
+        channel: int = 0,
+        phy: PhyOption = PhyOption.PHY_1M,
+        payload: PayloadOption = PayloadOption.PLD_PRBS9,
+        packet_len: int = 0
     ) -> StatusCode:
-        """Command board to being transmitting.
+        """Start a transmitter test.
 
-        Sends a command to the board, telling it to begin transmitting
-        packets of the given packet length, with the given payload, on
-        the given channel, using the given PHY. The payload must be one
-        of the values 0, 1, 2, 3, 4, 5, 6, or 7. Alternatively, payload
-        selection values are declared in `utils/constants.py` as
-        ADI_PAYLOAD_PRBS9 (0), ADI_PAYLOAD_11110000 (1), ADI_PAYLOAD_10101010 (2),
-        ADI_PAYLOAD_PRBS15 (3), ADI_PAYLOAD_11111111 (4) ADI_PAYLOAD_00000000 (5),
-        ADI_PAYLOAD_00001111 (6) and ADI_PAYLOAD_01010101 (7). The PHY must
-        be one of the values 1, 2, 3 or 4. Alternatively, PHY selection
-        values are declared in `utils/constants.py` as ADI_PHY_1M (1),
-        ADI_PHY_2M (2), ADI_PHY_S8 (3), and ADI_PHY_S2 (4). A test end
-        function must be called in order to end this process on the board.
+        Sends a command to the DUT, telling it to start a DTM transmitter
+        test in accordance with the given parameters.
 
         Parameters
         ----------
-        channel : int
-            The channel to transmit on.
-        phy : int
-            The PHY to use.
-        payload : int
-            The payload type to use.
-        packet_len : int
-            The TX packet length.
+        channel : int, optional
+            The channel on which transmission should take place.
+        phy : PhyOption, optional
+            The PHY that should be used by the transmitter.
+        payload : PayloadOption, optional
+            The packet payload type that should be used.
+        packet_len : int, optional
+            The desired length of the transmitted packets.
 
         Returns
         -------
-        Event
-            Object containing board return data.
+        StatusCode
+            The return packet status code.
 
         """
-        params = [channel, packet_len, payload, phy.value]
+        params = [channel, packet_len, payload.value, phy.value]
         return self.send_le_controller_command(
             OCF.LE_CONTROLLER.ENHANCED_TRANSMITTER_TEST, params=params)
 
     def rx_test(
-        self, channel: int = 0, phy: PhyOption = PhyOption.PHY_1M, modulation_idx: float = 0
+        self,
+        channel: int = 0,
+        phy: PhyOption = PhyOption.PHY_1M,
+        modulation_idx: int = 0
     ) -> StatusCode:
-        """Command board to begin receiving.
+        """Start a receiver test.
 
-        Sends a command to the board, telling it to begin receiving
-        on the given channel using the given PHY. The PHY must
-        be one of the values 1, 2, 3 or 4. Alternatively, PHY selection
-        values are declared in `utils/constants.py` as ADI_PHY_1M (1),
-        ADI_PHY_2M (2), ADI_PHY_S8 (3), and ADI_PHY_S2 (4). A test end
-        function must be called in order to end this process on the board.
+        Sends a command to the DUT, telling it to start a DTM receiver
+        test in accordance with the given parameters.
 
         Parameters
         ----------
-        channel : int
-            The channel to receive on.
-        phy : int
-            The PHY to use.
+        channel : int, optional
+            The channel on which the receiver should listen for packets.
+        phy : PhyOption, optional
+            The PHY that should be used by the receiver.
+        modulation_idx : float, optional
+            The expected modulation index of the transmitter. Indicates
+            whether the modulation index is standard (0) or stable (1).
 
         Returns
         -------
-        Event
-            Object containing board return data.
+        StatusCode
+            The return packet status code.
 
         """
         if phy == PhyOption.PHY_CODED_S2:
@@ -315,18 +511,18 @@ class BleStandardCmds:
             OCF.LE_CONTROLLER.ENHANCED_RECEIVER_TEST, params=params)
 
     def end_test(self) -> Tuple[StatusCode, int]:
-        """Command board to end the current test.
+        """End the current test.
 
-        Sends a command to the board, telling it to end whatever test
-        it is currently running. Function then parses the test stats
-        and returns the number of properly received packets.
+        Sends a command to the DUT, telling it to end the current
+        DTM test.
 
         Returns
         -------
-        Union[int, None]
-            The amount of properly received packets, or `None` if
-            the return data from the board is empty. In this case
-            it is likely that a test error occured.
+        StatusCode
+            The return packet status code.
+        int
+            The number of packets received correctly during the test. If
+            ending a TX test, this value will be 0.
 
         """
         evt = self.send_le_controller_command(OCF.LE_CONTROLLER.TEST_END, return_evt=True)
@@ -335,17 +531,22 @@ class BleStandardCmds:
         return rx_ok
 
     def disconnect(self, handle: int = 0x0000, reason: int = 0x16) -> StatusCode:
-        """Command board to disconnect from an initialized connection.
+        """Disconnect from an existing connection.
 
-        Sends a command to the board, telling it to break a currently
-        initialized connection. Board gives Local Host Termination (0x16)
-        as the reason for the disconnection. Function is used to exit
-        Connection Mode Testing.
+        Sends a command to the DUT, telling it to disconnect from
+        the indicated connection for the given reason.
+
+        Parameters
+        ----------
+        handle : int, optional
+            The handle to the desired connection.
+        reason : int, optional
+            The reason for the disconnection.
 
         Returns
         -------
-        Event
-            Object containing board return data.
+        StatusCode
+            The return packet status code.
 
         """
         params = to_le_nbyte_list(handle, 2)
@@ -353,12 +554,17 @@ class BleStandardCmds:
         return self.send_link_control_command(OCF.LINK_CONTROL.DISCONNECT, params=params)
 
     def reset(self) -> StatusCode:
-        """Sets log level.
-        Resets the controller
+        """Reset board controller/link layer.
+
+        Sends a command to the DUT, telling it that the controller
+        and the link layer should be reset. On-board implementation
+        may vary, meaning this command does not necessarily perform
+        a full hardware reset.
 
         Returns
-        ----------
-        Event: EventPacket
+        -------
+        StatusCode
+            The return packet status code.
 
         """
         return self.send_controller_command(OCF.CONTROLLER.RESET)
@@ -366,24 +572,31 @@ class BleStandardCmds:
     def set_event_mask(
         self, mask: int, mask_pg2: Optional[int] = None
     ) -> Union[StatusCode, Tuple[StatusCode, StatusCode]]:
-        """Set event mask(s).
+        """Enable/disable events the board can generate.
 
-        Sets the event masks using the Controller command group
-        Set Event Mask command. If a page 2 mask is provided,
-        then the Set Event Mask Page 2 command is also called.
+        Sends a command to the DUT, telling it to enable/disable
+        events that can be generated and returned to the host in
+        accordance with the given mask. If a page2 mask if provided,
+        then the command which sets the page2 masks will also be sent.
 
         Parameters
         ----------
         mask : int
-            event mask
+            Mask indicating the desired events. Setting a bit to `1`
+            enables the corresponding event. Setting the bit to `0`
+            disables it.
+        mask_pg2 : Optional[int], optional
+            Mask indicating the desired events for the second event
+            mask page. Setting a bit to `1` enables the corresponding
+            event. Setting the bit to `0` disables it.
 
         Returns
         -------
-        EventCode
-            The status of the event mask set operation.
-        Tuple[EventCode, EventCode]
-            The statuses of the both the event mask set and the
-            event mask page 2 set operation.
+        Union[StatusCode, Tuple[StatusCode, StatusCode]]
+            The return packet status codes(s). If both page1 and page2
+            were set, the first return is the status code for the page1
+            command and the second is the status code for the page2
+            command.
 
         """
         params = to_le_nbyte_list(mask, 8)
@@ -399,18 +612,23 @@ class BleStandardCmds:
         return status
 
     def set_event_mask_le(self, mask: int) -> StatusCode:
-        """LE controller set event mask
+        """Enable/disable LE events the board can generate.
+        
+        Sends a command to the DUT, telling it to enable/disable
+        LE events that can be generated and returned to the host
+        in accordance with the given mask.
 
         Parameters
         ----------
         mask : int
-            event mask
-        enable : _type_
-            whether the events should be enabled or disabled
+            Mask indicating the desired LE events. Setting a bit
+            to `1` enables the corresponding event. Setting the
+            bit to `0` disables it.
 
         Returns
         -------
-        EventCode
+        StatusCode
+            The return packet status code.
 
         """
         params = to_le_nbyte_list(mask, 8)

@@ -1,4 +1,55 @@
-"""DOCSTRING"""
+#! /usr/bin/env python3
+###############################################################################
+#
+#
+# Copyright (C) 2023 Maxim Integrated Products, Inc., All Rights Reserved.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+# OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+# IN NO EVENT SHALL MAXIM INTEGRATED BE LIABLE FOR ANY CLAIM, DAMAGES
+# OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+# Except as contained in this notice, the name of Maxim Integrated
+# Products, Inc. shall not be used except as stated in the Maxim Integrated
+# Products, Inc. Branding Policy.
+#
+# The mere transfer of this software does not imply any licenses
+# of trade secrets, proprietary technology, copyrights, patents,
+# trademarks, maskwork rights, or any other form of intellectual
+# property whatsoever. Maxim Integrated Products, Inc. retains all
+# ownership rights.
+#
+##############################################################################
+#
+# Copyright 2023 Analog Devices, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+##############################################################################
+"""Contains data classes used for HCI function parameters/returns."""
 # pylint: disable=too-many-arguments,too-many-locals,too-many-instance-attributes
 from typing import Optional
 from dataclasses import dataclass
@@ -6,50 +57,142 @@ from enum import Enum
 
 @dataclass
 class AdvParams:
-    """DOCSTRING"""
-    interval_min: int = 0x60
-    interval_max: int = 0x60
-    adv_type: int = 0x3
-    own_addr_type: int = 0
-    peer_addr_type: int = 0
-    peer_addr: int = 0
-    channel_map: int = 0x7
-    filter_policy: int = 0
+    """Advertising parameters data container."""
 
+    interval_min: int = 0x60
+    """Minimum advertising interval."""
+
+    interval_max: int = 0x60
+    """Maximum advertising interval."""
+
+    adv_type: int = 0x3
+    """Advertising type."""
+
+    own_addr_type: int = 0
+    """Own device address type."""
+
+    peer_addr_type: int = 0
+    """Connectable peer device address type."""
+
+    peer_addr: int = 0
+    """Connectable peer device address."""
+
+    channel_map: int = 0x7
+    """Advertising channel map."""
+
+    filter_policy: int = 0
+    """Advertising filter policy."""
+
+    def __repr__(self) -> str:
+        print_lns = []
+        for key, val in self.__dict__.items():
+            if val is None:
+                continue
+            print_lns.append(f"{key}:  {val}")
+
+        return '\n'.join(print_lns)
 
 @dataclass
 class ScanParams:
-    """DOCSTRING"""
+    """Scan parameters data container."""
+
     scan_type: int = 0x1
+    """Scan type."""
+
     scan_interval: int = 0x100
+    """Scan interval."""
+
     scan_window: int = 0x100
+    """Scan duration."""
+
     addr_type: int = 0x0
+    """Own device address type."""
+
     filter_policy: int = 0x0
+    """Scanning filter policy."""
 
+    def __repr__(self) -> str:
+        print_lns = []
+        for key, val in self.__dict__.items():
+            if val is None:
+                continue
+            print_lns.append(f"{key}:  {val}")
 
-class PeerAddrType(Enum):
-    """DOCSTRING"""
+        return '\n'.join(print_lns)
+
+class AddrType(Enum):
+    """BLE-defined peer address types."""
     PUBLIC = 0
-    RANDOM = 1
-    PUBLIC_IDENTITY = 2
-    RANDOM_IDENTITY = 3
+    """Public device address."""
 
+    RANDOM = 1
+    """Random device address."""
+
+    PUBLIC_IDENTITY = 2
+    """
+    Resolvable Private address based on local IRK from
+    resolving list, or public address if no match is found.
+    
+    .. note::
+        For advertising, this value is valid for own device
+        address type only. For connection, this value is valid
+        for both own device address type and connectable peer
+        device address type.
+
+    """
+
+    RANDOM_IDENTITY = 3
+    """
+    Resolvable Private address based on local IRK from
+    resolving list, or random address is no match is found.
+
+    .. note::
+        For advertising, this value is valid for own device
+        address type only. For connection, this value is valid
+        for both own device address type and connectable peer
+        device address type.
+
+    """
 
 @dataclass
 class ConnParams:
-    """DOCSTRING"""
-    peer_addr: int
+    """Connection parameters data container."""
+
     scan_interval: int = 0x100
+    """Scan interval."""
+
     scan_window: int = 0x100
+    """Scan duration."""
+
     init_filter_policy: int = 0x0
+    """Initiator filter policy."""
+
     peer_addr_type: int = 0x0
+    """Connectable peer device address type."""
+
+    peer_addr: int
+    """Connectable peer device address."""
+
     own_addr_type: int = 0x0
+    """Own device address type."""
+
     conn_interval_min: int = 0x6
+    """Connection interval minimum."""
+
     conn_interval_max: int = 0x6
+    """Connection interval maximum."""
+
     max_latency: int = 0x0000
+    """Maximum peripheral latency."""
+
     sup_timeout: int = 0x64
+    """Supervision timeout."""
+
     min_ce_length: int = 0x0F10
+    """Minimum connection event length."""
+
     max_ce_length: int = 0x0F10
+    """Maximum connection event length."""
 
     def __post_init__(self):
         if not 0x4 <= self.scan_interval <= 0x4000:
@@ -74,10 +217,17 @@ class ConnParams:
         if not 0x6 <= self.conn_interval_max <= 0xC80:
             raise ValueError("Connection interval min must be between 0x6 - 0xC80")
 
+    def __repr__(self) -> str:
+        print_lns = []
+        for key, val in self.__dict__.items():
+            if val is None:
+                continue
+            print_lns.append(f"{key}:  {val}")
+
+        return '\n'.join(print_lns)
+
 class DataPktStats:
-    """
-    Data packet report generated by connection stats and test stats
-    """
+    """Generic data stats container for CM and DTM."""
     def __init__(
         self,
         rx_data: int,
@@ -91,230 +241,389 @@ class DataPktStats:
         tx_isr: int,
     ) -> None:
         self.rx_data = rx_data
+        """Number of packets received correctly."""
+
         self.rx_data_crc = rx_data_crc
+        """Number of packets received with a CRC error."""
+
         self.rx_data_timeout = rx_data_timeout
+        """Number of RX timeouts."""
+
         self.tx_data = tx_data
+        """Number of correctly transmitted packets."""
+
         self.err_data = err_data
+        """Number of data transaction errors."""
+
         self.rx_setup = rx_setup
+        """RX packet setup watermark in microseconds."""
+
         self.tx_setup = tx_setup
+        """TX packet setup watermark in microseconds."""
+
         self.rx_isr = rx_isr
+        """RX ISR processing watermark in microseconds."""
+
         self.tx_isr = tx_isr
+        """TX ISR processing watermark in microseconds."""
 
-    def __repr__(self):
-        return str(self.__dict__)
+    def __repr__(self) -> str:
+        print_lns = []
+        for key, val in self.__dict__.items():
+            if val is None:
+                continue
+            print_lns.append(f"{key}:  {val}")
 
-    def per(self, peer_tx_data: Optional[int] = None):
-        """DOCSTRING"""
+        return '\n'.join(print_lns)
+
+    def per(self, peer_tx_data: Optional[int] = None) -> float:
+        """Calculate PER.
+
+        Calculates the Packet Error Rate of the current set of
+        statistics. If number of peer TX packets is not provided,
+        the value is inferred from the number of correctly received
+        packets, the number of CRC errors, and the number of timeouts
+        recorded by the receiver.
+
+        Parameters
+        ----------
+        peer_tx_data : Optional[int], optional
+            Number of packets transmitted by the peer device.
+
+        Returns
+        -------
+        float
+            Calculated PER value.
+
+        """
         if peer_tx_data:
             return 100 - 100 *(self.rx_data / peer_tx_data)
         return self.rx_data / (self.rx_data + self.rx_data_crc + self.rx_data_timeout)
 
 @dataclass
 class AdvPktStats:
-    """DOCSTRING"""
-    def __init__(
-        self,
-        tx_adv: int,
-        rx_req: int,
-        rx_req_crc: int,
-        rx_req_timeout: int,
-        tx_resp: int,
-        err_adv: int,
-        rx_setup: int,
-        tx_setup: int,
-        rx_isr: int,
-        tx_isr: int,
-        tx_chain: Optional[int] = None,
-    ) -> None:
-        self.tx_adv = tx_adv
-        self.rx_req = rx_req
-        self.rx_req_crc = rx_req_crc
-        self.rx_req_timeout = rx_req_timeout
-        self.tx_resp = tx_resp
-        self.err_adv = err_adv
-        self.rx_setup = rx_setup
-        self.tx_setup = tx_setup
-        self.rx_isr = rx_isr
-        self.tx_isr = tx_isr
-        self.tx_chain = tx_chain
+    """Advertising statistics data container."""
 
-    def __repr__(self):
-        return str(self.__dict__)
+    tx_adv: int = None
+    """Number of sent advertising packets."""
+
+    rx_req: int = None
+    """Number of advertising requests received correctly."""
+
+    rx_req_crc: int = None
+    """Number of advertising requests received with a CRC error."""
+
+    rx_req_timeout: int = None
+    """Number of RX timeouts."""
+
+    tx_resp: int = None
+    """Number of response packets sent."""
+
+    err_adv: int = None
+    """Number of advertising transaction errors."""
+
+    rx_setup: int = None
+    """RX packet setup watermark in microseconds."""
+
+    tx_setup: int = None
+    """TX packet setup watermark in microseconds."""
+
+    rx_isr: int = None
+    """RX ISR processing watermark in microseconds."""
+
+    tx_isr: int = None
+    """TX ISR processing watermark in microseconds."""
+
+    tx_chain: Optional[int] = None
+    """
+    Number of chain packets sent.
+    
+    .. note::
+        Value is only returned when retrieving auxiliary advertising statistics.
+    
+    """
+
+
+    def __repr__(self) -> str:
+        print_lns = []
+        for key, val in self.__dict__.items():
+            if val is None:
+                continue
+            print_lns.append(f"{key}:  {val}")
+
+        return '\n'.join(print_lns)
 
 @dataclass
 class ScanPktStats:
-    """DOCSTRING"""
-    def __init__(
-        self,
-        rx_adv: int,
-        rx_adv_crc: int,
-        rx_adv_timeout: int,
-        rx_chain: int,
-        rx_chain_crc: int,
-        rx_chain_timeout: int,
-        err_scan: int,
-        rx_setup: int,
-        tx_setup: int,
-        rx_isr: int,
-        tx_isr: int,
-        tx_req: Optional[int] = None,
-        rx_rsp: Optional[int] = None,
-        rx_rsp_crc: Optional[int] = None,
-        rx_rsp_timeout: Optional[int] = None
-    ) -> None:
-        self.rx_adv = rx_adv
-        self.rx_adv_crc = rx_adv_crc
-        self.rx_adv_timeout = rx_adv_timeout
-        self.rx_chain = rx_chain
-        self.rx_chain_crc = rx_chain_crc
-        self.rx_chain_timeout = rx_chain_timeout
-        self.err_scan = err_scan
-        self.rx_setup = rx_setup
-        self.tx_setup = tx_setup
-        self.rx_isr = rx_isr
-        self.tx_isr = tx_isr
-        self.tx_req = tx_req
-        self.rx_rsp = rx_rsp
-        self.rx_rsp_crc = rx_rsp_crc
-        self.rx_rsp_timeout = rx_rsp_timeout
+    """Scanning statistics data container."""
 
-    def __repr__(self):
-        return str(self.__dict__)
+    rx_adv: int = None
+    """Number of advertising packets received correctly."""
+
+    rx_adv_crc: int = None
+    """Number of advertising packets received with a CRC error."""
+
+    rx_adv_timeout: int = None
+    """Number of RX timeouts."""
+
+    rx_chain: Optional[int] = None
+    """
+    Number of chain packets received correctly.
+    
+    .. note::
+        Value is only returned when retrieving auxiliary scanning statistics.
+    
+    """
+
+    rx_chain_crc: Optional[int] = None
+    """
+    Number of chain packets received with a CRC error.
+    
+    .. note::
+        Value is only returned when retrieving auxiliary scanning statistics.
+
+    """
+
+    rx_chain_timeout: Optional[int] = None
+    """
+    Number of chain packet RX timeouts.
+    
+    .. note::
+        Value is only returned when retrieving auxiliary scanning statistics.
+    
+    """
+
+    err_scan: int = None
+    """Number of scan transaction errors."""
+
+    rx_setup: int = None
+    """RX packet setup watermark in microseconds."""
+
+    tx_setup: int = None
+    """TX packet setup watermark in microseconds."""
+
+    rx_isr: int = None
+    """RX ISR processing watermark in microseconds."""
+
+    tx_isr: int = None
+    """TX ISR processing watermark in microseconds."""
+
+    tx_req: int = None
+    """Number of advertising requests sent."""
+
+    rx_rsp: int = None
+    """Number of advertising response packets received correctly."""
+
+    rx_rsp_crc: int = None
+    """Number of advertising response packets received with a CRC error."""
+
+    rx_rsp_timeout: int = None
+    """Number of advertising response RX timeouts."""
+
+    def __repr__(self) -> str:
+        print_lns = []
+        for key, val in self.__dict__.items():
+            if val is None:
+                continue
+            print_lns.append(f"{key}:  {val}")
+
+        return '\n'.join(print_lns)
 
 @dataclass
 class MemPktStats:
-    """DOCSTRING"""
-    def __init__(
-        self,
-        stack: int,
-        sys_assert_cnt: int,
-        free_mem: int,
-        used_mem: int,
-        max_connections: int,
-        conn_ctx_size: int,
-        cs_watermark_lvl: int,
-        ll_watermark_lvl: int,
-        sch_watermark_lvl: int,
-        lhci_watermark_lvl: int,
-        max_adv_sets: int,
-        adv_set_ctx_size: int,
-        ext_scan_max: int,
-        ext_scan_ctx_size: int,
-        max_num_ext_init: int,
-        ext_init_ctx_size: int,
-        max_per_scanners: int,
-        per_scan_ctx_size: int,
-        max_cig: int,
-        cig_ctx_size: int,
-        cis_ctx_size: int
-    ) -> None:
-        self.stack = stack
-        self.sys_assert_cnt = sys_assert_cnt
-        self.free_mem = free_mem
-        self.used_mem = used_mem
-        self.max_connections = max_connections
-        self.conn_ctx_size = conn_ctx_size
-        self.cs_watermark_lvl = cs_watermark_lvl
-        self.ll_watermark_lvl = ll_watermark_lvl
-        self.sch_watermark_lvl = sch_watermark_lvl
-        self.lhci_watermark_lvl = lhci_watermark_lvl
-        self.max_adv_sets = max_adv_sets
-        self.adv_set_ctx_size = adv_set_ctx_size
-        self.ext_scan_max = ext_scan_max
-        self.ext_scan_ctx_size = ext_scan_ctx_size
-        self.ext_init_ctx_size = ext_init_ctx_size
-        self.max_num_ext_init = max_num_ext_init
-        self.max_per_scanners = max_per_scanners
-        self.per_scan_ctx_size = per_scan_ctx_size
-        self.max_cig = max_cig
-        self.cig_ctx_size = cig_ctx_size
-        self.cis_ctx_size = cis_ctx_size
+    """Memory statistics data container."""
 
-    def __repr__(self):
-        return str(self.__dict__)
+    stack: int = None
+    """Number of bytes used by the stack."""
+
+    sys_assert_cnt: int = None
+    """Number of times assertions hit."""
+
+    free_mem: int = None
+    """Memory free for stack usage."""
+
+    used_mem: int = None
+    """Memory used by stack."""
+
+    max_connections: int = None
+    """Maximum number of connections allowed."""
+
+    conn_ctx_size: int = None
+    """Number of bytes used for connection context."""
+
+    cs_watermark_lvl: int = None
+    """Critical section watermark duration in microseconds."""
+
+    ll_watermark_lvl: int = None
+    """Link layer handler watermark level in microseconds."""
+
+    sch_watermark_lvl: int = None
+    """Scheduler handler watermark level in microseconds."""
+
+    lhci_watermark_lvl: int = None
+    """LHCI handler watermark level in microseconds."""
+
+    max_adv_sets: int = None
+    """Maximum number of advertising sets."""
+
+    adv_set_ctx_size: int = None
+    """Advertising set context size in bytes."""
+
+    ext_scan_max: int = None
+    """Maximum number of extended scanners."""
+
+    ext_scan_ctx_size: int = None
+    """Extended scanners context size in bytes."""
+
+    ext_init_ctx_size: int = None
+    """Extended initiators context size in bytes."""
+
+    max_num_ext_init: int = None
+    """Maximum number of extended initiators."""
+
+    max_per_scanners: int = None
+    """Maximum number of periodic scanners."""
+
+    per_scan_ctx_size: int = None
+    """Periodic scanners context size in bytes."""
+
+    max_cig: int = None
+    """Maximim number of CIG."""
+
+    cig_ctx_size: int = None
+    """CIG context size in bytes."""
+
+    cis_ctx_size: int = None
+    """CIS context size in bytes."""
+
+    def __repr__(self) -> str:
+        print_lns = []
+        for key, val in self.__dict__.items():
+            if val is None:
+                continue
+            print_lns.append(f"{key}:  {val}")
+
+        return '\n'.join(print_lns)
 
 @dataclass
 class PduPktStats:
-    """DOCSTRING"""
-    def __init__(
-        self,
-        fail_pdu: int,
-        pass_pdu: int,
-        fail_whitelist: int,
-        pass_whitelist: int,
-        fail_peer_addr_match: int,
-        pass_peer_addr_match: int,
-        fail_local_addr_match: int,
-        pass_local_addr_match: int,
-        fail_peer_rpa_verify: int,
-        pass_peer_rpa_verify: int,
-        fail_peer_priv_addr: int,
-        pass_peer_priv_addr: int,
-        fail_local_priv_addr: int,
-        pass_local_priv_addr: int,
-        fail_peer_addr_res_req: int,
-        pass_peer_addr_res_req: int,
-        pass_local_addr_res_opt: int,
-        peer_res_addr_pend: int,
-        local_res_addr_pend: int,
-    ) -> None:
-        self.fail_pdu = fail_pdu
-        self.pass_pdu = pass_pdu
-        self.fail_whitelist = fail_whitelist
-        self.pass_whitelist = pass_whitelist
-        self.fail_peer_addr_match = fail_peer_addr_match
-        self.pass_peer_addr_match = pass_peer_addr_match
-        self.fail_local_addr_match = fail_local_addr_match
-        self.pass_local_addr_match = pass_local_addr_match
-        self.fail_peer_rpa_verify = fail_peer_rpa_verify
-        self.pass_peer_rpa_verify = pass_peer_rpa_verify
-        self.fail_peer_priv_addr = fail_peer_priv_addr
-        self.pass_peer_priv_addr = pass_peer_priv_addr
-        self.fail_local_priv_addr = fail_local_priv_addr
-        self.pass_local_priv_addr = pass_local_priv_addr
-        self.fail_peer_addr_res_req = fail_peer_addr_res_req
-        self.pass_peer_addr_res_req = pass_peer_addr_res_req
-        self.pass_local_addr_res_opt = pass_local_addr_res_opt
-        self.peer_res_addr_pend = peer_res_addr_pend
-        self.local_res_addr_pend = local_res_addr_pend
+    """PDU statistics data container."""
 
-    def __repr__(self):
-        return str(self.__dict__)
+    fail_pdu: int = None
+    """Number of PDUs failing PDU type filter."""
+
+    pass_pdu: int = None
+    """Number of PDUs passing PDU type filter."""
+
+    fail_whitelist: int = None
+    """Number of PDUs failing whitelist filter."""
+
+    pass_whitelist: int = None
+    """Number of PDUs passing whitelist filter."""
+
+    fail_peer_addr_match: int = None
+    """Number of PDUs failing peer address match."""
+
+    pass_peer_addr_match: int = None
+    """Number of PDUs passing peer address match."""
+
+    fail_local_addr_match: int = None
+    """Number of PDUs failing local address match."""
+
+    pass_local_addr_match: int = None
+    """Number of PDUs passing local address match."""
+
+    fail_peer_rpa_verify: int = None
+    """Number of peer RPAs failing verification."""
+
+    pass_peer_rpa_verify: int = None
+    """Number of peer RPAs passing verification."""
+
+    fail_local_rpa_verify:  int = None
+    """Number of local RPAs failing verification."""
+
+    pass_local_rpa_verify: int = None
+    """Number of local RPAs passing verification."""
+
+    fail_peer_priv_addr: int = None
+    """Number of peer addresses failing RPA requirements."""
+
+    fail_local_priv_addr: int = None
+    """Number of local addresses failing RPA requirements."""
+
+    fail_peer_addr_res_req: int = None
+    """Number of PDUs failing required peer address resolution."""
+
+    pass_peer_addr_res_req: int = None
+    """Number of PDUs passing required peer address resolution."""
+
+    pass_local_addr_res_opt:  int = None
+    """Number of PDUs passing optional local address resolution."""
+
+    peer_res_addr_pend: int = None
+    """Number of peer address resolutions pended."""
+
+    local_res_addr_pend: int = None
+    """Number of local address resolutions pended."""
+
+    def __repr__(self) -> str:
+        print_lns = []
+        for key, val in self.__dict__.items():
+            if val is None:
+                continue
+            print_lns.append(f"{key}:  {val}")
+
+        return '\n'.join(print_lns)
 
 @dataclass
 class TestReport:
-    """DOCSTRING"""
-    def __init__(
-        self,
-        rx_pkt_count: int,
-        rx_oct_count: int,
-        gen_pkt_count: int,
-        gen_oct_count: int
-    ) -> None:
-        self.rx_pkt_count = rx_pkt_count
-        self.rx_oct_count = rx_oct_count
-        self.gen_pkt_count = gen_pkt_count
-        self.gen_oct_count = gen_oct_count
+    """ISO/ACL test report data container."""
 
-    def __repr__(self):
-        return str(self.__dict__)
+    rx_pkt_count: int = None
+    """Number of packets received."""
+
+    rx_oct_count: int = None
+    """Number of octets received."""
+
+    gen_pkt_count: int = None
+    """Number of generated packets."""
+
+    gen_oct_count: int = None
+    """Number of generated octets."""
+
+    def __repr__(self) -> str:
+        print_lns = []
+        for key, val in self.__dict__.items():
+            if val is None:
+                continue
+            print_lns.append(f"{key}:  {val}")
+
+        return '\n'.join(print_lns)
 
 @dataclass
 class PoolStats:
-    """DOCSTRING"""
-    def __init__(
-        self,
-        buf_size: int,
-        num_buf: int,
-        num_alloc: int,
-        max_alloc: int,
-        max_req_len: int
-    ) -> None:
-        self.buf_size = buf_size
-        self.num_buf = num_buf
-        self.num_alloc = num_alloc
-        self.max_alloc = max_alloc
-        self.max_req_len = max_req_len
+    """Memory pool statistics data container."""
 
-    def __repr__(self):
-        return str(self.__dict__)
+    buf_size: int = None
+    """Buffer size."""
+
+    num_buf: int = None
+    """Number of buffers."""
+
+    num_alloc: int = None
+    """Number of allocations."""
+
+    max_alloc: int = None
+    """Maximum number of allocations."""
+
+    max_req_len: int = None
+    """Maximum required length."""
+
+    def __repr__(self) -> str:
+        print_lns = []
+        for key, val in self.__dict__.items():
+            if val is None:
+                continue
+            print_lns.append(f"{key}:  {val}")
+
+        return '\n'.join(print_lns)

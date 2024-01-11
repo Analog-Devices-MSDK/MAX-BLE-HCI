@@ -1,10 +1,65 @@
-"""DOCSTRING"""
+#! /usr/bin/env python3
+###############################################################################
+#
+#
+# Copyright (C) 2023 Maxim Integrated Products, Inc., All Rights Reserved.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+# OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+# IN NO EVENT SHALL MAXIM INTEGRATED BE LIABLE FOR ANY CLAIM, DAMAGES
+# OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+# Except as contained in this notice, the name of Maxim Integrated
+# Products, Inc. shall not be used except as stated in the Maxim Integrated
+# Products, Inc. Branding Policy.
+#
+# The mere transfer of this software does not imply any licenses
+# of trade secrets, proprietary technology, copyrights, patents,
+# trademarks, maskwork rights, or any other form of intellectual
+# property whatsoever. Maxim Integrated Products, Inc. retains all
+# ownership rights.
+#
+##############################################################################
+#
+# Copyright 2023 Analog Devices, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+##############################################################################
+"""
+Module contains definitions for ADI vendor-specific HCI commands.
+"""
 # pylint: disable=too-many-lines, too-many-arguments, too-many-public-methods
 from typing import Optional, Tuple, Union, Dict, List
 from ._utils import (
     _MAX_U32,
+    _MAX_U64,
     to_le_nbyte_list,
     PhyOption,
+    PayloadOption,
     SerialUartTransport
 )
 from ._hci_logger import get_formatted_logger
@@ -26,7 +81,27 @@ from .packet_codes import StatusCode
 from .packet_defs import OCF, OGF, PubKeyValidateMode
 
 class VendorSpecificCmds:
-    """DOCSTRING"""
+    """Definitions for ADI vendor-specific HCI commands.
+    
+    Class contains functions used to implement Analog Devices
+    vendor-specific HCI commands. Used as a parent for the full
+    Analog Devices BLE HCI class.
+
+    Arguments
+    ---------
+    port : SerialUartTransport
+        Serial port interfacing object.
+    logger_name: str
+        Name used to reference the HCI logger.
+
+    Attributes
+    ----------
+    port : SerialUartTransport
+        Serial port interfacing object.
+    logger : logging.Logger
+        HCI logging object referenced by the `name` argument.
+    
+    """
     def __init__(self, port: SerialUartTransport, logger_name: str):
         self.port = port
         self.logger = get_formatted_logger(name=logger_name)
@@ -37,7 +112,29 @@ class VendorSpecificCmds:
             params: List[int] = None,
             return_evt: bool = False
     ) -> Union[EventPacket, StatusCode]:
-        """DOCSTRING"""
+        """Send a vendor-specific command to the test board.
+
+        Sends a command from the OGF Vendor Specific subgroup to the DUT.
+
+        Parameters
+        ----------
+        ocf : OCF
+            Opcode command field value for the desired HCI command.
+        params : List[int], optional
+            Command parameters as single-byte values.
+        return_evt : bool, optional
+            If true, function returns full `EventPacket` object. If
+            false, function returns only the status code.
+
+        Returns
+        -------
+        Union[StatusCode, EventPacket]
+            If `return_evt` argument is true, the full return packet
+            from the DUT. If `return_evt` argument is false, the return
+            packet status code.
+
+
+        """
         cmd = CommandPacket(OGF.VENDOR_SPEC, ocf, params=params)
         if return_evt:
             return self.port.send_command(cmd)
@@ -52,30 +149,38 @@ class VendorSpecificCmds:
 
         Parameters
         ----------
-        addr : Union[List[int], bytearray]
+        addr : List[int]
             Desired BD address.
 
         Returns
         -------
-        EventPacket
-            Object containing board return data.
+        StatusCode
+            The return packet status code.
 
         """
         params = to_le_nbyte_list(addr, 6)
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_BD_ADDR, params=params)
 
     def reset_connection_stats(self) -> StatusCode:
-        """Reset accumulated connection stats
+        """Reset accumulated connection stats.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        reset all accumulated connection statisitics.
 
         Returns
         -------
         StatusCode
+            The return packet status code.
 
         """
         return self.send_vs_command(OCF.VENDOR_SPEC.RESET_CONN_STATS)
 
-    def enable_autogenerate_acl(self, enable) -> StatusCode:
-        """Enable automatic generation of ACL packets.
+    def enable_autogenerate_acl(self, enable: bool) -> StatusCode:
+        """Enable/disable automatic generation of ACL packets.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        enable or disable automatic generation of asynchronous
+        connection-less packets.
 
         Parameters
         ----------
@@ -84,21 +189,21 @@ class VendorSpecificCmds:
 
         Returns
         -------
-        Event
-            Object containing board return data.
+        StatusCode
+            The return packet status code.
 
         """
-        return self.send_vs_command(OCF.VENDOR_SPEC.GENERATE_ACL, params=int(enable))
+        return self.send_vs_command(OCF.VENDOR_SPEC.ENA_AUTO_GEN_ACL, params=int(enable))
 
     def generate_acl(
         self, handle: int, packet_len: int, num_packets: int
     ) -> StatusCode:
         """Command board to generate ACL data.
 
-        Sends a command to the board telling it to generate/send ACL data
-        in accordance with the provided packet length and number
-        of packets. A test end function must be called to end this
-        process on the board.
+        Sends a vendor-specific command to the DUT telling it
+        to generate/send ACL data in accordance with the provided
+        packet length and number of packets. A test end function
+        must be called to end this process on the board.
 
         Parameters
         ----------
@@ -111,8 +216,8 @@ class VendorSpecificCmds:
 
         Returns
         -------
-        EventCode
-            Process status code.
+        StatusCode
+            The return packet status code.
 
         Raises
         ------
@@ -137,10 +242,10 @@ class VendorSpecificCmds:
         return self.send_vs_command(OCF.VENDOR_SPEC.GENERATE_ACL, params=params)
 
     def enable_acl_sink(self, enable: bool) -> StatusCode:
-        """Command board to sink ACL data.
+        """Enable/disable ACL sink.
 
-        Sends a command to the board, telling it to sink
-        incoming ACL data.
+        Sends a vendor-specific command to the DUT, telling it to
+        enable or disable asynchronous connection-less packet sink.
 
         Parameters
         ----------
@@ -149,8 +254,8 @@ class VendorSpecificCmds:
 
         Returns
         -------
-        Event
-            Object containing board return data.
+        StatusCode
+            The return packet status code.
 
         """
         params = int(enable)
@@ -160,51 +265,43 @@ class VendorSpecificCmds:
         self,
         channel: int = 0,
         phy: int = 1,
-        payload: int = 0,
+        payload: PayloadOption = 0,
         packet_len: int = 0,
         num_packets: int = 0,
     ) -> StatusCode:
-        """Command board to being transmitting (vendor-specific).
+        """Start a vendor-specific transmitter test.
 
-        Sends a command to the board, telling it to begin transmitting
-        the given number of packets of the given length, with the given payload,
-        on the given channel, using the given PHY. The payload must be one
-        of the values 0, 1, 2, 3, 4, 5, 6, or 7. Alternatively, payload
-        selection values are declared in `utils/constants.py` as
-        ADI_PAYLOAD_PRBS9 (0), ADI_PAYLOAD_11110000 (1), ADI_PAYLOAD_10101010 (2),
-        ADI_PAYLOAD_PRBS15 (3), ADI_PAYLOAD_11111111 (4) ADI_PAYLOAD_00000000 (5),
-        ADI_PAYLOAD_00001111 (6) and ADI_PAYLOAD_01010101 (7). The PHY must
-        be one of the values 1, 2, 3 or 4. Alternatively, PHY selection
-        values are declared in `utils/constants.py` as ADI_PHY_1M (1),
-        ADI_PHY_2M (2), ADI_PHY_S8 (3), and ADI_PHY_S2 (4). A test end
-        function must be called in order to end this process on the board.
+        Sends a vendor-specific command to the DUT, telling it to
+        start a DTM transmitter test in accordance with the given
+        parameters.
 
         Parameters
         ----------
-        channel : int
-            The channel to transmit on.
-        phy : int
-            The PHY to use.
-        payload : int
-            The payload type to use.
-        packet_len : int
-            The TX packet length.
-        num_packets : int
-            The number of packets to transmit.
+        channel : int, optional
+            The channel on which transmission should take place.
+        phy : int, optional
+            The PHY that should be used by the transmitter.
+        payload : PayloadOption, optional
+            The packet payload type that should be transmitted.
+        packet_len : int, optional
+            The desired length of the transmitted packets.
+        num_packets : int, optional
+            The number of packets to transmit. Set to `0` to
+            enable continuous transmission.
 
         Returns
         -------
-        Event
-            Object containing board return data.
+        StatusCode
+            The return packet status code.
 
         Raises
         ------
         ValueError
-            If `handle` is greater than 65535.
+            If `channel` is greater than 39 or less than 0. 
         ValueError
-            If `packet_len` is greater than 65535.
+            If `packet_len` is greater than 255.
         ValueError
-            If `num_packets` is greater than 255.
+            If `num_packets` is greater than 65535.
 
         """
         if not 0 <= channel < 40:
@@ -226,36 +323,36 @@ class VendorSpecificCmds:
         num_packets: int = 0,
         modulation_idx: float = 0,
     ) -> StatusCode:
-        """Command board to begin receiving (vendor-specific).
+        """Start a vendor-specific receiver test.
 
-        Sends a command to the board, telling it to begin receiving
-        the given number of packets on the given channel using the given
-        PHY. The PHY must be one of the values 1, 2, 3 or 4. Alternatively,
-        PHY selection values are declared in `utils/constants.py` as
-        ADI_PHY_1M (1), ADI_PHY_2M (2), ADI_PHY_S8 (3), and ADI_PHY_S2 (4).
-        A test end function must be called in order to end this process on
-        the board.
+        Sends a vendor-specific command to the DUT, telling it to
+        start a DTM receiver test in accordance with the given
+        parameters.
 
         Parameters
         ----------
-        channel : int
-            The channel to receive on.
-        phy : int
-            The PHY to use.
-        num_packets : int
-            The number of packets to expect to receive.
+        channel : int, optional
+            The channel on which the receiver should listen for packets.
+        phy : int, optional
+            The PHY that should be used by the receiver.
+        num_packets : int, optional
+            The number of packets that the receiver is expected to receive,
+            i.e. the number of packets the transmitter is sending.
+        modulation_idx : float, optional
+            The expected modulation index of the transmitter. Indicates
+            whether the modulation index is standard (0) or stable (1).
 
         Returns
         -------
-        Event
-            Object containing board return data.
+        StatusCode
+            The return packet status code.
 
         Raises
         ------
         ValueError
-            If `handle` is greater than 65535.
+            If `channel` is greater than 39 or less than 0.
         ValueError
-            If `num_packets` is greater than 255.
+            if `num_packets` is greater than 65535.
 
         """
         if not 0 <= channel < 40:
@@ -269,20 +366,15 @@ class VendorSpecificCmds:
         return self.send_vs_command(OCF.VENDOR_SPEC.RX_TEST, params=params)
 
     def reset_test_stats(self) -> StatusCode:
-        """Command board to end the current test (vendor-specific).
+        """Reset accumulated test stats.
 
-        Sends a command to the board, telling it to end whatever test
-        it is currently running. Function then parses and returns the
-        test statistics, which inclue the number of packets properly
-        received, the number of crc errors, the number of RX timeout
-        occurances, and the number of TX packets sent.
+        Sends a vendor-specific command to the DUT, telling it to
+        reset all accumulated test statistics.
 
         Returns
         -------
-        Union[Dict[str, int], None]
-            The test statistics, or `None` if the return data from
-            the board is empty. In this case, it is likely that a
-            test error occured.
+        StatusCode
+            The return packet status code.
 
         """
         return self.send_vs_command(OCF.VENDOR_SPEC.RESET_TEST_STATS)
@@ -290,24 +382,24 @@ class VendorSpecificCmds:
     def set_adv_tx_power(self, tx_power: int) -> StatusCode:
         """Set the advertising TX power.
 
-        Sends a command to the board, telling
-        it to set the advertising TX power to the given value.
+        Sends a vendor-specific command to the DUT, telling it to
+        set the advertising TX power in accordance with the given
+        value.
 
         Parameters
         ----------
-        power : int
-            The desired TX power value in dBm.
+        tx_power : int
+            Desired advertising TX power.
 
         Returns
         -------
-        EventPacket
-            Object containing board return data from setting the
-            advertising power.
+        StatusCode
+            The return packet status code.
 
         Raises
         ------
         ValueError
-            If `tx_power` is not between -127dBm and 127dBm
+            If `tx_power` is greater than 127 or less than -127.
 
         """
         if not -127 < tx_power < 127:
@@ -318,28 +410,28 @@ class VendorSpecificCmds:
     def set_conn_tx_power(self, tx_power: int, handle: int = 0x0000) -> StatusCode:
         """Set the connection TX power.
 
-        Sends a command to the board, telling
-        it to set the connection TX power to the given value.
+        Sends a vendor-specific command to the DUT, telling it to
+        set the TX power on the indicated connection in accordance
+        with the given value.
 
         Parameters
         ----------
-        power : int
-            The desired TX power value.
-        handle : int
-            Connection handle.
+        tx_power : int
+            Desired connection TX power.
+        handle : int, optional
+            The handle to the desired connection.
 
         Returns
         -------
-        EventPacket
-            Object containing board return data from setting the
-            connection power.
+        StatusCode
+            The return packet status code.
 
         Raises
         ------
         ValueError
-            If `handle` is larger than 2 bytes.
+            If `handle` is more than 2 bytes in size.
         ValueError
-            If `tx_power` is not between -127dBm and 127dBm
+            If `tx_power` is greater than 127 or less than -127.
 
         """
         if _byte_length(handle) > 2:
@@ -356,30 +448,30 @@ class VendorSpecificCmds:
         channels: Optional[Union[List[int], int]] = None,
         handle: int = 0x0000,
     ) -> StatusCode:
-        """Set the channel map.
+        """Set the channel map for an existing connection.
 
-        Creates a channel map/mask based on the given arguments
-        and sends a command to the board, telling it to set its
-        internal channel map to the new one.
+        Sends a vendor-specific command to the DUT, telling it to
+        set the channel map for the indicated connection in
+        accordance with the mask generated from the given channel
+        values.
 
         Parameters
         ----------
-        channel : int, optional
-            Channel to mask out.
-        mask : int, optional
-            Channel mask to use.
-        handle : int
-            Connection handle.
+        channels : Union[List[int], int], optional
+            The channel(s) that should be included in the connection
+            channel map.
+        handle : int, optional
+            The handle to the desired connection.
 
         Returns
         -------
-        Event
-            Object containing board return data.
+        StatusCode
+            The return packet status code.
 
         Raises
         ------
         ValueError
-            If `handle` is larger than 2 bytes.
+            If `handle` is more than 2 bytes in size.
 
         """
         if _byte_length(handle) > 2:
@@ -405,27 +497,28 @@ class VendorSpecificCmds:
             addr: int,
             length: int,
             print_data: bool = False
-    ) -> Tuple[StatusCode, List[int]]:
-        """Read data from a specific register.
+    ) -> Tuple[List[int], StatusCode]:
+        """Read a number of bytes from a register.
 
-        Sends a command to the board, telling it to read data
-        or a given length from a given register address. Address
-        must begin with '0x' and must be a string representing
-        four bytes of hex data. Function both prints and returns
-        the read data.
+        Sends a vendor-specific command to the DUT, telling it to
+        read bytes from a register in accordance with the given
+        length and register address values. 
 
         Parameters
         ----------
-        addr : str
-            The register address to read from. Must being with '0x'
-            and contain four bytes of hex data.
+        addr : int
+            The address at which the read should begin.
         length : int
-            The desired length of the register read in bytes.
+            The number of bytes to read.
+        print_data : bool, optional
+            Print read data to the console?
 
         Returns
         -------
         List[int]
-            The data as read from the register.
+            The read data.
+        StatusCode
+            The return packet status code.
 
         """
         params = [length]
@@ -450,36 +543,49 @@ class VendorSpecificCmds:
 
                 addr += 4
 
-        return evt.status, read_data
+        return read_data, evt.status
 
     def set_scan_channel_map(self, channel_map: int) -> StatusCode:
-        """Set the channel map used for scanning
+        """Set the channel map used for scanning.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        set the channel map used for scanning in accordance with the
+        given value.
 
         Parameters
         ----------
         channel_map : int
-            channel map used for scanning
+            Desired channel map to use for scanning.
 
         Returns
         -------
-        EventCode
+        StatusCode
+            The return packet status code.
 
         """
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_SCAN_CH_MAP, params=channel_map)
 
     def set_event_mask_vs(self, mask: int, enable: bool) -> StatusCode:
-        """Vendor specific set event mask
+        """Enable/disable vendor specific events the board can generate.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        enable/disable vendor-specific events that can be generated
+        and returned to the host in accordance with the given mask.
 
         Parameters
         ----------
         mask : int
-            event mask
-        enable : _type_
-            whether the events should be enabled or disabled
+            Mask indicating the vendor-specific events that should
+            be enabled/disabled. Events are indicated when their
+            corresponding bit is set to `1`.
+        enable : bool
+            If true, enables the indicated events. If false, disables
+            them.
 
         Returns
         -------
-        EventCode
+        StatusCode
+            The return packet status code.
 
         """
         params = to_le_nbyte_list(mask, 8)
@@ -487,21 +593,27 @@ class VendorSpecificCmds:
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_EVENT_MASK, params=params)
 
     def set_tx_test_err_pattern(self, pattern: int) -> StatusCode:
-        """Set the TX test error pattern
+        """Set the TX test mode error pattern.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        set the pattern of errors for the TX test mode in accordance
+        with the given value.
 
         Parameters
         ----------
         pattern : int
-            32-bit error pattern
+            Desired error pattern.
 
         Returns
         -------
         StatusCode
+            The return packet status code.
 
         Raises
         ------
         ValueError
-            If `pattern` is larger than 32 bits.
+            If `pattern` is larger than 32 bits (4 bytes) in size.
+
         """
 
         if pattern > _MAX_U32:
@@ -513,27 +625,35 @@ class VendorSpecificCmds:
     def set_connection_op_flags(
         self, handle: int, flags: int, enable: bool
     ) -> StatusCode:
-        """Set connection operation flags
+        """Set connection operational flags.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        enable/disable the connection operational flags for the
+        indicated connection in accordance with the values provided.
 
         Parameters
         ----------
         handle : int
-            Handle to connection
+            The handle to the desired connection.
         flags : int
-            flags to enable or disable
+            Mask indicating the desired connection operational flags
+            that should be enabled/disabled. Flags are indicated when
+            their corresponding bit is set to `1`.
         enable : bool
-            True to enable, False to disable
+            If true, enables the indicated flags. If false, disables
+            them.
 
         Returns
         -------
-        EventCode
-        
+        StatusCode
+            The return packet status code.
+
         Raises
         ------
         ValueError
-            If `handle` is larger than 2 bytes.
+            If `handle` is larger than 2 bytes in size.
         ValueError
-            If `flags` is larger than 4 bytes.
+            If `flags` is larger than 4 bytes in size.
 
         """
         if _byte_length(handle) > 2:
@@ -547,22 +667,29 @@ class VendorSpecificCmds:
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_CONN_OP_FLAGS, params=params)
 
     def set_256_priv_key(self, priv_key: int) -> StatusCode:
-        """Set the 256 Byte private key used
+        """Set/clear the P-256 private key.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        set or clear the P-256 private key used to generate key
+        pairs and Diffie-hellman keys in accordance with the given
+        value.
 
         Parameters
         ----------
-        key : list[int]
-            private key
+        priv_key : int
+            Desired P-256 private key. Setting to `0` will clear
+            the key.
 
         Returns
         -------
-        EventCode
-
+        StatusCode
+            The return packet status code.
 
         Raises
         ------
         ValueError
-            If `priv_key` is larger than 32 bytes.
+            If `priv_key` is larger than 32 bytes in size.
+
         """
         if _byte_length(priv_key) > 32:
             raise ValueError(f"Private key ({priv_key}) too large, must be 32 bytes or less.")
@@ -573,23 +700,30 @@ class VendorSpecificCmds:
     def get_channel_map_periodic_scan_adv(
         self, handle: int, is_advertising: bool
     ) -> Tuple[int, StatusCode]:
-        """Get the channel map used for periodic scanning
+        """Get the channel map used for periodic scanning/advertising.
+        
+        Sends a vendor-specific command to the DUT, telling it to
+        retrieve the channel map used for either periodic scanning
+        or periodic advertising in accordance with the given values.
 
         Parameters
         ----------
         handle : int
-            handle to connection
+            The handle to the desired periodic scanner/advertiser.
         is_advertising : bool
-            True if advertiser, False if Scanner
+            Does the handle point to a periodic advertiser?
 
         Returns
         -------
-        EventPacket
+        int
+            The channel map returned by the DUT.
+        StatusCode
+            The return packet status code.
 
         Raises
         ------
         ValueError
-            If `handle` is larger than 2 bytes.
+            If `handle` is larger than 2 bytes in size.
 
         """
         if _byte_length(handle) > 2:
@@ -600,15 +734,20 @@ class VendorSpecificCmds:
         evt = self.send_vs_command(
             OCF.VENDOR_SPEC.GET_PER_CHAN_MAP, params=params, return_evt=True)
 
-        return evt.status, evt.get_return_params()
+        return evt.get_return_params(), evt.status
 
     def get_acl_test_report(self) -> Tuple[TestReport, StatusCode]:
-        """Get ACL Test Report
+        """Get ACL test report.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        retrieve the current ACL test report.
 
         Returns
         -------
-        Dict[str, int]
-            ACL Test Report
+        TestReport
+            The ACL test report returned by the DUT.
+        StatusCode
+            The return packet status code.
 
         """
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_ACL_TEST_REPORT)
@@ -626,28 +765,32 @@ class VendorSpecificCmds:
     def set_local_num_min_used_channels(
         self, phy: PhyOption, pwr_thresh: int, min_used: int
     ) -> StatusCode:
-        """Set local number of minimum used channels
+        """Set local minimum number of used channels.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        set the local minimum number of used channels in accordance
+        with the given PHY, power threshold, and minimum values.
 
         Parameters
         ----------
         phy : PhyOption
-            Which PHY to set min num channels
-        power_thresh : int
-            Power threshold for min num channels
+            PHY on which the process should take place.
+        pwr_thresh : int
+            Power threshold for the selected PHY.
         min_used : int
-            min num channels
+            Minimum number of used channels.
 
         Returns
         -------
-        EventCode
-
+        StatusCode
+            The return packet status code.
 
         Raises
         ------
         ValueError
-            If `min_used` is not in range [1, 37].
+            If `pwr_thresh` is greater than 127 or less than -127.
         ValueError
-            If `pwr_thresh` is not in range [-127, 127].
+            if `min_used` is greater than 37 or less than 1.
 
         """
         if not -127 < pwr_thresh < 127:
@@ -664,22 +807,28 @@ class VendorSpecificCmds:
     def get_peer_min_num_channels_used(
         self, handle: int
     ) -> Tuple[Dict[PhyOption, int], StatusCode]:
-        """Get minimum number of channels used by peer
+        """Get the minimum number of channels used by a peer.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        retrieve the minimum number of channels used by a peer
+        device as indicated by the given value.
 
         Parameters
         ----------
         handle : int
-            handle to connection to peer
+            Handle to the desired peer connection.
 
         Returns
         -------
         Dict[PhyOption, int]
-            min num used channel map
+            Peer minimum number of used channels by PHY type.
+        StatusCode
+            The return packet status code.
 
         Raises
         ------
         ValueError
-            If `handle` is larger than 2 bytes.
+            If `handle` is larger than 2 bytes in size.
 
         """
         if _byte_length(handle) > 2:
@@ -699,74 +848,99 @@ class VendorSpecificCmds:
         return min_used_map, evt.status
 
     def set_validate_pub_key_mode(self, mode: PubKeyValidateMode) -> StatusCode:
-        """Set validate public key mode
+        """Set the mode used to validate the public key.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        set the mode used to validate the public key in accordance
+        with the given value.
 
         Parameters
         ----------
         mode : PubKeyValidateMode
-            Mode to use for validation
+            Desired public key validation mode.
 
         Returns
         -------
-        EventCode
+        StatusCode
+            The return packet status code.
 
         """
         return self.send_vs_command(OCF.VENDOR_SPEC.VALIDATE_PUB_KEY_MODE, params=[mode.value])
 
     def get_rand_address(self) -> Tuple[int, StatusCode]:
-        """Gets a randomly generated address
+        """Get a random device address.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        retrieve a random device address.
 
         Returns
         -------
-        List[int]
-            6 Byte address
+        int
+            Random device address retrieved by the DUT.
+        StatusCode
+            The return packet status code.
 
         """
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_RAND_ADDR, return_evt=True)
         return evt.get_return_params(), evt.status
 
     def set_local_feature(self, features: int) -> StatusCode:
-        """Set local features
+        """Set local supported features.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        set the local supported features in accordance with the
+        given value.
 
         Parameters
         ----------
         features : int
-            64-Bit Mask of features
+            Mask indicating the local supported features. Setting
+            a bit to `1` will enable the indicated feature. Setting
+            a bit to `0` will disable it.
 
         Returns
         -------
         StatusCode
+            The return packet status code.
 
         Raises
         ------
         ValueError
-            If `features` is greater than 2^64.
+            If `features` is larger than 64 bits (8 bytes) in size.
 
         """
-        if features > 2**64:
+        if features > _MAX_U64:
             raise ValueError(f"Feature mask ({features}) is too large, must be 64 bits or less.")
 
         params = to_le_nbyte_list(features, 8)
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_LOCAL_FEAT, params=params)
 
     def set_operational_flags(self, flags: int, enable: bool) -> StatusCode:
-        """Set operational flags
+        """Enable/disable operational flags.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        enable or disable operational flags in accordance with the
+        values provided.
 
         Parameters
         ----------
         flags : int
-            32-Bit mask of flags
+            Mask indicating the desired operational flags that should
+            be enabled/disabled. Flags are indicated when their
+            corresponding bit is set to `1`.
         enable : bool
-            True to enable, False to disable
+            If true, enables the indicated flags. If false, disabled
+            them.
 
         Returns
         -------
         StatusCode
+            The return packet status code.
 
         Raises
         ------
         ValueError
-            If `flags` is larger than 32 bits.
+            If `flags` is larger than 32 bits (4 bytes) in size.
 
         """
         if flags > _MAX_U32:
@@ -777,12 +951,17 @@ class VendorSpecificCmds:
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_OP_FLAGS, params=params)
 
     def get_pdu_filter_stats(self) -> Tuple[PduPktStats, StatusCode]:
-        """Get PDU Filter Stats
+        """Get the accumulated PDU filter stats.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        retrieves the current accumulated PDU filter statistics.
 
         Returns
         -------
-        Dict[str, int]
-            Filter stats
+        PduPktStats
+            PDU filter statistics report returned by the DUT.
+        StatusCode
+            The return packet status code.
 
         """
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_PDU_FILT_STATS, return_evt=True)
@@ -799,10 +978,10 @@ class VendorSpecificCmds:
             pass_local_addr_match=data[7],
             fail_peer_rpa_verify=data[8],
             pass_peer_rpa_verify=data[9],
-            fail_peer_priv_addr=data[10],
-            pass_peer_priv_addr=data[11],
-            fail_local_priv_addr=data[12],
-            pass_local_priv_addr=data[13],
+            fail_local_rpa_verify=data[10],
+            pass_local_rpa_verify=data[11],
+            fail_peer_priv_addr=data[12],
+            fail_local_priv_addr=data[13],
             fail_peer_addr_res_req=data[14],
             pass_peer_addr_res_req=data[15],
             pass_local_addr_res_opt=data[16],
@@ -815,61 +994,76 @@ class VendorSpecificCmds:
     def set_encryption_mode(
         self, handle: int, enable: bool, nonce_mode: bool
     ) -> StatusCode:
-        """Set encryption mode
+        """Set the encryption mode of an existing connection.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        set the encryption mode of the indicated connection in
+        accordance with the values provided.
 
         Parameters
         ----------
         handle : int
-            handle to connection
+            Handle to the desired connection.
         enable : bool
-            True to enable, False to disable
+            Enable authentication?
         nonce_mode : bool
-            True for Noonce mode, False otherwise
+            Enable nonce mode?
 
         Returns
         -------
-        EventCode
+        StatusCode
+            The return packet status code.
 
         Raises
         ------
         ValueError
-            If `handle` is larger than 2 bytes.
+            If `handle` is larger than 2 bytes in size.
 
         """
         if _byte_length(handle) > 2:
             raise ValueError(f"Handle ({handle}) is too large, must be 2 bytes or less.")
 
-        params = to_le_nbyte_list(handle, 2)
-        params.append(int(enable))
+        params = [int(enable)]
         params.append(int(nonce_mode))
+        params.extend(to_le_nbyte_list(handle, 2))
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_ENC_MODE, params=params)
 
     def set_diagnostic_mode(self, enable: bool) -> StatusCode:
-        """Set diagnostic mode
+        """Enable/disable diagnostic mode.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        enable or disable the PAL system assert trap in accordance
+        with the provided value.
 
         Parameters
         ----------
         enable : bool
-            True to enable, False to disable
+            Enable diagnostic mode?
 
         Returns
         -------
-        EventCode
+        StatusCode
+            The return packet status code.
 
         """
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_DIAG_MODE, params=int(enable))
 
     def enable_sniffer_packet_forwarding(self, enable: bool) -> StatusCode:
-        """Enable packet sniffer forwarding
+        """Enable/disable sniffer packet forwarding.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        enable or disable sniffer packet forwarding in accordance
+        with the value provided.
 
         Parameters
         ----------
         enable : bool
-            True to enable, False to disable
+            Enable sniffer packet forwarding?
 
         Returns
         -------
-        EventCode
+        StatusCode
+            The return packet status code.
 
         """
         out_method = 0 # HCI through tokens, only available option
@@ -877,12 +1071,17 @@ class VendorSpecificCmds:
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_SNIFFER_ENABLE, params=params)
 
     def get_memory_stats(self) -> Tuple[MemPktStats, StatusCode]:
-        """Get memory use stats
+        """Get memory and system stats.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        retrieve the current memory and system statistics.
 
         Returns
         -------
-        Dict[str, int]
-            Memory use stats
+        MemPktStats
+            Memory and system statistics report retrieved by the DUT.
+        StatusCode
+            The return packet status code.
 
         """
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_SYS_STATS, return_evt=True)
@@ -916,12 +1115,17 @@ class VendorSpecificCmds:
         return stats, evt.status
 
     def get_adv_stats(self) -> Tuple[AdvPktStats, StatusCode]:
-        """Get advertising stats
+        """Get the accumulated advertising stats.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        retrieve the current accumulated advertising statistics.
 
         Returns
         -------
-        Dict[str, int]
-            Advertising stats
+        AdvPktStats
+            Advertising statistics report retrieved by the DUT.
+        StatusCode
+            The return packet status code.
 
         """
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_ADV_STATS, return_evt=True)
@@ -943,24 +1147,17 @@ class VendorSpecificCmds:
         return stats, evt.status
 
     def get_conn_stats(self) -> Tuple[DataPktStats, StatusCode]:
-        """Gets and parses connection stats.
+        """Get the stats captured during a connection.
 
-        Sends a command to the board, telling it to return
-        a connection statistics packet. Function then attempts
-        to parse the packet and calculate the current connection
-        PER%. Function will attempt this process for the given
-        number of retries.
-
-        Parameters
-        ----------
-        retries : int
-            Amount of times to attempt to collect and parse the
-            connection statistics.
+        Sends a vendor-specific command to the DUT, telling it to
+        retrieve the statistics captured during a connection.
 
         Returns
         -------
-        Dict[str, int]
-            The current connection statistics.
+        DataPktStats
+            Connection statistics report retrieved by the DUT.
+        StatusCode
+            The return packet status code.
 
         """
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_CONN_STATS, return_evt=True)
@@ -981,12 +1178,17 @@ class VendorSpecificCmds:
         return stats, evt.status
 
     def get_test_stats(self) -> Tuple[DataPktStats, StatusCode]:
-        """Get test stats
+        """Get the stats captured during test mode.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        retrieve the statistics captured during DTM.
 
         Returns
         -------
-        Dict[str, int]
-            Test stats
+        DataPktStats
+            Test mode statistics report retrieved by the DUT.
+        StatusCode
+            The return packet status code.
 
         """
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_TEST_STATS, return_evt=True)
@@ -1007,12 +1209,17 @@ class VendorSpecificCmds:
         return stats, evt.status
 
     def get_pool_stats(self) -> Tuple[List[PoolStats], StatusCode]:
-        """Get memory pool stats
+        """Get the memory pool stats captured during runtime.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        retrieve the memory pool statistics captured during runtime.
 
         Returns
         -------
-        Dict[str, int]
-            memory pool stats
+        List[PoolStats]
+            Memory pool statistics reports retrieved by the DUT.
+        StatusCode
+            The return packet status code.
 
         """
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_POOL_STATS, return_evt=True)
@@ -1039,23 +1246,28 @@ class VendorSpecificCmds:
         return stats, evt.status
 
     def set_additional_aux_ptr_offset(self, delay: int, handle: int) -> StatusCode:
-        """Set auxillary pointer delay
+        """Set auxiliary packet offset delay.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        set the auxiliary packet offset delay in accordance with
+        the given values.
 
         Parameters
         ----------
         delay : int
-            delay in microseconds. (0 to disable)
+            Desired delay. Set to 0 to disable.
         handle : int
-            handle to connection
+            Handle to the desired connection.
 
         Returns
         -------
-        EventCode
+        StatusCode
+            The return packet status code.
 
         Raises
         ------
         ValueError
-            If `delay` is larger than 4 bytes.
+            If `delay` is larger than 4 bytes in size.
 
         """
         if _byte_length(delay) > 4:
@@ -1068,18 +1280,23 @@ class VendorSpecificCmds:
     def set_ext_adv_data_fragmentation(
         self, handle: int, frag_length: int
     ) -> StatusCode:
-        """Set extended advertising fragmentation length
+        """Set the extended advertising fragmentation length.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        set the extended advertising fragmentation length in
+        accordance with the values provided.
 
         Parameters
         ----------
         handle : int
-            advertising handle
+            Desired advertising handle.
         frag_length : int
-            fragmentation length
+            Desired fragmentation length.
 
         Returns
         -------
-        EventCode
+        StatusCode
+            The return packet status code.
 
         """
         params = [handle, frag_length]
@@ -1088,71 +1305,83 @@ class VendorSpecificCmds:
     def set_extended_advertising_phy_opts(
         self, handle: int, primary: int, secondary: int
     ) -> StatusCode:
-        """Set phy options used for extended advertsing
+        """Set extended advertising PHY options.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        set the extended advertising PHY options in accordance with
+        the values provided.
 
         Parameters
         ----------
         handle : int
-            handle to connection
+            Desired advertising handle.
         primary : int
-            primary options
+            Desired primary advertising channel PHY options.
         secondary : int
-            secondary options
+            Desired secondary advertising channel PHY options.
 
         Returns
         -------
-        EventCode
+        StatusCode
+            The return packet status code.
 
         """
         params = [handle, primary, secondary]
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_EXT_ADV_DEF_PHY_OPTS, params=params)
 
     def set_extended_advertising_default_phy_opts(
-        self, handle: int, primary: int, secondary: int
+        self,
+        phy_opts: int
     ) -> StatusCode:
-        """Set default phy options used for extended advertsing
+        """Set the extended advertising default TX PHY options.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        set the default TX PHY options for the extended advertising
+        slave primary and secondary channels in accordance with the
+        value provided.
 
         Parameters
         ----------
-        handle : int
-            handle to connection
-        primary : int
-            primary options
-        secondary : int
-            secondary options
+        phy_opts : int
+            Desired PHY options.
 
         Returns
         -------
-        EventCode
+        StatusCode
+            The return packet status code.
 
         """
-        params = [handle, primary, secondary]
-        return self.send_vs_command(OCF.VENDOR_SPEC.SET_EXT_ADV_DEF_PHY_OPTS, params=params)
+        return self.send_vs_command(OCF.VENDOR_SPEC.SET_EXT_ADV_DEF_PHY_OPTS, params=phy_opts)
 
     def generate_iso_packets(
         self, handle: int, packet_len: int, num_packets: int
     ) -> StatusCode:
-        """Generate ISO packets
+        """Generate ISO packets.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        generate ISO packets on the indicated connection in accordance
+        with the parameters provided.
 
         Parameters
         ----------
         handle : int
-            handle to connection
-        packet_length : int
-            length of iso packet
+            Handle to the desired connection.
+        packet_len : int
+            Desired packet length.
         num_packets : int
-            number of iso packets per event
+            Number of ISO packets to send.
 
         Returns
         -------
-        EventCode
+        StatusCode
+            The return packet status code.
 
         Raises
         ------
         ValueError
-            If `handle` is larger than 2 bytes.
+            If `handle` is larger than 2 bytes in size.
         ValueError
-            If `packet_len` is larger than 2 bytes.
+            If `packet_len` is larger than 2 bytes in size.
 
         """
         if _byte_length(handle) > 2:
@@ -1167,12 +1396,17 @@ class VendorSpecificCmds:
         return self.send_vs_command(OCF.VENDOR_SPEC.GENERATE_ISO, params=params)
 
     def get_iso_test_report(self) -> Tuple[TestReport, StatusCode]:
-        """Get ISO test report
+        """Get the stats collected during an ISO test.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        retrieves the statistics collected during an ISO test.
 
         Returns
         -------
-        Dict[str, int]
-            ISO test report
+        TestReport
+            The ISO test statistics report retrieved by the DUT.
+        StatusCode
+            The return packet status code.
 
         """
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_ISO_TEST_REPORT, return_evt=True)
@@ -1188,37 +1422,47 @@ class VendorSpecificCmds:
         return stats, evt.status
 
     def enable_iso_packet_sink(self, enable: bool) -> StatusCode:
-        """Enable ISO packet sink
+        """Enable/disable ISO packet sink.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        enable or disable ISO packet sink in accordance with the
+        value provided.
 
         Parameters
         ----------
         enable : bool
-            True to enable, False to disable
+            Enable ISO packet sink?
 
         Returns
         -------
-        EventCode
+        StatusCode
+            The return packet status code.
 
         """
         return self.send_vs_command(OCF.VENDOR_SPEC.ENA_ISO_SINK, params=int(enable))
 
     def enable_autogen_iso_packets(self, packet_len: int) -> StatusCode:
-        """Enable autogeneration of of ISO packets
+        """Enable/disable automatic generation of ISO packets.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        enable or disable the automatic generation of ISO packets
+        in accordance with the values provided.
 
         Parameters
         ----------
-        packet_length : int
-            Length of packet (0 to disable)
+        packet_len : int
+            Desired ISO packet length. Set to 0 to disable automatic
+            generation.
 
         Returns
         -------
-        EventCode
-
+        StatusCode
+            The return packet status code.
 
         Raises
         ------
         ValueError
-            If `packet_len` is larger than 4 bytes.
+            If `packet_len` is larger than 32 bits (4 bytes) in size.
 
         """
         if packet_len > _MAX_U32:
@@ -1229,12 +1473,18 @@ class VendorSpecificCmds:
         return self.send_vs_command(OCF.VENDOR_SPEC.ENA_AUTO_GEN_ISO, params=params)
 
     def get_iso_connection_stats(self) -> Tuple[DataPktStats, StatusCode]:
-        """Get ISO connection stats
+        """Get the stats captured during an ISO connection.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        retrieve the statistics captured during an ISO connection.
 
         Returns
         -------
-        Dict[str, int]
-            ISO connection stats
+        DataPktStats
+            The ISO connection statistics report retrieved by the DUT.
+        StatusCode
+            The return packet status code.
+
         """
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_ISO_TEST_REPORT, return_evt=True)
         data = evt.get_return_params(param_lens=[4, 4, 4, 4, 4, 2, 2, 2, 2])
@@ -1254,12 +1504,19 @@ class VendorSpecificCmds:
         return stats, evt.status
 
     def get_aux_adv_stats(self) -> Tuple[AdvPktStats, StatusCode]:
-        """Get auxillary advertising stats
+        """Get the accumulated auxiliary advertising stats.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        retrieve the current accumulated auxiliary advertising
+        statistics.
 
         Returns
         -------
-        Dict[str, int]
-            AUX adv stats
+        AdvPktStats
+            The auxiliary advertising statistics report retrieved
+            by the DUT.
+        StatusCode
+            The return packet status code.
 
         """
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_AUX_ADV_STATS, return_evt=True)
@@ -1282,12 +1539,17 @@ class VendorSpecificCmds:
         return stats, evt.status
 
     def get_aux_scan_stats(self) -> Tuple[ScanPktStats, StatusCode]:
-        """Get auxillary scanning stats
+        """Get the accumulated auxiliary scan stats.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        retrieve the current accumulated auxiliary scan statistics.
 
         Returns
         -------
-        Dict[str, int]
-            Aux scan stats
+        ScanPktStats
+            The auxiliary scan statistics report retrieved by the DUT.
+        StatusCode
+            The return packet status code.
 
         """
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_AUX_SCAN_STATS, return_evt=True)
@@ -1315,12 +1577,17 @@ class VendorSpecificCmds:
         return stats, evt.status
 
     def get_periodic_scanning_stats(self) -> Tuple[ScanPktStats, StatusCode]:
-        """Get periodic scanning stats
+        """Get the accumulated periodic scanning stats.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        retrieve the current accumulated periodic scanning statistics.
 
         Returns
         -------
-        Dict[str, int]
-            Periodic scanning stats
+        ScanPktStats
+            The periodic scanning statistics report retrieved by the DUT.
+        StatusCode
+            The return packet status code.
 
         """
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_PER_SCAN_STATS, return_evt=True)
@@ -1344,25 +1611,30 @@ class VendorSpecificCmds:
     def set_connection_phy_tx_power(
         self, handle: int, power: int, phy: PhyOption
     ) -> StatusCode:
-        """Set TX Power for connection on given PHY
+        """Set the connection TX power level for a specific PHY.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        set the connection TX power level for the indicated connection
+        and PHY in accordance with the value provided.
 
         Parameters
         ----------
         handle : int
-            handle to connection
+            Handle to the desired connection.
         power : int
-            _description_
+            Desired TX power.
         phy : PhyOption
-            PHY to apply power to
+            PHY on which the TX power should be set.
 
         Returns
         -------
-            EventCode
+        StatusCode
+            The return packet status code.
 
         Raises
         ------
         ValueError
-            If `handle` is larger than 2 bytes.
+            If `handle` is larger than 2 bytes in size.
 
         """
         if _byte_length(handle) > 2:
@@ -1376,10 +1648,32 @@ class VendorSpecificCmds:
         params.append(phy.value)
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_CONN_PHY_TX_PWR, params=params)
 
-    def get_rssi_vs(self, channel: int = 0):
-        """DOCSTRING"""
-        if channel > 39:
-            raise ValueError("Channel must be between 0-39")
+    def get_rssi_vs(self, channel: int = 0) -> Tuple[int, StatusCode]:
+        """Get the RSSI values.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        retrieve the RSSI value for the indicated channel.
+
+        Parameters
+        ----------
+        channel : int, optional
+            Channel for which value should be retrieved.
+
+        Returns
+        -------
+        int
+            RSSI value for the indicated channel.
+        StatusCode
+            The return packet status code.
+            
+
+        Raises
+        ------
+        ValueError
+            If channel is greater than 39 or less than 0.
+        """
+        if not 0 <= channel < 40:
+            raise ValueError(f"Channel out of bandwidth ({channel}), must be in range [0, 40).")
 
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_RSSI, params=channel, return_evt=True)
         rssi = evt.get_return_params(signed=True)

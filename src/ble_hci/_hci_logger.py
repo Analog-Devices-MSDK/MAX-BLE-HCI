@@ -1,5 +1,8 @@
-################################################################################
-# Copyright (C) 2020 Maxim Integrated Products, Inc., All Rights Reserved.
+#! /usr/bin/env python3
+###############################################################################
+#
+#
+# Copyright (C) 2023 Maxim Integrated Products, Inc., All Rights Reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -29,7 +32,23 @@
 # property whatsoever. Maxim Integrated Products, Inc. retains all
 # ownership rights.
 #
-###############################################################################
+##############################################################################
+#
+# Copyright 2023 Analog Devices, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+##############################################################################
 """Module for HCI logger handling.
 
 Module defines a logger for test host-controller interfaces.
@@ -115,16 +134,17 @@ class _CustomFormatter(logging.Formatter):
 
 
 def get_formatted_logger(log_level=logging.INFO, name="BLE-HCI") -> logging.Logger:
-    """Gets logger with basic custom format
+    """Retrieves logger with basic custom format.
 
     The custom formatted logger applies basic coloring
-    for logging of different levels
+    for logging of different levels.
 
 
     Parameters
     ----------
     log_level : int
-        Any defined logging level such as logging.INFO
+        Any defined logging level such as logging.INFO.
+
     """
     logger = logging.getLogger(name)
 

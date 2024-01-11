@@ -49,14 +49,7 @@
 # limitations under the License.
 #
 ##############################################################################
-"""Module contains a host-controller interface for ADI BLE-compatible chips.
-
-Module defines a host-controller interface for BLE operation on any Analog
-Devices BLE compatible microchip. The HCI class provides basic testing
-functionality, and is designed to be used with the `BLE5_ctrl` example
-housed in the Analog Devices MSDK.
-
-"""
+"""Contains full HCI implementation."""
 # pylint: disable=too-many-arguments
 import logging
 
@@ -72,46 +65,65 @@ from ._utils import SerialUartTransport
 from .hci_packets import (
     AsyncPacket,
     CommandPacket,
-    EventPacket,
+    EventPacket
 )
 from .packet_codes import StatusCode
 from .packet_defs import ADI_PORT_BAUD_RATE
 
 class BleHci(BleStandardCmds, VendorSpecificCmds):
-    """Host-controller interface for ADI BLE-compatible microchips.
+    """Host-controller interface.
 
     The BleHci object defines a host-controller interface for
-    BLE operations on any Analog Devices BLE-compatible microchip.
-    Controller provides implementations for both connection mode
-    and DTM testing. It is designed to be used in conjunction with
-    the embedded firmware found in the `BLE5_ctr` example in the
-    Analog Devices MSDK.
+    BLE testing on any BLE-compatible microchip. Controller provides
+    implementations for both BLE standard HCI command and ADI vendor
+    specific commands. Support is also provided for the creation and
+    use of custom vendor-specific commands.
 
     Parameters
     ----------
     port_id : str
-        Serial port ID string.
+        ID string for the port on which a connection should be
+        established.
+    baud : int
+        Port baud rate.
     id_tag : str
-        String identification for class instance.
-    log_level : str
-        HCI logging level.
+        Connection ID string to use when logging.
+    log_level : Union[str, int]
+        Logging level.
+    logger_name : str
+        Name that should be used to reference HCI logger.
+    retries : int
+        Number of times a port read should be retried before
+        and error is thrown.
+    timeout : float
+        Port timeout.
+    async_callback : Callable[[AsyncPacket], Any], optional
+        Function pointer defining the process that should be taken
+        when an async packet is received. If not defined, the async
+        packet will be thrown out.
+    evt_callback : Callable[[EventPacket], Any], optional
+        Function pointer defining the process that should be taken
+        when an unexpected event packet is received. If not defined,
+        the event packet will be thrown out.
 
     Attributes
     ----------
-        port : serial.Serial
-            Test board serial port connection.
-        id_tag : str
-            Identification for class instance.
-        opcodes : Dict[str, int]
-            Command name to opcode map.
+    port_id : str
+        Id string for the port on which a connection has been
+        established
+    port : SerialUartTransport
+        Serial port interfacing object connected to the DUT.
+    id_tag : str
+        Connection ID string used by the logger.
+    logger : logging.Logger
+        HCI logging object reference by the `logger_name` argument.
+    retries : int
+        Number of times a port read should be retried before an error
+        is thrown.
+    timeout : float
+        Port timeout.
 
     """
-
-    PHY_1M = 1
-    PHY_2M = 2
-    PHY_S8 = 3
-    PHY_S2 = 4
-
     def __init__(
         self,
         port_id: str,
@@ -123,10 +135,9 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         timeout: float = 1.0,
         async_callback: Optional[Callable[[AsyncPacket], Any]] = None,
         evt_callback: Optional[Callable[[EventPacket], Any]] = None
-    ) -> None:
+    ):
         self.port_id = port_id
         self.port = None
-        self.mon_port = None
         self.id_tag = id_tag
         self.logger = get_formatted_logger(log_level=log_level, name=logger_name)
         self.retries = retries
@@ -136,7 +147,17 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         super().__init__(self.port, logger_name)
 
     def get_log_level(self) -> str:
-        """DOCSTRING"""
+        """Retrieve the current log level.
+
+        Retrieved the current logging level in string
+        format.
+
+        Returns
+        -------
+        str
+            The current logging level.
+
+        """
         level = self.logger.level
         if level == logging.DEBUG:
             return "DEBUG"
@@ -189,39 +210,42 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
     def start_advertising(
         self,
         connect: bool = True,
+        adv_params: Optional[AdvParams] = None
     ) -> StatusCode:
-        """Command board to start advertising.
+        """Start advertising.
 
-        Sends a command to the board, telling it to start advertising
-        with the given interval. Advertising type can be either
-        scannable/connectable or non-connectable in accordance with
-        the `connect` argument. HCI can be directed to listen for
-        events for either a finite number or seconds or indefinitely
-        in accordance with the `listen` argument. Indefinite listening
-        can only be ended with `CTRL-C`. A test end function must be
-        called to end this process on the board.
+        Convenience function which sends a sequence of commands to
+        the DUT, telling it to begin advertising. PHYs preferences
+        cannot be set when using this function, but advertising
+        parameters can be using the optional `adv_params` parameter.
+        If a value is provided for `adv_params`, the value of the
+        `connect` parameter is ignored. If no value is provided, all
+        advertising parameters are defaulted and `connect` is used
+        to determine the advertising type.
 
         Parameters
         ----------
-        interval : int
-            The advertising interval.
-        connect : bool
-            Use scannable/connectable advertising type?
-        listen : Union[bool, int]
-            Listen (indefinitely or finite) for incoming events?
+        connect : bool, optional
+            Make connectable? If true, advertising type is set to
+            `0x0 (ADV_IND)`. If false, advertising type is set to
+            `0x3 (ADV_NONCONN_IND)`. Ignored if `adv_params` is
+            not None.
+        adv_params : AdvParams, optional.
+            Advertising parameters.
 
         Returns
         -------
-        EventPacket
-            Object containing board return data.
+        StatusCode
+            The return status of the enable advertising command.
 
         """
 
         self.reset_connection_stats()
         self.set_default_phy(all_phys=0, tx_phys=7, rx_phys=7)
 
-        adv_type = 0 if connect else 3
-        adv_params = AdvParams(adv_type=adv_type)
+        if adv_params is None:
+            adv_type = 0 if connect else 3
+            adv_params = AdvParams(adv_type=adv_type)
         self.set_adv_params(adv_params)
 
         status = self.enable_adv(True)
@@ -230,74 +254,86 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
 
     def init_connection(
         self,
-        addr: int,
+        addr: Optional[int] = None,
         interval: int = 0x6,
         sup_timeout: int = 0x64,
+        conn_params: Optional[ConnParams] = None
     ) -> StatusCode:
-        """Command board to initialize a connection.
+        """Initialize a connection.
 
-        Sends a sequence of commands to the board, telling it to
-        initialize a connection in accordance with the given address,
-        interval, and timeout. The `address` argument must be a
-        string representing six bytes of hex values, with each byte
-        seperated by a ':'. HCI can be directed to listen for events
-        for either a finite number or seconds or indefinitely in
-        accordance with the `listen` argument. Indefinite listening
-        can only be ended with `CTRL-C`. The `disconnect()` function
-        must be called to end the connection if it is successfully made.
+        Convenience function which sends a sequence of commands to
+        the DUT, telling it to initialize a connection. PHYs preferences
+        cannot be set when using this function, but connection parameters
+        can be using the optional `conn_params` parameter. If a value is
+        provided for `conn_params`, the values of the `addr`, `interval`,
+        and `sup_timeout` parameters are ignored. If no value is provided,
+        all connection parameters except min/max interval and supervision
+        timeout are defaulted. In addition, a value for `addr` must be
+        provided.
 
         Parameters
         ----------
-        addr : str
-            BD address to use for connection initialization. String
-            containing six bytes of hex data, with each byte separated
-            by a ':'.
-        interval : int
-            Connection interval.
-        timeout : int
-            Connection initialization timeout.
-        listen : Union[bool, int]
-            Listen (finite or indefinite) for further events?
+        addr : int
+            Peer device BD address.
+        interval : int, optional
+            Connection inverval.
+        sup_timeout : int, optional
+            Supervision timeout.
 
         Returns
         -------
-        EventPacket
-            Object containing board return data.
+        StatusCode
+            The return status of the create connection command.
+
+        Raises
+        ------
+        ValueError
+            If both `addr` and `conn_params` are None.
+        ValueError
+            If `addr` is more than 6 bytes in size.
 
         """
+        if conn_params is None:
+            if addr is None:
+                raise ValueError("Either connection parameters or address must be provided.")
 
-        if addr > 2**48 - 1:
-            raise ValueError("Addr must be able to be represented in 6 Bytes")
+            if max((addr.bit_length() + 7) // 8, 1) > 6:
+                raise ValueError(f"Address ({addr}) is too large, must be 6 bytes or less.")
+
+            conn_params = ConnParams(
+                addr,
+                conn_interval_max=interval,
+                conn_interval_min=interval,
+                sup_timeout=sup_timeout,
+            )
 
         self.reset_connection_stats()
-        self.set_default_phy()
+        self.set_default_phy(all_phys=0, tx_phys=7, rx_phys=7)
 
-        conn_params = ConnParams(
-            addr,
-            conn_interval_max=interval,
-            conn_interval_min=interval,
-            sup_timeout=sup_timeout,
-        )
         status = self.create_connection(conn_params)
 
         return status
 
     def read_event(self, timeout: Optional[float] = None) -> EventPacket:
-        """Read sync event from controller
+        """Read an event from controller.
 
         Parameters
         ----------
         timeout : Optional[float], optional
-            time before aborting operation, by default None
+            Timeout for read operation. Can be used to
+            temporarily override this object's `timeout`
+            attribute.
 
         Returns
         -------
         EventPacket
+            Packet retrieved from the controller.
 
         Raises
         ------
         TimeoutError
-            If time has passed without response
+            If a timeout occurs and there are no retries remaining.
+
         """
         timeout_err = None
         tries = self.retries
@@ -321,32 +357,22 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         command: CommandPacket,
         timeout: Optional[float] = None,
     ) -> EventPacket:
-        """Send a custom command to the board.
-
-        Sends a custom HCI command to the board. Safeguarding is
-        not implemented, and therefore it is best to ensure desired
-        command is supported prior to sending, and no error will
-        be thrown for unsupported commands. The `command` argument will
-        accept either a string or an integer value, however, string values
-        must be in hex format, and integers must have originated from hex
-        numbers. HCI can be directed to listen for events for either a finite
-        number or seconds or indefinitely in accordance with the `listen`
-        argument. Indefinite listening can only be ended with `CTRL-C`.
+        """Send a command and retrieve the return packet.
 
         Parameters
         ----------
         command : Union[str, int]
-            The command to give the board. Can be a string or an integer.
-            String input must be formatted as hex values.
-        listen : Union[bool, int]
-            Listen (finite or indefinite) for further events?
+            Command to send. Must be an instance of the
+            `CommandPacket` class.
         timeout : int
-            Command timeout. Set to None for indefinite.
+            Timeout for read portion of the read/write.
+            Can be used to temporarily override this object's
+            `timeout` attribute.
 
         Returns
         -------
-        Event
-            Object containing board return data.
+        EventPacket
+            The command return packet.
 
         """
         if not timeout:
@@ -362,7 +388,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         the test board.
 
         """
-        self.port.exit()
+        self.port.close()
 
     def _init_ports(
         self,
