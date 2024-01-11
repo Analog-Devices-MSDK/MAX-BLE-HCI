@@ -53,9 +53,6 @@
 from dataclasses import dataclass
 from enum import Enum
 
-ADI_PORT_BAUD_RATE = 115200
-
-
 class PacketType(Enum):
     """BT standard packet types."""
 
@@ -78,7 +75,6 @@ class PacketType(Enum):
 
     EXTENDED = 0x9
     """Extended command packet type."""
-
 
 class OGF(Enum):
     """BLE-defined Opcode Group Field values."""
@@ -109,7 +105,6 @@ class OGF(Enum):
 
     VENDOR_SPEC = 0x3F
     """Vendor specific group field."""
-
 
 class NOpOCF(Enum):
     """BLE-defined NOP group Opcode Command Field values."""
@@ -719,16 +714,6 @@ class VendorSpecificOCF(Enum):
 
     PHY_DIS = 0x308
     """PHY disable command."""
-
-class PubKeyValidateMode(Enum):
-    """Public key validation modes."""
-
-    ALT1 = 0x0
-    """ALT1 validation mode."""
-
-    ALT2 = 0x1
-    """ALT2 validation mode."""
-
 
 @dataclass
 class OCF:

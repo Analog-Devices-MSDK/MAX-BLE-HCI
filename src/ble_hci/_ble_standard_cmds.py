@@ -57,12 +57,11 @@ from typing import Optional, Tuple, Union, List
 
 from ._hci_logger import get_formatted_logger
 from ._transport import SerialUartTransport, to_le_nbyte_list
-from .constants import PhyOption, Payload
+from .constants import PhyOption, PayloadOption
 from .data_params import AdvParams, ConnParams, ScanParams
 from .hci_packets import CommandPacket, EventPacket
 from .packet_codes import StatusCode
 from .packet_defs import OCF, OGF
-
 
 class BleStandardCmds:
     """Definitions for BLE standard HCI commands.
@@ -433,7 +432,7 @@ class BleStandardCmds:
         self,
         channel: int = 0,
         phy: PhyOption = PhyOption.PHY_1M,
-        payload: Payload = Payload.PLD_PRBS9,
+        payload: PayloadOption = PayloadOption.PLD_PRBS9,
         packet_len: int = 0
     ) -> StatusCode:
         """Start a transmitter test.

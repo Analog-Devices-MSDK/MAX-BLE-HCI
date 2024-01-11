@@ -51,9 +51,8 @@
 ##############################################################################
 """Contains data classes used for HCI function parameters/returns."""
 # pylint: disable=too-many-arguments,too-many-locals,too-many-instance-attributes
-from dataclasses import dataclass
-from enum import Enum
 from typing import Optional
+from dataclasses import dataclass
 
 
 @dataclass
@@ -120,40 +119,6 @@ class ScanParams:
             print_lns.append(f"{key}:  {val}")
 
         return '\n'.join(print_lns)
-
-class AddrType(Enum):
-    """BLE-defined peer address types."""
-    PUBLIC = 0
-    """Public device address."""
-
-    RANDOM = 1
-    """Random device address."""
-
-    PUBLIC_IDENTITY = 2
-    """
-    Resolvable Private address based on local IRK from
-    resolving list, or public address if no match is found.
-    
-    .. note::
-        For advertising, this value is valid for own device
-        address type only. For connection, this value is valid
-        for both own device address type and connectable peer
-        device address type.
-
-    """
-
-    RANDOM_IDENTITY = 3
-    """
-    Resolvable Private address based on local IRK from
-    resolving list, or random address is no match is found.
-
-    .. note::
-        For advertising, this value is valid for own device
-        address type only. For connection, this value is valid
-        for both own device address type and connectable peer
-        device address type.
-
-    """
 
 @dataclass
 class ConnParams:
@@ -301,7 +266,6 @@ class DataPktStats:
             return 100 - 100 * (self.rx_data / peer_tx_data)
         return self.rx_data / (self.rx_data + self.rx_data_crc + self.rx_data_timeout)
 
-
 @dataclass
 class AdvPktStats:
     """Advertising statistics data container."""
@@ -354,7 +318,6 @@ class AdvPktStats:
             print_lns.append(f"{key}:  {val}")
 
         return '\n'.join(print_lns)
-
 
 @dataclass
 class ScanPktStats:
@@ -432,7 +395,6 @@ class ScanPktStats:
 
         return '\n'.join(print_lns)
 
-
 @dataclass
 class MemPktStats:
     """Memory statistics data container."""
@@ -509,7 +471,6 @@ class MemPktStats:
 
         return '\n'.join(print_lns)
 
-
 @dataclass
 class PduPktStats:
     """PDU statistics data container."""
@@ -580,7 +541,6 @@ class PduPktStats:
 
         return '\n'.join(print_lns)
 
-
 @dataclass
 class TestReport:
     """ISO/ACL test report data container."""
@@ -605,7 +565,6 @@ class TestReport:
             print_lns.append(f"{key}:  {val}")
 
         return '\n'.join(print_lns)
-
 
 @dataclass
 class PoolStats:

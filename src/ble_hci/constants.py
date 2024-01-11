@@ -49,40 +49,111 @@
 # limitations under the License.
 #
 ##############################################################################
-"""
-constants.py
-
-Description: Constants used in BLE HCI
-
-"""
-
+"""Contains HCI constants definitions."""
 from enum import Enum
 
+ADI_PORT_BAUD_RATE = 115200
 
-class Payload(Enum):
-    """DTM Payload options"""
+MAX_U16 = 2**16 - 1
+"""Maximum value for a 16-bit unsigned integer."""
+MAX_U32 = 2**32 - 1
+"""Maximum value for a 32-bit unsigned integer."""
+MAX_U64 = 2**64 - 1
+"""Maximum value for a 64-bit unsigned integer."""
 
-    PRBS9 = 0
-    DF1 = 1
-    DF2 = 2
-    PRBS15 = 3
-    ALL_1S = 4
-    ALL_0S = 5
-    HALF_OFF_HALF_ON = 6
-    INV_DF1 = 7
+class Endian(Enum):
+    """Endian byte-order definitions."""
 
+    LITTLE = "little"
+    """Little endian byte order."""
 
-# ADI_PAYLOAD_PRBS9 (0), ADI_PAYLOAD_11110000 (1),
-# ADI_PAYLOAD_10101010 (2), ADI_PAYLOAD_PRBS15 (3),
-# ADI_PAYLOAD_11111111 (4) ADI_PAYLOAD_00000000 (5),
-# ADI_PAYLOAD_00001111 (6) and ADI_PAYLOAD_01010101 (7)
-
+    BIG = "big"
+    """Big endian byte order."""
 
 class PhyOption(Enum):
-    """Available modulation rates"""
+    """BLE-defined PHY options."""
 
     PHY_1M = 0x1
+    """1M PHY option."""
+
     PHY_2M = 0x2
+    """2M PHY option."""
+
     PHY_CODED = 0x3
+    """Generic coded PHY option."""
+
     PHY_CODED_S8 = 0x3
+    """Coded S8 PHY option."""
+
     PHY_CODED_S2 = 0x4
+    """Coded S2 PHY option."""
+
+class PayloadOption(Enum):
+    """BLE-definded payload options."""
+
+    PLD_PRBS9 = 0
+    """PRBS9 payload option."""
+
+    PLD_11110000 = 1
+    """11110000 payload option."""
+
+    PLD_10101010 = 2
+    """10101010 payload option."""
+
+    PLD_PRBS15 = 3
+    """PRBS15 payload option."""
+
+    PLD_11111111 = 4
+    """11111111 payload option."""
+
+    PLD_00000000 = 5
+    """00000000 payload option."""
+
+    PLD_00001111 = 6
+    """00001111 payload option."""
+
+    PLD_01010101 = 7
+    """01010101 payload option."""
+
+class AddrType(Enum):
+    """BLE-defined peer address types."""
+    PUBLIC = 0
+    """Public device address."""
+
+    RANDOM = 1
+    """Random device address."""
+
+    PUBLIC_IDENTITY = 2
+    """
+    Resolvable Private address based on local IRK from
+    resolving list, or public address if no match is found.
+    
+    .. note::
+        For advertising, this value is valid for own device
+        address type only. For connection, this value is valid
+        for both own device address type and connectable peer
+        device address type.
+
+    """
+
+    RANDOM_IDENTITY = 3
+    """
+    Resolvable Private address based on local IRK from
+    resolving list, or random address is no match is found.
+
+    .. note::
+        For advertising, this value is valid for own device
+        address type only. For connection, this value is valid
+        for both own device address type and connectable peer
+        device address type.
+
+    """
+
+class PubKeyValidateMode(Enum):
+    """Public key validation modes."""
+
+    ALT1 = 0x0
+    """ALT1 validation mode."""
+
+    ALT2 = 0x1
+    """ALT2 validation mode."""

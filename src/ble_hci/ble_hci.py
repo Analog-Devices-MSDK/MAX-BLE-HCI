@@ -61,8 +61,7 @@ from ._vendor_spec_cmds import VendorSpecificCmds
 from .data_params import AdvParams, ConnParams
 from .hci_packets import AsyncPacket, CommandPacket, EventPacket
 from .packet_codes import StatusCode
-from .packet_defs import ADI_PORT_BAUD_RATE
-
+from .constants import ADI_PORT_BAUD_RATE
 
 class BleHci(BleStandardCmds, VendorSpecificCmds):
     """Host-controller interface.

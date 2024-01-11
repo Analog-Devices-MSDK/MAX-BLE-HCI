@@ -57,26 +57,16 @@ from typing import List, Optional, Union
 
 from .packet_codes import EventCode, EventSubcode, StatusCode
 from .packet_defs import OCF, OGF, PacketType
+from .constants import Endian
 
 
-def _byte_length(num: int):
+def byte_length(num: int):
     """Calculate the length of an integer in bytes.
     
     PRIVATE
     
     """
     return max((num.bit_length() + 7) // 8, 1)
-
-
-class Endian(Enum):
-    """Endian byte-order definitions."""
-
-    LITTLE = "little"
-    """Little endian byte order."""
-
-    BIG = "big"
-    """Big endian byte order."""
-
 
 class CommandPacket:
     """Serializer for HCI command packets.
@@ -150,9 +140,9 @@ class CommandPacket:
         if params is None:
             return 0
         if isinstance(params, int):
-            return _byte_length(params)
+            return byte_length(params)
 
-        return sum(_byte_length(x) for x in params)
+        return sum(byte_length(x) for x in params)
 
     @staticmethod
     def make_hci_opcode(ogf: Union[OGF, int], ocf: Union[OCF, int]) -> int:
@@ -218,7 +208,7 @@ class CommandPacket:
 
         if self.params is not None:
             for param in self.params:
-                num_bytes = _byte_length(param)
+                num_bytes = byte_length(param)
                 try:
                     serialized_cmd.extend(param.to_bytes(num_bytes, endianness.value))
                 except OverflowError:
@@ -299,9 +289,9 @@ class ExtendedPacket:
         if pld is None:
             return 0
         if isinstance(pld, int):
-            return _byte_length(pld)
+            return byte_length(pld)
 
-        return sum(_byte_length(x) for x in pld)
+        return sum(byte_length(x) for x in pld)
 
     @staticmethod
     def make_hci_opcode(ogf: Union[OGF, int], ocf: Union[OCF, int]) -> int:
@@ -368,7 +358,7 @@ class ExtendedPacket:
 
         if self.payload is not None:
             for param in self.payload:
-                num_bytes = _byte_length(param)
+                num_bytes = byte_length(param)
                 try:
                     serialized_cmd.extend(param.to_bytes(num_bytes, endianness.value))
                 except OverflowError:

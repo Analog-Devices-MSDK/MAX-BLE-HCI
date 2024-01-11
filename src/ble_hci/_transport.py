@@ -54,12 +54,10 @@ Contains serial port functionality for the HCI implementation.
 """
 #pylint: disable=too-many-instance-attributes, too-many-arguments
 from typing import Optional, List, Callable, Any
-from enum import Enum
 from multiprocessing import Process
 from threading import Event, Lock, Thread
 import sys
 import datetime
-import sys
 import time
 import weakref
 
@@ -68,7 +66,8 @@ import serial
 from ._hci_logger import get_formatted_logger
 from .hci_packets import AsyncPacket, CommandPacket, EventPacket
 from .packet_codes import EventCode
-from .packet_defs import ADI_PORT_BAUD_RATE, PacketType
+from .packet_defs import PacketType
+from .constants import ADI_PORT_BAUD_RATE
 
 def to_le_nbyte_list(value: int, n_bytes: int) -> List[int]:
     """Create a list of little-endian bytes.
@@ -97,7 +96,6 @@ def to_le_nbyte_list(value: int, n_bytes: int) -> List[int]:
         little_endian.append(num_masked)
     return little_endian
 
-
 def le_list_to_int(nums: List[int]) -> int:
     """Create an integer from a little-endian list.
 
@@ -120,13 +118,6 @@ def le_list_to_int(nums: List[int]) -> int:
     for i, num in enumerate(nums):
         full_num |= num << 8 * i
     return full_num
-
-_MAX_U16 = 2**16 - 1
-"""Maximum value for a 16-bit unsigned integer."""
-_MAX_U32 = 2**32 - 1
-"""Maximum value for a 32-bit unsigned integer."""
-_MAX_U64 = 2**64 - 1
-"""Maximum value for a 64-bit unsigned integer."""
 
 class SerialUartTransport:
     """HCI UART serial port transportation object.

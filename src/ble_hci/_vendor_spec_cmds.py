@@ -56,8 +56,8 @@ Module contains definitions for ADI vendor-specific HCI commands.
 from typing import Optional, Tuple, Union, Dict, List
 
 from ._hci_logger import get_formatted_logger
-from ._transport import _MAX_U32, _MAX_U64, SerialUartTransport, to_le_nbyte_list
-from .constants import PhyOption, Payload
+from ._transport import SerialUartTransport, to_le_nbyte_list
+from .constants import PhyOption, PayloadOption, PubKeyValidateMode, MAX_U32, MAX_U64
 from .data_params import (
     AdvPktStats,
     DataPktStats,
@@ -67,10 +67,9 @@ from .data_params import (
     ScanPktStats,
     TestReport,
 )
-from .hci_packets import CommandPacket, EventPacket, _byte_length
+from .hci_packets import CommandPacket, EventPacket, byte_length
 from .packet_codes import StatusCode
-from .packet_defs import OCF, OGF, PubKeyValidateMode
-
+from .packet_defs import OCF, OGF
 
 class VendorSpecificCmds:
     """Definitions for ADI vendor-specific HCI commands.
@@ -218,7 +217,7 @@ class VendorSpecificCmds:
             If `num_packets` is greater than 255.
 
         """
-        if _byte_length(handle) > 2:
+        if byte_length(handle) > 2:
             raise ValueError(f"Handle ({handle}) is too large, must be 2 bytes or less.")
         if num_packets > 0xFFFF:
             raise ValueError(f"Num packets too large ({num_packets}), must be 65535 or less.")
@@ -254,7 +253,7 @@ class VendorSpecificCmds:
         self,
         channel: int = 0,
         phy: PhyOption = PhyOption.PHY_1M,
-        payload: Payload = Payload.PRBS15,
+        payload: PayloadOption = PayloadOption.PLD_PRBS15,
         packet_len: int = 0,
         num_packets: int = 0,
     ) -> StatusCode:
@@ -421,7 +420,7 @@ class VendorSpecificCmds:
             If `tx_power` is greater than 127 or less than -127.
 
         """
-        if _byte_length(handle) > 2:
+        if byte_length(handle) > 2:
             raise ValueError(f"Handle ({handle}) is too large, must be 2 bytes or less.")
         if not -127 < tx_power < 127:
             raise ValueError(f"TX power ({tx_power}) out of range, must be in range [-127, 127].")
@@ -461,7 +460,7 @@ class VendorSpecificCmds:
             If `handle` is more than 2 bytes in size.
 
         """
-        if _byte_length(handle) > 2:
+        if byte_length(handle) > 2:
             raise ValueError(f"Handle ({handle}) is too large, must be 2 bytes or less.")
 
         if channels:
@@ -603,7 +602,7 @@ class VendorSpecificCmds:
 
         """
 
-        if pattern > _MAX_U32:
+        if pattern > MAX_U32:
             raise ValueError(f"Pattern ({pattern}) too large, must be 32 bits or less.")
 
         params = to_le_nbyte_list(pattern, 4)
@@ -643,9 +642,9 @@ class VendorSpecificCmds:
             If `flags` is larger than 4 bytes in size.
 
         """
-        if _byte_length(handle) > 2:
+        if byte_length(handle) > 2:
             raise ValueError(f"Handle ({handle}) is too large, must be 2 bytes or less.")
-        if _byte_length(flags) > 4:
+        if byte_length(flags) > 4:
             raise ValueError(f"Flags ({flags}) is too large, must be 4 bytes or less.")
 
         params = to_le_nbyte_list(handle, 2)
@@ -678,7 +677,7 @@ class VendorSpecificCmds:
             If `priv_key` is larger than 32 bytes in size.
 
         """
-        if _byte_length(priv_key) > 32:
+        if byte_length(priv_key) > 32:
             raise ValueError(f"Private key ({priv_key}) too large, must be 32 bytes or less.")
 
         params = to_le_nbyte_list(priv_key, 32)
@@ -713,7 +712,7 @@ class VendorSpecificCmds:
             If `handle` is larger than 2 bytes in size.
 
         """
-        if _byte_length(handle) > 2:
+        if byte_length(handle) > 2:
             raise ValueError(f"Handle ({handle}) is too large, must be 2 bytes or less.")
 
         params = to_le_nbyte_list(handle, 2)
@@ -818,7 +817,7 @@ class VendorSpecificCmds:
             If `handle` is larger than 2 bytes in size.
 
         """
-        if _byte_length(handle) > 2:
+        if byte_length(handle) > 2:
             raise ValueError(f"Handle ({handle}) is too large, must be 2 bytes or less.")
 
         params = to_le_nbyte_list(handle, 2)
@@ -896,7 +895,7 @@ class VendorSpecificCmds:
             If `features` is larger than 64 bits (8 bytes) in size.
 
         """
-        if features > _MAX_U64:
+        if features > MAX_U64:
             raise ValueError(f"Feature mask ({features}) is too large, must be 64 bits or less.")
 
         params = to_le_nbyte_list(features, 8)
@@ -930,7 +929,7 @@ class VendorSpecificCmds:
             If `flags` is larger than 32 bits (4 bytes) in size.
 
         """
-        if flags > _MAX_U32:
+        if flags > MAX_U32:
             raise ValueError(f"Flags ({flags}) is too large, must be 32 bits or less.")
 
         params = to_le_nbyte_list(flags, 4)
@@ -1007,7 +1006,7 @@ class VendorSpecificCmds:
             If `handle` is larger than 2 bytes in size.
 
         """
-        if _byte_length(handle) > 2:
+        if byte_length(handle) > 2:
             raise ValueError(f"Handle ({handle}) is too large, must be 2 bytes or less.")
 
         params = [int(enable)]
@@ -1258,7 +1257,7 @@ class VendorSpecificCmds:
             If `delay` is larger than 4 bytes in size.
 
         """
-        if _byte_length(delay) > 4:
+        if byte_length(delay) > 4:
             raise ValueError(f"Delay ({delay}) is too large, must be 4 bytes or less.")
 
         params = to_le_nbyte_list(delay, 4)
@@ -1372,9 +1371,9 @@ class VendorSpecificCmds:
             If `packet_len` is larger than 2 bytes in size.
 
         """
-        if _byte_length(handle) > 2:
+        if byte_length(handle) > 2:
             raise ValueError(f"Handle ({handle}) is too large, must be 2 bytes or less.")
-        if _byte_length(packet_len) > 2:
+        if byte_length(packet_len) > 2:
             raise ValueError(
                 f"Packet length ({packet_len}) is too large, must be 2 bytes or less.")
 
@@ -1453,7 +1452,7 @@ class VendorSpecificCmds:
             If `packet_len` is larger than 32 bits (4 bytes) in size.
 
         """
-        if packet_len > _MAX_U32:
+        if packet_len > MAX_U32:
             raise ValueError(
                 f"Packet length ({packet_len}) is too large, must be 4 bytes or less.")
 
@@ -1625,7 +1624,7 @@ class VendorSpecificCmds:
             If `handle` is larger than 2 bytes in size.
 
         """
-        if _byte_length(handle) > 2:
+        if byte_length(handle) > 2:
             raise ValueError(f"Handle ({handle}) is too large, must be 2 bytes or less.")
 
         if phy == PhyOption.PHY_CODED_S2:
