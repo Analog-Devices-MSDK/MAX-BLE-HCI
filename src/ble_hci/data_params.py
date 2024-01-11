@@ -51,9 +51,10 @@
 ##############################################################################
 """Contains data classes used for HCI function parameters/returns."""
 # pylint: disable=too-many-arguments,too-many-locals,too-many-instance-attributes
-from typing import Optional
 from dataclasses import dataclass
 from enum import Enum
+from typing import Optional
+
 
 @dataclass
 class AdvParams:
@@ -297,8 +298,9 @@ class DataPktStats:
 
         """
         if peer_tx_data:
-            return 100 - 100 *(self.rx_data / peer_tx_data)
+            return 100 - 100 * (self.rx_data / peer_tx_data)
         return self.rx_data / (self.rx_data + self.rx_data_crc + self.rx_data_timeout)
+
 
 @dataclass
 class AdvPktStats:
@@ -352,6 +354,7 @@ class AdvPktStats:
             print_lns.append(f"{key}:  {val}")
 
         return '\n'.join(print_lns)
+
 
 @dataclass
 class ScanPktStats:
@@ -429,6 +432,7 @@ class ScanPktStats:
 
         return '\n'.join(print_lns)
 
+
 @dataclass
 class MemPktStats:
     """Memory statistics data container."""
@@ -505,6 +509,7 @@ class MemPktStats:
 
         return '\n'.join(print_lns)
 
+
 @dataclass
 class PduPktStats:
     """PDU statistics data container."""
@@ -575,6 +580,7 @@ class PduPktStats:
 
         return '\n'.join(print_lns)
 
+
 @dataclass
 class TestReport:
     """ISO/ACL test report data container."""
@@ -599,6 +605,7 @@ class TestReport:
             print_lns.append(f"{key}:  {val}")
 
         return '\n'.join(print_lns)
+
 
 @dataclass
 class PoolStats:

@@ -92,6 +92,7 @@ class EventCode(Enum):
     VENDOR_SPEC = 0xFF
     """Vendor specific event."""
 
+
 class EventSubcode(Enum):
     """Supported LE Meta event subcodes."""
 
@@ -196,6 +197,7 @@ class EventSubcode(Enum):
 
     BIGINFO_ADVERTISING_REPORT = 0x22
     """BIGInfo advertising report event."""
+
 
 class StatusCode(Enum):
     """BLE-defined status codes."""

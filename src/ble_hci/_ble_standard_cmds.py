@@ -54,20 +54,15 @@ Module contains definitions for BLE standard HCI commands.
 """
 #pylint: disable=too-many-arguments
 from typing import Optional, Tuple, Union, List
-from ._utils import (
-    to_le_nbyte_list,
-    SerialUartTransport,
-    PhyOption,
-    PayloadOption
-)
+
 from ._hci_logger import get_formatted_logger
+from ._transport import SerialUartTransport, to_le_nbyte_list
+from .constants import PhyOption, Payload
 from .data_params import AdvParams, ConnParams, ScanParams
-from .hci_packets import (
-    CommandPacket,
-    EventPacket
-)
+from .hci_packets import CommandPacket, EventPacket
 from .packet_codes import StatusCode
 from .packet_defs import OCF, OGF
+
 
 class BleStandardCmds:
     """Definitions for BLE standard HCI commands.
@@ -96,10 +91,7 @@ class BleStandardCmds:
         self.logger = get_formatted_logger(name=logger_name)
 
     def send_le_controller_command(
-        self,
-        ocf: OCF,
-        params: List[int] = None,
-        return_evt: bool = False
+        self, ocf: OCF, params: List[int] = None, return_evt: bool = False
     ) -> Union[StatusCode, EventPacket]:
         """Send an LE Controller command to the test board.
 
@@ -131,10 +123,7 @@ class BleStandardCmds:
         return self.port.send_command(cmd).status
 
     def send_link_control_command(
-        self,
-        ocf: OCF,
-        params: List[int] = None,
-        return_evt: bool = False
+        self, ocf: OCF, params: List[int] = None, return_evt: bool = False
     ) -> Union[StatusCode, EventPacket]:
         """Send a Link Control command to the test board.
 
@@ -166,10 +155,7 @@ class BleStandardCmds:
         return self.port.send_command(cmd).status
 
     def send_controller_command(
-        self,
-        ocf: OCF,
-        params: List[int] = None,
-        return_evt: bool = False
+        self, ocf: OCF, params: List[int] = None, return_evt: bool = False
     ) -> Union[StatusCode, EventPacket]:
         """Send a Controller command to the test board.
 
@@ -447,7 +433,7 @@ class BleStandardCmds:
         self,
         channel: int = 0,
         phy: PhyOption = PhyOption.PHY_1M,
-        payload: PayloadOption = PayloadOption.PLD_PRBS9,
+        payload: Payload = Payload.PLD_PRBS9,
         packet_len: int = 0
     ) -> StatusCode:
         """Start a transmitter test.
@@ -525,7 +511,9 @@ class BleStandardCmds:
             ending a TX test, this value will be 0.
 
         """
-        evt = self.send_le_controller_command(OCF.LE_CONTROLLER.TEST_END, return_evt=True)
+        evt = self.send_le_controller_command(
+            OCF.LE_CONTROLLER.TEST_END, return_evt=True
+        )
         rx_ok = evt.get_return_params()
 
         return rx_ok
@@ -600,13 +588,17 @@ class BleStandardCmds:
 
         """
         params = to_le_nbyte_list(mask, 8)
-        status = self.send_controller_command(OCF.CONTROLLER.SET_EVENT_MASK, params=params)
+        status = self.send_controller_command(
+            OCF.CONTROLLER.SET_EVENT_MASK, params=params
+        )
 
         if mask_pg2:
             params = to_le_nbyte_list(mask_pg2, 8)
             return (
                 status,
-                self.send_controller_command(OCF.CONTROLLER.SET_EVENT_MASK_PAGE2, params=params)
+                self.send_controller_command(
+                    OCF.CONTROLLER.SET_EVENT_MASK_PAGE2, params=params
+                )
             )
 
         return status

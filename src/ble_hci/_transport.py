@@ -50,7 +50,7 @@
 #
 ##############################################################################
 """
-Contains utilities functions/classes for the HCI implementation.
+Contains serial port functionality for the HCI implementation.
 """
 #pylint: disable=too-many-instance-attributes, too-many-arguments
 from typing import Optional, List, Callable, Any
@@ -59,19 +59,16 @@ from multiprocessing import Process
 from threading import Event, Lock, Thread
 import sys
 import datetime
+import sys
 import time
 import weakref
 
 import serial
 
 from ._hci_logger import get_formatted_logger
-from .packet_defs import ADI_PORT_BAUD_RATE, PacketType
-from .hci_packets import (
-    AsyncPacket,
-    CommandPacket,
-    EventPacket
-)
+from .hci_packets import AsyncPacket, CommandPacket, EventPacket
 from .packet_codes import EventCode
+from .packet_defs import ADI_PORT_BAUD_RATE, PacketType
 
 def to_le_nbyte_list(value: int, n_bytes: int) -> List[int]:
     """Create a list of little-endian bytes.
@@ -130,52 +127,6 @@ _MAX_U32 = 2**32 - 1
 """Maximum value for a 32-bit unsigned integer."""
 _MAX_U64 = 2**64 - 1
 """Maximum value for a 64-bit unsigned integer."""
-
-class PhyOption(Enum):
-    """BLE-defined PHY options."""
-
-    PHY_1M = 0x1
-    """1M PHY option."""
-
-    PHY_2M = 0x2
-    """2M PHY option."""
-
-    PHY_CODED = 0x3
-    """Generic coded PHY option."""
-
-    PHY_CODED_S8 = 0x3
-    """Coded S8 PHY option."""
-
-    PHY_CODED_S2 = 0x4
-    """Coded S2 PHY option."""
-
-class PayloadOption(Enum):
-    """BLE-definded payload options."""
-
-    PLD_PRBS9 = 0
-    """PRBS9 payload option."""
-
-    PLD_11110000 = 1
-    """11110000 payload option."""
-
-    PLD_10101010 = 2
-    """10101010 payload option."""
-
-    PLD_PRBS15 = 3
-    """PRBS15 payload option."""
-
-    PLD_11111111 = 4
-    """11111111 payload option."""
-
-    PLD_00000000 = 5
-    """00000000 payload option."""
-
-    PLD_00001111 = 6
-    """00001111 payload option."""
-
-    PLD_01010101 = 7
-    """01010101 payload option."""
-
 
 class SerialUartTransport:
     """HCI UART serial port transportation object.

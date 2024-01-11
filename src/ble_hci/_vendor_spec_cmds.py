@@ -54,31 +54,23 @@ Module contains definitions for ADI vendor-specific HCI commands.
 """
 # pylint: disable=too-many-lines, too-many-arguments, too-many-public-methods
 from typing import Optional, Tuple, Union, Dict, List
-from ._utils import (
-    _MAX_U32,
-    _MAX_U64,
-    to_le_nbyte_list,
-    PhyOption,
-    PayloadOption,
-    SerialUartTransport
-)
+
 from ._hci_logger import get_formatted_logger
+from ._transport import _MAX_U32, _MAX_U64, SerialUartTransport, to_le_nbyte_list
+from .constants import PhyOption, Payload
 from .data_params import (
-    DataPktStats,
-    ScanPktStats,
     AdvPktStats,
+    DataPktStats,
     MemPktStats,
     PduPktStats,
+    PoolStats,
+    ScanPktStats,
     TestReport,
-    PoolStats
 )
-from .hci_packets import (
-    CommandPacket,
-    EventPacket,
-    _byte_length
-)
+from .hci_packets import CommandPacket, EventPacket, _byte_length
 from .packet_codes import StatusCode
 from .packet_defs import OCF, OGF, PubKeyValidateMode
+
 
 class VendorSpecificCmds:
     """Definitions for ADI vendor-specific HCI commands.
@@ -107,10 +99,7 @@ class VendorSpecificCmds:
         self.logger = get_formatted_logger(name=logger_name)
 
     def send_vs_command(
-            self,
-            ocf: OCF,
-            params: List[int] = None,
-            return_evt: bool = False
+        self, ocf: OCF, params: List[int] = None, return_evt: bool = False
     ) -> Union[EventPacket, StatusCode]:
         """Send a vendor-specific command to the test board.
 
@@ -264,8 +253,8 @@ class VendorSpecificCmds:
     def tx_test_vs(
         self,
         channel: int = 0,
-        phy: int = 1,
-        payload: PayloadOption = 0,
+        phy: PhyOption = PhyOption.PHY_1M,
+        payload: Payload = Payload.PRBS15,
         packet_len: int = 0,
         num_packets: int = 0,
     ) -> StatusCode:
@@ -277,15 +266,15 @@ class VendorSpecificCmds:
 
         Parameters
         ----------
-        channel : int, optional
+        channel : int
             The channel on which transmission should take place.
-        phy : int, optional
+        phy : PhyOption
             The PHY that should be used by the transmitter.
-        payload : PayloadOption, optional
+        payload : PayloadOption
             The packet payload type that should be transmitted.
-        packet_len : int, optional
+        packet_len : int
             The desired length of the transmitted packets.
-        num_packets : int, optional
+        num_packets : int
             The number of packets to transmit. Set to `0` to
             enable continuous transmission.
 
@@ -311,17 +300,16 @@ class VendorSpecificCmds:
         if num_packets > 0xFFFF:
             raise ValueError(f"Num packets too large ({num_packets}), must be 65535 or less.")
 
-
-        params = [channel, packet_len, payload, phy]
+        params = [channel, packet_len, payload.value, phy.value]
         params.extend(to_le_nbyte_list(num_packets, 2))
         return self.send_vs_command(OCF.VENDOR_SPEC.TX_TEST, params=params)
 
     def rx_test_vs(
         self,
         channel: int = 0,
-        phy: int = 1,
+        phy: PhyOption = PhyOption.PHY_1M,
         num_packets: int = 0,
-        modulation_idx: float = 0,
+        modulation_idx: int = 0,
     ) -> StatusCode:
         """Start a vendor-specific receiver test.
 
@@ -331,14 +319,14 @@ class VendorSpecificCmds:
 
         Parameters
         ----------
-        channel : int, optional
+        channel : int
             The channel on which the receiver should listen for packets.
-        phy : int, optional
+        phy : PhyOption
             The PHY that should be used by the receiver.
-        num_packets : int, optional
+        num_packets : int
             The number of packets that the receiver is expected to receive,
             i.e. the number of packets the transmitter is sending.
-        modulation_idx : float, optional
+        modulation_idx : int
             The expected modulation index of the transmitter. Indicates
             whether the modulation index is standard (0) or stable (1).
 
@@ -360,8 +348,7 @@ class VendorSpecificCmds:
         if num_packets > 0xFFFF:
             raise ValueError(f"Num packets too large ({num_packets}), must be 65535 or less.")
 
-
-        params = [channel, phy, modulation_idx]
+        params = [channel, phy.value, modulation_idx]
         params.extend(to_le_nbyte_list(num_packets, 2))
         return self.send_vs_command(OCF.VENDOR_SPEC.RX_TEST, params=params)
 
@@ -525,7 +512,7 @@ class VendorSpecificCmds:
         params.extend(to_le_nbyte_list(addr, 4))
         evt = self.send_vs_command(OCF.VENDOR_SPEC.REG_READ, params=params, return_evt=True)
 
-        param_lens = [4]*(length // 4)
+        param_lens = [4] * (length // 4)
         if not length % 4 == 0:
             param_lens.append(length % 4)
         read_data = evt.get_return_params(param_lens=param_lens)
@@ -757,7 +744,7 @@ class VendorSpecificCmds:
             rx_pkt_count=data[0],
             rx_oct_count=data[1],
             gen_pkt_count=data[2],
-            gen_oct_count=data[3]
+            gen_oct_count=data[3],
         )
 
         return stats, evt.status
@@ -842,7 +829,7 @@ class VendorSpecificCmds:
         min_used_map = {
             PhyOption.PHY_1M: data[0],
             PhyOption.PHY_2M: data[1],
-            PhyOption.PHY_CODED: data[2]
+            PhyOption.PHY_CODED: data[2],
         }
 
         return min_used_map, evt.status
@@ -965,7 +952,7 @@ class VendorSpecificCmds:
 
         """
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_PDU_FILT_STATS, return_evt=True)
-        data = evt.get_return_params(param_lens=[2]*19)
+        data = evt.get_return_params(param_lens=[2] * 19)
 
         stats = PduPktStats(
             fail_pdu=data[0],
@@ -986,7 +973,7 @@ class VendorSpecificCmds:
             pass_peer_addr_res_req=data[15],
             pass_local_addr_res_opt=data[16],
             peer_res_addr_pend=data[17],
-            local_res_addr_pend=data[18]
+            local_res_addr_pend=data[18],
         )
 
         return stats, evt.status
@@ -1066,7 +1053,7 @@ class VendorSpecificCmds:
             The return packet status code.
 
         """
-        out_method = 0 # HCI through tokens, only available option
+        out_method = 0  # HCI through tokens, only available option
         params = [out_method, int(enable)]
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_SNIFFER_ENABLE, params=params)
 
@@ -1086,7 +1073,8 @@ class VendorSpecificCmds:
         """
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_SYS_STATS, return_evt=True)
         data = evt.get_return_params(
-            param_lens=[2, 2, 4, 4, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2])
+            param_lens=[2, 2, 4, 4, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+        )
 
         stats = MemPktStats(
             stack=data[0],
@@ -1109,7 +1097,7 @@ class VendorSpecificCmds:
             per_scan_ctx_size=data[17],
             max_cig=data[18],
             cig_ctx_size=data[19],
-            cis_ctx_size=data[20]
+            cis_ctx_size=data[20],
         )
 
         return stats, evt.status
@@ -1141,7 +1129,7 @@ class VendorSpecificCmds:
             rx_setup=data[6],
             tx_setup=data[7],
             rx_isr=data[8],
-            tx_isr=data[9]
+            tx_isr=data[9],
         )
 
         return stats, evt.status
@@ -1172,7 +1160,7 @@ class VendorSpecificCmds:
             rx_setup=data[5],
             tx_setup=data[6],
             rx_isr=data[7],
-            tx_isr=data[8]
+            tx_isr=data[8],
         )
 
         return stats, evt.status
@@ -1203,7 +1191,7 @@ class VendorSpecificCmds:
             rx_setup=data[5],
             tx_setup=data[6],
             rx_isr=data[7],
-            tx_isr=data[8]
+            tx_isr=data[8],
         )
 
         return stats, evt.status
@@ -1226,7 +1214,7 @@ class VendorSpecificCmds:
         num_pools = evt.evt_params[0]
 
         param_lens = [1]
-        param_lens.extend([2, 1, 1, 1, 2]*num_pools)
+        param_lens.extend([2, 1, 1, 1, 2] * num_pools)
 
         data = evt.get_return_params(param_lens=param_lens, use_raw=True)
 
@@ -1239,7 +1227,7 @@ class VendorSpecificCmds:
                     num_buf=data.pop(0),
                     num_alloc=data.pop(0),
                     max_alloc=data.pop(0),
-                    max_req_len=data.pop(0)
+                    max_req_len=data.pop(0),
                 )
             )
 
@@ -1327,7 +1315,7 @@ class VendorSpecificCmds:
 
         """
         params = [handle, primary, secondary]
-        return self.send_vs_command(OCF.VENDOR_SPEC.SET_EXT_ADV_DEF_PHY_OPTS, params=params)
+        return self.send_vs_command(OCF.VENDOR_SPEC.SET_EXT_ADV_PHY_OPTS, params=params)
 
     def set_extended_advertising_default_phy_opts(
         self,
@@ -1416,7 +1404,7 @@ class VendorSpecificCmds:
             rx_pkt_count=data[0],
             rx_oct_count=data[1],
             gen_pkt_count=data[2],
-            gen_oct_count=data[3]
+            gen_oct_count=data[3],
         )
 
         return stats, evt.status
@@ -1498,7 +1486,7 @@ class VendorSpecificCmds:
             rx_setup=data[5],
             tx_setup=data[6],
             rx_isr=data[7],
-            tx_isr=data[8]
+            tx_isr=data[8],
         )
 
         return stats, evt.status
@@ -1533,7 +1521,7 @@ class VendorSpecificCmds:
             rx_setup=data[7],
             tx_setup=data[8],
             rx_isr=data[9],
-            tx_isr=data[10]
+            tx_isr=data[10],
         )
 
         return stats, evt.status
@@ -1572,7 +1560,7 @@ class VendorSpecificCmds:
             rx_setup=data[11],
             tx_setup=data[12],
             rx_isr=data[13],
-            tx_isr=data[14]
+            tx_isr=data[14],
         )
         return stats, evt.status
 
@@ -1604,7 +1592,7 @@ class VendorSpecificCmds:
             rx_setup=data[7],
             tx_setup=data[8],
             rx_isr=data[9],
-            tx_isr=data[10]
+            tx_isr=data[10],
         )
         return stats, evt.status
 

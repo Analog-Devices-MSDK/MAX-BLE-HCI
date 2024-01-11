@@ -55,8 +55,9 @@ from __future__ import annotations
 from enum import Enum
 from typing import List, Optional, Union
 
-from .packet_codes import EventCode, StatusCode, EventSubcode
+from .packet_codes import EventCode, EventSubcode, StatusCode
 from .packet_defs import OCF, OGF, PacketType
+
 
 def _byte_length(num: int):
     """Calculate the length of an integer in bytes.
@@ -65,6 +66,7 @@ def _byte_length(num: int):
     
     """
     return max((num.bit_length() + 7) // 8, 1)
+
 
 class Endian(Enum):
     """Endian byte-order definitions."""
@@ -530,7 +532,7 @@ class EventPacket:
                 evt_code=serialized_event[0],
                 length=serialized_event[1],
                 status=serialized_event[5],
-                evt_params=serialized_event[2:]
+                evt_params=serialized_event[2:],
             )
         elif serialized_event[0] == EventCode.HARDWARE_ERROR.value:
             pkt = EventPacket(
@@ -551,7 +553,7 @@ class EventPacket:
                 evt_code=serialized_event[0],
                 length=serialized_event[1],
                 status=None,
-                evt_params=serialized_event[2:]
+                evt_params=serialized_event[2:],
             )
         elif serialized_event[0] == EventCode.LE_META.value:
             pkt = EventPacket(
@@ -559,21 +561,21 @@ class EventPacket:
                 length=serialized_event[1],
                 status=None,
                 evt_params=serialized_event[3:],
-                evt_subcode=serialized_event[2]
+                evt_subcode=serialized_event[2],
             )
         elif serialized_event[0] == EventCode.AUTH_PAYLOAD_TIMEOUT_EXPIRED.value:
             pkt = EventPacket(
                 evt_code=serialized_event[0],
                 length=serialized_event[1],
                 status=None,
-                evt_params=serialized_event[2:]
+                evt_params=serialized_event[2:],
             )
         elif serialized_event[0] == EventCode.VENDOR_SPEC:
             pkt = EventPacket(
                 evt_code=serialized_event[0],
                 length=serialized_event[1],
                 status=serialized_event[2],
-                evt_params=serialized_event[3:]
+                evt_params=serialized_event[3:],
             )
         else:
             raise ValueError(f"Invalid event code ({serialized_event[0]}) received.")

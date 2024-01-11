@@ -50,8 +50,8 @@
 #
 ##############################################################################
 """DOCSTRING"""
-from enum import Enum
 from dataclasses import dataclass
+from enum import Enum
 
 ADI_PORT_BAUD_RATE = 115200
 
@@ -728,6 +728,7 @@ class PubKeyValidateMode(Enum):
 
     ALT2 = 0x1
     """ALT2 validation mode."""
+
 
 @dataclass
 class OCF:
