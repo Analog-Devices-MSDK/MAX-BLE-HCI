@@ -175,8 +175,8 @@ class ConnParams:
 
         if not isinstance(self.peer_addr_type, AddrType):
             raise TypeError(
-                "Attribute peer_addr_type must be of type AddrType, not %s",
-                type(self.peer_addr_type).__name__
+                "Attribute peer_addr_type must be of type AddrType, ",
+                f"not {type(self.peer_addr_type).__name__}",
             )
 
         if self.peer_addr > 2**48 - 1:
@@ -184,8 +184,8 @@ class ConnParams:
 
         if not isinstance(self.own_addr_type, AddrType):
             raise TypeError(
-                "Attribute own_addr_type must be of type AddrType, not %s",
-                type(self.own_addr_type).__name__
+                "Attribute own_addr_type must be of type AddrType, ",
+                f"not {type(self.own_addr_type).__name__}"
             )
 
         if not 0x6 <= self.conn_interval_max <= 0xC80:
