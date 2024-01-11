@@ -52,7 +52,7 @@
 """
 Contains serial port functionality for the HCI implementation.
 """
-#pylint: disable=too-many-instance-attributes, too-many-arguments
+# pylint: disable=too-many-instance-attributes, too-many-arguments
 from typing import Optional, List, Callable, Any
 from multiprocessing import Process
 from threading import Event, Lock, Thread
@@ -68,6 +68,7 @@ from .hci_packets import AsyncPacket, CommandPacket, EventPacket
 from .packet_codes import EventCode
 from .packet_defs import PacketType
 from .constants import ADI_PORT_BAUD_RATE
+
 
 def to_le_nbyte_list(value: int, n_bytes: int) -> List[int]:
     """Create a list of little-endian bytes.
@@ -96,6 +97,7 @@ def to_le_nbyte_list(value: int, n_bytes: int) -> List[int]:
         little_endian.append(num_masked)
     return little_endian
 
+
 def le_list_to_int(nums: List[int]) -> int:
     """Create an integer from a little-endian list.
 
@@ -119,11 +121,12 @@ def le_list_to_int(nums: List[int]) -> int:
         full_num |= num << 8 * i
     return full_num
 
+
 class SerialUartTransport:
     """HCI UART serial port transportation object.
 
     Class defines the implementation of a thread-based UART
-    serial port transportation object. The object is used 
+    serial port transportation object. The object is used
     by the HCI to retrieve and sort both event packet and
     asynchronous packets received from the DUT.
 
@@ -174,8 +177,9 @@ class SerialUartTransport:
     evt_callback : Callable[[AsyncPacket], Any], optional
         Function pointer defining the process that should be taken
         when an unexpected event packet is received.
-    
+
     """
+
     def __new__(cls, *args, **kwargs):
         if "instances" not in cls.__dict__:
             cls.instances = weakref.WeakValueDictionary()
@@ -237,7 +241,7 @@ class SerialUartTransport:
 
         Starts the thread that is used to read from the serial
         port and store the received events.
-        
+
         """
         self._read_thread.start()
 
@@ -313,9 +317,9 @@ class SerialUartTransport:
 
     def _init_read_thread(self) -> None:
         """Initializes the port read thread and data locks.
-        
+
         PRIVATE
-        
+
         """
         self._kill_evt = Event()
         self._read_thread = Thread(
@@ -355,9 +359,9 @@ class SerialUartTransport:
 
     def _read(self, kill_evt: Event) -> None:
         """Process executed by the port read thread.
-        
+
         PRIVATE
-        
+
         """
         while not kill_evt.is_set():
             # pylint: disable=consider-using-with

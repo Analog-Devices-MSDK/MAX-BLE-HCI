@@ -92,7 +92,8 @@ class AdvParams:
                 continue
             print_lns.append(f"{key}:  {val}")
 
-        return '\n'.join(print_lns)
+        return "\n".join(print_lns)
+
 
 @dataclass
 class ScanParams:
@@ -120,7 +121,8 @@ class ScanParams:
                 continue
             print_lns.append(f"{key}:  {val}")
 
-        return '\n'.join(print_lns)
+        return "\n".join(print_lns)
+
 
 @dataclass
 class ConnParams:
@@ -185,7 +187,7 @@ class ConnParams:
         if not isinstance(self.own_addr_type, AddrType):
             raise TypeError(
                 "Attribute own_addr_type must be of type AddrType, ",
-                f"not {type(self.own_addr_type).__name__}"
+                f"not {type(self.own_addr_type).__name__}",
             )
 
         if not 0x6 <= self.conn_interval_max <= 0xC80:
@@ -198,10 +200,12 @@ class ConnParams:
                 continue
             print_lns.append(f"{key}:  {val}")
 
-        return '\n'.join(print_lns)
+        return "\n".join(print_lns)
+
 
 class DataPktStats:
     """Generic data stats container for CM and DTM."""
+
     def __init__(
         self,
         rx_data: int,
@@ -248,7 +252,7 @@ class DataPktStats:
                 continue
             print_lns.append(f"{key}:  {val}")
 
-        return '\n'.join(print_lns)
+        return "\n".join(print_lns)
 
     def per(self, peer_tx_data: Optional[int] = None) -> float:
         """Calculate PER.
@@ -273,6 +277,7 @@ class DataPktStats:
         if peer_tx_data:
             return 100 - 100 * (self.rx_data / peer_tx_data)
         return self.rx_data / (self.rx_data + self.rx_data_crc + self.rx_data_timeout)
+
 
 @dataclass
 class AdvPktStats:
@@ -317,7 +322,6 @@ class AdvPktStats:
     
     """
 
-
     def __repr__(self) -> str:
         print_lns = []
         for key, val in self.__dict__.items():
@@ -325,7 +329,8 @@ class AdvPktStats:
                 continue
             print_lns.append(f"{key}:  {val}")
 
-        return '\n'.join(print_lns)
+        return "\n".join(print_lns)
+
 
 @dataclass
 class ScanPktStats:
@@ -401,7 +406,8 @@ class ScanPktStats:
                 continue
             print_lns.append(f"{key}:  {val}")
 
-        return '\n'.join(print_lns)
+        return "\n".join(print_lns)
+
 
 @dataclass
 class MemPktStats:
@@ -477,7 +483,8 @@ class MemPktStats:
                 continue
             print_lns.append(f"{key}:  {val}")
 
-        return '\n'.join(print_lns)
+        return "\n".join(print_lns)
+
 
 @dataclass
 class PduPktStats:
@@ -513,7 +520,7 @@ class PduPktStats:
     pass_peer_rpa_verify: int = None
     """Number of peer RPAs passing verification."""
 
-    fail_local_rpa_verify:  int = None
+    fail_local_rpa_verify: int = None
     """Number of local RPAs failing verification."""
 
     pass_local_rpa_verify: int = None
@@ -531,7 +538,7 @@ class PduPktStats:
     pass_peer_addr_res_req: int = None
     """Number of PDUs passing required peer address resolution."""
 
-    pass_local_addr_res_opt:  int = None
+    pass_local_addr_res_opt: int = None
     """Number of PDUs passing optional local address resolution."""
 
     peer_res_addr_pend: int = None
@@ -547,7 +554,8 @@ class PduPktStats:
                 continue
             print_lns.append(f"{key}:  {val}")
 
-        return '\n'.join(print_lns)
+        return "\n".join(print_lns)
+
 
 @dataclass
 class TestReport:
@@ -572,7 +580,8 @@ class TestReport:
                 continue
             print_lns.append(f"{key}:  {val}")
 
-        return '\n'.join(print_lns)
+        return "\n".join(print_lns)
+
 
 @dataclass
 class PoolStats:
@@ -600,4 +609,4 @@ class PoolStats:
                 continue
             print_lns.append(f"{key}:  {val}")
 
-        return '\n'.join(print_lns)
+        return "\n".join(print_lns)

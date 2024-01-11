@@ -61,6 +61,7 @@ MAX_U32 = 2**32 - 1
 MAX_U64 = 2**64 - 1
 """Maximum value for a 64-bit unsigned integer."""
 
+
 class Endian(Enum):
     """Endian byte-order definitions."""
 
@@ -69,6 +70,7 @@ class Endian(Enum):
 
     BIG = "big"
     """Big endian byte order."""
+
 
 class PhyOption(Enum):
     """BLE-defined PHY options."""
@@ -87,6 +89,7 @@ class PhyOption(Enum):
 
     PHY_CODED_S2 = 0x4
     """Coded S2 PHY option."""
+
 
 class PayloadOption(Enum):
     """BLE-definded payload options."""
@@ -115,8 +118,10 @@ class PayloadOption(Enum):
     PLD_01010101 = 7
     """01010101 payload option."""
 
+
 class AddrType(Enum):
     """BLE-defined peer address types."""
+
     PUBLIC = 0
     """Public device address."""
 
@@ -148,6 +153,7 @@ class AddrType(Enum):
         device address type.
 
     """
+
 
 class PubKeyValidateMode(Enum):
     """Public key validation modes."""

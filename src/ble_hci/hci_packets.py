@@ -62,11 +62,12 @@ from .constants import Endian
 
 def byte_length(num: int):
     """Calculate the length of an integer in bytes.
-    
+
     PRIVATE
-    
+
     """
     return max((num.bit_length() + 7) // 8, 1)
+
 
 class CommandPacket:
     """Serializer for HCI command packets.
@@ -103,11 +104,12 @@ class CommandPacket:
         Command parameters, if any.
 
     """
+
     def __init__(
         self,
         ogf: Union[OGF, int],
         ocf: Union[OCF, int],
-        params: Optional[Union[List[int], int]]=None
+        params: Optional[Union[List[int], int]] = None,
     ):
         self.ogf = self._enum_to_int(ogf)
         self.ocf = self._enum_to_int(ocf)
@@ -123,9 +125,9 @@ class CommandPacket:
 
     def _enum_to_int(self, num):
         """Convert an enumeration value to an integer.
-        
+
         PRIVATE
-        
+
         """
         if isinstance(num, Enum):
             return num.value
@@ -133,9 +135,9 @@ class CommandPacket:
 
     def _get_length(self, params):
         """Get parameters length.
-        
+
         PRIVATE
-        
+
         """
         if params is None:
             return 0
@@ -147,7 +149,7 @@ class CommandPacket:
     @staticmethod
     def make_hci_opcode(ogf: Union[OGF, int], ocf: Union[OCF, int]) -> int:
         """Make an HCI opcode.
-        
+
         Creates an HCI opcode from the given Opcode Group Field (OGF)
         and Opcode Command Field (OCF) values.
 
@@ -162,7 +164,7 @@ class CommandPacket:
         -------
         int
             The generated HCI opcode.
-        
+
         """
         if not isinstance(ogf, int):
             if isinstance(ogf, Enum):
@@ -218,6 +220,7 @@ class CommandPacket:
 
         return serialized_cmd
 
+
 class ExtendedPacket:
     """Serializer for HCI extended command packets.
 
@@ -252,11 +255,12 @@ class ExtendedPacket:
         Command parameters, if any.
 
     """
+
     def __init__(
         self,
         ogf: Union[OGF, int],
         ocf: Union[OCF, int],
-        payload: Optional[Union[List[int], int]] = None
+        payload: Optional[Union[List[int], int]] = None,
     ):
         self.ogf = self._enum_to_int(ogf)
         self.ocf = self._enum_to_int(ocf)
@@ -272,9 +276,9 @@ class ExtendedPacket:
 
     def _enum_to_int(self, num):
         """Convert an enumeration value to an integer.
-        
+
         PRIVATE
-        
+
         """
         if isinstance(num, Enum):
             return num.value
@@ -282,9 +286,9 @@ class ExtendedPacket:
 
     def _get_length(self, pld):
         """Get payload length.
-        
+
         PRIVATE
-        
+
         """
         if pld is None:
             return 0
@@ -296,7 +300,7 @@ class ExtendedPacket:
     @staticmethod
     def make_hci_opcode(ogf: Union[OGF, int], ocf: Union[OCF, int]) -> int:
         """Make an HCI opcode.
-        
+
         Creates an HCI opcode from the given Opcode Group Field (OGF)
         and Opcode Command Field (OCF) values.
 
@@ -311,7 +315,7 @@ class ExtendedPacket:
         -------
         int
             The generated HCI opcode.
-        
+
         """
         if not isinstance(ogf, int):
             if isinstance(ogf, Enum):
@@ -368,9 +372,10 @@ class ExtendedPacket:
 
         return serialized_cmd
 
+
 class AsyncPacket:
     """Deserializer for HCI ACL packets.
-    
+
     Object defines a deserializer/data container for HCI
     Asynchronous Connection-Less packets. To create an
     instance directly from bytes, use the static function
@@ -401,15 +406,11 @@ class AsyncPacket:
         Packet data length.
     data : bytes
         Packet data.
-    
+
     """
+
     def __init__(
-        self,
-        handle: int,
-        pb_flag: int,
-        bc_flag: int,
-        length: int,
-        data: bytes
+        self, handle: int, pb_flag: int, bc_flag: int, length: int, data: bytes
     ):
         self.handle = handle
         self.pb_flag = pb_flag
@@ -423,7 +424,7 @@ class AsyncPacket:
     @staticmethod
     def from_bytes(pkt: bytes) -> AsyncPacket:
         """Deserialize an HCI ACL packet.
-        
+
         Deserializes an HCI Asynchronous Connection-Less packet
         from a bytes object.
 
@@ -436,7 +437,7 @@ class AsyncPacket:
         -------
         AsyncPacket
             The deserialized packet.
-        
+
         """
         return AsyncPacket(
             handle=(pkt[0] & 0xF0) + (pkt[1] << 8),
@@ -446,9 +447,10 @@ class AsyncPacket:
             data=pkt[4:] if pkt[4:] else None,
         )
 
+
 class EventPacket:
     """Deserializer for HCI event packets.
-    
+
     Object defines a deserializer/data container for HCI
     event packets. To create an instance directly from
     bytes, use the static function `from_bytes`. Event
@@ -481,15 +483,16 @@ class EventPacket:
         Packet event subcode
     evt_params : bytes
         Packet return parameters.
-    
+
     """
+
     def __init__(
         self,
         evt_code: int,
         length: int,
         status: int,
         evt_params: bytes,
-        evt_subcode: Optional[int] = None
+        evt_subcode: Optional[int] = None,
     ):
         self.evt_code = EventCode(evt_code)
         self.length = length
@@ -503,7 +506,7 @@ class EventPacket:
     @staticmethod
     def from_bytes(serialized_event: bytes) -> EventPacket:
         """Deserialize an HCI event packet.
-        
+
         Deserializes an HCI event packet from a bytes object.
 
         Parameters
@@ -515,7 +518,7 @@ class EventPacket:
         -------
         EventPacket
             The deserialized packet.
-        
+
         """
         if serialized_event[0] == EventCode.COMMAND_COMPLETE.value:
             pkt = EventPacket(
@@ -529,14 +532,14 @@ class EventPacket:
                 evt_code=serialized_event[0],
                 length=serialized_event[1],
                 status=StatusCode.ERROR_CODE_HW_FAILURE.value,
-                evt_params=serialized_event[2:]
+                evt_params=serialized_event[2:],
             )
         elif serialized_event[0] == EventCode.NUM_COMPLETED_PACKETS.value:
             pkt = EventPacket(
                 evt_code=serialized_event[0],
                 length=serialized_event[1],
                 status=StatusCode.SUCCESS.value,
-                evt_params=serialized_event[2:]
+                evt_params=serialized_event[2:],
             )
         elif serialized_event[0] == EventCode.DATA_BUFF_OVERFLOW.value:
             pkt = EventPacket(
@@ -579,7 +582,7 @@ class EventPacket:
         signed: bool = False,
     ) -> Union[List[int], int]:
         """Retrieve packet return parameters.
-        
+
         Parses the packet return parameters from the bytes stored
         in the `evt_params` attribute in accordance with the given
         lengths and deserialization parameters.
@@ -599,7 +602,7 @@ class EventPacket:
         -------
         Union[List[int], int]
             The parsed return parameter(s).
-        
+
         """
         if self.evt_code == EventCode.COMMAND_COMPLETE:
             param_bytes = self.evt_params[4:]

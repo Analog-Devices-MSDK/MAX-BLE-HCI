@@ -71,9 +71,10 @@ from .hci_packets import CommandPacket, EventPacket, byte_length
 from .packet_codes import StatusCode
 from .packet_defs import OCF, OGF
 
+
 class VendorSpecificCmds:
     """Definitions for ADI vendor-specific HCI commands.
-    
+
     Class contains functions used to implement Analog Devices
     vendor-specific HCI commands. Used as a parent for the full
     Analog Devices BLE HCI class.
@@ -91,8 +92,9 @@ class VendorSpecificCmds:
         Serial port interfacing object.
     logger : logging.Logger
         HCI logging object referenced by the `name` argument.
-    
+
     """
+
     def __init__(self, port: SerialUartTransport, logger_name: str):
         self.port = port
         self.logger = get_formatted_logger(name=logger_name)
@@ -181,7 +183,9 @@ class VendorSpecificCmds:
             The return packet status code.
 
         """
-        return self.send_vs_command(OCF.VENDOR_SPEC.ENA_AUTO_GEN_ACL, params=int(enable))
+        return self.send_vs_command(
+            OCF.VENDOR_SPEC.ENA_AUTO_GEN_ACL, params=int(enable)
+        )
 
     def generate_acl(
         self, handle: int, packet_len: int, num_packets: int
@@ -218,11 +222,17 @@ class VendorSpecificCmds:
 
         """
         if byte_length(handle) > 2:
-            raise ValueError(f"Handle ({handle}) is too large, must be 2 bytes or less.")
+            raise ValueError(
+                f"Handle ({handle}) is too large, must be 2 bytes or less."
+            )
         if num_packets > 0xFFFF:
-            raise ValueError(f"Num packets too large ({num_packets}), must be 65535 or less.")
+            raise ValueError(
+                f"Num packets too large ({num_packets}), must be 65535 or less."
+            )
         if packet_len > 0xFF:
-            raise ValueError(f"Packet length too large ({packet_len}), must be 255 or less.")
+            raise ValueError(
+                f"Packet length too large ({packet_len}), must be 255 or less."
+            )
 
         params = to_le_nbyte_list(handle, 2)
         params.append(packet_len)
@@ -285,7 +295,7 @@ class VendorSpecificCmds:
         Raises
         ------
         ValueError
-            If `channel` is greater than 39 or less than 0. 
+            If `channel` is greater than 39 or less than 0.
         ValueError
             If `packet_len` is greater than 255.
         ValueError
@@ -293,11 +303,17 @@ class VendorSpecificCmds:
 
         """
         if not 0 <= channel < 40:
-            raise ValueError(f"Channel out of bandwidth ({channel}), must be in range [0, 40).")
+            raise ValueError(
+                f"Channel out of bandwidth ({channel}), must be in range [0, 40)."
+            )
         if packet_len > 0xFF:
-            raise ValueError(f"Packet length too large ({packet_len}), must be 255 or less.")
+            raise ValueError(
+                f"Packet length too large ({packet_len}), must be 255 or less."
+            )
         if num_packets > 0xFFFF:
-            raise ValueError(f"Num packets too large ({num_packets}), must be 65535 or less.")
+            raise ValueError(
+                f"Num packets too large ({num_packets}), must be 65535 or less."
+            )
 
         params = [channel, packet_len, payload.value, phy.value]
         params.extend(to_le_nbyte_list(num_packets, 2))
@@ -343,9 +359,13 @@ class VendorSpecificCmds:
 
         """
         if not 0 <= channel < 40:
-            raise ValueError(f"Channel out of bandwidth ({channel}), must be in range [0, 40).")
+            raise ValueError(
+                f"Channel out of bandwidth ({channel}), must be in range [0, 40)."
+            )
         if num_packets > 0xFFFF:
-            raise ValueError(f"Num packets too large ({num_packets}), must be 65535 or less.")
+            raise ValueError(
+                f"Num packets too large ({num_packets}), must be 65535 or less."
+            )
 
         params = [channel, phy.value, modulation_idx]
         params.extend(to_le_nbyte_list(num_packets, 2))
@@ -389,7 +409,9 @@ class VendorSpecificCmds:
 
         """
         if not -127 < tx_power < 127:
-            raise ValueError(f"TX power ({tx_power}) out of range, must be in range [-127, 127].")
+            raise ValueError(
+                f"TX power ({tx_power}) out of range, must be in range [-127, 127]."
+            )
 
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_ADV_TX_PWR, params=tx_power)
 
@@ -421,9 +443,13 @@ class VendorSpecificCmds:
 
         """
         if byte_length(handle) > 2:
-            raise ValueError(f"Handle ({handle}) is too large, must be 2 bytes or less.")
+            raise ValueError(
+                f"Handle ({handle}) is too large, must be 2 bytes or less."
+            )
         if not -127 < tx_power < 127:
-            raise ValueError(f"TX power ({tx_power}) out of range, must be in range [-127, 127].")
+            raise ValueError(
+                f"TX power ({tx_power}) out of range, must be in range [-127, 127]."
+            )
 
         params = to_le_nbyte_list(handle, 2)
         params.append(tx_power)
@@ -461,7 +487,9 @@ class VendorSpecificCmds:
 
         """
         if byte_length(handle) > 2:
-            raise ValueError(f"Handle ({handle}) is too large, must be 2 bytes or less.")
+            raise ValueError(
+                f"Handle ({handle}) is too large, must be 2 bytes or less."
+            )
 
         if channels:
             channels = channels if isinstance(channels, list) else [channels]
@@ -479,16 +507,13 @@ class VendorSpecificCmds:
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_CHAN_MAP, params=params)
 
     def read_register(
-            self,
-            addr: int,
-            length: int,
-            print_data: bool = False
+        self, addr: int, length: int, print_data: bool = False
     ) -> Tuple[List[int], StatusCode]:
         """Read a number of bytes from a register.
 
         Sends a vendor-specific command to the DUT, telling it to
         read bytes from a register in accordance with the given
-        length and register address values. 
+        length and register address values.
 
         Parameters
         ----------
@@ -509,7 +534,9 @@ class VendorSpecificCmds:
         """
         params = [length]
         params.extend(to_le_nbyte_list(addr, 4))
-        evt = self.send_vs_command(OCF.VENDOR_SPEC.REG_READ, params=params, return_evt=True)
+        evt = self.send_vs_command(
+            OCF.VENDOR_SPEC.REG_READ, params=params, return_evt=True
+        )
 
         param_lens = [4] * (length // 4)
         if not length % 4 == 0:
@@ -643,7 +670,9 @@ class VendorSpecificCmds:
 
         """
         if byte_length(handle) > 2:
-            raise ValueError(f"Handle ({handle}) is too large, must be 2 bytes or less.")
+            raise ValueError(
+                f"Handle ({handle}) is too large, must be 2 bytes or less."
+            )
         if byte_length(flags) > 4:
             raise ValueError(f"Flags ({flags}) is too large, must be 4 bytes or less.")
 
@@ -678,7 +707,9 @@ class VendorSpecificCmds:
 
         """
         if byte_length(priv_key) > 32:
-            raise ValueError(f"Private key ({priv_key}) too large, must be 32 bytes or less.")
+            raise ValueError(
+                f"Private key ({priv_key}) too large, must be 32 bytes or less."
+            )
 
         params = to_le_nbyte_list(priv_key, 32)
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_P256_PRIV_KEY, params=params)
@@ -687,7 +718,7 @@ class VendorSpecificCmds:
         self, handle: int, is_advertising: bool
     ) -> Tuple[int, StatusCode]:
         """Get the channel map used for periodic scanning/advertising.
-        
+
         Sends a vendor-specific command to the DUT, telling it to
         retrieve the channel map used for either periodic scanning
         or periodic advertising in accordance with the given values.
@@ -713,12 +744,15 @@ class VendorSpecificCmds:
 
         """
         if byte_length(handle) > 2:
-            raise ValueError(f"Handle ({handle}) is too large, must be 2 bytes or less.")
+            raise ValueError(
+                f"Handle ({handle}) is too large, must be 2 bytes or less."
+            )
 
         params = to_le_nbyte_list(handle, 2)
         params.append(int(is_advertising))
         evt = self.send_vs_command(
-            OCF.VENDOR_SPEC.GET_PER_CHAN_MAP, params=params, return_evt=True)
+            OCF.VENDOR_SPEC.GET_PER_CHAN_MAP, params=params, return_evt=True
+        )
 
         return evt.get_return_params(), evt.status
 
@@ -780,15 +814,21 @@ class VendorSpecificCmds:
 
         """
         if not -127 < pwr_thresh < 127:
-            raise ValueError(f"Thresh ({pwr_thresh}) out of range, must be in range [-127, 127].")
+            raise ValueError(
+                f"Thresh ({pwr_thresh}) out of range, must be in range [-127, 127]."
+            )
         if not 0 < min_used <= 37:
-            raise ValueError(f"Min used ({min_used}) out of range, must be in range [1, 37].")
+            raise ValueError(
+                f"Min used ({min_used}) out of range, must be in range [1, 37]."
+            )
 
         if phy == PhyOption.PHY_CODED_S2:
             phy = PhyOption.PHY_CODED
 
         params = [phy.value, pwr_thresh, min_used]
-        return self.send_vs_command(OCF.VENDOR_SPEC.SET_LOCAL_MIN_USED_CHAN, params=params)
+        return self.send_vs_command(
+            OCF.VENDOR_SPEC.SET_LOCAL_MIN_USED_CHAN, params=params
+        )
 
     def get_peer_min_num_channels_used(
         self, handle: int
@@ -818,11 +858,14 @@ class VendorSpecificCmds:
 
         """
         if byte_length(handle) > 2:
-            raise ValueError(f"Handle ({handle}) is too large, must be 2 bytes or less.")
+            raise ValueError(
+                f"Handle ({handle}) is too large, must be 2 bytes or less."
+            )
 
         params = to_le_nbyte_list(handle, 2)
         evt = self.send_vs_command(
-            OCF.VENDOR_SPEC.GET_PEER_MIN_USED_CHAN, params=params, return_evt=True)
+            OCF.VENDOR_SPEC.GET_PEER_MIN_USED_CHAN, params=params, return_evt=True
+        )
         data = evt.get_return_params(param_lens=[1, 1, 1])
 
         min_used_map = {
@@ -851,7 +894,9 @@ class VendorSpecificCmds:
             The return packet status code.
 
         """
-        return self.send_vs_command(OCF.VENDOR_SPEC.VALIDATE_PUB_KEY_MODE, params=[mode.value])
+        return self.send_vs_command(
+            OCF.VENDOR_SPEC.VALIDATE_PUB_KEY_MODE, params=[mode.value]
+        )
 
     def get_rand_address(self) -> Tuple[int, StatusCode]:
         """Get a random device address.
@@ -896,7 +941,9 @@ class VendorSpecificCmds:
 
         """
         if features > MAX_U64:
-            raise ValueError(f"Feature mask ({features}) is too large, must be 64 bits or less.")
+            raise ValueError(
+                f"Feature mask ({features}) is too large, must be 64 bits or less."
+            )
 
         params = to_le_nbyte_list(features, 8)
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_LOCAL_FEAT, params=params)
@@ -1007,7 +1054,9 @@ class VendorSpecificCmds:
 
         """
         if byte_length(handle) > 2:
-            raise ValueError(f"Handle ({handle}) is too large, must be 2 bytes or less.")
+            raise ValueError(
+                f"Handle ({handle}) is too large, must be 2 bytes or less."
+            )
 
         params = [int(enable)]
         params.append(int(nonce_mode))
@@ -1316,10 +1365,7 @@ class VendorSpecificCmds:
         params = [handle, primary, secondary]
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_EXT_ADV_PHY_OPTS, params=params)
 
-    def set_extended_advertising_default_phy_opts(
-        self,
-        phy_opts: int
-    ) -> StatusCode:
+    def set_extended_advertising_default_phy_opts(self, phy_opts: int) -> StatusCode:
         """Set the extended advertising default TX PHY options.
 
         Sends a vendor-specific command to the DUT, telling it to
@@ -1338,7 +1384,9 @@ class VendorSpecificCmds:
             The return packet status code.
 
         """
-        return self.send_vs_command(OCF.VENDOR_SPEC.SET_EXT_ADV_DEF_PHY_OPTS, params=phy_opts)
+        return self.send_vs_command(
+            OCF.VENDOR_SPEC.SET_EXT_ADV_DEF_PHY_OPTS, params=phy_opts
+        )
 
     def generate_iso_packets(
         self, handle: int, packet_len: int, num_packets: int
@@ -1372,10 +1420,13 @@ class VendorSpecificCmds:
 
         """
         if byte_length(handle) > 2:
-            raise ValueError(f"Handle ({handle}) is too large, must be 2 bytes or less.")
+            raise ValueError(
+                f"Handle ({handle}) is too large, must be 2 bytes or less."
+            )
         if byte_length(packet_len) > 2:
             raise ValueError(
-                f"Packet length ({packet_len}) is too large, must be 2 bytes or less.")
+                f"Packet length ({packet_len}) is too large, must be 2 bytes or less."
+            )
 
         params = to_le_nbyte_list(handle, 2)
         params.extend(to_le_nbyte_list(packet_len, 2))
@@ -1454,7 +1505,8 @@ class VendorSpecificCmds:
         """
         if packet_len > MAX_U32:
             raise ValueError(
-                f"Packet length ({packet_len}) is too large, must be 4 bytes or less.")
+                f"Packet length ({packet_len}) is too large, must be 4 bytes or less."
+            )
 
         params = to_le_nbyte_list(packet_len, 4)
         return self.send_vs_command(OCF.VENDOR_SPEC.ENA_AUTO_GEN_ISO, params=params)
@@ -1625,7 +1677,9 @@ class VendorSpecificCmds:
 
         """
         if byte_length(handle) > 2:
-            raise ValueError(f"Handle ({handle}) is too large, must be 2 bytes or less.")
+            raise ValueError(
+                f"Handle ({handle}) is too large, must be 2 bytes or less."
+            )
 
         if phy == PhyOption.PHY_CODED_S2:
             phy = PhyOption.PHY_CODED
@@ -1652,7 +1706,7 @@ class VendorSpecificCmds:
             RSSI value for the indicated channel.
         StatusCode
             The return packet status code.
-            
+
 
         Raises
         ------
@@ -1660,9 +1714,13 @@ class VendorSpecificCmds:
             If channel is greater than 39 or less than 0.
         """
         if not 0 <= channel < 40:
-            raise ValueError(f"Channel out of bandwidth ({channel}), must be in range [0, 40).")
+            raise ValueError(
+                f"Channel out of bandwidth ({channel}), must be in range [0, 40)."
+            )
 
-        evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_RSSI, params=channel, return_evt=True)
+        evt = self.send_vs_command(
+            OCF.VENDOR_SPEC.GET_RSSI, params=channel, return_evt=True
+        )
         rssi = evt.get_return_params(signed=True)
 
         return rssi, evt.status

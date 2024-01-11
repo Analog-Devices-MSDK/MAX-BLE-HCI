@@ -63,6 +63,7 @@ from .hci_packets import AsyncPacket, CommandPacket, EventPacket
 from .packet_codes import StatusCode
 from .constants import ADI_PORT_BAUD_RATE
 
+
 class BleHci(BleStandardCmds, VendorSpecificCmds):
     """Host-controller interface.
 
@@ -117,6 +118,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         Port timeout.
 
     """
+
     def __init__(
         self,
         port_id: str,
@@ -127,7 +129,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         retries: int = 0,
         timeout: float = 1.0,
         async_callback: Optional[Callable[[AsyncPacket], Any]] = None,
-        evt_callback: Optional[Callable[[EventPacket], Any]] = None
+        evt_callback: Optional[Callable[[EventPacket], Any]] = None,
     ):
         self.port_id = port_id
         self.port = None
@@ -201,9 +203,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
             )
 
     def start_advertising(
-        self,
-        connect: bool = True,
-        adv_params: Optional[AdvParams] = None
+        self, connect: bool = True, adv_params: Optional[AdvParams] = None
     ) -> StatusCode:
         """Start advertising.
 
@@ -250,7 +250,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         addr: Optional[int] = None,
         interval: int = 0x6,
         sup_timeout: int = 0x64,
-        conn_params: Optional[ConnParams] = None
+        conn_params: Optional[ConnParams] = None,
     ) -> StatusCode:
         """Initialize a connection.
 
@@ -288,10 +288,14 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         """
         if conn_params is None:
             if addr is None:
-                raise ValueError("Either connection parameters or address must be provided.")
+                raise ValueError(
+                    "Either connection parameters or address must be provided."
+                )
 
             if max((addr.bit_length() + 7) // 8, 1) > 6:
-                raise ValueError(f"Address ({addr}) is too large, must be 6 bytes or less.")
+                raise ValueError(
+                    f"Address ({addr}) is too large, must be 6 bytes or less."
+                )
 
             conn_params = ConnParams(
                 addr,

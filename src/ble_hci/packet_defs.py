@@ -53,6 +53,7 @@
 from dataclasses import dataclass
 from enum import Enum
 
+
 class PacketType(Enum):
     """BT standard packet types."""
 
@@ -75,6 +76,7 @@ class PacketType(Enum):
 
     EXTENDED = 0x9
     """Extended command packet type."""
+
 
 class OGF(Enum):
     """BLE-defined Opcode Group Field values."""
@@ -106,11 +108,13 @@ class OGF(Enum):
     VENDOR_SPEC = 0x3F
     """Vendor specific group field."""
 
+
 class NOpOCF(Enum):
     """BLE-defined NOP group Opcode Command Field values."""
 
     NOP = 0x00
     """No operation."""
+
 
 class LinkControlOCF(Enum):
     """BLE-defined Link Control group Opcode Command Field values"""
@@ -120,6 +124,7 @@ class LinkControlOCF(Enum):
 
     READ_REMOTE_VER_INFO = 0x1D
     """Read remote version info command."""
+
 
 class ControllerOCF(Enum):
     """BLE-defined Controller group Opcode Command Field values."""
@@ -154,6 +159,7 @@ class ControllerOCF(Enum):
     CONFIG_DATA_PATH = 0x83
     """Configure data path command."""
 
+
 class InformationalOCF(Enum):
     """BLE-defined Information group Opcode Command Field values."""
 
@@ -181,11 +187,13 @@ class InformationalOCF(Enum):
     READ_LOCAL_SUP_CONTROLLER_DLY = 0x0F
     """Read local supported controller delay command."""
 
+
 class StatusOCF(Enum):
     """BLE-defined Status group Opcode Command Field values."""
 
     READ_RSSI = 0x05
     """Read RSSI command."""
+
 
 class LEControllerOCF(Enum):
     """BLE-defined LE Controller group Opcode Command Field values."""
@@ -553,6 +561,7 @@ class LEControllerOCF(Enum):
     SET_TX_POWER_REPORT_ENABLE = 0x7A
     """Set TX power reporting enable command."""
 
+
 class VendorSpecificOCF(Enum):
     """ADI Vendor Specific group Opcode Command Field values."""
 
@@ -714,6 +723,7 @@ class VendorSpecificOCF(Enum):
 
     PHY_DIS = 0x308
     """PHY disable command."""
+
 
 @dataclass
 class OCF:

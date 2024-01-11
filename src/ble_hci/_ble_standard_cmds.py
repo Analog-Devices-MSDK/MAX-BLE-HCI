@@ -52,7 +52,7 @@
 """
 Module contains definitions for BLE standard HCI commands.
 """
-#pylint: disable=too-many-arguments
+# pylint: disable=too-many-arguments
 from typing import Optional, Tuple, Union, List
 
 from ._hci_logger import get_formatted_logger
@@ -63,9 +63,10 @@ from .hci_packets import CommandPacket, EventPacket
 from .packet_codes import StatusCode
 from .packet_defs import OCF, OGF
 
+
 class BleStandardCmds:
     """Definitions for BLE standard HCI commands.
-    
+
     Class contains functions used to implement BLE standard HCI
     commands. Used as a parent for the full Analog Devices BLE
     HCI class.
@@ -83,8 +84,9 @@ class BleStandardCmds:
         Serial port interfacing object.
     logger : logging.Logger
         HCI logging object referenced by the `name` argument.
-    
+
     """
+
     def __init__(self, port: SerialUartTransport, logger_name: str):
         self.port = port
         self.logger = get_formatted_logger(name=logger_name)
@@ -206,12 +208,18 @@ class BleStandardCmds:
         params = to_le_nbyte_list(adv_params.interval_min, 2)
         params.extend(to_le_nbyte_list(adv_params.interval_max, 2))
         params.extend(
-            [adv_params.adv_type, adv_params.own_addr_type.value, adv_params.peer_addr_type.value]
+            [
+                adv_params.adv_type,
+                adv_params.own_addr_type.value,
+                adv_params.peer_addr_type.value,
+            ]
         )
         params.extend(to_le_nbyte_list(adv_params.peer_addr, 6))
         params.extend([adv_params.channel_map, adv_params.filter_policy])
 
-        return self.send_le_controller_command(OCF.LE_CONTROLLER.SET_ADV_PARAM, params=params)
+        return self.send_le_controller_command(
+            OCF.LE_CONTROLLER.SET_ADV_PARAM, params=params
+        )
 
     def enable_adv(self, enable: bool) -> StatusCode:
         """Command board to start/stop advertising.
@@ -255,12 +263,12 @@ class BleStandardCmds:
         params.append(scan_params.addr_type.value)
         params.append(scan_params.filter_policy)
 
-        return self.send_le_controller_command(OCF.LE_CONTROLLER.SET_SCAN_PARAM, params=params)
+        return self.send_le_controller_command(
+            OCF.LE_CONTROLLER.SET_SCAN_PARAM, params=params
+        )
 
     def enable_scanning(
-        self,
-        enable: bool,
-        filter_duplicates: bool = False
+        self, enable: bool, filter_duplicates: bool = False
     ) -> StatusCode:
         """Command board to start/stop scanning.
 
@@ -281,9 +289,13 @@ class BleStandardCmds:
 
         """
         params = [int(enable), int(filter_duplicates)]
-        return self.send_le_controller_command(OCF.LE_CONTROLLER.SET_SCAN_ENABLE, params=params)
+        return self.send_le_controller_command(
+            OCF.LE_CONTROLLER.SET_SCAN_ENABLE, params=params
+        )
 
-    def create_connection(self, conn_params: ConnParams = ConnParams(0x0)) -> StatusCode:
+    def create_connection(
+        self, conn_params: ConnParams = ConnParams(0x0)
+    ) -> StatusCode:
         """Command board to connect with a peer device.
 
         Sends a command to the DUT, telling it to create a connection
@@ -313,7 +325,9 @@ class BleStandardCmds:
         params.extend(to_le_nbyte_list(conn_params.min_ce_length, 2))
         params.extend(to_le_nbyte_list(conn_params.max_ce_length, 2))
 
-        return self.send_le_controller_command(OCF.LE_CONTROLLER.CREATE_CONN, params=params)
+        return self.send_le_controller_command(
+            OCF.LE_CONTROLLER.CREATE_CONN, params=params
+        )
 
     def set_default_phy(
         self, all_phys: int = 0x0, tx_phys: int = 0x7, rx_phys: int = 0x7
@@ -339,7 +353,9 @@ class BleStandardCmds:
 
         """
         params = [all_phys, tx_phys, rx_phys]
-        return self.send_le_controller_command(OCF.LE_CONTROLLER.SET_DEF_PHY, params=params)
+        return self.send_le_controller_command(
+            OCF.LE_CONTROLLER.SET_DEF_PHY, params=params
+        )
 
     def set_data_len(
         self, handle: int = 0x0000, tx_octets: int = 0xFB00, tx_time: int = 0x9042
@@ -367,7 +383,9 @@ class BleStandardCmds:
         params = to_le_nbyte_list(handle, 2)
         params.extend(to_le_nbyte_list(tx_octets, 2))
         params.extend(to_le_nbyte_list(tx_time, 2))
-        return self.send_le_controller_command(OCF.LE_CONTROLLER.SET_DATA_LEN, params=params)
+        return self.send_le_controller_command(
+            OCF.LE_CONTROLLER.SET_DATA_LEN, params=params
+        )
 
     def set_phy(
         self,
@@ -375,7 +393,7 @@ class BleStandardCmds:
         all_phys: int = 0x0,
         tx_phys: int = 0x7,
         rx_phys: int = 0x7,
-        phy_opts: int = 0x0
+        phy_opts: int = 0x0,
     ) -> StatusCode:
         """Set the PHY preferences for a connection.
 
@@ -403,24 +421,24 @@ class BleStandardCmds:
         if not 0 <= all_phys <= 3:
             self.logger.warning(
                 "Invalid all PHYs option (%i), must be between 0x0 and 0x3. Defaulting to 0x0.",
-                all_phys
+                all_phys,
             )
         if all_phys in (1, 3) and not 0 < tx_phys <= 7:
             self.logger.warning(
                 "Invalid TX PHY option (%i), must be between 0x1 and 0x7. Defaulting to 0x7.",
-                tx_phys
+                tx_phys,
             )
             tx_phys = 0x7
         if all_phys in (2, 3) and not 0 < rx_phys <= 7:
             self.logger.warning(
                 "Invalid RX PHY option (%i), must be between 0x1 and 0x7. Defaulting to 0x7.",
-                rx_phys
+                rx_phys,
             )
             rx_phys = 0x7
         if phy_opts not in (0, 1, 2, 4):
             self.logger.warning(
                 "Invalid PHY options (%i), must be 0x0, 0x1, 0x2, or 0x4. Defaulting to 0x0.",
-                phy_opts
+                phy_opts,
             )
             phy_opts = 0x0
 
@@ -435,7 +453,7 @@ class BleStandardCmds:
         channel: int = 0,
         phy: PhyOption = PhyOption.PHY_1M,
         payload: PayloadOption = PayloadOption.PLD_PRBS9,
-        packet_len: int = 0
+        packet_len: int = 0,
     ) -> StatusCode:
         """Start a transmitter test.
 
@@ -461,13 +479,14 @@ class BleStandardCmds:
         """
         params = [channel, packet_len, payload.value, phy.value]
         return self.send_le_controller_command(
-            OCF.LE_CONTROLLER.ENHANCED_TRANSMITTER_TEST, params=params)
+            OCF.LE_CONTROLLER.ENHANCED_TRANSMITTER_TEST, params=params
+        )
 
     def rx_test(
         self,
         channel: int = 0,
         phy: PhyOption = PhyOption.PHY_1M,
-        modulation_idx: int = 0
+        modulation_idx: int = 0,
     ) -> StatusCode:
         """Start a receiver test.
 
@@ -495,7 +514,8 @@ class BleStandardCmds:
 
         params = [channel, phy.value, modulation_idx]
         return self.send_le_controller_command(
-            OCF.LE_CONTROLLER.ENHANCED_RECEIVER_TEST, params=params)
+            OCF.LE_CONTROLLER.ENHANCED_RECEIVER_TEST, params=params
+        )
 
     def end_test(self) -> Tuple[StatusCode, int]:
         """End the current test.
@@ -540,7 +560,9 @@ class BleStandardCmds:
         """
         params = to_le_nbyte_list(handle, 2)
         params.append(reason)
-        return self.send_link_control_command(OCF.LINK_CONTROL.DISCONNECT, params=params)
+        return self.send_link_control_command(
+            OCF.LINK_CONTROL.DISCONNECT, params=params
+        )
 
     def reset(self) -> StatusCode:
         """Reset board controller/link layer.
@@ -599,14 +621,14 @@ class BleStandardCmds:
                 status,
                 self.send_controller_command(
                     OCF.CONTROLLER.SET_EVENT_MASK_PAGE2, params=params
-                )
+                ),
             )
 
         return status
 
     def set_event_mask_le(self, mask: int) -> StatusCode:
         """Enable/disable LE events the board can generate.
-        
+
         Sends a command to the DUT, telling it to enable/disable
         LE events that can be generated and returned to the host
         in accordance with the given mask.
@@ -625,4 +647,6 @@ class BleStandardCmds:
 
         """
         params = to_le_nbyte_list(mask, 8)
-        return self.send_le_controller_command(OCF.LE_CONTROLLER.SET_EVENT_MASK, params=params)
+        return self.send_le_controller_command(
+            OCF.LE_CONTROLLER.SET_EVENT_MASK, params=params
+        )
