@@ -54,6 +54,8 @@
 from typing import Optional
 from dataclasses import dataclass
 
+from .constants import AddrType
+
 
 @dataclass
 class AdvParams:
@@ -68,10 +70,10 @@ class AdvParams:
     adv_type: int = 0x3
     """Advertising type."""
 
-    own_addr_type: int = 0
+    own_addr_type: AddrType = AddrType.PUBLIC
     """Own device address type."""
 
-    peer_addr_type: int = 0
+    peer_addr_type: AddrType = AddrType.PUBLIC
     """Connectable peer device address type."""
 
     peer_addr: int = 0
@@ -105,7 +107,7 @@ class ScanParams:
     scan_window: int = 0x100
     """Scan duration."""
 
-    addr_type: int = 0x0
+    addr_type: AddrType = AddrType.PUBLIC
     """Own device address type."""
 
     filter_policy: int = 0x0
@@ -124,6 +126,9 @@ class ScanParams:
 class ConnParams:
     """Connection parameters data container."""
 
+    peer_addr: int
+    """Connectable peer device address."""
+
     scan_interval: int = 0x100
     """Scan interval."""
 
@@ -133,13 +138,10 @@ class ConnParams:
     init_filter_policy: int = 0x0
     """Initiator filter policy."""
 
-    peer_addr_type: int = 0x0
+    peer_addr_type: AddrType = AddrType.PUBLIC
     """Connectable peer device address type."""
 
-    peer_addr: int
-    """Connectable peer device address."""
-
-    own_addr_type: int = 0x0
+    own_addr_type: AddrType = AddrType.PUBLIC
     """Own device address type."""
 
     conn_interval_min: int = 0x6
@@ -171,14 +173,20 @@ class ConnParams:
                 f"Init filter policy must be 0x0 or 0x1 {self.init_filter_policy}"
             )
 
-        if self.peer_addr_type not in [0, 1, 2, 3]:
-            raise ValueError("Invalid peer address type")
+        if not isinstance(self.peer_addr_type, AddrType):
+            raise TypeError(
+                "Attribute peer_addr_type must be of type AddrType, not %s",
+                type(self.peer_addr_type).__name__
+            )
 
         if self.peer_addr > 2**48 - 1:
             raise ValueError("Peer address must be representable by 6 octets")
 
-        if self.own_addr_type not in [0, 1, 2, 3]:
-            raise ValueError("Invalid peer address type")
+        if not isinstance(self.own_addr_type, AddrType):
+            raise TypeError(
+                "Attribute own_addr_type must be of type AddrType, not %s",
+                type(self.own_addr_type).__name__
+            )
 
         if not 0x6 <= self.conn_interval_max <= 0xC80:
             raise ValueError("Connection interval min must be between 0x6 - 0xC80")

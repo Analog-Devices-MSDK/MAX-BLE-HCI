@@ -205,7 +205,9 @@ class BleStandardCmds:
         """
         params = to_le_nbyte_list(adv_params.interval_min, 2)
         params.extend(to_le_nbyte_list(adv_params.interval_max, 2))
-        params.extend([adv_params.adv_type, adv_params.own_addr_type, adv_params.peer_addr_type])
+        params.extend(
+            [adv_params.adv_type, adv_params.own_addr_type.value, adv_params.peer_addr_type.value]
+        )
         params.extend(to_le_nbyte_list(adv_params.peer_addr, 6))
         params.extend([adv_params.channel_map, adv_params.filter_policy])
 
@@ -250,7 +252,7 @@ class BleStandardCmds:
         params = [scan_params.scan_type]
         params.extend(to_le_nbyte_list(scan_params.scan_interval, 2))
         params.extend(to_le_nbyte_list(scan_params.scan_window, 2))
-        params.append(scan_params.addr_type)
+        params.append(scan_params.addr_type.value)
         params.append(scan_params.filter_policy)
 
         return self.send_le_controller_command(OCF.LE_CONTROLLER.SET_SCAN_PARAM, params=params)
@@ -281,7 +283,7 @@ class BleStandardCmds:
         params = [int(enable), int(filter_duplicates)]
         return self.send_le_controller_command(OCF.LE_CONTROLLER.SET_SCAN_ENABLE, params=params)
 
-    def create_connection(self, conn_params: ConnParams = ConnParams()) -> StatusCode:
+    def create_connection(self, conn_params: ConnParams = ConnParams(0x0)) -> StatusCode:
         """Command board to connect with a peer device.
 
         Sends a command to the DUT, telling it to create a connection
@@ -301,9 +303,9 @@ class BleStandardCmds:
         params = to_le_nbyte_list(conn_params.scan_interval, 2)
         params.extend(to_le_nbyte_list(conn_params.scan_window, 2))
         params.append(conn_params.init_filter_policy)
-        params.append(conn_params.peer_addr_type)
+        params.append(conn_params.peer_addr_type.value)
         params.extend(to_le_nbyte_list(conn_params.peer_addr, 6))
-        params.append(conn_params.own_addr_type)
+        params.append(conn_params.own_addr_type.value)
         params.extend(to_le_nbyte_list(conn_params.conn_interval_min, 2))
         params.extend(to_le_nbyte_list(conn_params.conn_interval_max, 2))
         params.extend(to_le_nbyte_list(conn_params.max_latency, 2))
