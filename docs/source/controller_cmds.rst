@@ -134,11 +134,7 @@ Parameters
     * - 61
       - LE Meta
     * - All other bits
-<<<<<<< HEAD
-      - [Reserved for future use].
-=======
       - [Reserved for future use.]
->>>>>>> 4dd08ad (Initial documentation bringup)
 
 Return Parameters
 `````````````````
