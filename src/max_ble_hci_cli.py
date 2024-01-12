@@ -139,7 +139,7 @@ def _hex_int(hex_str: str) -> int:
     return int(hex_str, 16)
 
 
-def _signal_handler(signal, fname):  # pylint: disable=unused-variable
+def _signal_handler(_signal, _fname):  # pylint: disable=unused-variable
     print()
     sys.exit(0)
 
@@ -154,13 +154,12 @@ def _run_input_cmds(commands):
 
         # Catch SystemExit, allows user to ctrl-c to quit the current command
         except SystemExit as err:
-            if "{0}".format(err) != "0":
+            if err.code != 0:
                 # Catch the magic exit value, return 0
-                if "{0}".format(err) == str(EXIT_FUNC_MAGIC):
+                if err.code == EXIT_FUNC_MAGIC:
                     sys.exit(0)
-
                 # Return error
-                sys.exit(int("{0}".format(err)))
+                sys.exit(err.code)
 
             # Continue if we get a different code
 
