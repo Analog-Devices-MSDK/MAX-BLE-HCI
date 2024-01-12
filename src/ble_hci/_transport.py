@@ -235,6 +235,8 @@ class SerialUartTransport:
     def __del__(self):
         if self._read_thread.is_alive():
             self.stop()
+        if self.port.isOpen():
+            self.port.close()
 
     def start(self):
         """Start the port read thread.

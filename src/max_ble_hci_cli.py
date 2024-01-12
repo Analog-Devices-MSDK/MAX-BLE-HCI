@@ -70,8 +70,7 @@ from colorlog import ColoredFormatter
 
 from ble_hci import BleHci
 from ble_hci.constants import PhyOption, PayloadOption
-from ble_hci import packet_codes as pc
-
+from ble_hci.data_params import ConnParams
 # Create a logger
 logger = logging.getLogger(__name__)
 
@@ -112,9 +111,6 @@ DEFAULT_SCAN_INTERVAL = 0x100
 DEFAULT_CONN_INTERVAL = 0x6  # 7.5 ms
 DEFAULT_SUP_TIMEOUT = 0x64  # 1 s
 
-hci = None
-
-
 class ListenAction(argparse.Action):
     """Listen Action"""
 
@@ -139,29 +135,16 @@ class ArgumentParser(argparse.ArgumentParser):
         self.exit(2)
 
 
-def hex_int(hex_str: str) -> int:
-    """Convert hex as string to int
-
-    Parameters
-    ----------
-    hex_str : str
-        hex value as string
-
-    Returns
-    -------
-    int
-        hex string converted to int
-    """
+def _hex_int(hex_str: str) -> int:
     return int(hex_str, 16)
 
 
-def signal_handler(signal, fname):
-    # pylint: disable=unused-variable
+def _signal_handler(signal, fname):  # pylint: disable=unused-variable
     print()
     sys.exit(0)
 
 
-def run_input_cmds(commands):
+def _run_input_cmds(commands):
     for cmd in commands:
         try:
             args = terminal.parse_args(cmd.split())
@@ -184,19 +167,12 @@ def run_input_cmds(commands):
     return True
 
 
-def addr_func(args):
-    """Set BD Address
-
-    Parameters
-    ----------
-    args : _type_
-        _description_
-    """
+def _addr_func(args):
     addr = int(args.addr.replace(":", ""), 16)
     hci.set_address(addr)
 
 
-def adv_func(args):
+def _adv_func(args):
     hci.start_advertising(
         interval=args.adv_interval,
         connect=args.connect,
@@ -206,55 +182,39 @@ def adv_func(args):
     )
 
 
-def scan_func(args):
+def _scan_func(args):
     # TODO: Figure out to replicate this
     hci.start(interval=args.scan_interval)
 
 
-def init_func(args):
+def _init_func(args):
+
     hci.init_connection(
         args.addr,
         interval=args.conn_interval,
-        timeout=args.sup_timeout,
-        listen=args.listen,
-        stats=args.stats,
-        maintain=args.maintain,
+        sup_timeout=args.sup_timeout,
+        conn_params=ConnParams()
     )
 
 
-def data_len_func(args):
+def _data_len_func(args):
     hci.set_data_len()
 
 
-def send_acl_func(args):
+def _send_acl_func(args):
     hci.sendAcl(args.packet_length, args.num_packets)
 
 
-def sink_acl_func(args):
+def _sink_acl_func(args):
     hci.sinkAcl()
 
 
-def conn_stats_func(args):
-    
-    print(hci.get_conn_stats())
-
-
-def phy_func(args):
+def _phy_func(args):
     hci.set_phy(args.phy)
 
 
-def reset_func(args):
-    hci.reset()
-
-
-def memstats_func(args):
-    # TODO: NO CLUE
-    print(hci.get_memory_stats())
-    # hci.listen(stats=args.stats, time=args.time)
-
-
-def tx_test_func(args):
-    code = hci.tx_test(
+def _tx_test_func(args):
+    hci.tx_test(
         channel=args.channel,
         phy=PhyOption(args.phy),
         payload=PayloadOption(args.payload),
@@ -262,21 +222,21 @@ def tx_test_func(args):
     )
 
 
-def tx_test_vs_func(args):
+def _tx_test_vs_func(_args):
     hci.tx_test_vs_(
-        channel=args.channel,
-        phy=args.phy,
-        payload=args.payload,
-        packet_length=args.packet_length,
-        num_packets=args.num_packets,
+        channel=_args.channel,
+        phy=_args.phy,
+        payload=_args.payload,
+        packet_length=_args.packet_length,
+        num_packets=_args.num_packets,
     )
 
 
-def rx_test_func(args):
-    hci.rx_test(channel=args.channel, phy=PhyOption(args.phy))
+def _rx_test_func(_args):
+    hci.rx_test(channel=_args.channel, phy=PhyOption(_args.phy))
 
 
-def rx_test_vs_func(args):
+def _rx_test_vs_func(args):
     hci.rx_test_vs(
         channel=args.channel,
         phy=PhyOption(args.phy),
@@ -285,75 +245,25 @@ def rx_test_vs_func(args):
     )
 
 
-def end_test_func(args):
-    hci.end_test()
-
-
-def reset_test_stats_func(args):
-    hci.reset_test_stats()
-
-
-def tx_power_func(args):
+def _tx_power_func(args):
     hci.set_adv_tx_power(args.power, handle=args.handle)
 
 
-def discon_func(args):
-    hci.disconnect()
+def _set_ch_map_func(args):
+    # TODO: Missing mask param?
+    hci.set_channel_map(channel=args.channel, handle=args.handle)
 
 
-def set_ch_map_func(args):
-    hci.set_channel_map(channel=args.channel, mask=args.mask, handle=args.handle)
-
-
-def cmd_func(args):
+def _cmd_func(args):
     # TODO: NO CLUE 2
     hci.command(args.cmd, listen=args.listen)
 
-
-def read_reg_func(args):
-    print(args.addr)
-    hci.read_register(args.addr, args.length)
-
-
-def write_reg_func(args):
-    hci.write_register(args.addr, args.value)
-
-
-def help_func(args):
-    terminal.print_help()
-
-
-def exit_func(args):
-    if hci is not None:
-        hci.exit()
-    sys.exit(EXIT_FUNC_MAGIC)
-
-
-def set_trace_func(args):
-    hci.logger.setLevel(args.trace_level)
-
-
-def serial_port_func(args):
-    global hci
-    global PORT_INITIALIZED
-    if hci is not None:
-        hci.exit()
-        hci = BleHci(args.serialPort, baud=args.baudRate, monPort_id=args.monPort)
-    else:
-        hci = BleHci(args.serialPort, baud=args.baudRate, monPort_id=args.monPort)
-
-    PORT_INITIALIZED = True
-
-
-def set_id_func(args):
-    global hci
-    hci.id = args.idtag
 
 
 ################## MAIN ##################
 if __name__ == "__main__":
     # Setup the signal handler to catch the ctrl-C
-    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGINT, _signal_handler)
 
     # Setup the command line description text
     DESC_TEXT = f"""
@@ -368,13 +278,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description=DESC_TEXT, formatter_class=RawTextHelpFormatter
     )
-    parser.add_argument(
-        "serialPort",
-        nargs="?",
-        default=None,
-        help="Serial port path or COM#. Default: None"
-        + '\nIf not set, set using the "port" command.',
-    )
+    parser.add_argument("serial_port", help="Serial port path or COM#")
     parser.add_argument(
         "-b",
         "--baud",
@@ -407,19 +311,28 @@ if __name__ == "__main__":
         + "\nIf more than 1, separate commands with a comma.",
     )
 
+    parser.add_argument(
+        "-t",
+        "--trace_level",
+        dest="trace_level",
+        type=int,
+        default=3,
+        help="""Set the trace level
+        0: Error only
+        1: Warning/Error
+        2: Info/Warning/Error
+        3: All messages
+        Default: 3""",
+    )
+
     args = parser.parse_args()
 
-    if args.serialPort is None:
-        logger.warning(
-            "Serial port not initialized. Set port using the 'port' command."
-        )
-        PORT_INITIALIZED = False
-    else:
-        PORT_INITIALIZED = True
-        hci = BleHci(args.serialPort, baud=args.baudRate, id_tag=args.idtag)
+    PORT_INITIALIZED = True
+    hci = BleHci(args.serial_port, baud=args.baudRate, id_tag=args.idtag)
+    hci.logger.setLevel(args.trace_level)
 
     print("Bluetooth Low Energy HCI tool")
-    print(f"Serial port: {args.serialPort}")
+    print(f"Serial port: {args.serial_port}")
     print(f"Monitor Trace Msg Serial Port: {args.monPort}")
     print(f"8N1 {args.baudRate}")
 
@@ -446,7 +359,7 @@ if __name__ == "__main__":
         "addr", help="Set the device address.", formatter_class=RawTextHelpFormatter
     )
     addr_parser.add_argument("addr", help="Device address, ex: 00:11:22:33:44:55")
-    addr_parser.set_defaults(func=addr_func, which="addr")
+    addr_parser.set_defaults(func=_addr_func, which="addr")
 
     memstats_parser = subparsers.add_parser(
         "memstats",
@@ -454,7 +367,7 @@ if __name__ == "__main__":
         formatter_class=RawTextHelpFormatter,
     )
 
-    memstats_parser.set_defaults(func=memstats_func)
+    memstats_parser.set_defaults(func=lambda _: print(hci.get_memory_stats()))
 
     #### ADV PARSER ####
     adv_parser = subparsers.add_parser(
@@ -466,7 +379,7 @@ if __name__ == "__main__":
         "-i",
         "--interval",
         dest="adv_interval",
-        type=hex_int,
+        type=_hex_int,
         default=DEFAULT_ADV_INTERVAL,
         help=f"""Advertising interval in units of 0.625 ms, 16-bit hex number 0x0020 - 0x4000.
         Default: 0x{DEFAULT_ADV_INTERVAL}""",
@@ -490,7 +403,7 @@ if __name__ == "__main__":
         action="store_true",
         help="Setup an event listener to restart advertising if we disconnect.",
     )
-    adv_parser.set_defaults(func=adv_func, which="adv")
+    adv_parser.set_defaults(func=_adv_func, which="adv")
 
     #### SCAN PARSER ####
     scan_parser = subparsers.add_parser(
@@ -502,12 +415,12 @@ if __name__ == "__main__":
         "-i",
         "--interval",
         dest="scan_interval",
-        type=hex_int,
+        type=_hex_int,
         default=DEFAULT_SCAN_INTERVAL,
         help=f"""Scanning interval in units of 0.625 ms, 16-bit hex number 0x0020 - 0x4000.
         Default: 0x{DEFAULT_SCAN_INTERVAL}""",
     )
-    scan_parser.set_defaults(func=scan_func, which="scan")
+    scan_parser.set_defaults(func=_scan_func, which="scan")
 
     #### INIT PARSER ####
     init_parser = subparsers.add_parser(
@@ -522,7 +435,7 @@ if __name__ == "__main__":
         "-i",
         "--interval",
         dest="conn_interval",
-        type=hex_int,
+        type=_hex_int,
         default=DEFAULT_CONN_INTERVAL,
         help=f"""Connection interval in units of 1.25ms, 16-bit hex number 0x0006 - 0x0C80."
         Default: {hex(DEFAULT_CONN_INTERVAL)}""",
@@ -531,7 +444,7 @@ if __name__ == "__main__":
         "-t",
         "--timeout",
         dest="sup_timeout",
-        type=hex_int,
+        type=_hex_int,
         default=DEFAULT_SUP_TIMEOUT,
         help=f"""Supervision timeout in units of 10ms, 16-bit hex number 0x000A - 0x0C80.
         "Default: {hex(DEFAULT_SUP_TIMEOUT)}""",
@@ -559,12 +472,13 @@ if __name__ == "__main__":
         action="store_true",
         help="Setup an event listener to restart advertising if we disconnect.",
     )
-    init_parser.set_defaults(func=init_func, which="init")
+    init_parser.set_defaults(func=_init_func, which="init")
 
+    #TODO: DUNNO what this is meant to take in
     datalen_parser = subparsers.add_parser(
-        "data-len", help="Set the max data length", formatter_class=RawTextHelpFormatter
+        "data-len", help="Set the max data length",formatter_class=RawTextHelpFormatter
     )
-    datalen_parser.set_defaults(func=data_len_func, which="dataLen")
+    datalen_parser.set_defaults(func=_data_len_func, which="dataLen")
 
     sendacl_parser = subparsers.add_parser(
         "send-acl", help="Send ACL packets", formatter_class=RawTextHelpFormatter
@@ -579,21 +493,24 @@ if __name__ == "__main__":
         type=int,
         help="Number of packets to send, 8-bit decimal 1-255, 0 to enable auto-generate",
     )
-    sendacl_parser.set_defaults(func=send_acl_func, which="sendAcl")
+    sendacl_parser.set_defaults(func=_send_acl_func, which="sendAcl")
 
     sinkAcl_parser = subparsers.add_parser(
         "sink-acl",
         help="Sink ACL packets, do not send events to host",
         formatter_class=RawTextHelpFormatter,
     )
-    sinkAcl_parser.set_defaults(func=sink_acl_func, which="sinkAcl")
+    sinkAcl_parser.set_defaults(func=_sink_acl_func, which="sinkAcl")
 
     connStats_parser = subparsers.add_parser(
         "connstats",
         help="Get the connection stats",
         formatter_class=RawTextHelpFormatter,
     )
-    connStats_parser.set_defaults(func=conn_stats_func, which="connstats")
+
+    connStats_parser.set_defaults(
+        func=lambda _: print(hci.get_conn_stats()), which="connstats"
+    )
 
     #### PHY PARSER ####
     phy_parser = subparsers.add_parser(
@@ -615,39 +532,20 @@ if __name__ == "__main__":
         type=int,
         help="Number of seconds to listen for after setting PHY.",
     )
-    phy_parser.set_defaults(func=phy_func, which="phy")
+    phy_parser.set_defaults(func=_phy_func, which="phy")
 
     #### RESET PARSER ####
     reset_parser = subparsers.add_parser("reset", help="Sends an HCI reset command")
-    reset_parser.set_defaults(func=reset_func, which="reset")
+    reset_parser.set_defaults(func=lambda _: hci.reset(), which="reset")
 
     #### LISTEN PARSER ####
-    listen_parser = subparsers.add_parser(
-        "listen", help="Listen for HCI events, print to screen"
-    )
-    listen_parser.add_argument(
-        "-t",
-        "--time",
-        dest="time",
-        type=int,
-        default=0,
-        help="Time to listen in seconds. Default: 0 (indefinitely)",
-    )
-    listen_parser.add_argument(
-        "--stats",
-        dest="stats",
-        action="store_true",
-        help="Periodically print the connection stats if listening.",
-    )
-    listen_parser.set_defaults(func=memstats_func, which="listen")
-
-    txTest_parser = subparsers.add_parser(
+    tx_test_parser = subparsers.add_parser(
         "tx-test",
         aliases=["tx"],
         help="Execute the transmitter test.",
         formatter_class=RawTextHelpFormatter,
     )
-    txTest_parser.add_argument(
+    tx_test_parser.add_argument(
         "-c",
         "--channel",
         type=int,
@@ -655,7 +553,7 @@ if __name__ == "__main__":
         default=0,
         help="TX test channel, 0-39. Default: 0",
     )
-    txTest_parser.add_argument(
+    tx_test_parser.add_argument(
         "--phy",
         dest="phy",
         type=int,
@@ -667,7 +565,7 @@ if __name__ == "__main__":
         4: S2
         Default: 1M""",
     )
-    txTest_parser.add_argument(
+    tx_test_parser.add_argument(
         "-p",
         "--payload",
         dest="payload",
@@ -684,14 +582,14 @@ if __name__ == "__main__":
         7: 01010101
         Default: PRBS9""",
     )
-    txTest_parser.add_argument(
+    tx_test_parser.add_argument(
         "-pl",
         "--packet-length",
         type=int,
         default=0,
         help="Tx packet length, number of bytes per packet, 0-255. Default: 0",
     )
-    txTest_parser.set_defaults(func=tx_test_func, which="txTest")
+    tx_test_parser.set_defaults(func=_tx_test_func, which="txTest")
 
     tx_test_vs_parser = subparsers.add_parser(
         "tx-test-vs",
@@ -753,7 +651,7 @@ if __name__ == "__main__":
         default=0,
         help="Number of packets to transmit, 2 bytes hex, 0 equals infinite. Default: 0",
     )
-    tx_test_vs_parser.set_defaults(func=tx_test_vs_func, which="txTestVS")
+    tx_test_vs_parser.set_defaults(func=_tx_test_vs_func, which="txTestVS")
 
     #### RXTEST PARSER ####
     rxTest_parser = subparsers.add_parser(
@@ -775,18 +673,23 @@ if __name__ == "__main__":
         dest="phy",
         type=int,
         default=1,
-        help="Rx Test PHY\n1: 1M\n2: 2M\n3: S8\n4: S2\nDefault: 1",
+        help="""Rx Test PHY
+        1: 1M
+        2: 2M
+        3: S8
+        4: S2
+        Default: 1""",
     )
-    rxTest_parser.set_defaults(func=rx_test_func, which="rxTest")
+    rxTest_parser.set_defaults(func=_rx_test_func, which="rxTest")
 
     #### RXTESTVS PARSER ####
-    rxTestVS_parser = subparsers.add_parser(
+    rx_test_vs_parser = subparsers.add_parser(
         "rx-test-vs",
         aliases=["rxvs"],
         help="Execute the vendor-specific receiver test",
         formatter_class=RawTextHelpFormatter,
     )
-    rxTestVS_parser.add_argument(
+    rx_test_vs_parser.add_argument(
         "-c",
         "--channel",
         dest="channel",
@@ -794,14 +697,14 @@ if __name__ == "__main__":
         default=0,
         help="Rx test channel. Default: 0",
     )
-    rxTestVS_parser.add_argument(
+    rx_test_vs_parser.add_argument(
         "--phy",
         dest="phy",
         type=int,
         default=1,
         help="Rx Test PHY\n1: 1M\n2: 2M\n3: S8\n4: S2\nDefault: 1",
     )
-    rxTestVS_parser.add_argument(
+    rx_test_vs_parser.add_argument(
         "-m",
         "--mod-idx",
         dest="modulationIdx",
@@ -809,7 +712,7 @@ if __name__ == "__main__":
         default=0,
         help="Vendor-specific modulation index",
     )
-    rxTestVS_parser.add_argument(
+    rx_test_vs_parser.add_argument(
         "-n",
         "--num_packets",
         dest="num_packets",
@@ -817,16 +720,16 @@ if __name__ == "__main__":
         default=0,
         help="Number of packets to transmit, 2 bytes hex, 0 equals infinite. Default: 0",
     )
-    rxTestVS_parser.set_defaults(func=rx_test_vs_func, which="rxTestVS")
+    rx_test_vs_parser.set_defaults(func=_rx_test_vs_func, which="rxTestVS")
 
     #### ENDTEST PARSER ####
-    endTest_parser = subparsers.add_parser(
+    endtest_parser = subparsers.add_parser(
         "end-test",
         aliases=["end"],
         help="End the Tx/Rx test, print the number of correctly received packets",
         formatter_class=RawTextHelpFormatter,
     )
-    endTest_parser.set_defaults(func=end_test_func, which="endTest")
+    endtest_parser.set_defaults(func=lambda _ : hci.end_test(), which="endTest")
 
     #### ENDTESTVS PARSER ####
     reset_test_stats_parser = subparsers.add_parser(
@@ -836,23 +739,23 @@ if __name__ == "__main__":
         formatter_class=RawTextHelpFormatter,
     )
     reset_test_stats_parser.set_defaults(
-        func=reset_test_stats_func, which="reset-test-stats"
+        func=lambda _ : hci.reset_test_stats(), which="reset-test-stats"
     )
-    
+
     #### TXPOWER PARSER ####
-    txPower_parser = subparsers.add_parser(
+    txpower_parser = subparsers.add_parser(
         "tx-power",
         aliases=["txp"],
         help="Set the Tx power",
         formatter_class=RawTextHelpFormatter,
     )
-    txPower_parser.add_argument(
+    txpower_parser.add_argument(
         "power", type=int, help="Integer power setting in units of dBm."
     )
-    txPower_parser.add_argument(
+    txpower_parser.add_argument(
         "--handle", dest="handle", type=int, help="Connection handle, integer."
     )  ## TODO: CHECK THIS
-    txPower_parser.set_defaults(func=tx_power_func, which="txPower")
+    txpower_parser.set_defaults(func=_tx_power_func, which="txPower")
 
     discon_parser = subparsers.add_parser(
         "discon",
@@ -860,36 +763,37 @@ if __name__ == "__main__":
         help="Send the command to disconnect",
         formatter_class=RawTextHelpFormatter,
     )
-    discon_parser.set_defaults(func=discon_func, which="discon")
 
-    setChMap_parser = subparsers.add_parser(
+    discon_parser.set_defaults(func=lambda _ : hci.disconnect(), which="discon")
+
+    set_ch_map_parser = subparsers.add_parser(
         "set-ch-map",
         help="Set the connection channel map to a given channel.",
         formatter_class=RawTextHelpFormatter,
     )
-    setChMap_parser.add_argument(
+    set_ch_map_parser.add_argument(
         "channel",
         type=int,
         nargs="?",
         help="""Channel to use in channel map
         Will set the channel map to the given channel plus one additional channel.""",
     )
-    setChMap_parser.add_argument(
+    set_ch_map_parser.add_argument(
         "-m",
         "--mask",
         dest="mask",
-        type=hex_int,
+        type=_hex_int,
         help=""""4-byte hex number to use a channel map.
         0xFFFFFFFFFF uses all channels, 0x000000000F will use channels 0-3, etc""",
     )
-    setChMap_parser.add_argument(
+    set_ch_map_parser.add_argument(
         "--handle",
         dest="handle",
         type=int,
         default=0,
         help="Connection handle, integer. Default: 0",
     )
-    setChMap_parser.set_defaults(func=set_ch_map_func, which="setChMap")
+    set_ch_map_parser.set_defaults(func=_set_ch_map_func, which="setChMap")
 
     cmd_parser = subparsers.add_parser(
         "cmd", help="Send raw HCI command", formatter_class=RawTextHelpFormatter
@@ -915,39 +819,7 @@ if __name__ == "__main__":
         type=int,
         help="Command timeout, Default: None",
     )
-    cmd_parser.set_defaults(func=cmd_func, which="cmd")
-
-    readReg_parser = subparsers.add_parser(
-        "read-reg",
-        aliases=["read"],
-        help="Read register, device performs a memcpy from address and returns the value",
-        formatter_class=RawTextHelpFormatter,
-    )
-    readReg_parser.add_argument(
-        "addr", help='Address to read, 32-bit hex value\nex: "0x20000000"'
-    )
-    readReg_parser.add_argument(
-        "length",
-        type=hex_int,
-        help='Number of bytes to read, 4- or 8-bit hex value\nex: "0x2"',
-    )
-    readReg_parser.set_defaults(func=read_reg_func, which="readReg")
-
-    writeReg_parser = subparsers.add_parser(
-        "write-reg",
-        aliases=["write"],
-        help="Write register, device performs a memcpy to the memory address",
-        formatter_class=RawTextHelpFormatter,
-    )
-    writeReg_parser.add_argument(
-        "addr", help='Address to write, 32-bit hex value\nex:"0x20000000"'
-    )
-    writeReg_parser.add_argument(
-        "value",
-        type=hex_int,
-        help='Data to write, 8-, 16-, or 32-bit hex value\nex:"0x12"',
-    )
-    writeReg_parser.set_defaults(func=write_reg_func, which="writeReg")
+    cmd_parser.set_defaults(func=_cmd_func, which="cmd")
 
     #### EXIT PARSER ####
     exit_parser = subparsers.add_parser(
@@ -956,93 +828,28 @@ if __name__ == "__main__":
         help="Exit the program",
         formatter_class=RawTextHelpFormatter,
     )
-    exit_parser.set_defaults(func=exit_func, which="exit")
+    exit_parser.set_defaults(func=lambda _ : sys.exit(EXIT_FUNC_MAGIC), which="exit")
 
     #### HELP PARSER ####
     help_parser = subparsers.add_parser("help", aliases=["h"], help="Show help message")
-    help_parser.set_defaults(func=help_func, which="help")
+    help_parser.set_defaults(func=lambda _ : terminal.print_help(), which="help")
 
-    #### PORT PARSER ####
-    port_parser = subparsers.add_parser(
-        "port", help="Set the serialPort", formatter_class=RawTextHelpFormatter
-    )
-    port_parser.add_argument("serialPort", help="Serial port path or COM#")
-    port_parser.add_argument(
-        "-b",
-        "--baud",
-        dest="baudRate",
-        type=int,
-        default=DEFAULT_BAUD,
-        help="Serial port baud rate. Default: " + str(DEFAULT_BAUD),
-    )
-    port_parser.add_argument(
-        "-m",
-        "--monitor-trace-port",
-        dest="monPort",
-        default=None,
-        help="Monitor Trace Msg Serial Port path or COM#. Default: None",
-    )
-    port_parser.set_defaults(func=serial_port_func, which="port")
-
-    #### ID PARSER ####
-    id_parser = subparsers.add_parser(
-        "id",
-        aliases=["tag"],
-        help="Set or change board ID for printing trace messages.",
-        formatter_class=RawTextHelpFormatter,
-    )
-    id_parser.add_argument("idtag", help="Board ID tag for printing trace messages.")
-    id_parser.set_defaults(func=set_id_func)
-
-    #### TRACE PARSER ####
-    trace_parser = subparsers.add_parser(
-        "trace_level",
-        aliases=["trace"],
-        help="Set test trace messaging level",
-        formatter_class=RawTextHelpFormatter,
-    )
-    trace_parser.add_argument(
-        "-t",
-        "--trace_level",
-        dest="trace_level",
-        type=int,
-        default=3,
-        help="""Set the trace level
-        0: Error only
-        1: Warning/Error
-        2: Info/Warning/Error
-        3: All messages
-        Default: 3""",
-    )
-    trace_parser.set_defaults(func=set_trace_func, which="trace")
-
-
-    
-
-
-
-    def completer(text, state):
+    def _completer(text, state):
         commands = list(subparsers.choices.keys())
         matches = [cmd for cmd in commands if cmd.startswith(text)]
         return matches[state] if state < len(matches) else None
 
-    
-    readline.set_completer(completer)
-    readline.parse_and_bind('tab: complete')
+    readline.set_completer(_completer)
+    readline.parse_and_bind("tab: complete")
 
     COMMANDS_RUN = False
-    if PORT_INITIALIZED and COMMANDS:
-        logger.info("Port set, running input commands.")
-        COMMANDS_RUN = run_input_cmds(COMMANDS)
-    elif COMMANDS:
-        logger.warning(
-            "Warning: Serial port not initialized. Commands will be run after initialization."
-        )
+    if COMMANDS:
+        COMMANDS_RUN = _run_input_cmds(COMMANDS)
 
     while True:
         if COMMANDS and not COMMANDS_RUN and PORT_INITIALIZED:
             logger.info("Port set, running input commands.")
-            COMMANDS_RUN = run_input_cmds(COMMANDS)
+            COMMANDS_RUN = _run_input_cmds(COMMANDS)
 
         astr = input(">>> ")
         try:
@@ -1071,5 +878,6 @@ if __name__ == "__main__":
                 logger.error(
                     "Process finished with exit code %s (%s)", err, type(err).__name__
                 )
-        except Exception as err:
-            logger.error('Unexpected exception %s', type(err).__name__)
+
+        except Exception as err:  # pylint: disable=broad-exception-caught
+            logger.error("Unexpected exception %s", type(err).__name__)
