@@ -561,6 +561,15 @@ class LEControllerOCF(Enum):
     SET_TX_POWER_REPORT_ENABLE = 0x7A
     """Set TX power reporting enable command."""
 
+    SET_DATA_RELATED_ADDRESS_CHANGES = 0x7C
+    """Set data related address changes command."""
+
+    SET_DEF_SUBRATE = 0x7D
+    """Set default subrate command."""
+
+    SUBRATE_REQ = 0x7E
+    """Subrate request command."""
+
 
 class VendorSpecificOCF(Enum):
     """ADI Vendor Specific group Opcode Command Field values."""
