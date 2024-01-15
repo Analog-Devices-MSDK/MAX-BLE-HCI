@@ -409,15 +409,15 @@ if __name__ == "__main__":
     )
 
     datalen_parser = subparsers.add_parser(
-        "datalen", 
-        help="Set the max data length", formatter_class=RawTextHelpFormatter
+        "datalen", help="Set the max data length", formatter_class=RawTextHelpFormatter
     )
     datalen_parser.set_defaults(func=lambda _: hci.set_data_len(), which="dataLen")
 
     send_acl_parser = subparsers.add_parser(
-        "send-acl", 
-        aliases=['aclo'],
-        help="Send ACL packets", formatter_class=RawTextHelpFormatter
+        "send-acl",
+        aliases=["aclo"],
+        help="Send ACL packets",
+        formatter_class=RawTextHelpFormatter,
     )
     send_acl_parser.add_argument(
         "packet_length",
@@ -444,7 +444,7 @@ if __name__ == "__main__":
 
     sinl_acl_parser = subparsers.add_parser(
         "sink-acl",
-        aliases=['acli'],
+        aliases=["acli"],
         help="Sink ACL packets, do not send events to host",
         formatter_class=RawTextHelpFormatter,
     )
@@ -456,7 +456,7 @@ if __name__ == "__main__":
 
     connStats_parser = subparsers.add_parser(
         "connstats",
-        aliases=['cs'],
+        aliases=["cs"],
         help="Get the connection stats",
         formatter_class=RawTextHelpFormatter,
     )
@@ -467,14 +467,12 @@ if __name__ == "__main__":
 
     test_stats_parser = subparsers.add_parser(
         "teststats",
-        aliases=['ts'],
+        aliases=["ts"],
         help="Get the test stats",
         formatter_class=RawTextHelpFormatter,
     )
 
-    test_stats_parser.set_defaults(
-        func=lambda _: print(hci.get_test_stats())
-    )
+    test_stats_parser.set_defaults(func=lambda _: print(hci.get_test_stats()))
 
     #### PHY PARSER ####
     phy_parser = subparsers.add_parser(
@@ -784,7 +782,6 @@ if __name__ == "__main__":
     )
     set_ch_map_parser.set_defaults(
         func=lambda args: hci.set_channel_map(channels=args.mask, handle=args.handle),
-        
     )
 
     cmd_parser = subparsers.add_parser(
