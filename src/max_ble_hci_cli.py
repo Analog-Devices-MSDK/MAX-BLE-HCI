@@ -409,12 +409,15 @@ if __name__ == "__main__":
     )
 
     datalen_parser = subparsers.add_parser(
-        "data-len", help="Set the max data length", formatter_class=RawTextHelpFormatter
+        "datalen", 
+        help="Set the max data length", formatter_class=RawTextHelpFormatter
     )
     datalen_parser.set_defaults(func=lambda _: hci.set_data_len(), which="dataLen")
 
     send_acl_parser = subparsers.add_parser(
-        "send-acl", help="Send ACL packets", formatter_class=RawTextHelpFormatter
+        "send-acl", 
+        aliases=['aclo'],
+        help="Send ACL packets", formatter_class=RawTextHelpFormatter
     )
     send_acl_parser.add_argument(
         "packet_length",
@@ -441,6 +444,7 @@ if __name__ == "__main__":
 
     sinl_acl_parser = subparsers.add_parser(
         "sink-acl",
+        aliases=['acli'],
         help="Sink ACL packets, do not send events to host",
         formatter_class=RawTextHelpFormatter,
     )
@@ -452,12 +456,24 @@ if __name__ == "__main__":
 
     connStats_parser = subparsers.add_parser(
         "connstats",
+        aliases=['cs'],
         help="Get the connection stats",
         formatter_class=RawTextHelpFormatter,
     )
 
     connStats_parser.set_defaults(
         func=lambda _: print(hci.get_conn_stats()), which="connstats"
+    )
+
+    test_stats_parser = subparsers.add_parser(
+        "teststats",
+        aliases=['ts'],
+        help="Get the test stats",
+        formatter_class=RawTextHelpFormatter,
+    )
+
+    test_stats_parser.set_defaults(
+        func=lambda _: print(hci.get_test_stats())
     )
 
     #### PHY PARSER ####
@@ -703,7 +719,7 @@ if __name__ == "__main__":
     #### ENDTESTVS PARSER ####
     reset_test_stats_parser = subparsers.add_parser(
         "reset-test-stats",
-        aliases=["rst-ts"],
+        aliases=["rsts"],
         help="Reseta accumulated stats from DTM",
         formatter_class=RawTextHelpFormatter,
     )
@@ -713,7 +729,7 @@ if __name__ == "__main__":
 
     #### TXPOWER PARSER ####
     txpower_parser = subparsers.add_parser(
-        "tx-power",
+        "txpower",
         aliases=["txp"],
         help="Set the Tx power",
         formatter_class=RawTextHelpFormatter,
@@ -740,7 +756,7 @@ if __name__ == "__main__":
     discon_parser.set_defaults(func=lambda _: hci.disconnect(), which="discon")
 
     set_ch_map_parser = subparsers.add_parser(
-        "set-ch-map",
+        "setchmap",
         help="Set the connection channel map to a given channel.",
         formatter_class=RawTextHelpFormatter,
     )
@@ -768,7 +784,7 @@ if __name__ == "__main__":
     )
     set_ch_map_parser.set_defaults(
         func=lambda args: hci.set_channel_map(channels=args.mask, handle=args.handle),
-        which="setChMap",
+        
     )
 
     cmd_parser = subparsers.add_parser(
