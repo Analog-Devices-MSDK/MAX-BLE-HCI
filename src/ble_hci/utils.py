@@ -62,6 +62,7 @@ import glob
 import os
 import serial
 
+DEFAULT_BAUDRATE=115200
 
 def get_serial_ports() -> List[str]:
     """Lists serial port names
