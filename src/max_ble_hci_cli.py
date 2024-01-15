@@ -643,13 +643,13 @@ if __name__ == "__main__":
     )
 
     #### RXTEST PARSER ####
-    rxTest_parser = subparsers.add_parser(
+    rx_test_parser = subparsers.add_parser(
         "rxtest",
         aliases=["rx"],
         help="Execute the receiver test",
         formatter_class=RawTextHelpFormatter,
     )
-    rxTest_parser.add_argument(
+    rx_test_parser.add_argument(
         "-c",
         "--channel",
         dest="channel",
@@ -657,7 +657,7 @@ if __name__ == "__main__":
         default=0,
         help="Rx test channel, 0-39. Default: 0",
     )
-    rxTest_parser.add_argument(
+    rx_test_parser.add_argument(
         "--phy",
         dest="phy",
         type=int,
@@ -669,9 +669,8 @@ if __name__ == "__main__":
         4: S2
         Default: 1""",
     )
-    rxTest_parser.set_defaults(
-        func=lambda args: hci.rx_test(channel=args.channel, phy=PhyOption(args.phy)),
-        which="rxTest",
+    rx_test_parser.set_defaults(
+        func=lambda args: hci.rx_test(channel=args.channel, phy=PhyOption(args.phy))
     )
 
     #### RXTESTVS PARSER ####
@@ -724,7 +723,6 @@ if __name__ == "__main__":
             modulation_idx=args.modulationIdx,
             num_packets=args.num_packets,
         ),
-        which="rxTestVS",
     )
 
     #### ENDTEST PARSER ####
@@ -734,7 +732,7 @@ if __name__ == "__main__":
         help="End the Tx/Rx test, print the number of correctly received packets",
         formatter_class=RawTextHelpFormatter,
     )
-    endtest_parser.set_defaults(func=lambda _: hci.end_test(), which="endTest")
+    endtest_parser.set_defaults(func=lambda _: hci.end_test())
 
     #### ENDTESTVS PARSER ####
     reset_test_stats_parser = subparsers.add_parser(
