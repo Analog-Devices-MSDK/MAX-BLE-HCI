@@ -215,8 +215,8 @@ if __name__ == "__main__":
         dest="commands",
         nargs="*",
         default=None,
-        help="Commands to run on startup."
-        + "\nIf more than 1, separate commands with a comma.",
+        help="""Commands to run on startup.
+        If more than 1, separate commands with a comma.""",
     )
 
     parser.add_argument(
@@ -382,9 +382,10 @@ if __name__ == "__main__":
         default=False,
         nargs="?",
         action=ListenAction,
-        help="Enable listening for events.\nUses: "
-        + "\n-l           --> listens indefinitely, ctrl-c to exit"
-        + "\n-l N_SECONDS --> listens for N_SECONDS, then returns",
+        help="""Enable listening for events.
+        Uses:
+        -l           --> listens indefinitely, ctrl-c to exit
+        -l N_SECONDS --> listens for N_SECONDS, then returns""",
     )
     init_parser.add_argument(
         "--stats",
@@ -414,8 +415,8 @@ if __name__ == "__main__":
     datalen_parser.set_defaults(func=lambda _: hci.set_data_len(), which="dataLen")
 
     send_acl_parser = subparsers.add_parser(
-        "send-acl",
-        aliases=["aclo"],
+        "sendacl",
+        
         help="Send ACL packets",
         formatter_class=RawTextHelpFormatter,
     )
@@ -439,19 +440,17 @@ if __name__ == "__main__":
         func=lambda args: hci.generate_acl(
             args.handle, args.packet_len, args.num_packets
         ),
-        which="sendAcl",
+        
     )
 
     sinl_acl_parser = subparsers.add_parser(
-        "sink-acl",
-        aliases=["acli"],
+        "sinkacl",
         help="Sink ACL packets, do not send events to host",
         formatter_class=RawTextHelpFormatter,
     )
     sinl_acl_parser.add_argument("-e", "--enable", default=1)
     sinl_acl_parser.set_defaults(
         func=lambda _: hci.enable_acl_sink(bool(args.enable)),
-        which="sinkAcl",
     )
 
     connStats_parser = subparsers.add_parser(
@@ -484,7 +483,12 @@ if __name__ == "__main__":
         "--phy",
         type=int,
         default=1,
-        help="Desired PHY\n1: 1M\n2: 2M\n3: S8\n4: S2\nDefault: 1M",
+        help="""Desired PHY
+        1: 1M
+        2: 2M
+        3: S8
+        4: S2
+        Default: 1M""",
     )
 
     phy_parser.set_defaults(func=lambda args: hci.set_phy(args.phy), which="phy")
@@ -495,7 +499,7 @@ if __name__ == "__main__":
 
     #### LISTEN PARSER ####
     tx_test_parser = subparsers.add_parser(
-        "tx-test",
+        "txtest",
         aliases=["tx"],
         help="Execute the transmitter test.",
         formatter_class=RawTextHelpFormatter,
@@ -551,11 +555,10 @@ if __name__ == "__main__":
             payload=PayloadOption(args.payload),
             packet_len=args.packet_length,
         ),
-        which="txTest",
     )
 
     tx_test_vs_parser = subparsers.add_parser(
-        "tx-test-vs",
+        "txtestvs",
         aliases=["txvs"],
         help="Execute the vendor-specific transmitter test",
         formatter_class=RawTextHelpFormatter,
@@ -627,7 +630,7 @@ if __name__ == "__main__":
 
     #### RXTEST PARSER ####
     rxTest_parser = subparsers.add_parser(
-        "rx-test",
+        "rxtest",
         aliases=["rx"],
         help="Execute the receiver test",
         formatter_class=RawTextHelpFormatter,
@@ -659,7 +662,7 @@ if __name__ == "__main__":
 
     #### RXTESTVS PARSER ####
     rx_test_vs_parser = subparsers.add_parser(
-        "rx-test-vs",
+        "rxtestvs",
         aliases=["rxvs"],
         help="Execute the vendor-specific receiver test",
         formatter_class=RawTextHelpFormatter,
@@ -677,7 +680,12 @@ if __name__ == "__main__":
         dest="phy",
         type=int,
         default=1,
-        help="Rx Test PHY\n1: 1M\n2: 2M\n3: S8\n4: S2\nDefault: 1",
+        help="""Rx Test PHY
+        1: 1M
+        2: 2M
+        3: S8
+        4: S2
+        Default: 1""",
     )
     rx_test_vs_parser.add_argument(
         "-m",
@@ -707,7 +715,7 @@ if __name__ == "__main__":
 
     #### ENDTEST PARSER ####
     endtest_parser = subparsers.add_parser(
-        "end-test",
+        "endtest",
         aliases=["end"],
         help="End the Tx/Rx test, print the number of correctly received packets",
         formatter_class=RawTextHelpFormatter,
@@ -716,9 +724,9 @@ if __name__ == "__main__":
 
     #### ENDTESTVS PARSER ####
     reset_test_stats_parser = subparsers.add_parser(
-        "reset-test-stats",
+        "reset_ts",
         aliases=["rsts"],
-        help="Reseta accumulated stats from DTM",
+        help="Reset accumulated stats from DTM",
         formatter_class=RawTextHelpFormatter,
     )
     reset_test_stats_parser.set_defaults(
@@ -797,9 +805,10 @@ if __name__ == "__main__":
         dest="listen",
         action=ListenAction,
         default=False,
-        help="Enable listening for events.\nUses: "
-        + "\n-l           --> listens indefinitely, ctrl-c to exit"
-        + "\n-l N_SECONDS --> listens for N_SECONDS, then returns",
+        help="""Enable listening for events.\n
+        Uses:
+        -l           --> listens indefinitely, ctrl-c to exit
+        -l N_SECONDS --> listens for N_SECONDS, then returns""",
     )
     cmd_parser.add_argument(
         "-t",
