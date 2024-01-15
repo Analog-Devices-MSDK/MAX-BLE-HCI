@@ -296,6 +296,29 @@ class SerialUartTransport:
         """
         return self._write(pkt.to_bytes(), timeout)
 
+    def send_command_raw(
+        self,
+        raw_command: bytearray,
+        timeout: Optional[float] = None,
+    ) -> EventPacket:
+        """Write a raw HCI command to device
+
+        Parameters
+        ----------
+        raw_command : bytearray
+            Command as a byte array
+
+        timeout : Optional[float], optional
+            Timeout for response retrieval. Can be used
+            to temporarily override this object's `timeout`
+            attribute.
+
+        Returns
+        -------
+        EventPacket
+        """
+        return self._write(raw_command, timeout)
+
     def retrieve_packet(self, timeout: Optional[float] = None) -> EventPacket:
         """Retrieve a packet from the serial line.
 

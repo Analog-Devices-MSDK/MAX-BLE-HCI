@@ -91,7 +91,6 @@ class PhyOption(Enum):
     """Coded S2 PHY option."""
 
 
-
 class PayloadOption(Enum):
     """BLE-definded payload options."""
 
