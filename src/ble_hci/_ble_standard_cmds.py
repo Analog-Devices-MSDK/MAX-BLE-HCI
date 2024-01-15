@@ -477,7 +477,8 @@ class BleStandardCmds:
             The return packet status code.
 
         """
-        if isinstance(payload, PhyOption):
+
+        if isinstance(payload, PayloadOption):
             payload = payload.value
         if isinstance(phy, PhyOption):
             phy = phy.value
