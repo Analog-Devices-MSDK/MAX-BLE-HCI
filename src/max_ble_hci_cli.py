@@ -151,9 +151,10 @@ def _signal_handler(_signal, _fname):  # pylint: disable=unused-argument
 def _run_input_cmds(commands):
     for cmd in commands:
         try:
+            # pylint: disable=used-before-assignment
             _args = terminal.parse_args(
                 cmd.split()
-            )  # pylint: disable=used-before-assignment
+            )  
             _args.func(_args)
         except AttributeError:
             continue
