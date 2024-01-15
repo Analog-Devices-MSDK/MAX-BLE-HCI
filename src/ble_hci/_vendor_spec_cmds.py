@@ -262,8 +262,8 @@ class VendorSpecificCmds:
     def tx_test_vs(
         self,
         channel: int = 0,
-        phy: PhyOption = PhyOption.PHY_1M,
-        payload: PayloadOption = PayloadOption.PLD_PRBS15,
+        phy: Union[PhyOption, int] = PhyOption.PHY_1M,
+        payload: Union[PayloadOption, int] = PayloadOption.PLD_PRBS15,
         packet_len: int = 0,
         num_packets: int = 0,
     ) -> StatusCode:
@@ -277,9 +277,9 @@ class VendorSpecificCmds:
         ----------
         channel : int
             The channel on which transmission should take place.
-        phy : PhyOption
+        phy : Union[PhyOption, int]
             The PHY that should be used by the transmitter.
-        payload : PayloadOption
+        payload : Union[PayloadOption, int]
             The packet payload type that should be transmitted.
         packet_len : int
             The desired length of the transmitted packets.
@@ -315,6 +315,11 @@ class VendorSpecificCmds:
                 f"Num packets too large ({num_packets}), must be 65535 or less."
             )
 
+        if isinstance(payload, PayloadOption):
+            payload = payload.value
+        if isinstance(phy, PhyOption):
+            phy = phy.value
+
         params = [channel, packet_len, payload.value, phy.value]
         params.extend(to_le_nbyte_list(num_packets, 2))
         return self.send_vs_command(OCF.VENDOR_SPEC.TX_TEST, params=params)
@@ -322,7 +327,7 @@ class VendorSpecificCmds:
     def rx_test_vs(
         self,
         channel: int = 0,
-        phy: PhyOption = PhyOption.PHY_1M,
+        phy: Union[PhyOption, int] = PhyOption.PHY_1M,
         num_packets: int = 0,
         modulation_idx: int = 0,
     ) -> StatusCode:
@@ -336,7 +341,7 @@ class VendorSpecificCmds:
         ----------
         channel : int
             The channel on which the receiver should listen for packets.
-        phy : PhyOption
+        phy : Union[PhyOption, int]
             The PHY that should be used by the receiver.
         num_packets : int
             The number of packets that the receiver is expected to receive,
@@ -366,6 +371,9 @@ class VendorSpecificCmds:
             raise ValueError(
                 f"Num packets too large ({num_packets}), must be 65535 or less."
             )
+
+        if isinstance(phy, PhyOption):
+            phy = phy.value
 
         params = [channel, phy.value, modulation_idx]
         params.extend(to_le_nbyte_list(num_packets, 2))

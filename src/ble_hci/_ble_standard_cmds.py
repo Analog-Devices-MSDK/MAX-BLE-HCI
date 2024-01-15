@@ -451,8 +451,8 @@ class BleStandardCmds:
     def tx_test(
         self,
         channel: int = 0,
-        phy: PhyOption = PhyOption.PHY_1M,
-        payload: PayloadOption = PayloadOption.PLD_PRBS9,
+        phy: Union[PhyOption, int] = PhyOption.PHY_1M,
+        payload: Union[PayloadOption, int] = PayloadOption.PLD_PRBS9,
         packet_len: int = 0,
     ) -> StatusCode:
         """Start a transmitter test.
@@ -464,7 +464,7 @@ class BleStandardCmds:
         ----------
         channel : int, optional
             The channel on which transmission should take place.
-        phy : PhyOption, optional
+        phy : Union[PhyOption,int], optional
             The PHY that should be used by the transmitter.
         payload : PayloadOption, optional
             The packet payload type that should be used.
@@ -477,7 +477,12 @@ class BleStandardCmds:
             The return packet status code.
 
         """
-        params = [channel, packet_len, payload.value, phy.value]
+        if isinstance(payload, PhyOption):
+            payload = payload.value
+        if isinstance(phy, PhyOption):
+            phy = phy.value
+
+        params = [channel, packet_len, payload, phy]
         return self.send_le_controller_command(
             OCF.LE_CONTROLLER.ENHANCED_TRANSMITTER_TEST, params=params
         )
@@ -485,7 +490,7 @@ class BleStandardCmds:
     def rx_test(
         self,
         channel: int = 0,
-        phy: PhyOption = PhyOption.PHY_1M,
+        phy: Union[PhyOption, int] = PhyOption.PHY_1M,
         modulation_idx: int = 0,
     ) -> StatusCode:
         """Start a receiver test.
@@ -497,7 +502,7 @@ class BleStandardCmds:
         ----------
         channel : int, optional
             The channel on which the receiver should listen for packets.
-        phy : PhyOption, optional
+        phy : Union[PhyOption,int], optional
             The PHY that should be used by the receiver.
         modulation_idx : float, optional
             The expected modulation index of the transmitter. Indicates
@@ -509,10 +514,14 @@ class BleStandardCmds:
             The return packet status code.
 
         """
+
         if phy == PhyOption.PHY_CODED_S2:
             phy = PhyOption.PHY_CODED_S8
 
-        params = [channel, phy.value, modulation_idx]
+        if isinstance(phy, PhyOption):
+            phy = phy.value
+
+        params = [channel, phy, modulation_idx]
         return self.send_le_controller_command(
             OCF.LE_CONTROLLER.ENHANCED_RECEIVER_TEST, params=params
         )
