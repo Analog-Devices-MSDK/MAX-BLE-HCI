@@ -154,9 +154,7 @@ def _run_input_cmds(commands):
     for cmd in commands:
         try:
             # pylint: disable=used-before-assignment
-            _args = terminal.parse_args(
-                cmd.split()
-            )  
+            _args = terminal.parse_args(cmd.split())
             _args.func(_args)
         except AttributeError:
             continue
@@ -268,14 +266,17 @@ if __name__ == "__main__":
     # Start the terminal argparse
     terminal = ArgumentParser(prog="", add_help=True)
     subparsers = terminal.add_subparsers()
-    
+
     clear_parser = subparsers.add_parser(
         "clear",
-        aliases=['cls'],
-        help="Clear the scrren", formatter_class=RawTextHelpFormatter
+        aliases=["cls"],
+        help="Clear the scrren",
+        formatter_class=RawTextHelpFormatter,
     )
-   
-    clear_parser.set_defaults(func=lambda _: os.system('cls' if os.name == 'nt' else 'clear'))
+
+    clear_parser.set_defaults(
+        func=lambda _: os.system("cls" if os.name == "nt" else "clear")
+    )
 
     #### ADDR PARSER ####
     addr_parser = subparsers.add_parser(
