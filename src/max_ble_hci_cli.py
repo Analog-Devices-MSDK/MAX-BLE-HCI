@@ -416,7 +416,6 @@ if __name__ == "__main__":
 
     send_acl_parser = subparsers.add_parser(
         "sendacl",
-        
         help="Send ACL packets",
         formatter_class=RawTextHelpFormatter,
     )
@@ -440,7 +439,6 @@ if __name__ == "__main__":
         func=lambda args: hci.generate_acl(
             args.handle, args.packet_len, args.num_packets
         ),
-        
     )
 
     sinl_acl_parser = subparsers.add_parser(
@@ -836,7 +834,7 @@ if __name__ == "__main__":
     help_parser.set_defaults(func=lambda _: terminal.print_help(), which="help")
 
     def _completer(text, state):
-        commands = list(subparsers.choices.keys())
+        commands = subparsers.choices.keys()
         matches = [cmd for cmd in commands if cmd.startswith(text)]
         return matches[state] if state < len(matches) else None
 
