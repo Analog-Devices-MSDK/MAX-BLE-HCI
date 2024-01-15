@@ -57,6 +57,7 @@ Description: CLI Client to use MAX-BLE-HCI
 """
 import argparse
 import logging
+
 import signal
 
 # pylint: disable=unused-import
@@ -114,6 +115,7 @@ DEFAULT_SUP_TIMEOUT = 0x64  # 1 s
 
 
 class ListenAction(argparse.Action):
+    # pylint: disable=too-few-public-methods
     """Listen Action"""
 
     def __call__(self, _parser, namespace, values, option_string=None):
@@ -149,7 +151,9 @@ def _signal_handler(_signal, _fname):  # pylint: disable=unused-argument
 def _run_input_cmds(commands):
     for cmd in commands:
         try:
-            _args = terminal.parse_args(cmd.split())
+            _args = terminal.parse_args(
+                cmd.split()
+            )  # pylint: disable=used-before-assignment
             _args.func(_args)
         except AttributeError:
             continue
