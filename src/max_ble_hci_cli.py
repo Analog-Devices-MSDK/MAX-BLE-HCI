@@ -55,6 +55,7 @@ max_ble_hci_cli.py
 Description: CLI Client to use MAX-BLE-HCI
 
 """
+import os
 import argparse
 import logging
 
@@ -72,6 +73,7 @@ from colorlog import ColoredFormatter
 from ble_hci import BleHci
 from ble_hci.constants import PhyOption, PayloadOption
 from ble_hci.data_params import ConnParams, AdvParams, ScanParams
+
 
 # Create a logger
 logger = logging.getLogger(__name__)
@@ -221,7 +223,7 @@ if __name__ == "__main__":
         nargs="*",
         default=None,
         help="""Commands to run on startup.
-        If more than 1, separate commands with a comma.""",
+        If more than 1, separate commands with a semicolon (;).""",
     )
 
     parser.add_argument(
@@ -256,7 +258,7 @@ if __name__ == "__main__":
         else:
             COMMANDS = COMMANDS[0]
 
-        COMMANDS = COMMANDS.split(",")
+        COMMANDS = COMMANDS.split(";")
         COMMANDS = [x.strip() for x in COMMANDS]
 
         print("Startup commands: ")
@@ -266,6 +268,14 @@ if __name__ == "__main__":
     # Start the terminal argparse
     terminal = ArgumentParser(prog="", add_help=True)
     subparsers = terminal.add_subparsers()
+    
+    clear_parser = subparsers.add_parser(
+        "clear",
+        aliases=['cls'],
+        help="Clear the scrren", formatter_class=RawTextHelpFormatter
+    )
+   
+    clear_parser.set_defaults(func=lambda _: os.system('cls' if os.name == 'nt' else 'clear'))
 
     #### ADDR PARSER ####
     addr_parser = subparsers.add_parser(
