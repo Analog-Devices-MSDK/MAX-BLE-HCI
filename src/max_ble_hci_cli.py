@@ -238,7 +238,15 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     PORT_INITIALIZED = True
-    hci = BleHci(args.serial_port, baud=args.baudRate, id_tag=args.idtag)
+
+    packet_print = lambda packet: print(packet)
+    hci = BleHci(
+        args.serial_port,
+        baud=args.baudRate,
+        id_tag=args.idtag,
+        async_callback=packet_print,
+        evt_callback=packet_print,
+    )
     hci.logger.setLevel(args.trace_level)
 
     print("Bluetooth Low Energy HCI tool")
