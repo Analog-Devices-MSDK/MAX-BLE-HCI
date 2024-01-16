@@ -689,7 +689,7 @@ class VendorSpecificCmds:
         params.append(int(enable))
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_CONN_OP_FLAGS, params=params)
 
-    def set_256_priv_key(self, priv_key: int) -> StatusCode:
+    def set_256_priv_key(self, priv_key: list[int]) -> StatusCode:
         """Set/clear the P-256 private key.
 
         Sends a vendor-specific command to the DUT, telling it to
@@ -699,7 +699,7 @@ class VendorSpecificCmds:
 
         Parameters
         ----------
-        priv_key : int
+        priv_key : list
             Desired P-256 private key. Setting to `0` will clear
             the key.
 
@@ -714,13 +714,12 @@ class VendorSpecificCmds:
             If `priv_key` is larger than 32 bytes in size.
 
         """
-        if byte_length(priv_key) > 32:
+        if len(priv_key) > 32:
             raise ValueError(
                 f"Private key ({priv_key}) too large, must be 32 bytes or less."
-            )
+            )    
 
-        params = to_le_nbyte_list(priv_key, 32)
-        return self.send_vs_command(OCF.VENDOR_SPEC.SET_P256_PRIV_KEY, params=params)
+        return self.send_vs_command(OCF.VENDOR_SPEC.SET_P256_PRIV_KEY, params=priv_key[::-1])
 
     def get_channel_map_periodic_scan_adv(
         self, handle: int, is_advertising: bool
@@ -778,7 +777,7 @@ class VendorSpecificCmds:
             The return packet status code.
 
         """
-        evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_ACL_TEST_REPORT)
+        evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_ACL_TEST_REPORT,return_evt=True)
         data = evt.get_return_params(param_lens=[4, 4, 4, 4])
 
         stats = TestReport(
@@ -921,6 +920,7 @@ class VendorSpecificCmds:
 
         """
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_RAND_ADDR, return_evt=True)
+        print(evt)
         return evt.get_return_params(), evt.status
 
     def set_local_feature(self, features: int) -> StatusCode:

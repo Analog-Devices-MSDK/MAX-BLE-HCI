@@ -294,6 +294,7 @@ class SerialUartTransport:
             The retrieved packet.
 
         """
+        
         return self._write(pkt.to_bytes(), timeout)
 
     def send_command_raw(
@@ -461,15 +462,18 @@ class SerialUartTransport:
         PRIVATE
 
         """
+        
         tries = self.retries
         self.logger.info("%s  %s>%s", datetime.datetime.now(), self.id_tag, pkt.hex())
         timeout_err = None
 
         self.port.flush()
         self.port.write(pkt)
+        
         while tries >= 0 and self._read_thread.is_alive():
             try:
                 return self._retrieve(timeout)
+                
             except TimeoutError as err:
                 tries -= 1
                 timeout_err = err
