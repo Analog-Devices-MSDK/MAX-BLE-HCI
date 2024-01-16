@@ -158,23 +158,20 @@ def _run_input_cmds(commands):
             _args.func(_args)
         except AttributeError:
             continue
-
         # Catch SystemExit, allows user to ctrl-c to quit the current command
         except SystemExit as _err:
             if _err.code != 0:
-                # Catch the magic exit value, return 0
                 if _err.code == EXIT_FUNC_MAGIC:
                     sys.exit(0)
-                # Return error
+
                 sys.exit(_err.code)
-
-            # Continue if we get a different code
-
     return True
 
 
 ################## MAIN ##################
 if __name__ == "__main__":
+    COMMAND_STATE = ""
+
     # Setup the signal handler to catch the ctrl-C
     signal.signal(signal.SIGINT, _signal_handler)
 
@@ -547,6 +544,7 @@ if __name__ == "__main__":
         default=0,
         help="Tx packet length, number of bytes per packet, 0-255. Default: 0",
     )
+
     tx_test_parser.set_defaults(
         func=lambda args: print(
             hci.tx_test(
@@ -858,7 +856,7 @@ if __name__ == "__main__":
             logger.info("Port set, running input commands.")
             COMMANDS_RUN = _run_input_cmds(COMMANDS)
 
-        astr = input(">>> ")
+        astr = input(f"{COMMAND_STATE}>>> ")
         try:
             args = terminal.parse_args(astr.split())
 
