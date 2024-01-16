@@ -689,7 +689,7 @@ class VendorSpecificCmds:
         params.append(int(enable))
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_CONN_OP_FLAGS, params=params)
 
-    def set_256_priv_key(self, priv_key: list[int]) -> StatusCode:
+    def set_256_priv_key(self, priv_key: List[int]) -> StatusCode:
         """Set/clear the P-256 private key.
 
         Sends a vendor-specific command to the DUT, telling it to
