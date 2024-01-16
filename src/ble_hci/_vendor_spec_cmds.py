@@ -1734,3 +1734,21 @@ class VendorSpecificCmds:
         rssi = evt.get_return_params(signed=True)
 
         return rssi, evt.status
+
+    def bb_enable(self) -> StatusCode:
+        """Enable the baseband radio
+        NOTE: Must be done before using RSSI
+        Returns
+        -------
+        StatusCode
+        """
+        return self.send_vs_command(OCF.VENDOR_SPEC.BB_EN)
+
+    def bb_disable(self) -> StatusCode:
+        """Disable the baseband radio
+
+        Returns
+        -------
+        StatusCode
+        """
+        return self.send_vs_command(OCF.VENDOR_SPEC.BB_DIS)
