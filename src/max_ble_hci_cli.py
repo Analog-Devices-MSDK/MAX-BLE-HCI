@@ -239,13 +239,12 @@ if __name__ == "__main__":
 
     PORT_INITIALIZED = True
 
-    packet_print = lambda packet: print(packet)
     hci = BleHci(
         args.serial_port,
         baud=args.baudRate,
         id_tag=args.idtag,
-        async_callback=packet_print,
-        evt_callback=packet_print,
+        async_callback=print,
+        evt_callback=print,
     )
     hci.logger.setLevel(args.trace_level)
 
