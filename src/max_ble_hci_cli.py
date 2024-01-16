@@ -494,7 +494,38 @@ if __name__ == "__main__":
         formatter_class=RawTextHelpFormatter,
     )
 
+
     test_stats_parser.set_defaults(func=lambda _: print(hci.get_test_stats()))
+
+    phy_enable = subparsers.add_parser(
+        "bben",
+        help="Enable the Baseband Radio (Required for RSSI capture)",
+        formatter_class=RawTextHelpFormatter,
+    )
+    phy_enable.set_defaults(func=lambda args : print(hci.bb_enable()))
+
+    phy_disable = subparsers.add_parser(
+        "bbdis",
+        help="Disable the Baseband Radio",
+        formatter_class=RawTextHelpFormatter,
+    )
+    phy_disable.set_defaults(func=lambda args : print(hci.bb_disable()))
+
+
+
+    rssi_parser = subparsers.add_parser(
+        "rssi",
+        help="Get an RSSI sample using CCA",
+        formatter_class=RawTextHelpFormatter,
+    )
+    rssi_parser.add_argument("-c", "--channel", default=0)
+    
+    def _print_rssi(args):
+        rssi, status = hci.get_rssi_vs(args.channel)
+        print(f'RSSI - {rssi}')
+        print(status)
+
+    rssi_parser.set_defaults(func=_print_rssi)
 
     #### RESET PARSER ####
     reset_parser = subparsers.add_parser("reset", help="Sends an HCI reset command")
