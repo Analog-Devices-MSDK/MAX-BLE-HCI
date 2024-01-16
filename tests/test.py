@@ -7,7 +7,7 @@ from ble_hci import packet_codes as pc
 
 from ble_hci.constants import PhyOption, PubKeyValidateMode
 
-PORT = "/dev/serial/by-id/usb-FTDI_FT231X_USB_UART_D30GPTRM-if00-port0"
+PORT = ""
 
 hci1 = BleHci(PORT, id_tag="hci1")
 
