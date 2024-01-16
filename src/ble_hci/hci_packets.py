@@ -522,14 +522,13 @@ class EventPacket:
 
         """
         if serialized_event[0] == EventCode.COMMAND_COMPLETE.value:
-            
             pkt = EventPacket(
                 evt_code=serialized_event[0],
                 length=serialized_event[1],
                 status=StatusCode(serialized_event[5]),
                 evt_params=serialized_event[2:],
             )
-            
+
         elif serialized_event[0] == EventCode.HARDWARE_ERROR.value:
             pkt = EventPacket(
                 evt_code=serialized_event[0],

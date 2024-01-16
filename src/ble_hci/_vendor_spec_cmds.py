@@ -717,9 +717,11 @@ class VendorSpecificCmds:
         if len(priv_key) > 32:
             raise ValueError(
                 f"Private key ({priv_key}) too large, must be 32 bytes or less."
-            )    
+            )
 
-        return self.send_vs_command(OCF.VENDOR_SPEC.SET_P256_PRIV_KEY, params=priv_key[::-1])
+        return self.send_vs_command(
+            OCF.VENDOR_SPEC.SET_P256_PRIV_KEY, params=priv_key[::-1]
+        )
 
     def get_channel_map_periodic_scan_adv(
         self, handle: int, is_advertising: bool
@@ -777,7 +779,7 @@ class VendorSpecificCmds:
             The return packet status code.
 
         """
-        evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_ACL_TEST_REPORT,return_evt=True)
+        evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_ACL_TEST_REPORT, return_evt=True)
         data = evt.get_return_params(param_lens=[4, 4, 4, 4])
 
         stats = TestReport(

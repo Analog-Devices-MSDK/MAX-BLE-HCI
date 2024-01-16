@@ -50,7 +50,7 @@ class TestHci(unittest.TestCase):
         )
 
         addr, status = hci1.get_rand_address()
-        print(addr, status)
+        
         self.assertTrue(addr != 6 or status != pc.StatusCode.SUCCESS)
 
         self.assertEqual(hci1.set_local_feature(0), pc.StatusCode.SUCCESS)
@@ -94,8 +94,6 @@ class TestHci(unittest.TestCase):
 
         # stats, status = hci1.get_periodic_scanning_stats()
         # self.assertTrue(stats is not None and status == pc.StatusCode.SUCCESS)
-
-    
 
 
 if __name__ == "__main__":
