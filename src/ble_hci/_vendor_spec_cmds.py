@@ -1735,7 +1735,6 @@ class VendorSpecificCmds:
 
         return rssi, evt.status
 
-
     def bb_enable(self) -> StatusCode:
         """Enable the baseband radio
         NOTE: Must be done before using RSSI
@@ -1744,6 +1743,7 @@ class VendorSpecificCmds:
         StatusCode
         """
         return self.send_vs_command(OCF.VENDOR_SPEC.BB_EN)
+
     def bb_disable(self) -> StatusCode:
         """Disable the baseband radio
 
@@ -1752,4 +1752,3 @@ class VendorSpecificCmds:
         StatusCode
         """
         return self.send_vs_command(OCF.VENDOR_SPEC.BB_DIS)
-
