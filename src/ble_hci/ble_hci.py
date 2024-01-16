@@ -400,6 +400,12 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
 
         """
 
+        try:
+            EventPacket.from_bytes(raw_command)
+        except ValueError:
+            self.logger.error("Could not form event packet out of raw command")
+            return EventPacket(status=StatusCode.ERROR_CODE_UNKNOWN_HCI_CMD)
+
         if not timeout:
             timeout = self.timeout
         return self.port.send_command_raw(raw_command, timeout)

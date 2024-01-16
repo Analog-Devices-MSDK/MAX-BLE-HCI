@@ -284,7 +284,7 @@ if __name__ == "__main__":
     )
     addr_parser.add_argument("addr", help="Device address, ex: 00:11:22:33:44:55")
     addr_parser.set_defaults(
-        func=lambda args: hci.set_address(int(args.addr.replace(":", ""), 16)),
+        func=lambda args: print(hci.set_address(int(args.addr.replace(":", ""), 16))),
         which="addr",
     )
 
@@ -331,11 +331,13 @@ if __name__ == "__main__":
         help="Setup an event listener to restart advertising if we disconnect.",
     )
     adv_parser.set_defaults(
-        func=lambda args: hci.start_advertising(
-            connect=args.connect,
-            adv_params=AdvParams(
-                interval_min=args.adv_interval,
-                interval_max=args.adv_interval,
+        func=lambda args: print(
+            hci.start_advertising(
+                connect=args.connect,
+                adv_params=AdvParams(
+                    interval_min=args.adv_interval,
+                    interval_max=args.adv_interval,
+                ),
             ),
         ),
         which="adv",
@@ -357,8 +359,10 @@ if __name__ == "__main__":
         Default: 0x{DEFAULT_SCAN_INTERVAL}""",
     )
     scan_parser.set_defaults(
-        func=lambda args: hci.set_scan_params(
-            scan_params=ScanParams(scan_interval=args.scan_interval)
+        func=lambda args: print(
+            hci.set_scan_params(
+                scan_params=ScanParams(scan_interval=args.scan_interval)
+            )
         )
         or hci.enable_scanning(enable=True),
         which="scan",
@@ -416,13 +420,14 @@ if __name__ == "__main__":
         help="Setup an event listener to restart advertising if we disconnect.",
     )
     init_parser.set_defaults(
-        func=lambda args: hci.init_connection(
-            args.addr,
-            interval=args.conn_interval,
-            sup_timeout=args.sup_timeout,
-            conn_params=ConnParams(peer_addr=args.addr),
-        ),
-        which="init",
+        func=lambda args: print(
+            hci.init_connection(
+                args.addr,
+                interval=args.conn_interval,
+                sup_timeout=args.sup_timeout,
+                conn_params=ConnParams(peer_addr=args.addr),
+            )
+        )
     )
 
     datalen_parser = subparsers.add_parser(
@@ -452,8 +457,8 @@ if __name__ == "__main__":
         help="Number of bytes per ACL packet, 16-bit decimal 1-65535, 0 to disable.",
     )
     send_acl_parser.set_defaults(
-        func=lambda args: hci.generate_acl(
-            args.handle, args.packet_len, args.num_packets
+        func=lambda args: print(
+            hci.generate_acl(args.handle, args.packet_len, args.num_packets)
         ),
     )
 
@@ -464,7 +469,7 @@ if __name__ == "__main__":
     )
     sinl_acl_parser.add_argument("-e", "--enable", default=1)
     sinl_acl_parser.set_defaults(
-        func=lambda _: hci.enable_acl_sink(bool(args.enable)),
+        func=lambda _: print(hci.enable_acl_sink(bool(args.enable))),
     )
 
     connStats_parser = subparsers.add_parser(
@@ -487,29 +492,9 @@ if __name__ == "__main__":
 
     test_stats_parser.set_defaults(func=lambda _: print(hci.get_test_stats()))
 
-    #### PHY PARSER ####
-    phy_parser = subparsers.add_parser(
-        "phy",
-        help="Update the PHY in the active connection",
-        formatter_class=RawTextHelpFormatter,
-    )
-    phy_parser.add_argument(
-        "--phy",
-        type=int,
-        default=1,
-        help="""Desired PHY
-        1: 1M
-        2: 2M
-        3: S8
-        4: S2
-        Default: 1M""",
-    )
-
-    phy_parser.set_defaults(func=lambda args: hci.set_phy(args.phy), which="phy")
-
     #### RESET PARSER ####
     reset_parser = subparsers.add_parser("reset", help="Sends an HCI reset command")
-    reset_parser.set_defaults(func=lambda _: hci.reset(), which="reset")
+    reset_parser.set_defaults(func=lambda _: print(hci.reset()), which="reset")
 
     #### LISTEN PARSER ####
     tx_test_parser = subparsers.add_parser(
@@ -563,11 +548,13 @@ if __name__ == "__main__":
         help="Tx packet length, number of bytes per packet, 0-255. Default: 0",
     )
     tx_test_parser.set_defaults(
-        func=lambda args: hci.tx_test(
-            channel=args.channel,
-            phy=PhyOption(args.phy),
-            payload=PayloadOption(args.payload),
-            packet_len=args.packet_length,
+        func=lambda args: print(
+            hci.tx_test(
+                channel=args.channel,
+                phy=PhyOption(args.phy),
+                payload=PayloadOption(args.payload),
+                packet_len=args.packet_length,
+            )
         ),
     )
 
@@ -632,14 +619,15 @@ if __name__ == "__main__":
         help="Number of packets to transmit, 2 bytes hex, 0 equals infinite. Default: 0",
     )
     tx_test_vs_parser.set_defaults(
-        func=lambda args: hci.tx_test_vs(
-            channel=args.channel,
-            phy=args.phy,
-            payload=args.payload,
-            packet_len=args.packet_length,
-            num_packets=args.num_packets,
-        ),
-        which="txTestVS",
+        func=lambda args: print(
+            hci.tx_test_vs(
+                channel=args.channel,
+                phy=args.phy,
+                payload=args.payload,
+                packet_len=args.packet_length,
+                num_packets=args.num_packets,
+            )
+        )
     )
 
     #### RXTEST PARSER ####
@@ -670,7 +658,9 @@ if __name__ == "__main__":
         Default: 1""",
     )
     rx_test_parser.set_defaults(
-        func=lambda args: hci.rx_test(channel=args.channel, phy=PhyOption(args.phy))
+        func=lambda args: print(
+            hci.rx_test(channel=args.channel, phy=PhyOption(args.phy))
+        )
     )
 
     #### RXTESTVS PARSER ####
@@ -717,11 +707,13 @@ if __name__ == "__main__":
         help="Number of packets to transmit, 2 bytes hex, 0 equals infinite. Default: 0",
     )
     rx_test_vs_parser.set_defaults(
-        func=lambda args: hci.rx_test_vs(
-            channel=args.channel,
-            phy=PhyOption(args.phy),
-            modulation_idx=args.modulationIdx,
-            num_packets=args.num_packets,
+        func=lambda args: print(
+            hci.rx_test_vs(
+                channel=args.channel,
+                phy=PhyOption(args.phy),
+                modulation_idx=args.modulationIdx,
+                num_packets=args.num_packets,
+            )
         ),
     )
 
@@ -732,9 +724,15 @@ if __name__ == "__main__":
         help="End the Tx/Rx test, print the number of correctly received packets",
         formatter_class=RawTextHelpFormatter,
     )
-    endtest_parser.set_defaults(func=lambda _: hci.end_test())
 
-    #### ENDTESTVS PARSER ####
+    def _end_test(_args):
+        rx_packets, status = hci.end_test()
+        print(f"RX Received: {rx_packets}")
+        print(status)
+
+    endtest_parser.set_defaults(func=_end_test)
+
+    #### RESET TEST STATS PARSER ####
     reset_test_stats_parser = subparsers.add_parser(
         "reset_ts",
         aliases=["rsts"],
@@ -742,7 +740,7 @@ if __name__ == "__main__":
         formatter_class=RawTextHelpFormatter,
     )
     reset_test_stats_parser.set_defaults(
-        func=lambda _: hci.reset_test_stats(), which="reset-test-stats"
+        func=lambda _: print(hci.reset_test_stats()), which="reset-test-stats"
     )
 
     #### TXPOWER PARSER ####
@@ -755,13 +753,9 @@ if __name__ == "__main__":
     txpower_parser.add_argument(
         "power", type=int, help="Integer power setting in units of dBm."
     )
-    txpower_parser.add_argument(
-        "--handle", dest="handle", type=int, help="Connection handle, integer."
-    )
+
     txpower_parser.set_defaults(
-        func=lambda args: hci.set_adv_tx_power(args.power)
-        or hci.set_conn_tx_power(args.power, args.handle),
-        which="txPower",
+        func=lambda args: print(hci.set_adv_tx_power(args.power)),
     )
 
     discon_parser = subparsers.add_parser(
@@ -771,7 +765,7 @@ if __name__ == "__main__":
         formatter_class=RawTextHelpFormatter,
     )
 
-    discon_parser.set_defaults(func=lambda _: hci.disconnect(), which="discon")
+    discon_parser.set_defaults(func=lambda _: print(hci.disconnect()), which="discon")
 
     set_ch_map_parser = subparsers.add_parser(
         "setchmap",
@@ -829,9 +823,9 @@ if __name__ == "__main__":
         type=int,
         help="Command timeout, Default: None",
     )
+
     cmd_parser.set_defaults(
-        func=lambda args: hci.write_command_raw(bytes.fromhex(args.command)),
-        which="cmd",
+        func=lambda args: print(hci.write_command_raw(bytes.fromhex(args.command)))
     )
 
     #### EXIT PARSER ####

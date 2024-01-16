@@ -527,7 +527,7 @@ class BleStandardCmds:
             OCF.LE_CONTROLLER.ENHANCED_RECEIVER_TEST, params=params
         )
 
-    def end_test(self) -> Tuple[StatusCode, int]:
+    def end_test(self) -> Tuple[int, StatusCode]:
         """End the current test.
 
         Sends a command to the DUT, telling it to end the current
@@ -547,7 +547,7 @@ class BleStandardCmds:
         )
         rx_ok = evt.get_return_params()
 
-        return rx_ok
+        return rx_ok, evt.status
 
     def disconnect(self, handle: int = 0x0000, reason: int = 0x16) -> StatusCode:
         """Disconnect from an existing connection.
