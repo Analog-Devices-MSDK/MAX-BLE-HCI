@@ -51,7 +51,7 @@ class TestHci(unittest.TestCase):
 
         addr, status = hci1.get_rand_address()
         
-        self.assertTrue(addr != 6 or status != pc.StatusCode.SUCCESS)
+        self.assertTrue(addr > 0 or status != pc.StatusCode.SUCCESS)
 
         self.assertEqual(hci1.set_local_feature(0), pc.StatusCode.SUCCESS)
 
