@@ -58,7 +58,7 @@ Description: Bare minimum example of using the BleHci class
 from ble_hci import BleHci
 
 # Path to serial port used for HCI
-PORT = "/dev/serial/by-id/usb-FTDI_FT231X_USB_UART_D30GPTRM-if00-port0"
+PORT = ""
 
 controller = BleHci(PORT)
 event = controller.reset()
