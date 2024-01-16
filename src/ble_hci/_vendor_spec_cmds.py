@@ -922,7 +922,7 @@ class VendorSpecificCmds:
 
         """
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_RAND_ADDR, return_evt=True)
-        print(evt)
+
         return evt.get_return_params(), evt.status
 
     def set_local_feature(self, features: int) -> StatusCode:
