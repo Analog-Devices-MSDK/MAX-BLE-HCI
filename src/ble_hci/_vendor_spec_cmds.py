@@ -262,8 +262,8 @@ class VendorSpecificCmds:
     def tx_test_vs(
         self,
         channel: int = 0,
-        phy: PhyOption = PhyOption.PHY_1M,
-        payload: PayloadOption = PayloadOption.PLD_PRBS15,
+        phy: Union[PhyOption, int] = PhyOption.PHY_1M,
+        payload: Union[PayloadOption, int] = PayloadOption.PLD_PRBS15,
         packet_len: int = 0,
         num_packets: int = 0,
     ) -> StatusCode:
@@ -277,9 +277,9 @@ class VendorSpecificCmds:
         ----------
         channel : int
             The channel on which transmission should take place.
-        phy : PhyOption
+        phy : Union[PhyOption, int]
             The PHY that should be used by the transmitter.
-        payload : PayloadOption
+        payload : Union[PayloadOption, int]
             The packet payload type that should be transmitted.
         packet_len : int
             The desired length of the transmitted packets.
@@ -315,6 +315,11 @@ class VendorSpecificCmds:
                 f"Num packets too large ({num_packets}), must be 65535 or less."
             )
 
+        if isinstance(payload, PayloadOption):
+            payload = payload.value
+        if isinstance(phy, PhyOption):
+            phy = phy.value
+
         params = [channel, packet_len, payload.value, phy.value]
         params.extend(to_le_nbyte_list(num_packets, 2))
         return self.send_vs_command(OCF.VENDOR_SPEC.TX_TEST, params=params)
@@ -322,7 +327,7 @@ class VendorSpecificCmds:
     def rx_test_vs(
         self,
         channel: int = 0,
-        phy: PhyOption = PhyOption.PHY_1M,
+        phy: Union[PhyOption, int] = PhyOption.PHY_1M,
         num_packets: int = 0,
         modulation_idx: int = 0,
     ) -> StatusCode:
@@ -336,7 +341,7 @@ class VendorSpecificCmds:
         ----------
         channel : int
             The channel on which the receiver should listen for packets.
-        phy : PhyOption
+        phy : Union[PhyOption, int]
             The PHY that should be used by the receiver.
         num_packets : int
             The number of packets that the receiver is expected to receive,
@@ -366,6 +371,9 @@ class VendorSpecificCmds:
             raise ValueError(
                 f"Num packets too large ({num_packets}), must be 65535 or less."
             )
+
+        if isinstance(phy, PhyOption):
+            phy = phy.value
 
         params = [channel, phy.value, modulation_idx]
         params.extend(to_le_nbyte_list(num_packets, 2))
@@ -681,7 +689,7 @@ class VendorSpecificCmds:
         params.append(int(enable))
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_CONN_OP_FLAGS, params=params)
 
-    def set_256_priv_key(self, priv_key: int) -> StatusCode:
+    def set_256_priv_key(self, priv_key: List[int]) -> StatusCode:
         """Set/clear the P-256 private key.
 
         Sends a vendor-specific command to the DUT, telling it to
@@ -691,7 +699,7 @@ class VendorSpecificCmds:
 
         Parameters
         ----------
-        priv_key : int
+        priv_key : list
             Desired P-256 private key. Setting to `0` will clear
             the key.
 
@@ -706,13 +714,14 @@ class VendorSpecificCmds:
             If `priv_key` is larger than 32 bytes in size.
 
         """
-        if byte_length(priv_key) > 32:
+        if len(priv_key) > 32:
             raise ValueError(
                 f"Private key ({priv_key}) too large, must be 32 bytes or less."
             )
 
-        params = to_le_nbyte_list(priv_key, 32)
-        return self.send_vs_command(OCF.VENDOR_SPEC.SET_P256_PRIV_KEY, params=params)
+        return self.send_vs_command(
+            OCF.VENDOR_SPEC.SET_P256_PRIV_KEY, params=priv_key[::-1]
+        )
 
     def get_channel_map_periodic_scan_adv(
         self, handle: int, is_advertising: bool
@@ -770,7 +779,7 @@ class VendorSpecificCmds:
             The return packet status code.
 
         """
-        evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_ACL_TEST_REPORT)
+        evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_ACL_TEST_REPORT, return_evt=True)
         data = evt.get_return_params(param_lens=[4, 4, 4, 4])
 
         stats = TestReport(
@@ -913,6 +922,7 @@ class VendorSpecificCmds:
 
         """
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_RAND_ADDR, return_evt=True)
+        print(evt)
         return evt.get_return_params(), evt.status
 
     def set_local_feature(self, features: int) -> StatusCode:

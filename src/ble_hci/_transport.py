@@ -235,6 +235,8 @@ class SerialUartTransport:
     def __del__(self):
         if self._read_thread.is_alive():
             self.stop()
+        if self.port.isOpen():
+            self.port.close()
 
     def start(self):
         """Start the port read thread.
@@ -292,7 +294,31 @@ class SerialUartTransport:
             The retrieved packet.
 
         """
+
         return self._write(pkt.to_bytes(), timeout)
+
+    def send_command_raw(
+        self,
+        raw_command: bytearray,
+        timeout: Optional[float] = None,
+    ) -> EventPacket:
+        """Write a raw HCI command to device
+
+        Parameters
+        ----------
+        raw_command : bytearray
+            Command as a byte array
+
+        timeout : Optional[float], optional
+            Timeout for response retrieval. Can be used
+            to temporarily override this object's `timeout`
+            attribute.
+
+        Returns
+        -------
+        EventPacket
+        """
+        return self._write(raw_command, timeout)
 
     def retrieve_packet(self, timeout: Optional[float] = None) -> EventPacket:
         """Retrieve a packet from the serial line.
@@ -436,15 +462,18 @@ class SerialUartTransport:
         PRIVATE
 
         """
+
         tries = self.retries
         self.logger.info("%s  %s>%s", datetime.datetime.now(), self.id_tag, pkt.hex())
         timeout_err = None
 
         self.port.flush()
         self.port.write(pkt)
+
         while tries >= 0 and self._read_thread.is_alive():
             try:
                 return self._retrieve(timeout)
+
             except TimeoutError as err:
                 tries -= 1
                 timeout_err = err

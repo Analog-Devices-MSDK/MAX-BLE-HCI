@@ -378,6 +378,32 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
 
         return evt
 
+    def write_command_raw(
+        self,
+        raw_command: bytearray,
+        timeout: Optional[float] = None,
+    ) -> EventPacket:
+        """Write raw command to device
+
+        Parameters
+        ----------
+        raw_command : bytearray
+            Command as bytearray
+        timeout : int
+            Timeout for read portion of the read/write.
+            Can be used to temporarily override this object's
+            `timeout` attribute.
+
+        Returns
+        -------
+        EventPacket
+
+        """
+
+        if not timeout:
+            timeout = self.timeout
+        return self.port.send_command_raw(raw_command, timeout)
+
     def exit(self) -> None:
         """Close the HCI connection.
 
