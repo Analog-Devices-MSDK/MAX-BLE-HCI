@@ -822,7 +822,7 @@ if __name__ == "__main__":
 
     readline.set_completer(_completer)
     readline.parse_and_bind("tab: complete")
-    readline.set_completer_delims(readline.get_completer_delims().replace('-', ''))
+    readline.set_completer_delims(readline.get_completer_delims().replace("-", ""))
 
     COMMANDS_RUN = False
     if COMMANDS:
