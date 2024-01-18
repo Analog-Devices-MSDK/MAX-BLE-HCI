@@ -2,10 +2,10 @@ import secrets
 import time
 import unittest
 
-from ble_hci import BleHci
-from ble_hci import packet_codes as pc
+from max_ble_hci import BleHci
+from max_ble_hci import packet_codes as pc
 
-from ble_hci.constants import PhyOption, PubKeyValidateMode
+from max_ble_hci.constants import PhyOption, PubKeyValidateMode
 
 PORT = ""
 

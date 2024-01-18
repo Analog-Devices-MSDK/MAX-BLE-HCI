@@ -70,9 +70,9 @@ from argparse import RawTextHelpFormatter
 
 from colorlog import ColoredFormatter
 
-from ble_hci import BleHci
-from ble_hci.constants import PhyOption, PayloadOption
-from ble_hci.data_params import ConnParams, AdvParams, ScanParams
+from max_ble_hci import BleHci
+from max_ble_hci.constants import PhyOption, PayloadOption
+from max_ble_hci.data_params import ConnParams, AdvParams, ScanParams
 
 
 # Create a logger
