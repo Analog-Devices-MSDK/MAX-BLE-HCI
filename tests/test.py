@@ -92,9 +92,6 @@ class TestHci(unittest.TestCase):
             pc.StatusCode.ERROR_CODE_UNKNOWN_CONN_ID,
         )
 
-        # stats, status = hci1.get_periodic_scanning_stats()
-        # self.assertTrue(stats is not None and status == pc.StatusCode.SUCCESS)
-
 
 if __name__ == "__main__":
     unittest.main()
