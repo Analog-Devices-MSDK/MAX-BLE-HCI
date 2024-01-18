@@ -156,9 +156,7 @@ def _run_input_cmds(commands):
                 sys.exit(_err.code)
     return True
 
-
-################## MAIN ##################
-if __name__ == "__main__":
+def main():
     COMMAND_STATE = ""
 
     # Setup the signal handler to catch the ctrl-C
@@ -863,3 +861,7 @@ if __name__ == "__main__":
 
         except Exception as err:  # pylint: disable=broad-exception-caught
             logger.error("Unexpected exception %s", type(err).__name__)
+
+################## MAIN ##################
+if __name__ == "__main__":
+    main()
