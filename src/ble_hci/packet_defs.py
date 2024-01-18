@@ -727,10 +727,10 @@ class VendorSpecificOCF(Enum):
     GET_RSSI = 0x306
     """Get RSSI command."""
 
-    PHY_EN = 0x307
+    BB_EN = 0x307
     """PHY enable command."""
 
-    PHY_DIS = 0x308
+    BB_DIS = 0x308
     """PHY disable command."""
 
 
