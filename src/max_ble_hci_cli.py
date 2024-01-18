@@ -156,6 +156,7 @@ def _run_input_cmds(commands):
                 sys.exit(_err.code)
     return True
 
+
 def main():
     COMMAND_STATE = ""
 
@@ -861,6 +862,7 @@ def main():
 
         except Exception as err:  # pylint: disable=broad-exception-caught
             logger.error("Unexpected exception %s", type(err).__name__)
+
 
 ################## MAIN ##################
 if __name__ == "__main__":

@@ -1192,6 +1192,27 @@ class VendorSpecificCmds:
 
         return stats, evt.status
 
+    def get_scan_stats(self) -> Tuple[ScanPktStats, StatusCode]:
+        evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_SCAN_STATS, return_evt=True)
+        data = evt.get_return_params(param_lens=[4, 4, 4, 4, 4, 4, 4, 4, 2, 2, 2, 2])
+
+        stats = ScanPktStats(
+            rx_adv=data[0],
+            rx_adv_crc=data[1],
+            rx_adv_timeout=data[2],
+            tx_req=data[3],
+            rx_rsp=data[4],
+            rx_rsp_crc=data[5],
+            rx_rsp_timeout=data[6],
+            err_scan=data[7],
+            rx_setup=data[8],
+            tx_setup=data[9],
+            rx_isr=data[10],
+            tx_isr=data[11],
+        )
+
+        return stats, evt.status
+
     def get_conn_stats(self) -> Tuple[DataPktStats, StatusCode]:
         """Get the stats captured during a connection.
 
