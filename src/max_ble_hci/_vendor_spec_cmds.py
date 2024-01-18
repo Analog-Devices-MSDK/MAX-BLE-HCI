@@ -1193,6 +1193,13 @@ class VendorSpecificCmds:
         return stats, evt.status
 
     def get_scan_stats(self) -> Tuple[ScanPktStats, StatusCode]:
+        """Get Scan stats
+
+        Returns
+        -------
+        Tuple[ScanPktStats, StatusCode]
+            Accumulated scanning stats and status code
+        """
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_SCAN_STATS, return_evt=True)
         data = evt.get_return_params(param_lens=[4, 4, 4, 4, 4, 4, 4, 4, 2, 2, 2, 2])
 
