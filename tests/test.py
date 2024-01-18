@@ -73,8 +73,8 @@ class TestHci(unittest.TestCase):
 
         stats, status = hci1.get_adv_stats()
         self.assertTrue(stats is not None and status == pc.StatusCode.SUCCESS)
-        # stats, status = hci1.get_sca()
-        # self.assertTrue(stats is not None and status == pc.StatusCode.SUCCESS)
+        stats, status = hci1.get_scan_stats()
+        self.assertTrue(stats is not None and status == pc.StatusCode.SUCCESS)
 
         stats, status = hci1.get_conn_stats()
         self.assertTrue(stats is not None and status == pc.StatusCode.SUCCESS)
