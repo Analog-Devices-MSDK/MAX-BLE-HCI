@@ -135,14 +135,11 @@ Parameters
       - LE Meta
     * - All other bits
 <<<<<<< HEAD
-      - [Reserved for future use.]
-=======
 <<<<<<< HEAD
       - [Reserved for future use].
 =======
       - [Reserved for future use.]
->>>>>>> 3ac7e3c (Initial documentation bringup)
->>>>>>> ae983f2 (merge 2x)
+>>>>>>> 4dd08ad (Initial documentation bringup)
 
 Return Parameters
 `````````````````
