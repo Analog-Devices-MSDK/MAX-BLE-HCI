@@ -134,7 +134,15 @@ Parameters
     * - 61
       - LE Meta
     * - All other bits
+<<<<<<< HEAD
       - [Reserved for future use.]
+=======
+<<<<<<< HEAD
+      - [Reserved for future use].
+=======
+      - [Reserved for future use.]
+>>>>>>> 3ac7e3c (Initial documentation bringup)
+>>>>>>> ae983f2 (merge 2x)
 
 Return Parameters
 `````````````````
@@ -269,4 +277,8 @@ Return Parameters
 Event(s) Generated
 ``````````````````
 
+<<<<<<< HEAD
 - COMMAND_COMPLETE
+=======
+- COMMAND_COMPLETE
+>>>>>>> ae983f2 (merge 2x)
