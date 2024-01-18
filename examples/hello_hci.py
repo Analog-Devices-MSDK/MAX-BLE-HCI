@@ -55,7 +55,7 @@ hello_hci.py
 Description: Bare minimum example of using the BleHci class
 
 """
-from ble_hci import BleHci
+from max_ble_hci import BleHci
 
 # Path to serial port used for HCI
 PORT = ""
