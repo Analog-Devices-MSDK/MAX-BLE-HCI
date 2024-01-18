@@ -134,7 +134,7 @@ Parameters
     * - 61
       - LE Meta
     * - All other bits
-      - [Reserved for future use.]
+      - [Reserved for future use].
 
 Return Parameters
 `````````````````
@@ -235,7 +235,7 @@ Parameters
     * - Value(s)
       - Parameter Description
     * - 0x0000 to 0x0EFF
-      - Indicates which connection to retrieve the TX power for
+      - Indicates which connection to retrieve the TX power for.
     
 .. list-table:: Type, size = 1 octet
     :width: 100%
@@ -245,11 +245,604 @@ Parameters
     * - Value(s)
       - Parameter Description
     * - 0x00
-      - Read current TX power level
+      - Read current TX power level.
     * - 0x1
-      - Read maximum TX power level
+      - Read maximum TX power level.
     * - All other values
-      - [Reserved for future use.]
+      - [Reserved for future use].
+
+Return Parameters
+`````````````````
+
+.. list-table:: Status, size = 1 octet
+    :width: 100%
+    :widths: 20 80
+    :header-rows: 1
+
+    * - Value(s)
+      - Parameter Description
+    * - 0x00
+      - Command completed successfully.
+    * - 0x01 to 0xFF
+      - Command failed.
+
+.. list-table:: Connection_Handle, size = 1 octet
+    :width: 100%
+    :widths: 20 80
+    :header-rows: 1
+
+    * - Value(s)
+      - Parameter Description
+    * - 0x0000 to 0x0EFF
+      - Connection handle
+
+.. list-table:: TX_Power_Level, size = 1 octet
+    :width: 100%
+    :widths: 20 80
+    :header-rows: 1
+
+    * - Value(s)
+      - Parameter Description
+    * - 0x00 to 0xFF
+      - | TX power level (signed value).
+        | Range: -30dBm to 20dBm
+
+Event(s) Generated
+``````````````````
+
+- COMMAND_COMPLETE
+
+
+Set Controller to Host Flow Control
+-----------------------------------
+
+Turn flow control on/off for data sent from the Controller to
+the Host.
+
+.. list-table::
+    :width: 100%
+    :widths: 30 10 30 30
+    :header-rows: 1
+
+    * - Command
+      - OCF
+      - Command Parameters
+      - Return Parameters
+    * - SET_CONTROLLER_TO_HOST_FC
+      - 0x0031
+      - Flow_Control_Enable
+      - Status
+
+Parameters
+``````````
+
+.. list-table:: Flow_Control_Enable, size = 1 octet
+    :width: 100%
+    :widths: 20 80
+    :header-rows: 1
+
+    * - Value(s)
+      - Parameter Description
+    * - 0x00
+      - Flow control off.
+    * - 0x01
+      - Flow control on for HCI ACL packets and off for HCI Synchronous packets.
+    * - 0x02
+      - Flow control off for HCI ACL packets and on for HCI Synchronous packets.
+    * - 0x03
+      - Flow control on for all packets.
+    * - All other values
+      - [Reserved for future use].
+
+Return Parameters
+`````````````````
+
+.. list-table:: Status, size = 1 octet
+    :width: 100%
+    :widths: 20 80
+    :header-rows: 1
+
+    * - Value(s)
+      - Parameter Description
+    * - 0x00
+      - Command completed successfully.
+    * - 0x01 to 0xFF
+      - Command failed.
+
+Event(s) Generated
+``````````````````
+
+- COMMAND_COMPLETE
+
+
+Host Buffer Size
+----------------
+
+Notify the Controller about the maximum data size of HCI ACL
+and Synchronous packets sent from the Controller to the Host.
+
+.. list-table::
+    :width: 100%
+    :widths: 30 10 30 30
+    :header-rows: 1
+
+    * - Command
+      - OCF
+      - Command Parameters
+      - Return Parameters
+    * - HOST_BUFFER_SIZE
+      - 0x0033
+      - | Host_ACL_Data_Packet_Length
+        | Host_Synchronous_Data_Packet_Length
+        | Host_Total_Num_ACL_Data_Packets
+        | Host_Total_Num_Synchronous_Data_Packets
+      - Status
+
+Parameters
+``````````
+
+.. list-table:: Host_ACL_Data_Packet_Length, size = 2 octets
+    :width: 100%
+    :widths: 20 80
+    :header-rows: 1
+
+    * - Value(s)
+      - Parameter Description
+    * - 0x0000 to 0xFFFF
+      - Maximum length (in octets) of data for HCI ACL packets that the Host can accept.
+
+.. list-table:: Host_Synchronous_Data_Packet_Length, size = 1 octet
+    :width: 100%
+    :widths: 20 80
+    :header-rows: 1
+
+    * - Value(s)
+      - Parameter Description
+    * - 0x00 to 0xFF
+      - Maximum length (in octets) of data for HCI Synchronous packets that the Host can accept.
+    
+.. list-table:: Host_Total_Num_ACL_Data_Packets, size = 2 octets
+    :width: 100%
+    :widths: 20 80
+    :header-rows: 1
+
+    * - Value(s)
+      - Parameter Description
+    * - 0x0000 to 0xFFFF
+      - Total number of HCI ACL packets that can be stored in the data buffers of the Host.
+
+.. list-table:: Host_Total_Num_Synchronous_Data_Packets, size = 2 octets
+  :width: 100%
+  :widths: 20 80
+  :header-rows: 1
+
+  * - Values(s)
+    - Parameter Description
+  * - 0x0000 to 0xFFFF
+    - Total number of HCI Synchronous packets that can be stored in the data buffers of the Host.
+
+Return Parameters
+`````````````````
+
+.. list-table:: Status, size = 1 octet
+    :width: 100%
+    :widths: 20 80
+    :header-rows: 1
+
+    * - Value(s)
+      - Parameter Description
+    * - 0x00
+      - Command completed successfully.
+    * - 0x01 to 0xFF
+      - Command failed.
+
+Event(s) Generated
+``````````````````
+
+- COMMAND_COMPLETE
+
+
+Host Number of Completed Packets
+--------------------------------
+
+Notify the Controller about the number of HCI packets that have
+been completed for each connection since the previous call of this
+command.
+
+.. list-table::
+    :width: 100%
+    :widths: 30 10 30 30
+    :header-rows: 1
+
+    * - Command
+      - OCF
+      - Command Parameters
+      - Return Parameters
+    * - HOST_NUM_CMPL_PKTS
+      - 0x0035
+      - | Num_Handles
+        | Connection_Handle[i]
+        | Host_Num_Completed_Packets[i]
+      -
+
+Parameters
+``````````
+
+.. list-table:: Num_Handles, size = 1 octet
+    :width: 100%
+    :widths: 20 80
+    :header-rows: 1
+
+    * - Value(s)
+      - Parameter Description
+    * - 0x00 to 0xFF
+      - Number of Connection_Handle/Host_Num_Completed_Packets parameter pairs contained in this command.
+    
+.. list-table:: Connection_Handle, size = 2*Num_Handles octets
+    :width: 100%
+    :widths: 20 80
+    :header-rows: 1
+
+    * - Value(s)
+      - Parameter Description
+    * - 0x0000 to 0x0EFF
+      - Connection handle for which the corresponding number of packets has been completed.
+
+.. list-table:: Host_Num_Completed_Packets, size = 2*Num_Handles octets
+  :width: 100%
+  :widths: 20 80
+  :header-rows: 1
+
+  * - Values(s)
+    - Parameter Description
+  * - 0x0000 to 0xFFFF
+    - Number of packets that have been completed for the corresponding connection handle.
+
+Return Parameters
+`````````````````
+
+None.
+
+Event(s) Generated
+``````````````````
+
+- COMMAND_COMPLETE (if command contains invalid parameters)
+
+
+Set Event Mask Page 2
+---------------------
+
+Control which events are generated by the HCI for the Host
+(continued from SET_EVENT_MASK). Setting a bit to 1 enables
+the corresponding event.
+
+.. list-table::
+    :width: 100%
+    :widths: 30 10 30 30
+    :header-rows: 1
+
+    * - Command
+      - OCF
+      - Command Parameters
+      - Return Parameters
+    * - SET_EVENT_MASK_PAGE2
+      - 0x0063
+      - Event_Mask_Page_2
+      - Status
+
+Parameters
+``````````
+
+.. list-table:: Event_Mask_Page_2, size = 8 octets
+    :width: 100%
+    :widths: 20 80
+    :header-rows: 1
+
+    * - Bit
+      - Event
+    * - 0
+      - [Previously used].
+    * - 1
+      - [Previously used].
+    * - 2
+      - [Previously used].
+    * - 3
+      - [Previously used].
+    * - 4
+      - [Previously used].
+    * - 5
+      - [Previously used].
+    * - 6
+      - [Previously used].
+    * - 7
+      - [Previously used].
+    * - 8
+      - Number of Completed Data Blocks
+    * - 9
+      - [Previously used].
+    * - 10
+      - [Previously used].
+    * - 11
+      - [Previously used].
+    * - 12
+      - [Previously used].
+    * - 13
+      - [Previously used].
+    * - 14
+      - Triggered Clock Capture
+    * - 15
+      - Synchronization Train Complete
+    * - 16
+      - Synchronization Train Received
+    * - 17
+      - Connectionless Peripheral Broadcast Received
+    * - 18
+      - Connectionless Peripheral Broadcast Timeout
+    * - 19
+      - Truncated Page Complete
+    * - 20
+      - Peripheral Page Response Timeout
+    * - 21
+      - Connectionless Peripheral Broadcast Channel Map Change
+    * - 22
+      - Inquiry Response Notification
+    * - 23
+      - Authenticated Payload Timeout Expired
+    * - 24
+      - SAM Status Change
+    * - 25
+      - Encryption Change (v2)
+    * - 60 to 63
+      - [Reserved for future use].
+
+Return Parameters
+`````````````````
+
+.. list-table:: Status, size = 1 octet
+    :width: 100%
+    :widths: 20 80
+    :header-rows: 1
+
+    * - Value(s)
+      - Parameter Description
+    * - 0x00
+      - Command completed successfully.
+    * - 0x01 to 0xFF
+      - Command failed.
+
+Event(s) Generated
+``````````````````
+
+- COMMAND_COMPLETE
+
+
+Read Authenticated Payload Timeout
+----------------------------------
+
+Read the authenticated payload timeout for a connection.
+
+.. list-table::
+    :width: 100%
+    :widths: 30 10 30 30
+    :header-rows: 1
+
+    * - Command
+      - OCF
+      - Command Parameters
+      - Return Parameters
+    * - READ_AUTH_PAYLOAD_TO
+      - 0x007B
+      - Connection_Handle
+      - | Status
+        | Connection_Handle
+        | Authenticated_Payload_Timeout
+
+Parameters
+``````````
+
+.. list-table:: Connection_Handle, size = 2 octets
+    :width: 100%
+    :widths: 20 80
+    :header-rows: 1
+
+    * - Value(s)
+      - Parameter Description
+    * - 0x0000 to 0x0EFF
+      - Indicates which connection to retrieve the authenticated payload timeout for.
+
+Return Parameters
+`````````````````
+
+.. list-table:: Status, size = 1 octet
+    :width: 100%
+    :widths: 20 80
+    :header-rows: 1
+
+    * - Value(s)
+      - Parameter Description
+    * - 0x00
+      - Command completed successfully.
+    * - 0x01 to 0xFF
+      - Command failed.
+
+.. list-table:: Connection_Handle, size = 2 octets
+    :width: 100%
+    :widths: 20 80
+    :header-rows: 1
+
+    * - Value(s)
+      - Parameter Description
+    * - 0x0000 to 0x0EFF
+      - Connection handle
+
+.. list-table:: Authenticated_Payload_Timeout, size = 2 octets
+    :width: 100%
+    :widths: 20 80
+    :header-rows: 1
+
+    * - Value(s)
+      - Parameter Description
+    * - 0x0001 to 0xFFFF
+      - | Maximum amount of time specified between packed authenticated by an MIC.
+        | Time = value * 10ms
+        | Time Range = 10ms to 655350ms
+
+Event(s) Generated
+``````````````````
+
+- COMMAND_COMPLETE
+
+
+Write Authenticated Payload Timeout
+-----------------------------------
+
+Write the authenticated payload timeout value for a connection.
+
+.. list-table::
+    :width: 100%
+    :widths: 30 10 30 30
+    :header-rows: 1
+
+    * - Command
+      - OCF
+      - Command Parameters
+      - Return Parameters
+    * - WRITE_AUTH_PAYLOAD_TO
+      - 0x007C
+      - | Connection_Handle
+        | Authenticated_Payload_Timeout
+      - | Status
+        | Connection_Handle
+
+Parameters
+``````````
+
+.. list-table:: Connection_Handle, size = 2 octets
+    :width: 100%
+    :widths: 20 80
+    :header-rows: 1
+
+    * - Value(s)
+      - Parameter Description
+    * - 0x0000 to 0x0EFF
+      - Indicates which connection to write the authenticated payload timeout for.
+
+.. list-table:: Authenticated_Payload_Timeout, size = 2 octets
+    :width: 100%
+    :widths: 20 80
+    :header-rows: 1
+
+    * - Value(s)
+      - Parameter Description
+    * - 0x0001 to 0xFFFF
+      - | Maximum amount of time specified between packets authenticated by a valic MIC.
+        | Time = value * 10ms
+        | Time Range = 10ms to 655350ms
+
+Return Parameters
+`````````````````
+
+.. list-table:: Status, size = 1 octet
+    :width: 100%
+    :widths: 20 80
+    :header-rows: 1
+
+    * - Value(s)
+      - Parameter Description
+    * - 0x00
+      - Command completed successfully.
+    * - 0x01 to 0xFF
+      - Command failed.
+
+.. list-table:: Connection_Handle, size = 2 octets
+    :width: 100%
+    :widths: 20 80
+    :header-rows: 1
+
+    * - Value(s)
+      - Parameter Description
+    * - 0x0000 to 0x0EFF
+      - Connection handle.
+
+Event(s) Generated
+``````````````````
+
+- COMMAND_COMPLETE
+
+
+Configure Data Path
+-------------------
+
+Configure the data transport path in between the Controller and
+the Host in the indicated direction.
+
+.. list-table::
+    :width: 100%
+    :widths: 30 10 30 30
+    :header-rows: 1
+
+    * - Command
+      - OCF
+      - Command Parameters
+      - Return Parameters
+    * - CONFIG_DATA_PATH
+      - 0x0083
+      - | Data_Path_Direction
+        | Data_Path_ID
+        | Vendor_Specific_Config_Length
+        | Vendor_Specific_Config
+      - Status
+
+Parameters
+``````````
+
+.. list-table:: Data_Path_Direction, size = 1 octet
+    :width: 100%
+    :widths: 20 80
+    :header-rows: 1
+
+    * - Value(s)
+      - Parameter Description
+    * - 0x00
+      - Configure input path (Host to Controller).
+    * - 0x01
+      - Configure output path (Controller to Host).
+    * - All other values
+      - [Reserved for future use].
+
+.. list-table:: Data_Path_ID, size = 1 octet
+    :width: 100%
+    :widths: 20 80
+    :header-rows: 1
+
+    * - Value(s)
+      - Parameter Description
+    * - 0x00
+      - [Reserved for future use].
+    * - 0x01 to 0xFE
+      - Logic channel number, vendor-specific.
+    * - 0xFF
+      - [Reserved for future use].
+    
+.. list-table:: Vendor_Specific_Config_Length, size = 1 octet
+    :width: 100%
+    :widths: 20 80
+    :header-rows: 1
+
+    * - Value(s)
+      - Parameter Description
+    * - 0x00 to 0xFF
+      - Length of the vendor-specific configuration data.
+
+.. list-table:: Vendor_Specific_Config, size = Vendor_Specific_Config_Length octets
+  :width: 100%
+  :widths: 20 80
+  :header-rows: 1
+
+  * - Values(s)
+    - Parameter Description
+  * - Variable
+    - Vendor-specific configuration for the indicated data path.
 
 Return Parameters
 `````````````````
