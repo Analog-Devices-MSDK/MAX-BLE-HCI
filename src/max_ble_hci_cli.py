@@ -116,17 +116,6 @@ DEFAULT_CONN_INTERVAL = 0x6  # 7.5 ms
 DEFAULT_SUP_TIMEOUT = 0x64  # 1 s
 
 
-class ListenAction(argparse.Action):
-    # pylint: disable=too-few-public-methods
-    """Listen Action"""
-
-    def __call__(self, _parser, namespace, values, option_string=None):
-        if values is not None:
-            setattr(namespace, self.dest, int(values))
-        else:
-            setattr(namespace, self.dest, True)
-
-
 class ArgumentParser(argparse.ArgumentParser):
     """Argument  Parser
 
@@ -321,19 +310,6 @@ if __name__ == "__main__":
         action="store_false",
         help="Disable advertising as a connectable device.",
     )
-
-    adv_parser.add_argument(
-        "--stats",
-        dest="stats",
-        action="store_true",
-        help="Periodically print the connection stats if listening.",
-    )
-    adv_parser.add_argument(
-        "--maintain",
-        dest="maintain",
-        action="store_true",
-        help="Setup an event listener to restart advertising if we disconnect.",
-    )
     adv_parser.set_defaults(
         func=lambda args: print(
             hci.start_advertising(
@@ -399,30 +375,6 @@ if __name__ == "__main__":
         help=f"""Supervision timeout in units of 10ms, 16-bit hex number 0x000A - 0x0C80.
         "Default: {hex(DEFAULT_SUP_TIMEOUT)}""",
     )
-    init_parser.add_argument(
-        "-l",
-        "--listen",
-        dest="listen",
-        default=False,
-        nargs="?",
-        action=ListenAction,
-        help="""Enable listening for events.
-        Uses:
-        -l           --> listens indefinitely, ctrl-c to exit
-        -l N_SECONDS --> listens for N_SECONDS, then returns""",
-    )
-    init_parser.add_argument(
-        "--stats",
-        dest="stats",
-        action="store_true",
-        help="Periodically print the connection stats if listening.",
-    )
-    init_parser.add_argument(
-        "--maintain",
-        dest="maintain",
-        action="store_true",
-        help="Setup an event listener to restart advertising if we disconnect.",
-    )
     init_parser.set_defaults(
         func=lambda args: print(
             hci.init_connection(
@@ -435,12 +387,12 @@ if __name__ == "__main__":
     )
 
     datalen_parser = subparsers.add_parser(
-        "datalen", help="Set the max data length", formatter_class=RawTextHelpFormatter
+        "data-len", help="Set the max data length", formatter_class=RawTextHelpFormatter
     )
     datalen_parser.set_defaults(func=lambda _: hci.set_data_len(), which="dataLen")
 
     send_acl_parser = subparsers.add_parser(
-        "sendacl",
+        "send-acl",
         help="Send ACL packets",
         formatter_class=RawTextHelpFormatter,
     )
@@ -467,7 +419,7 @@ if __name__ == "__main__":
     )
 
     sinl_acl_parser = subparsers.add_parser(
-        "sinkacl",
+        "sink-acl",
         help="Sink ACL packets, do not send events to host",
         formatter_class=RawTextHelpFormatter,
     )
@@ -477,7 +429,7 @@ if __name__ == "__main__":
     )
 
     connStats_parser = subparsers.add_parser(
-        "connstats",
+        "conn-stats",
         aliases=["cs"],
         help="Get the connection stats",
         formatter_class=RawTextHelpFormatter,
@@ -488,7 +440,7 @@ if __name__ == "__main__":
     )
 
     test_stats_parser = subparsers.add_parser(
-        "teststats",
+        "test-stats",
         aliases=["ts"],
         help="Get the test stats",
         formatter_class=RawTextHelpFormatter,
@@ -528,9 +480,9 @@ if __name__ == "__main__":
     reset_parser = subparsers.add_parser("reset", help="Sends an HCI reset command")
     reset_parser.set_defaults(func=lambda _: print(hci.reset()), which="reset")
 
-    #### LISTEN PARSER ####
+    #### TX TEST PARSER ####
     tx_test_parser = subparsers.add_parser(
-        "txtest",
+        "tx-test",
         aliases=["tx"],
         help="Execute the transmitter test.",
         formatter_class=RawTextHelpFormatter,
@@ -665,7 +617,7 @@ if __name__ == "__main__":
 
     #### RXTEST PARSER ####
     rx_test_parser = subparsers.add_parser(
-        "rxtest",
+        "rx-test",
         aliases=["rx"],
         help="Execute the receiver test",
         formatter_class=RawTextHelpFormatter,
@@ -698,7 +650,7 @@ if __name__ == "__main__":
 
     #### RXTESTVS PARSER ####
     rx_test_vs_parser = subparsers.add_parser(
-        "rxtestvs",
+        "rx-test-vs",
         aliases=["rxvs"],
         help="Execute the vendor-specific receiver test",
         formatter_class=RawTextHelpFormatter,
@@ -752,7 +704,7 @@ if __name__ == "__main__":
 
     #### ENDTEST PARSER ####
     endtest_parser = subparsers.add_parser(
-        "endtest",
+        "end-test",
         aliases=["end"],
         help="End the Tx/Rx test, print the number of correctly received packets",
         formatter_class=RawTextHelpFormatter,
@@ -778,7 +730,7 @@ if __name__ == "__main__":
 
     #### TXPOWER PARSER ####
     txpower_parser = subparsers.add_parser(
-        "txpower",
+        "tx-power",
         aliases=["txp"],
         help="Set the Tx power",
         formatter_class=RawTextHelpFormatter,
@@ -801,7 +753,7 @@ if __name__ == "__main__":
     discon_parser.set_defaults(func=lambda _: print(hci.disconnect()), which="discon")
 
     set_ch_map_parser = subparsers.add_parser(
-        "setchmap",
+        "set-chmap",
         help="Set the connection channel map to a given channel.",
         formatter_class=RawTextHelpFormatter,
     )
@@ -839,17 +791,6 @@ if __name__ == "__main__":
         help='String of hex bytes LSB first\nex: "01030C00" to send HCI Reset command',
     )
     cmd_parser.add_argument(
-        "-l",
-        "--listen",
-        dest="listen",
-        action=ListenAction,
-        default=False,
-        help="""Enable listening for events.\n
-        Uses:
-        -l           --> listens indefinitely, ctrl-c to exit
-        -l N_SECONDS --> listens for N_SECONDS, then returns""",
-    )
-    cmd_parser.add_argument(
         "-t",
         "--timeout",
         dest="timeout",
@@ -881,6 +822,7 @@ if __name__ == "__main__":
 
     readline.set_completer(_completer)
     readline.parse_and_bind("tab: complete")
+    readline.set_completer_delims(readline.get_completer_delims().replace('-', ''))
 
     COMMANDS_RUN = False
     if COMMANDS:
