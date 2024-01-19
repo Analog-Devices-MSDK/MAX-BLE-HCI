@@ -837,21 +837,11 @@ def main():
         astr = input(f"{command_state}>>> ")
         try:
             args = terminal.parse_args(astr.split())
-
-            if (
-                not args.which == "port"
-                and not args.which == "help"
-                and not args.which == "exit"
-            ):
-                logger.error(
-                    "Serial port is not set. Set serial port using the 'port' command."
-                )
-            else:
-                try:
-                    args.func(args)
-                except AttributeError as err:
-                    logger.error(str(err))
-                    continue
+            try:
+                args.func(args)
+            except AttributeError as err:
+                logger.error(str(err))
+                continue
 
         except SystemExit as err:
             if err.code == EXIT_FUNC_MAGIC:
