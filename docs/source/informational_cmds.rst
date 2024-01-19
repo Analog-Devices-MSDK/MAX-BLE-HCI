@@ -509,13 +509,13 @@ Read Local Supported Codec Capabilities
 Read a list of capabilities supported by the controller for the
 indicated codec. Return parameters are organized as such:
 
-Status
-Num_Codec_Capabilities
-Codec_Capability_Length[0]
-Codec_Capability[0]
-...
-Codec_Capability_Length[i]
-Codec_Capability[i]
+| Status
+| Num_Codec_Capabilities
+| Codec_Capability_Length[0]
+| Codec_Capability[0]
+| ...
+| Codec_Capability_Length[i]
+| Codec_Capability[i]
 
 .. list-table::
     :width: 100%
