@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>max_ble_hci.ble_hci &mdash; MAX BLE HCI 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=2389946f"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MAX BLE HCI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hci_reference.html">HCI Command Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MAX BLE HCI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">max_ble_hci.ble_hci</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for max_ble_hci.ble_hci</h1><div class="highlight"><pre>
+<span></span><span class="ch">#! /usr/bin/env python3</span>
+<span class="c1">###############################################################################</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (C) 2023 Maxim Integrated Products, Inc., All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a</span>
+<span class="c1"># copy of this software and associated documentation files (the &quot;Software&quot;),</span>
+<span class="c1"># to deal in the Software without restriction, including without limitation</span>
+<span class="c1"># the rights to use, copy, modify, merge, publish, distribute, sublicense,</span>
+<span class="c1"># and/or sell copies of the Software, and to permit persons to whom the</span>
+<span class="c1"># Software is furnished to do so, subject to the following conditions:</span>
+<span class="c1">#</span>
+<span class="c1"># The above copyright notice and this permission notice shall be included</span>
+<span class="c1"># in all copies or substantial portions of the Software.</span>
+<span class="c1">#</span>
+<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS</span>
+<span class="c1"># OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF</span>
+<span class="c1"># MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.</span>
+<span class="c1"># IN NO EVENT SHALL MAXIM INTEGRATED BE LIABLE FOR ANY CLAIM, DAMAGES</span>
+<span class="c1"># OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,</span>
+<span class="c1"># ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR</span>
+<span class="c1"># OTHER DEALINGS IN THE SOFTWARE.</span>
+<span class="c1">#</span>
+<span class="c1"># Except as contained in this notice, the name of Maxim Integrated</span>
+<span class="c1"># Products, Inc. shall not be used except as stated in the Maxim Integrated</span>
+<span class="c1"># Products, Inc. Branding Policy.</span>
+<span class="c1">#</span>
+<span class="c1"># The mere transfer of this software does not imply any licenses</span>
+<span class="c1"># of trade secrets, proprietary technology, copyrights, patents,</span>
+<span class="c1"># trademarks, maskwork rights, or any other form of intellectual</span>
+<span class="c1"># property whatsoever. Maxim Integrated Products, Inc. retains all</span>
+<span class="c1"># ownership rights.</span>
+<span class="c1">#</span>
+<span class="c1">##############################################################################</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright 2023 Analog Devices, Inc.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+<span class="c1">#</span>
+<span class="c1">##############################################################################</span>
+<span class="sd">&quot;&quot;&quot;Contains full HCI implementation.&quot;&quot;&quot;</span>
+<span class="c1"># pylint: disable=too-many-arguments</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">._ble_standard_cmds</span> <span class="kn">import</span> <span class="n">BleStandardCmds</span>
+<span class="kn">from</span> <span class="nn">._hci_logger</span> <span class="kn">import</span> <span class="n">get_formatted_logger</span>
+<span class="kn">from</span> <span class="nn">._transport</span> <span class="kn">import</span> <span class="n">SerialUartTransport</span>
+<span class="kn">from</span> <span class="nn">._vendor_spec_cmds</span> <span class="kn">import</span> <span class="n">VendorSpecificCmds</span>
+<span class="kn">from</span> <span class="nn">.data_params</span> <span class="kn">import</span> <span class="n">AdvParams</span><span class="p">,</span> <span class="n">ConnParams</span>
+<span class="kn">from</span> <span class="nn">.hci_packets</span> <span class="kn">import</span> <span class="n">AsyncPacket</span><span class="p">,</span> <span class="n">CommandPacket</span><span class="p">,</span> <span class="n">EventPacket</span>
+<span class="kn">from</span> <span class="nn">.packet_codes</span> <span class="kn">import</span> <span class="n">StatusCode</span>
+<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">ADI_PORT_BAUD_RATE</span>
+
+
+<div class="viewcode-block" id="BleHci"><a class="viewcode-back" href="../../ble_hci.html#max_ble_hci.ble_hci.BleHci">[docs]</a><span class="k">class</span> <span class="nc">BleHci</span><span class="p">(</span><span class="n">BleStandardCmds</span><span class="p">,</span> <span class="n">VendorSpecificCmds</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Host-controller interface.</span>
+
+<span class="sd">    The BleHci object defines a host-controller interface for</span>
+<span class="sd">    BLE testing on any BLE-compatible microchip. Controller provides</span>
+<span class="sd">    implementations for both BLE standard HCI command and ADI vendor</span>
+<span class="sd">    specific commands. Support is also provided for the creation and</span>
+<span class="sd">    use of custom vendor-specific commands.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    port_id : str</span>
+<span class="sd">        ID string for the port on which a connection should be</span>
+<span class="sd">        established.</span>
+<span class="sd">    baud : int</span>
+<span class="sd">        Port baud rate.</span>
+<span class="sd">    id_tag : str</span>
+<span class="sd">        Connection ID string to use when logging.</span>
+<span class="sd">    log_level : Union[str, int]</span>
+<span class="sd">        Logging level.</span>
+<span class="sd">    logger_name : str</span>
+<span class="sd">        Name that should be used to reference HCI logger.</span>
+<span class="sd">    retries : int</span>
+<span class="sd">        Number of times a port read should be retried before</span>
+<span class="sd">        and error is thrown.</span>
+<span class="sd">    timeout : float</span>
+<span class="sd">        Port timeout.</span>
+<span class="sd">    async_callback : Callable[[AsyncPacket], Any], optional</span>
+<span class="sd">        Function pointer defining the process that should be taken</span>
+<span class="sd">        when an async packet is received. If not defined, the async</span>
+<span class="sd">        packet will be thrown out.</span>
+<span class="sd">    evt_callback : Callable[[EventPacket], Any], optional</span>
+<span class="sd">        Function pointer defining the process that should be taken</span>
+<span class="sd">        when an unexpected event packet is received. If not defined,</span>
+<span class="sd">        the event packet will be thrown out.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    port_id : str</span>
+<span class="sd">        Id string for the port on which a connection has been</span>
+<span class="sd">        established</span>
+<span class="sd">    port : SerialUartTransport</span>
+<span class="sd">        Serial port interfacing object connected to the DUT.</span>
+<span class="sd">    id_tag : str</span>
+<span class="sd">        Connection ID string used by the logger.</span>
+<span class="sd">    logger : logging.Logger</span>
+<span class="sd">        HCI logging object reference by the `logger_name` argument.</span>
+<span class="sd">    retries : int</span>
+<span class="sd">        Number of times a port read should be retried before an error</span>
+<span class="sd">        is thrown.</span>
+<span class="sd">    timeout : float</span>
+<span class="sd">        Port timeout.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">port_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">baud</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">ADI_PORT_BAUD_RATE</span><span class="p">,</span>
+        <span class="n">id_tag</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;DUT&quot;</span><span class="p">,</span>
+        <span class="n">log_level</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
+        <span class="n">logger_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;BLE-HCI&quot;</span><span class="p">,</span>
+        <span class="n">retries</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">async_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">AsyncPacket</span><span class="p">],</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">evt_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">EventPacket</span><span class="p">],</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port_id</span> <span class="o">=</span> <span class="n">port_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_tag</span> <span class="o">=</span> <span class="n">id_tag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">get_formatted_logger</span><span class="p">(</span><span class="n">log_level</span><span class="o">=</span><span class="n">log_level</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">logger_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">retries</span> <span class="o">=</span> <span class="n">retries</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_ports</span><span class="p">(</span><span class="n">port_id</span><span class="p">,</span> <span class="n">baud</span><span class="p">,</span> <span class="n">logger_name</span><span class="p">,</span> <span class="n">async_callback</span><span class="p">,</span> <span class="n">evt_callback</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">,</span> <span class="n">logger_name</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BleHci.get_log_level"><a class="viewcode-back" href="../../ble_hci.html#max_ble_hci.ble_hci.BleHci.get_log_level">[docs]</a>    <span class="k">def</span> <span class="nf">get_log_level</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve the current log level.</span>
+
+<span class="sd">        Retrieved the current logging level in string</span>
+<span class="sd">        format.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            The current logging level.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">level</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">level</span>
+        <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;DEBUG&quot;</span>
+        <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;INFO&quot;</span>
+        <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;WARNING&quot;</span>
+        <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;ERROR&quot;</span>
+        <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="n">logging</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;CRITICAL&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;NOTSET&quot;</span></div>
+
+<div class="viewcode-block" id="BleHci.set_log_level"><a class="viewcode-back" href="../../ble_hci.html#max_ble_hci.ble_hci.BleHci.set_log_level">[docs]</a>    <span class="k">def</span> <span class="nf">set_log_level</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sets log level.</span>
+
+<span class="sd">        Provides intermediary control over the logging level</span>
+<span class="sd">        of the host-controller interface module logger. If</span>
+<span class="sd">        necessary, desired log level is automatically converted</span>
+<span class="sd">        from a string to an integer. As such, both strings and</span>
+<span class="sd">        integers are valid inputs to the `level` parameter.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        level : Union[int, str]</span>
+<span class="sd">            Desired log level.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">ll_str</span> <span class="o">=</span> <span class="n">level</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">ll_str</span> <span class="o">==</span> <span class="s2">&quot;DEBUG&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">ll_str</span> <span class="o">==</span> <span class="s2">&quot;INFO&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">ll_str</span> <span class="o">==</span> <span class="s2">&quot;WARNING&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">ll_str</span> <span class="o">==</span> <span class="s2">&quot;ERROR&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">ll_str</span> <span class="o">==</span> <span class="s2">&quot;CRITICAL&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">NOTSET</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;Invalid log level string: </span><span class="si">%s</span><span class="s2">, level set to &#39;logging.NOTSET&#39;&quot;</span><span class="p">,</span> <span class="n">ll_str</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BleHci.start_advertising"><a class="viewcode-back" href="../../ble_hci.html#max_ble_hci.ble_hci.BleHci.start_advertising">[docs]</a>    <span class="k">def</span> <span class="nf">start_advertising</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">connect</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">adv_params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">AdvParams</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Start advertising.</span>
+
+<span class="sd">        Convenience function which sends a sequence of commands to</span>
+<span class="sd">        the DUT, telling it to begin advertising. PHYs preferences</span>
+<span class="sd">        cannot be set when using this function, but advertising</span>
+<span class="sd">        parameters can be using the optional `adv_params` parameter.</span>
+<span class="sd">        If a value is provided for `adv_params`, the value of the</span>
+<span class="sd">        `connect` parameter is ignored. If no value is provided, all</span>
+<span class="sd">        advertising parameters are defaulted and `connect` is used</span>
+<span class="sd">        to determine the advertising type.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        connect : bool, optional</span>
+<span class="sd">            Make connectable? If true, advertising type is set to</span>
+<span class="sd">            `0x0 (ADV_IND)`. If false, advertising type is set to</span>
+<span class="sd">            `0x3 (ADV_NONCONN_IND)`. Ignored if `adv_params` is</span>
+<span class="sd">            not None.</span>
+<span class="sd">        adv_params : AdvParams, optional.</span>
+<span class="sd">            Advertising parameters.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return status of the enable advertising command.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_connection_stats</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_default_phy</span><span class="p">(</span><span class="n">all_phys</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tx_phys</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">rx_phys</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">adv_params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">adv_type</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">connect</span> <span class="k">else</span> <span class="mi">3</span>
+            <span class="n">adv_params</span> <span class="o">=</span> <span class="n">AdvParams</span><span class="p">(</span><span class="n">adv_type</span><span class="o">=</span><span class="n">adv_type</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_adv_params</span><span class="p">(</span><span class="n">adv_params</span><span class="p">)</span>
+
+        <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enable_adv</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">status</span></div>
+
+<div class="viewcode-block" id="BleHci.init_connection"><a class="viewcode-back" href="../../ble_hci.html#max_ble_hci.ble_hci.BleHci.init_connection">[docs]</a>    <span class="k">def</span> <span class="nf">init_connection</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">addr</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">interval</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x6</span><span class="p">,</span>
+        <span class="n">sup_timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x64</span><span class="p">,</span>
+        <span class="n">conn_params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ConnParams</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize a connection.</span>
+
+<span class="sd">        Convenience function which sends a sequence of commands to</span>
+<span class="sd">        the DUT, telling it to initialize a connection. PHYs preferences</span>
+<span class="sd">        cannot be set when using this function, but connection parameters</span>
+<span class="sd">        can be using the optional `conn_params` parameter. If a value is</span>
+<span class="sd">        provided for `conn_params`, the values of the `addr`, `interval`,</span>
+<span class="sd">        and `sup_timeout` parameters are ignored. If no value is provided,</span>
+<span class="sd">        all connection parameters except min/max interval and supervision</span>
+<span class="sd">        timeout are defaulted. In addition, a value for `addr` must be</span>
+<span class="sd">        provided.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        addr : int</span>
+<span class="sd">            Peer device BD address.</span>
+<span class="sd">        interval : int, optional</span>
+<span class="sd">            Connection inverval.</span>
+<span class="sd">        sup_timeout : int, optional</span>
+<span class="sd">            Supervision timeout.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return status of the create connection command.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If both `addr` and `conn_params` are None.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `addr` is more than 6 bytes in size.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">conn_params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">addr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Either connection parameters or address must be provided.&quot;</span>
+                <span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">max</span><span class="p">((</span><span class="n">addr</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span> <span class="o">+</span> <span class="mi">7</span><span class="p">)</span> <span class="o">//</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">6</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Address (</span><span class="si">{</span><span class="n">addr</span><span class="si">}</span><span class="s2">) is too large, must be 6 bytes or less.&quot;</span>
+                <span class="p">)</span>
+
+            <span class="n">conn_params</span> <span class="o">=</span> <span class="n">ConnParams</span><span class="p">(</span>
+                <span class="n">addr</span><span class="p">,</span>
+                <span class="n">conn_interval_max</span><span class="o">=</span><span class="n">interval</span><span class="p">,</span>
+                <span class="n">conn_interval_min</span><span class="o">=</span><span class="n">interval</span><span class="p">,</span>
+                <span class="n">sup_timeout</span><span class="o">=</span><span class="n">sup_timeout</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_connection_stats</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_default_phy</span><span class="p">(</span><span class="n">all_phys</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tx_phys</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">rx_phys</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+
+        <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_connection</span><span class="p">(</span><span class="n">conn_params</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">status</span></div>
+
+<div class="viewcode-block" id="BleHci.read_event"><a class="viewcode-back" href="../../ble_hci.html#max_ble_hci.ble_hci.BleHci.read_event">[docs]</a>    <span class="k">def</span> <span class="nf">read_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventPacket</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read an event from controller.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        timeout : Optional[float], optional</span>
+<span class="sd">            Timeout for read operation. Can be used to</span>
+<span class="sd">            temporarily override this object&#39;s `timeout`</span>
+<span class="sd">            attribute.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        EventPacket</span>
+<span class="sd">            Packet retrieved from the controller.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TimeoutError</span>
+<span class="sd">            If a timeout occurs and there are no retries remaining.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">timeout_err</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">tries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">retries</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">timeout</span><span class="p">:</span>
+            <span class="n">timeout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span>
+        <span class="k">while</span> <span class="n">tries</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">.</span><span class="n">retrieve_packet</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">TimeoutError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="n">tries</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="n">timeout_err</span> <span class="o">=</span> <span class="n">err</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                    <span class="s2">&quot;Timeout occured. Retrying. </span><span class="si">%d</span><span class="s2"> retries remaining.&quot;</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">retries</span> <span class="o">-</span> <span class="n">tries</span><span class="p">,</span>
+                <span class="p">)</span>
+
+        <span class="k">raise</span> <span class="ne">TimeoutError</span><span class="p">(</span><span class="s2">&quot;Timeout occured. No retries remaining.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">timeout_err</span></div>
+
+<div class="viewcode-block" id="BleHci.write_command"><a class="viewcode-back" href="../../ble_hci.html#max_ble_hci.ble_hci.BleHci.write_command">[docs]</a>    <span class="k">def</span> <span class="nf">write_command</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">command</span><span class="p">:</span> <span class="n">CommandPacket</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventPacket</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Send a command and retrieve the return packet.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        command : Union[str, int]</span>
+<span class="sd">            Command to send. Must be an instance of the</span>
+<span class="sd">            `CommandPacket` class.</span>
+<span class="sd">        timeout : int</span>
+<span class="sd">            Timeout for read portion of the read/write.</span>
+<span class="sd">            Can be used to temporarily override this object&#39;s</span>
+<span class="sd">            `timeout` attribute.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        EventPacket</span>
+<span class="sd">            The command return packet.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">timeout</span><span class="p">:</span>
+            <span class="n">timeout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span>
+        <span class="n">evt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">evt</span></div>
+
+<div class="viewcode-block" id="BleHci.write_command_raw"><a class="viewcode-back" href="../../ble_hci.html#max_ble_hci.ble_hci.BleHci.write_command_raw">[docs]</a>    <span class="k">def</span> <span class="nf">write_command_raw</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">raw_command</span><span class="p">:</span> <span class="nb">bytearray</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventPacket</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Write raw command to device</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        raw_command : bytearray</span>
+<span class="sd">            Command as bytearray</span>
+<span class="sd">        timeout : int</span>
+<span class="sd">            Timeout for read portion of the read/write.</span>
+<span class="sd">            Can be used to temporarily override this object&#39;s</span>
+<span class="sd">            `timeout` attribute.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        EventPacket</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">timeout</span><span class="p">:</span>
+            <span class="n">timeout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">.</span><span class="n">send_command_raw</span><span class="p">(</span><span class="n">raw_command</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BleHci.exit"><a class="viewcode-back" href="../../ble_hci.html#max_ble_hci.ble_hci.BleHci.exit">[docs]</a>    <span class="k">def</span> <span class="nf">exit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Close the HCI connection.</span>
+
+<span class="sd">        Used to safely close the connection between the HCI and</span>
+<span class="sd">        the test board.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_init_ports</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">port_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">baud</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">logger_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">async_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">AsyncPacket</span><span class="p">],</span> <span class="n">Any</span><span class="p">]],</span>
+        <span class="n">evt_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">EventPacket</span><span class="p">],</span> <span class="n">Any</span><span class="p">]],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes serial ports.</span>
+
+<span class="sd">        PRIVATE</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">SerialUartTransport</span><span class="p">(</span>
+            <span class="n">port_id</span><span class="p">,</span>
+            <span class="n">baud</span><span class="o">=</span><span class="n">baud</span><span class="p">,</span>
+            <span class="n">id_tag</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">id_tag</span><span class="p">,</span>
+            <span class="n">logger_name</span><span class="o">=</span><span class="n">logger_name</span><span class="p">,</span>
+            <span class="n">retries</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">retries</span><span class="p">,</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">,</span>
+            <span class="n">async_callback</span><span class="o">=</span><span class="n">async_callback</span><span class="p">,</span>
+            <span class="n">evt_callback</span><span class="o">=</span><span class="n">evt_callback</span><span class="p">,</span>
+        <span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Analog Devices, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

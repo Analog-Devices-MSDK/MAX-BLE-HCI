@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Reference &mdash; MAX BLE HCI 0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=2389946f"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="max_ble_hci.ble_hci" href="ble_hci.html" />
+    <link rel="prev" title="Examples" href="examples.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            MAX BLE HCI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ble_hci.html">max_ble_hci.ble_hci</a></li>
+<li class="toctree-l2"><a class="reference internal" href="constants.html">max_ble_hci.constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_params.html">max_ble_hci.data_params</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hci_packets.html">max_ble_hci.hci_packets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packet_codes.html">max_ble_hci.packet_codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packet_defs.html">max_ble_hci.packet_defs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-max_ble_hci">Package Contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#implementation-details">Implementation details</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#classes">Classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hci_reference.html">HCI Command Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MAX BLE HCI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">API Reference</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/modules.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ble_hci.html">max_ble_hci.ble_hci</a></li>
+<li class="toctree-l1"><a class="reference internal" href="constants.html">max_ble_hci.constants</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_params.html">max_ble_hci.data_params</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hci_packets.html">max_ble_hci.hci_packets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packet_codes.html">max_ble_hci.packet_codes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="packet_defs.html">max_ble_hci.packet_defs</a></li>
+</ul>
+</div>
+<section id="module-max_ble_hci">
+<span id="package-contents"></span><h2>Package Contents<a class="headerlink" href="#module-max_ble_hci" title="Permalink to this heading"></a></h2>
+<p>The package <cite>ble_hci</cite> contains the <cite>BleHci</cite> object, which is used as a method
+of communication between the test host (PC) and the test controller(s) (PCB).
+The HCI is primarily used by the test controllers during board-to-board testing,
+but is provided publically due to the wide range of HCI applications and use
+cases.</p>
+<section id="implementation-details">
+<h3>Implementation details<a class="headerlink" href="#implementation-details" title="Permalink to this heading"></a></h3>
+<p>The HCI object contained in this package has many of the base HCI functions
+already implemented. These include:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>reset</p></li>
+<li><p>maximize data length</p></li>
+<li><p>send/sink ACL data</p></li>
+<li><p>TX test (basic and vendor-specific)</p></li>
+<li><p>RX test (basic and vendor-specific)</p></li>
+<li><p>end test</p></li>
+<li><p>PHY selection</p></li>
+<li><p>TX power selection</p></li>
+<li><p>BD address selection</p></li>
+<li><p>channel map selection</p></li>
+<li><p>start advertising</p></li>
+<li><p>start scanning</p></li>
+<li><p>initialize connection</p></li>
+<li><p>disconnect</p></li>
+<li><p>register read/write</p></li>
+</ul>
+</div></blockquote>
+<p>Should an HCI command that is not currently implemented be needed, the <cite>BleHci</cite>
+object also provides a function for sending a raw HCI command.</p>
+</section>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>BleHci</p></li>
+</ul>
+</section>
+<section id="usage">
+<h3>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h3>
+<p>The <cite>BleHci</cite> object contains several initialization parameters which can be
+used to define the board UART COM/serial port, define a string identifier
+for the HCI, and specificy the HCI logging level. For the purpose of these
+examples, it is assumed the COM/serial port string has already been assigned
+to the variable <cite>port</cite>.</p>
+<p>Create an HCI, basic:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">hci</span> <span class="o">=</span> <span class="n">BleHci</span><span class="p">(</span><span class="n">port</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Create an HCI, set ID string to <cite>‘DUT’</cite>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">hci</span> <span class="o">=</span> <span class="n">BleHci</span><span class="p">(</span><span class="n">port</span><span class="p">,</span> <span class="n">id_tag</span><span class="o">=</span><span class="s1">&#39;DUT&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Create an HCI, set log level to <cite>‘ERROR’</cite>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">hci</span> <span class="o">=</span> <span class="n">BleHci</span><span class="p">(</span><span class="n">port</span><span class="p">,</span> <span class="n">log_level</span><span class="o">=</span><span class="s1">&#39;ERROR&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="examples.html" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ble_hci.html" class="btn btn-neutral float-right" title="max_ble_hci.ble_hci" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Analog Devices, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

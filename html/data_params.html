@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>max_ble_hci.data_params &mdash; MAX BLE HCI 0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=2389946f"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="max_ble_hci.hci_packets" href="hci_packets.html" />
+    <link rel="prev" title="max_ble_hci.constants" href="constants.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            MAX BLE HCI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ble_hci.html">max_ble_hci.ble_hci</a></li>
+<li class="toctree-l2"><a class="reference internal" href="constants.html">max_ble_hci.constants</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">max_ble_hci.data_params</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.data_params.AdvParams"><code class="docutils literal notranslate"><span class="pre">AdvParams</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.AdvParams.adv_type"><code class="docutils literal notranslate"><span class="pre">AdvParams.adv_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.AdvParams.channel_map"><code class="docutils literal notranslate"><span class="pre">AdvParams.channel_map</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.AdvParams.filter_policy"><code class="docutils literal notranslate"><span class="pre">AdvParams.filter_policy</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.AdvParams.interval_max"><code class="docutils literal notranslate"><span class="pre">AdvParams.interval_max</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.AdvParams.interval_min"><code class="docutils literal notranslate"><span class="pre">AdvParams.interval_min</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.AdvParams.own_addr_type"><code class="docutils literal notranslate"><span class="pre">AdvParams.own_addr_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.AdvParams.peer_addr"><code class="docutils literal notranslate"><span class="pre">AdvParams.peer_addr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.AdvParams.peer_addr_type"><code class="docutils literal notranslate"><span class="pre">AdvParams.peer_addr_type</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.data_params.AdvPktStats"><code class="docutils literal notranslate"><span class="pre">AdvPktStats</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.AdvPktStats.err_adv"><code class="docutils literal notranslate"><span class="pre">AdvPktStats.err_adv</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.AdvPktStats.rx_isr"><code class="docutils literal notranslate"><span class="pre">AdvPktStats.rx_isr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.AdvPktStats.rx_req"><code class="docutils literal notranslate"><span class="pre">AdvPktStats.rx_req</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.AdvPktStats.rx_req_crc"><code class="docutils literal notranslate"><span class="pre">AdvPktStats.rx_req_crc</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.AdvPktStats.rx_req_timeout"><code class="docutils literal notranslate"><span class="pre">AdvPktStats.rx_req_timeout</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.AdvPktStats.rx_setup"><code class="docutils literal notranslate"><span class="pre">AdvPktStats.rx_setup</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.AdvPktStats.tx_adv"><code class="docutils literal notranslate"><span class="pre">AdvPktStats.tx_adv</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.AdvPktStats.tx_chain"><code class="docutils literal notranslate"><span class="pre">AdvPktStats.tx_chain</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.AdvPktStats.tx_isr"><code class="docutils literal notranslate"><span class="pre">AdvPktStats.tx_isr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.AdvPktStats.tx_resp"><code class="docutils literal notranslate"><span class="pre">AdvPktStats.tx_resp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.AdvPktStats.tx_setup"><code class="docutils literal notranslate"><span class="pre">AdvPktStats.tx_setup</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.data_params.ConnParams"><code class="docutils literal notranslate"><span class="pre">ConnParams</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ConnParams.conn_interval_max"><code class="docutils literal notranslate"><span class="pre">ConnParams.conn_interval_max</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ConnParams.conn_interval_min"><code class="docutils literal notranslate"><span class="pre">ConnParams.conn_interval_min</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ConnParams.init_filter_policy"><code class="docutils literal notranslate"><span class="pre">ConnParams.init_filter_policy</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ConnParams.max_ce_length"><code class="docutils literal notranslate"><span class="pre">ConnParams.max_ce_length</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ConnParams.max_latency"><code class="docutils literal notranslate"><span class="pre">ConnParams.max_latency</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ConnParams.min_ce_length"><code class="docutils literal notranslate"><span class="pre">ConnParams.min_ce_length</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ConnParams.own_addr_type"><code class="docutils literal notranslate"><span class="pre">ConnParams.own_addr_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ConnParams.peer_addr"><code class="docutils literal notranslate"><span class="pre">ConnParams.peer_addr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ConnParams.peer_addr_type"><code class="docutils literal notranslate"><span class="pre">ConnParams.peer_addr_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ConnParams.scan_interval"><code class="docutils literal notranslate"><span class="pre">ConnParams.scan_interval</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ConnParams.scan_window"><code class="docutils literal notranslate"><span class="pre">ConnParams.scan_window</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ConnParams.sup_timeout"><code class="docutils literal notranslate"><span class="pre">ConnParams.sup_timeout</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.data_params.DataPktStats"><code class="docutils literal notranslate"><span class="pre">DataPktStats</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.DataPktStats.err_data"><code class="docutils literal notranslate"><span class="pre">DataPktStats.err_data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.DataPktStats.per"><code class="docutils literal notranslate"><span class="pre">DataPktStats.per()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.DataPktStats.rx_data"><code class="docutils literal notranslate"><span class="pre">DataPktStats.rx_data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.DataPktStats.rx_data_crc"><code class="docutils literal notranslate"><span class="pre">DataPktStats.rx_data_crc</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.DataPktStats.rx_data_timeout"><code class="docutils literal notranslate"><span class="pre">DataPktStats.rx_data_timeout</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.DataPktStats.rx_isr"><code class="docutils literal notranslate"><span class="pre">DataPktStats.rx_isr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.DataPktStats.rx_setup"><code class="docutils literal notranslate"><span class="pre">DataPktStats.rx_setup</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.DataPktStats.tx_data"><code class="docutils literal notranslate"><span class="pre">DataPktStats.tx_data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.DataPktStats.tx_isr"><code class="docutils literal notranslate"><span class="pre">DataPktStats.tx_isr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.DataPktStats.tx_setup"><code class="docutils literal notranslate"><span class="pre">DataPktStats.tx_setup</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.data_params.MemPktStats"><code class="docutils literal notranslate"><span class="pre">MemPktStats</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.MemPktStats.adv_set_ctx_size"><code class="docutils literal notranslate"><span class="pre">MemPktStats.adv_set_ctx_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.MemPktStats.cig_ctx_size"><code class="docutils literal notranslate"><span class="pre">MemPktStats.cig_ctx_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.MemPktStats.cis_ctx_size"><code class="docutils literal notranslate"><span class="pre">MemPktStats.cis_ctx_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.MemPktStats.conn_ctx_size"><code class="docutils literal notranslate"><span class="pre">MemPktStats.conn_ctx_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.MemPktStats.cs_watermark_lvl"><code class="docutils literal notranslate"><span class="pre">MemPktStats.cs_watermark_lvl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.MemPktStats.ext_init_ctx_size"><code class="docutils literal notranslate"><span class="pre">MemPktStats.ext_init_ctx_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.MemPktStats.ext_scan_ctx_size"><code class="docutils literal notranslate"><span class="pre">MemPktStats.ext_scan_ctx_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.MemPktStats.ext_scan_max"><code class="docutils literal notranslate"><span class="pre">MemPktStats.ext_scan_max</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.MemPktStats.free_mem"><code class="docutils literal notranslate"><span class="pre">MemPktStats.free_mem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.MemPktStats.lhci_watermark_lvl"><code class="docutils literal notranslate"><span class="pre">MemPktStats.lhci_watermark_lvl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.MemPktStats.ll_watermark_lvl"><code class="docutils literal notranslate"><span class="pre">MemPktStats.ll_watermark_lvl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.MemPktStats.max_adv_sets"><code class="docutils literal notranslate"><span class="pre">MemPktStats.max_adv_sets</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.MemPktStats.max_cig"><code class="docutils literal notranslate"><span class="pre">MemPktStats.max_cig</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.MemPktStats.max_connections"><code class="docutils literal notranslate"><span class="pre">MemPktStats.max_connections</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.MemPktStats.max_num_ext_init"><code class="docutils literal notranslate"><span class="pre">MemPktStats.max_num_ext_init</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.MemPktStats.max_per_scanners"><code class="docutils literal notranslate"><span class="pre">MemPktStats.max_per_scanners</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.MemPktStats.per_scan_ctx_size"><code class="docutils literal notranslate"><span class="pre">MemPktStats.per_scan_ctx_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.MemPktStats.sch_watermark_lvl"><code class="docutils literal notranslate"><span class="pre">MemPktStats.sch_watermark_lvl</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.MemPktStats.stack"><code class="docutils literal notranslate"><span class="pre">MemPktStats.stack</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.MemPktStats.sys_assert_cnt"><code class="docutils literal notranslate"><span class="pre">MemPktStats.sys_assert_cnt</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.MemPktStats.used_mem"><code class="docutils literal notranslate"><span class="pre">MemPktStats.used_mem</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.data_params.PduPktStats"><code class="docutils literal notranslate"><span class="pre">PduPktStats</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.PduPktStats.fail_local_addr_match"><code class="docutils literal notranslate"><span class="pre">PduPktStats.fail_local_addr_match</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.PduPktStats.fail_local_priv_addr"><code class="docutils literal notranslate"><span class="pre">PduPktStats.fail_local_priv_addr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.PduPktStats.fail_local_rpa_verify"><code class="docutils literal notranslate"><span class="pre">PduPktStats.fail_local_rpa_verify</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.PduPktStats.fail_pdu"><code class="docutils literal notranslate"><span class="pre">PduPktStats.fail_pdu</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.PduPktStats.fail_peer_addr_match"><code class="docutils literal notranslate"><span class="pre">PduPktStats.fail_peer_addr_match</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.PduPktStats.fail_peer_addr_res_req"><code class="docutils literal notranslate"><span class="pre">PduPktStats.fail_peer_addr_res_req</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.PduPktStats.fail_peer_priv_addr"><code class="docutils literal notranslate"><span class="pre">PduPktStats.fail_peer_priv_addr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.PduPktStats.fail_peer_rpa_verify"><code class="docutils literal notranslate"><span class="pre">PduPktStats.fail_peer_rpa_verify</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.PduPktStats.fail_whitelist"><code class="docutils literal notranslate"><span class="pre">PduPktStats.fail_whitelist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.PduPktStats.local_res_addr_pend"><code class="docutils literal notranslate"><span class="pre">PduPktStats.local_res_addr_pend</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.PduPktStats.pass_local_addr_match"><code class="docutils literal notranslate"><span class="pre">PduPktStats.pass_local_addr_match</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.PduPktStats.pass_local_addr_res_opt"><code class="docutils literal notranslate"><span class="pre">PduPktStats.pass_local_addr_res_opt</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.PduPktStats.pass_local_rpa_verify"><code class="docutils literal notranslate"><span class="pre">PduPktStats.pass_local_rpa_verify</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.PduPktStats.pass_pdu"><code class="docutils literal notranslate"><span class="pre">PduPktStats.pass_pdu</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.PduPktStats.pass_peer_addr_match"><code class="docutils literal notranslate"><span class="pre">PduPktStats.pass_peer_addr_match</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.PduPktStats.pass_peer_addr_res_req"><code class="docutils literal notranslate"><span class="pre">PduPktStats.pass_peer_addr_res_req</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.PduPktStats.pass_peer_rpa_verify"><code class="docutils literal notranslate"><span class="pre">PduPktStats.pass_peer_rpa_verify</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.PduPktStats.pass_whitelist"><code class="docutils literal notranslate"><span class="pre">PduPktStats.pass_whitelist</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.PduPktStats.peer_res_addr_pend"><code class="docutils literal notranslate"><span class="pre">PduPktStats.peer_res_addr_pend</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.data_params.PoolStats"><code class="docutils literal notranslate"><span class="pre">PoolStats</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.PoolStats.buf_size"><code class="docutils literal notranslate"><span class="pre">PoolStats.buf_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.PoolStats.max_alloc"><code class="docutils literal notranslate"><span class="pre">PoolStats.max_alloc</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.PoolStats.max_req_len"><code class="docutils literal notranslate"><span class="pre">PoolStats.max_req_len</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.PoolStats.num_alloc"><code class="docutils literal notranslate"><span class="pre">PoolStats.num_alloc</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.PoolStats.num_buf"><code class="docutils literal notranslate"><span class="pre">PoolStats.num_buf</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.data_params.ScanParams"><code class="docutils literal notranslate"><span class="pre">ScanParams</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ScanParams.addr_type"><code class="docutils literal notranslate"><span class="pre">ScanParams.addr_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ScanParams.filter_policy"><code class="docutils literal notranslate"><span class="pre">ScanParams.filter_policy</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ScanParams.scan_interval"><code class="docutils literal notranslate"><span class="pre">ScanParams.scan_interval</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ScanParams.scan_type"><code class="docutils literal notranslate"><span class="pre">ScanParams.scan_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ScanParams.scan_window"><code class="docutils literal notranslate"><span class="pre">ScanParams.scan_window</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.data_params.ScanPktStats"><code class="docutils literal notranslate"><span class="pre">ScanPktStats</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ScanPktStats.err_scan"><code class="docutils literal notranslate"><span class="pre">ScanPktStats.err_scan</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ScanPktStats.rx_adv"><code class="docutils literal notranslate"><span class="pre">ScanPktStats.rx_adv</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ScanPktStats.rx_adv_crc"><code class="docutils literal notranslate"><span class="pre">ScanPktStats.rx_adv_crc</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ScanPktStats.rx_adv_timeout"><code class="docutils literal notranslate"><span class="pre">ScanPktStats.rx_adv_timeout</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ScanPktStats.rx_chain"><code class="docutils literal notranslate"><span class="pre">ScanPktStats.rx_chain</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ScanPktStats.rx_chain_crc"><code class="docutils literal notranslate"><span class="pre">ScanPktStats.rx_chain_crc</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ScanPktStats.rx_chain_timeout"><code class="docutils literal notranslate"><span class="pre">ScanPktStats.rx_chain_timeout</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ScanPktStats.rx_isr"><code class="docutils literal notranslate"><span class="pre">ScanPktStats.rx_isr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ScanPktStats.rx_rsp"><code class="docutils literal notranslate"><span class="pre">ScanPktStats.rx_rsp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ScanPktStats.rx_rsp_crc"><code class="docutils literal notranslate"><span class="pre">ScanPktStats.rx_rsp_crc</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ScanPktStats.rx_rsp_timeout"><code class="docutils literal notranslate"><span class="pre">ScanPktStats.rx_rsp_timeout</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ScanPktStats.rx_setup"><code class="docutils literal notranslate"><span class="pre">ScanPktStats.rx_setup</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ScanPktStats.tx_isr"><code class="docutils literal notranslate"><span class="pre">ScanPktStats.tx_isr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ScanPktStats.tx_req"><code class="docutils literal notranslate"><span class="pre">ScanPktStats.tx_req</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.ScanPktStats.tx_setup"><code class="docutils literal notranslate"><span class="pre">ScanPktStats.tx_setup</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.data_params.TestReport"><code class="docutils literal notranslate"><span class="pre">TestReport</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.TestReport.gen_oct_count"><code class="docutils literal notranslate"><span class="pre">TestReport.gen_oct_count</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.TestReport.gen_pkt_count"><code class="docutils literal notranslate"><span class="pre">TestReport.gen_pkt_count</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.TestReport.rx_oct_count"><code class="docutils literal notranslate"><span class="pre">TestReport.rx_oct_count</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.data_params.TestReport.rx_pkt_count"><code class="docutils literal notranslate"><span class="pre">TestReport.rx_pkt_count</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="hci_packets.html">max_ble_hci.hci_packets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packet_codes.html">max_ble_hci.packet_codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packet_defs.html">max_ble_hci.packet_defs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-max_ble_hci">Package Contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hci_reference.html">HCI Command Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MAX BLE HCI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">API Reference</a></li>
+      <li class="breadcrumb-item active">max_ble_hci.data_params</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/data_params.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-max_ble_hci.data_params">
+<span id="max-ble-hci-data-params"></span><h1>max_ble_hci.data_params<a class="headerlink" href="#module-max_ble_hci.data_params" title="Permalink to this heading"></a></h1>
+<p>Contains data classes used for HCI function parameters/returns.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.AdvParams">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AdvParams</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interval_min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">96</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval_max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">96</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adv_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">own_addr_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="constants.html#max_ble_hci.constants.AddrType" title="max_ble_hci.constants.AddrType"><span class="pre">AddrType</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">AddrType.PUBLIC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peer_addr_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="constants.html#max_ble_hci.constants.AddrType" title="max_ble_hci.constants.AddrType"><span class="pre">AddrType</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">AddrType.PUBLIC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peer_addr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_map</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_policy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/data_params.html#AdvParams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.data_params.AdvParams" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Advertising parameters data container.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.AdvParams.adv_type">
+<span class="sig-name descname"><span class="pre">adv_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#max_ble_hci.data_params.AdvParams.adv_type" title="Permalink to this definition"></a></dt>
+<dd><p>Advertising type.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.AdvParams.channel_map">
+<span class="sig-name descname"><span class="pre">channel_map</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">7</span></em><a class="headerlink" href="#max_ble_hci.data_params.AdvParams.channel_map" title="Permalink to this definition"></a></dt>
+<dd><p>Advertising channel map.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.AdvParams.filter_policy">
+<span class="sig-name descname"><span class="pre">filter_policy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#max_ble_hci.data_params.AdvParams.filter_policy" title="Permalink to this definition"></a></dt>
+<dd><p>Advertising filter policy.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.AdvParams.interval_max">
+<span class="sig-name descname"><span class="pre">interval_max</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">96</span></em><a class="headerlink" href="#max_ble_hci.data_params.AdvParams.interval_max" title="Permalink to this definition"></a></dt>
+<dd><p>Maximum advertising interval.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.AdvParams.interval_min">
+<span class="sig-name descname"><span class="pre">interval_min</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">96</span></em><a class="headerlink" href="#max_ble_hci.data_params.AdvParams.interval_min" title="Permalink to this definition"></a></dt>
+<dd><p>Minimum advertising interval.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.AdvParams.own_addr_type">
+<span class="sig-name descname"><span class="pre">own_addr_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="constants.html#max_ble_hci.constants.AddrType" title="max_ble_hci.constants.AddrType"><span class="pre">AddrType</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#max_ble_hci.data_params.AdvParams.own_addr_type" title="Permalink to this definition"></a></dt>
+<dd><p>Own device address type.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.AdvParams.peer_addr">
+<span class="sig-name descname"><span class="pre">peer_addr</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#max_ble_hci.data_params.AdvParams.peer_addr" title="Permalink to this definition"></a></dt>
+<dd><p>Connectable peer device address.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.AdvParams.peer_addr_type">
+<span class="sig-name descname"><span class="pre">peer_addr_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="constants.html#max_ble_hci.constants.AddrType" title="max_ble_hci.constants.AddrType"><span class="pre">AddrType</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#max_ble_hci.data_params.AdvParams.peer_addr_type" title="Permalink to this definition"></a></dt>
+<dd><p>Connectable peer device address type.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.AdvPktStats">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AdvPktStats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tx_adv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx_req</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx_req_crc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx_req_timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tx_resp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">err_adv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx_setup</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tx_setup</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx_isr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tx_isr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tx_chain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/data_params.html#AdvPktStats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.data_params.AdvPktStats" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Advertising statistics data container.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.AdvPktStats.err_adv">
+<span class="sig-name descname"><span class="pre">err_adv</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.AdvPktStats.err_adv" title="Permalink to this definition"></a></dt>
+<dd><p>Number of advertising transaction errors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.AdvPktStats.rx_isr">
+<span class="sig-name descname"><span class="pre">rx_isr</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.AdvPktStats.rx_isr" title="Permalink to this definition"></a></dt>
+<dd><p>RX ISR processing watermark in microseconds.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.AdvPktStats.rx_req">
+<span class="sig-name descname"><span class="pre">rx_req</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.AdvPktStats.rx_req" title="Permalink to this definition"></a></dt>
+<dd><p>Number of advertising requests received correctly.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.AdvPktStats.rx_req_crc">
+<span class="sig-name descname"><span class="pre">rx_req_crc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.AdvPktStats.rx_req_crc" title="Permalink to this definition"></a></dt>
+<dd><p>Number of advertising requests received with a CRC error.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.AdvPktStats.rx_req_timeout">
+<span class="sig-name descname"><span class="pre">rx_req_timeout</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.AdvPktStats.rx_req_timeout" title="Permalink to this definition"></a></dt>
+<dd><p>Number of RX timeouts.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.AdvPktStats.rx_setup">
+<span class="sig-name descname"><span class="pre">rx_setup</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.AdvPktStats.rx_setup" title="Permalink to this definition"></a></dt>
+<dd><p>RX packet setup watermark in microseconds.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.AdvPktStats.tx_adv">
+<span class="sig-name descname"><span class="pre">tx_adv</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.AdvPktStats.tx_adv" title="Permalink to this definition"></a></dt>
+<dd><p>Number of sent advertising packets.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.AdvPktStats.tx_chain">
+<span class="sig-name descname"><span class="pre">tx_chain</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.AdvPktStats.tx_chain" title="Permalink to this definition"></a></dt>
+<dd><p>Number of chain packets sent.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Value is only returned when retrieving auxiliary advertising statistics.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.AdvPktStats.tx_isr">
+<span class="sig-name descname"><span class="pre">tx_isr</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.AdvPktStats.tx_isr" title="Permalink to this definition"></a></dt>
+<dd><p>TX ISR processing watermark in microseconds.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.AdvPktStats.tx_resp">
+<span class="sig-name descname"><span class="pre">tx_resp</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.AdvPktStats.tx_resp" title="Permalink to this definition"></a></dt>
+<dd><p>Number of response packets sent.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.AdvPktStats.tx_setup">
+<span class="sig-name descname"><span class="pre">tx_setup</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.AdvPktStats.tx_setup" title="Permalink to this definition"></a></dt>
+<dd><p>TX packet setup watermark in microseconds.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ConnParams">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ConnParams</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peer_addr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scan_interval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">256</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scan_window</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">256</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_filter_policy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peer_addr_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="constants.html#max_ble_hci.constants.AddrType" title="max_ble_hci.constants.AddrType"><span class="pre">AddrType</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">AddrType.PUBLIC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">own_addr_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="constants.html#max_ble_hci.constants.AddrType" title="max_ble_hci.constants.AddrType"><span class="pre">AddrType</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">AddrType.PUBLIC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn_interval_min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn_interval_max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_latency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sup_timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_ce_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3856</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_ce_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3856</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/data_params.html#ConnParams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.data_params.ConnParams" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Connection parameters data container.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ConnParams.conn_interval_max">
+<span class="sig-name descname"><span class="pre">conn_interval_max</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#max_ble_hci.data_params.ConnParams.conn_interval_max" title="Permalink to this definition"></a></dt>
+<dd><p>Connection interval maximum.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ConnParams.conn_interval_min">
+<span class="sig-name descname"><span class="pre">conn_interval_min</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#max_ble_hci.data_params.ConnParams.conn_interval_min" title="Permalink to this definition"></a></dt>
+<dd><p>Connection interval minimum.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ConnParams.init_filter_policy">
+<span class="sig-name descname"><span class="pre">init_filter_policy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#max_ble_hci.data_params.ConnParams.init_filter_policy" title="Permalink to this definition"></a></dt>
+<dd><p>Initiator filter policy.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ConnParams.max_ce_length">
+<span class="sig-name descname"><span class="pre">max_ce_length</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3856</span></em><a class="headerlink" href="#max_ble_hci.data_params.ConnParams.max_ce_length" title="Permalink to this definition"></a></dt>
+<dd><p>Maximum connection event length.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ConnParams.max_latency">
+<span class="sig-name descname"><span class="pre">max_latency</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#max_ble_hci.data_params.ConnParams.max_latency" title="Permalink to this definition"></a></dt>
+<dd><p>Maximum peripheral latency.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ConnParams.min_ce_length">
+<span class="sig-name descname"><span class="pre">min_ce_length</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3856</span></em><a class="headerlink" href="#max_ble_hci.data_params.ConnParams.min_ce_length" title="Permalink to this definition"></a></dt>
+<dd><p>Minimum connection event length.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ConnParams.own_addr_type">
+<span class="sig-name descname"><span class="pre">own_addr_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="constants.html#max_ble_hci.constants.AddrType" title="max_ble_hci.constants.AddrType"><span class="pre">AddrType</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#max_ble_hci.data_params.ConnParams.own_addr_type" title="Permalink to this definition"></a></dt>
+<dd><p>Own device address type.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ConnParams.peer_addr">
+<span class="sig-name descname"><span class="pre">peer_addr</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#max_ble_hci.data_params.ConnParams.peer_addr" title="Permalink to this definition"></a></dt>
+<dd><p>Connectable peer device address.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ConnParams.peer_addr_type">
+<span class="sig-name descname"><span class="pre">peer_addr_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="constants.html#max_ble_hci.constants.AddrType" title="max_ble_hci.constants.AddrType"><span class="pre">AddrType</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#max_ble_hci.data_params.ConnParams.peer_addr_type" title="Permalink to this definition"></a></dt>
+<dd><p>Connectable peer device address type.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ConnParams.scan_interval">
+<span class="sig-name descname"><span class="pre">scan_interval</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">256</span></em><a class="headerlink" href="#max_ble_hci.data_params.ConnParams.scan_interval" title="Permalink to this definition"></a></dt>
+<dd><p>Scan interval.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ConnParams.scan_window">
+<span class="sig-name descname"><span class="pre">scan_window</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">256</span></em><a class="headerlink" href="#max_ble_hci.data_params.ConnParams.scan_window" title="Permalink to this definition"></a></dt>
+<dd><p>Scan duration.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ConnParams.sup_timeout">
+<span class="sig-name descname"><span class="pre">sup_timeout</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">100</span></em><a class="headerlink" href="#max_ble_hci.data_params.ConnParams.sup_timeout" title="Permalink to this definition"></a></dt>
+<dd><p>Supervision timeout.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.DataPktStats">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DataPktStats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rx_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx_data_crc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx_data_timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tx_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">err_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx_setup</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tx_setup</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx_isr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tx_isr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/data_params.html#DataPktStats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.data_params.DataPktStats" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Generic data stats container for CM and DTM.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.DataPktStats.err_data">
+<span class="sig-name descname"><span class="pre">err_data</span></span><a class="headerlink" href="#max_ble_hci.data_params.DataPktStats.err_data" title="Permalink to this definition"></a></dt>
+<dd><p>Number of data transaction errors.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.DataPktStats.per">
+<span class="sig-name descname"><span class="pre">per</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peer_tx_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/max_ble_hci/data_params.html#DataPktStats.per"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.data_params.DataPktStats.per" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate PER.</p>
+<p>Calculates the Packet Error Rate of the current set of
+statistics. If number of peer TX packets is not provided,
+the value is inferred from the number of correctly received
+packets, the number of CRC errors, and the number of timeouts
+recorded by the receiver.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>peer_tx_data</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – Number of packets transmitted by the peer device.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Calculated PER value.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.DataPktStats.rx_data">
+<span class="sig-name descname"><span class="pre">rx_data</span></span><a class="headerlink" href="#max_ble_hci.data_params.DataPktStats.rx_data" title="Permalink to this definition"></a></dt>
+<dd><p>Number of packets received correctly.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.DataPktStats.rx_data_crc">
+<span class="sig-name descname"><span class="pre">rx_data_crc</span></span><a class="headerlink" href="#max_ble_hci.data_params.DataPktStats.rx_data_crc" title="Permalink to this definition"></a></dt>
+<dd><p>Number of packets received with a CRC error.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.DataPktStats.rx_data_timeout">
+<span class="sig-name descname"><span class="pre">rx_data_timeout</span></span><a class="headerlink" href="#max_ble_hci.data_params.DataPktStats.rx_data_timeout" title="Permalink to this definition"></a></dt>
+<dd><p>Number of RX timeouts.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.DataPktStats.rx_isr">
+<span class="sig-name descname"><span class="pre">rx_isr</span></span><a class="headerlink" href="#max_ble_hci.data_params.DataPktStats.rx_isr" title="Permalink to this definition"></a></dt>
+<dd><p>RX ISR processing watermark in microseconds.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.DataPktStats.rx_setup">
+<span class="sig-name descname"><span class="pre">rx_setup</span></span><a class="headerlink" href="#max_ble_hci.data_params.DataPktStats.rx_setup" title="Permalink to this definition"></a></dt>
+<dd><p>RX packet setup watermark in microseconds.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.DataPktStats.tx_data">
+<span class="sig-name descname"><span class="pre">tx_data</span></span><a class="headerlink" href="#max_ble_hci.data_params.DataPktStats.tx_data" title="Permalink to this definition"></a></dt>
+<dd><p>Number of correctly transmitted packets.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.DataPktStats.tx_isr">
+<span class="sig-name descname"><span class="pre">tx_isr</span></span><a class="headerlink" href="#max_ble_hci.data_params.DataPktStats.tx_isr" title="Permalink to this definition"></a></dt>
+<dd><p>TX ISR processing watermark in microseconds.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.DataPktStats.tx_setup">
+<span class="sig-name descname"><span class="pre">tx_setup</span></span><a class="headerlink" href="#max_ble_hci.data_params.DataPktStats.tx_setup" title="Permalink to this definition"></a></dt>
+<dd><p>TX packet setup watermark in microseconds.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.MemPktStats">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MemPktStats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stack</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sys_assert_cnt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">free_mem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">used_mem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_connections</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn_ctx_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cs_watermark_lvl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ll_watermark_lvl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sch_watermark_lvl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lhci_watermark_lvl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_adv_sets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adv_set_ctx_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ext_scan_max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ext_scan_ctx_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ext_init_ctx_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num_ext_init</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_per_scanners</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">per_scan_ctx_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_cig</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cig_ctx_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cis_ctx_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/data_params.html#MemPktStats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.data_params.MemPktStats" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Memory statistics data container.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.MemPktStats.adv_set_ctx_size">
+<span class="sig-name descname"><span class="pre">adv_set_ctx_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.MemPktStats.adv_set_ctx_size" title="Permalink to this definition"></a></dt>
+<dd><p>Advertising set context size in bytes.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.MemPktStats.cig_ctx_size">
+<span class="sig-name descname"><span class="pre">cig_ctx_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.MemPktStats.cig_ctx_size" title="Permalink to this definition"></a></dt>
+<dd><p>CIG context size in bytes.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.MemPktStats.cis_ctx_size">
+<span class="sig-name descname"><span class="pre">cis_ctx_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.MemPktStats.cis_ctx_size" title="Permalink to this definition"></a></dt>
+<dd><p>CIS context size in bytes.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.MemPktStats.conn_ctx_size">
+<span class="sig-name descname"><span class="pre">conn_ctx_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.MemPktStats.conn_ctx_size" title="Permalink to this definition"></a></dt>
+<dd><p>Number of bytes used for connection context.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.MemPktStats.cs_watermark_lvl">
+<span class="sig-name descname"><span class="pre">cs_watermark_lvl</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.MemPktStats.cs_watermark_lvl" title="Permalink to this definition"></a></dt>
+<dd><p>Critical section watermark duration in microseconds.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.MemPktStats.ext_init_ctx_size">
+<span class="sig-name descname"><span class="pre">ext_init_ctx_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.MemPktStats.ext_init_ctx_size" title="Permalink to this definition"></a></dt>
+<dd><p>Extended initiators context size in bytes.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.MemPktStats.ext_scan_ctx_size">
+<span class="sig-name descname"><span class="pre">ext_scan_ctx_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.MemPktStats.ext_scan_ctx_size" title="Permalink to this definition"></a></dt>
+<dd><p>Extended scanners context size in bytes.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.MemPktStats.ext_scan_max">
+<span class="sig-name descname"><span class="pre">ext_scan_max</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.MemPktStats.ext_scan_max" title="Permalink to this definition"></a></dt>
+<dd><p>Maximum number of extended scanners.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.MemPktStats.free_mem">
+<span class="sig-name descname"><span class="pre">free_mem</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.MemPktStats.free_mem" title="Permalink to this definition"></a></dt>
+<dd><p>Memory free for stack usage.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.MemPktStats.lhci_watermark_lvl">
+<span class="sig-name descname"><span class="pre">lhci_watermark_lvl</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.MemPktStats.lhci_watermark_lvl" title="Permalink to this definition"></a></dt>
+<dd><p>LHCI handler watermark level in microseconds.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.MemPktStats.ll_watermark_lvl">
+<span class="sig-name descname"><span class="pre">ll_watermark_lvl</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.MemPktStats.ll_watermark_lvl" title="Permalink to this definition"></a></dt>
+<dd><p>Link layer handler watermark level in microseconds.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.MemPktStats.max_adv_sets">
+<span class="sig-name descname"><span class="pre">max_adv_sets</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.MemPktStats.max_adv_sets" title="Permalink to this definition"></a></dt>
+<dd><p>Maximum number of advertising sets.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.MemPktStats.max_cig">
+<span class="sig-name descname"><span class="pre">max_cig</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.MemPktStats.max_cig" title="Permalink to this definition"></a></dt>
+<dd><p>Maximim number of CIG.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.MemPktStats.max_connections">
+<span class="sig-name descname"><span class="pre">max_connections</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.MemPktStats.max_connections" title="Permalink to this definition"></a></dt>
+<dd><p>Maximum number of connections allowed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.MemPktStats.max_num_ext_init">
+<span class="sig-name descname"><span class="pre">max_num_ext_init</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.MemPktStats.max_num_ext_init" title="Permalink to this definition"></a></dt>
+<dd><p>Maximum number of extended initiators.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.MemPktStats.max_per_scanners">
+<span class="sig-name descname"><span class="pre">max_per_scanners</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.MemPktStats.max_per_scanners" title="Permalink to this definition"></a></dt>
+<dd><p>Maximum number of periodic scanners.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.MemPktStats.per_scan_ctx_size">
+<span class="sig-name descname"><span class="pre">per_scan_ctx_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.MemPktStats.per_scan_ctx_size" title="Permalink to this definition"></a></dt>
+<dd><p>Periodic scanners context size in bytes.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.MemPktStats.sch_watermark_lvl">
+<span class="sig-name descname"><span class="pre">sch_watermark_lvl</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.MemPktStats.sch_watermark_lvl" title="Permalink to this definition"></a></dt>
+<dd><p>Scheduler handler watermark level in microseconds.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.MemPktStats.stack">
+<span class="sig-name descname"><span class="pre">stack</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.MemPktStats.stack" title="Permalink to this definition"></a></dt>
+<dd><p>Number of bytes used by the stack.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.MemPktStats.sys_assert_cnt">
+<span class="sig-name descname"><span class="pre">sys_assert_cnt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.MemPktStats.sys_assert_cnt" title="Permalink to this definition"></a></dt>
+<dd><p>Number of times assertions hit.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.MemPktStats.used_mem">
+<span class="sig-name descname"><span class="pre">used_mem</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.MemPktStats.used_mem" title="Permalink to this definition"></a></dt>
+<dd><p>Memory used by stack.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.PduPktStats">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PduPktStats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fail_pdu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pass_pdu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fail_whitelist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pass_whitelist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fail_peer_addr_match</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pass_peer_addr_match</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fail_local_addr_match</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pass_local_addr_match</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fail_peer_rpa_verify</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pass_peer_rpa_verify</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fail_local_rpa_verify</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pass_local_rpa_verify</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fail_peer_priv_addr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fail_local_priv_addr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fail_peer_addr_res_req</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pass_peer_addr_res_req</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pass_local_addr_res_opt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peer_res_addr_pend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">local_res_addr_pend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/data_params.html#PduPktStats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.data_params.PduPktStats" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>PDU statistics data container.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.PduPktStats.fail_local_addr_match">
+<span class="sig-name descname"><span class="pre">fail_local_addr_match</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.PduPktStats.fail_local_addr_match" title="Permalink to this definition"></a></dt>
+<dd><p>Number of PDUs failing local address match.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.PduPktStats.fail_local_priv_addr">
+<span class="sig-name descname"><span class="pre">fail_local_priv_addr</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.PduPktStats.fail_local_priv_addr" title="Permalink to this definition"></a></dt>
+<dd><p>Number of local addresses failing RPA requirements.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.PduPktStats.fail_local_rpa_verify">
+<span class="sig-name descname"><span class="pre">fail_local_rpa_verify</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.PduPktStats.fail_local_rpa_verify" title="Permalink to this definition"></a></dt>
+<dd><p>Number of local RPAs failing verification.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.PduPktStats.fail_pdu">
+<span class="sig-name descname"><span class="pre">fail_pdu</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.PduPktStats.fail_pdu" title="Permalink to this definition"></a></dt>
+<dd><p>Number of PDUs failing PDU type filter.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.PduPktStats.fail_peer_addr_match">
+<span class="sig-name descname"><span class="pre">fail_peer_addr_match</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.PduPktStats.fail_peer_addr_match" title="Permalink to this definition"></a></dt>
+<dd><p>Number of PDUs failing peer address match.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.PduPktStats.fail_peer_addr_res_req">
+<span class="sig-name descname"><span class="pre">fail_peer_addr_res_req</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.PduPktStats.fail_peer_addr_res_req" title="Permalink to this definition"></a></dt>
+<dd><p>Number of PDUs failing required peer address resolution.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.PduPktStats.fail_peer_priv_addr">
+<span class="sig-name descname"><span class="pre">fail_peer_priv_addr</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.PduPktStats.fail_peer_priv_addr" title="Permalink to this definition"></a></dt>
+<dd><p>Number of peer addresses failing RPA requirements.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.PduPktStats.fail_peer_rpa_verify">
+<span class="sig-name descname"><span class="pre">fail_peer_rpa_verify</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.PduPktStats.fail_peer_rpa_verify" title="Permalink to this definition"></a></dt>
+<dd><p>Number of peer RPAs failing verification.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.PduPktStats.fail_whitelist">
+<span class="sig-name descname"><span class="pre">fail_whitelist</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.PduPktStats.fail_whitelist" title="Permalink to this definition"></a></dt>
+<dd><p>Number of PDUs failing whitelist filter.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.PduPktStats.local_res_addr_pend">
+<span class="sig-name descname"><span class="pre">local_res_addr_pend</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.PduPktStats.local_res_addr_pend" title="Permalink to this definition"></a></dt>
+<dd><p>Number of local address resolutions pended.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.PduPktStats.pass_local_addr_match">
+<span class="sig-name descname"><span class="pre">pass_local_addr_match</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.PduPktStats.pass_local_addr_match" title="Permalink to this definition"></a></dt>
+<dd><p>Number of PDUs passing local address match.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.PduPktStats.pass_local_addr_res_opt">
+<span class="sig-name descname"><span class="pre">pass_local_addr_res_opt</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.PduPktStats.pass_local_addr_res_opt" title="Permalink to this definition"></a></dt>
+<dd><p>Number of PDUs passing optional local address resolution.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.PduPktStats.pass_local_rpa_verify">
+<span class="sig-name descname"><span class="pre">pass_local_rpa_verify</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.PduPktStats.pass_local_rpa_verify" title="Permalink to this definition"></a></dt>
+<dd><p>Number of local RPAs passing verification.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.PduPktStats.pass_pdu">
+<span class="sig-name descname"><span class="pre">pass_pdu</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.PduPktStats.pass_pdu" title="Permalink to this definition"></a></dt>
+<dd><p>Number of PDUs passing PDU type filter.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.PduPktStats.pass_peer_addr_match">
+<span class="sig-name descname"><span class="pre">pass_peer_addr_match</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.PduPktStats.pass_peer_addr_match" title="Permalink to this definition"></a></dt>
+<dd><p>Number of PDUs passing peer address match.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.PduPktStats.pass_peer_addr_res_req">
+<span class="sig-name descname"><span class="pre">pass_peer_addr_res_req</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.PduPktStats.pass_peer_addr_res_req" title="Permalink to this definition"></a></dt>
+<dd><p>Number of PDUs passing required peer address resolution.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.PduPktStats.pass_peer_rpa_verify">
+<span class="sig-name descname"><span class="pre">pass_peer_rpa_verify</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.PduPktStats.pass_peer_rpa_verify" title="Permalink to this definition"></a></dt>
+<dd><p>Number of peer RPAs passing verification.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.PduPktStats.pass_whitelist">
+<span class="sig-name descname"><span class="pre">pass_whitelist</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.PduPktStats.pass_whitelist" title="Permalink to this definition"></a></dt>
+<dd><p>Number of PDUs passing whitelist filter.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.PduPktStats.peer_res_addr_pend">
+<span class="sig-name descname"><span class="pre">peer_res_addr_pend</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.PduPktStats.peer_res_addr_pend" title="Permalink to this definition"></a></dt>
+<dd><p>Number of peer address resolutions pended.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.PoolStats">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PoolStats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buf_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_buf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_alloc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_alloc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_req_len</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/data_params.html#PoolStats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.data_params.PoolStats" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Memory pool statistics data container.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.PoolStats.buf_size">
+<span class="sig-name descname"><span class="pre">buf_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.PoolStats.buf_size" title="Permalink to this definition"></a></dt>
+<dd><p>Buffer size.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.PoolStats.max_alloc">
+<span class="sig-name descname"><span class="pre">max_alloc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.PoolStats.max_alloc" title="Permalink to this definition"></a></dt>
+<dd><p>Maximum number of allocations.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.PoolStats.max_req_len">
+<span class="sig-name descname"><span class="pre">max_req_len</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.PoolStats.max_req_len" title="Permalink to this definition"></a></dt>
+<dd><p>Maximum required length.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.PoolStats.num_alloc">
+<span class="sig-name descname"><span class="pre">num_alloc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.PoolStats.num_alloc" title="Permalink to this definition"></a></dt>
+<dd><p>Number of allocations.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.PoolStats.num_buf">
+<span class="sig-name descname"><span class="pre">num_buf</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.PoolStats.num_buf" title="Permalink to this definition"></a></dt>
+<dd><p>Number of buffers.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ScanParams">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ScanParams</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scan_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scan_interval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">256</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scan_window</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">256</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addr_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="constants.html#max_ble_hci.constants.AddrType" title="max_ble_hci.constants.AddrType"><span class="pre">AddrType</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">AddrType.PUBLIC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_policy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/data_params.html#ScanParams"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.data_params.ScanParams" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Scan parameters data container.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ScanParams.addr_type">
+<span class="sig-name descname"><span class="pre">addr_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="constants.html#max_ble_hci.constants.AddrType" title="max_ble_hci.constants.AddrType"><span class="pre">AddrType</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#max_ble_hci.data_params.ScanParams.addr_type" title="Permalink to this definition"></a></dt>
+<dd><p>Own device address type.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ScanParams.filter_policy">
+<span class="sig-name descname"><span class="pre">filter_policy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#max_ble_hci.data_params.ScanParams.filter_policy" title="Permalink to this definition"></a></dt>
+<dd><p>Scanning filter policy.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ScanParams.scan_interval">
+<span class="sig-name descname"><span class="pre">scan_interval</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">256</span></em><a class="headerlink" href="#max_ble_hci.data_params.ScanParams.scan_interval" title="Permalink to this definition"></a></dt>
+<dd><p>Scan interval.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ScanParams.scan_type">
+<span class="sig-name descname"><span class="pre">scan_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#max_ble_hci.data_params.ScanParams.scan_type" title="Permalink to this definition"></a></dt>
+<dd><p>Scan type.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ScanParams.scan_window">
+<span class="sig-name descname"><span class="pre">scan_window</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">256</span></em><a class="headerlink" href="#max_ble_hci.data_params.ScanParams.scan_window" title="Permalink to this definition"></a></dt>
+<dd><p>Scan duration.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ScanPktStats">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ScanPktStats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rx_adv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx_adv_crc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx_adv_timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tx_req</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx_rsp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx_rsp_crc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx_rsp_timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">err_scan</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx_setup</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tx_setup</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx_isr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tx_isr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx_chain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx_chain_crc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx_chain_timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/data_params.html#ScanPktStats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.data_params.ScanPktStats" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Scanning statistics data container.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ScanPktStats.err_scan">
+<span class="sig-name descname"><span class="pre">err_scan</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.ScanPktStats.err_scan" title="Permalink to this definition"></a></dt>
+<dd><p>Number of scan transaction errors.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ScanPktStats.rx_adv">
+<span class="sig-name descname"><span class="pre">rx_adv</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.ScanPktStats.rx_adv" title="Permalink to this definition"></a></dt>
+<dd><p>Number of advertising packets received correctly.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ScanPktStats.rx_adv_crc">
+<span class="sig-name descname"><span class="pre">rx_adv_crc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.ScanPktStats.rx_adv_crc" title="Permalink to this definition"></a></dt>
+<dd><p>Number of advertising packets received with a CRC error.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ScanPktStats.rx_adv_timeout">
+<span class="sig-name descname"><span class="pre">rx_adv_timeout</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.ScanPktStats.rx_adv_timeout" title="Permalink to this definition"></a></dt>
+<dd><p>Number of RX timeouts.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ScanPktStats.rx_chain">
+<span class="sig-name descname"><span class="pre">rx_chain</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.ScanPktStats.rx_chain" title="Permalink to this definition"></a></dt>
+<dd><p>Number of chain packets received correctly.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Value is only returned when retrieving auxiliary scanning statistics.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ScanPktStats.rx_chain_crc">
+<span class="sig-name descname"><span class="pre">rx_chain_crc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.ScanPktStats.rx_chain_crc" title="Permalink to this definition"></a></dt>
+<dd><p>Number of chain packets received with a CRC error.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Value is only returned when retrieving auxiliary scanning statistics.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ScanPktStats.rx_chain_timeout">
+<span class="sig-name descname"><span class="pre">rx_chain_timeout</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.ScanPktStats.rx_chain_timeout" title="Permalink to this definition"></a></dt>
+<dd><p>Number of chain packet RX timeouts.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Value is only returned when retrieving auxiliary scanning statistics.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ScanPktStats.rx_isr">
+<span class="sig-name descname"><span class="pre">rx_isr</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.ScanPktStats.rx_isr" title="Permalink to this definition"></a></dt>
+<dd><p>RX ISR processing watermark in microseconds.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ScanPktStats.rx_rsp">
+<span class="sig-name descname"><span class="pre">rx_rsp</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.ScanPktStats.rx_rsp" title="Permalink to this definition"></a></dt>
+<dd><p>Number of advertising response packets received correctly.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ScanPktStats.rx_rsp_crc">
+<span class="sig-name descname"><span class="pre">rx_rsp_crc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.ScanPktStats.rx_rsp_crc" title="Permalink to this definition"></a></dt>
+<dd><p>Number of advertising response packets received with a CRC error.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ScanPktStats.rx_rsp_timeout">
+<span class="sig-name descname"><span class="pre">rx_rsp_timeout</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.ScanPktStats.rx_rsp_timeout" title="Permalink to this definition"></a></dt>
+<dd><p>Number of advertising response RX timeouts.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ScanPktStats.rx_setup">
+<span class="sig-name descname"><span class="pre">rx_setup</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.ScanPktStats.rx_setup" title="Permalink to this definition"></a></dt>
+<dd><p>RX packet setup watermark in microseconds.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ScanPktStats.tx_isr">
+<span class="sig-name descname"><span class="pre">tx_isr</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.ScanPktStats.tx_isr" title="Permalink to this definition"></a></dt>
+<dd><p>TX ISR processing watermark in microseconds.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ScanPktStats.tx_req">
+<span class="sig-name descname"><span class="pre">tx_req</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.ScanPktStats.tx_req" title="Permalink to this definition"></a></dt>
+<dd><p>Number of advertising requests sent.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.ScanPktStats.tx_setup">
+<span class="sig-name descname"><span class="pre">tx_setup</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.ScanPktStats.tx_setup" title="Permalink to this definition"></a></dt>
+<dd><p>TX packet setup watermark in microseconds.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.TestReport">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TestReport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rx_pkt_count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx_oct_count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gen_pkt_count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gen_oct_count</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/data_params.html#TestReport"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.data_params.TestReport" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>ISO/ACL test report data container.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.TestReport.gen_oct_count">
+<span class="sig-name descname"><span class="pre">gen_oct_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.TestReport.gen_oct_count" title="Permalink to this definition"></a></dt>
+<dd><p>Number of generated octets.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.TestReport.gen_pkt_count">
+<span class="sig-name descname"><span class="pre">gen_pkt_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.TestReport.gen_pkt_count" title="Permalink to this definition"></a></dt>
+<dd><p>Number of generated packets.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.TestReport.rx_oct_count">
+<span class="sig-name descname"><span class="pre">rx_oct_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.TestReport.rx_oct_count" title="Permalink to this definition"></a></dt>
+<dd><p>Number of octets received.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.data_params.TestReport.rx_pkt_count">
+<span class="sig-name descname"><span class="pre">rx_pkt_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.data_params.TestReport.rx_pkt_count" title="Permalink to this definition"></a></dt>
+<dd><p>Number of packets received.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="constants.html" class="btn btn-neutral float-left" title="max_ble_hci.constants" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="hci_packets.html" class="btn btn-neutral float-right" title="max_ble_hci.hci_packets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Analog Devices, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

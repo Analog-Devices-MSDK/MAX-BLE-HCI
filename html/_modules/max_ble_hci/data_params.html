@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>max_ble_hci.data_params &mdash; MAX BLE HCI 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=2389946f"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MAX BLE HCI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hci_reference.html">HCI Command Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MAX BLE HCI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">max_ble_hci.data_params</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for max_ble_hci.data_params</h1><div class="highlight"><pre>
+<span></span><span class="ch">#! /usr/bin/env python3</span>
+<span class="c1">###############################################################################</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (C) 2023 Maxim Integrated Products, Inc., All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a</span>
+<span class="c1"># copy of this software and associated documentation files (the &quot;Software&quot;),</span>
+<span class="c1"># to deal in the Software without restriction, including without limitation</span>
+<span class="c1"># the rights to use, copy, modify, merge, publish, distribute, sublicense,</span>
+<span class="c1"># and/or sell copies of the Software, and to permit persons to whom the</span>
+<span class="c1"># Software is furnished to do so, subject to the following conditions:</span>
+<span class="c1">#</span>
+<span class="c1"># The above copyright notice and this permission notice shall be included</span>
+<span class="c1"># in all copies or substantial portions of the Software.</span>
+<span class="c1">#</span>
+<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS</span>
+<span class="c1"># OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF</span>
+<span class="c1"># MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.</span>
+<span class="c1"># IN NO EVENT SHALL MAXIM INTEGRATED BE LIABLE FOR ANY CLAIM, DAMAGES</span>
+<span class="c1"># OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,</span>
+<span class="c1"># ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR</span>
+<span class="c1"># OTHER DEALINGS IN THE SOFTWARE.</span>
+<span class="c1">#</span>
+<span class="c1"># Except as contained in this notice, the name of Maxim Integrated</span>
+<span class="c1"># Products, Inc. shall not be used except as stated in the Maxim Integrated</span>
+<span class="c1"># Products, Inc. Branding Policy.</span>
+<span class="c1">#</span>
+<span class="c1"># The mere transfer of this software does not imply any licenses</span>
+<span class="c1"># of trade secrets, proprietary technology, copyrights, patents,</span>
+<span class="c1"># trademarks, maskwork rights, or any other form of intellectual</span>
+<span class="c1"># property whatsoever. Maxim Integrated Products, Inc. retains all</span>
+<span class="c1"># ownership rights.</span>
+<span class="c1">#</span>
+<span class="c1">##############################################################################</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright 2023 Analog Devices, Inc.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+<span class="c1">#</span>
+<span class="c1">##############################################################################</span>
+<span class="sd">&quot;&quot;&quot;Contains data classes used for HCI function parameters/returns.&quot;&quot;&quot;</span>
+<span class="c1"># pylint: disable=too-many-arguments,too-many-locals,too-many-instance-attributes</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+
+<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">AddrType</span>
+
+
+<div class="viewcode-block" id="AdvParams"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.AdvParams">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">AdvParams</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Advertising parameters data container.&quot;&quot;&quot;</span>
+
+    <span class="n">interval_min</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x60</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Minimum advertising interval.&quot;&quot;&quot;</span>
+
+    <span class="n">interval_max</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x60</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximum advertising interval.&quot;&quot;&quot;</span>
+
+    <span class="n">adv_type</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x3</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Advertising type.&quot;&quot;&quot;</span>
+
+    <span class="n">own_addr_type</span><span class="p">:</span> <span class="n">AddrType</span> <span class="o">=</span> <span class="n">AddrType</span><span class="o">.</span><span class="n">PUBLIC</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Own device address type.&quot;&quot;&quot;</span>
+
+    <span class="n">peer_addr_type</span><span class="p">:</span> <span class="n">AddrType</span> <span class="o">=</span> <span class="n">AddrType</span><span class="o">.</span><span class="n">PUBLIC</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Connectable peer device address type.&quot;&quot;&quot;</span>
+
+    <span class="n">peer_addr</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Connectable peer device address.&quot;&quot;&quot;</span>
+
+    <span class="n">channel_map</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x7</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Advertising channel map.&quot;&quot;&quot;</span>
+
+    <span class="n">filter_policy</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Advertising filter policy.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">print_lns</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">print_lns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">:  </span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">print_lns</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ScanParams"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.ScanParams">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ScanParams</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Scan parameters data container.&quot;&quot;&quot;</span>
+
+    <span class="n">scan_type</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x1</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Scan type.&quot;&quot;&quot;</span>
+
+    <span class="n">scan_interval</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x100</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Scan interval.&quot;&quot;&quot;</span>
+
+    <span class="n">scan_window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x100</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Scan duration.&quot;&quot;&quot;</span>
+
+    <span class="n">addr_type</span><span class="p">:</span> <span class="n">AddrType</span> <span class="o">=</span> <span class="n">AddrType</span><span class="o">.</span><span class="n">PUBLIC</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Own device address type.&quot;&quot;&quot;</span>
+
+    <span class="n">filter_policy</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x0</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Scanning filter policy.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">print_lns</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">print_lns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">:  </span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">print_lns</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ConnParams"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.ConnParams">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ConnParams</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Connection parameters data container.&quot;&quot;&quot;</span>
+
+    <span class="n">peer_addr</span><span class="p">:</span> <span class="nb">int</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Connectable peer device address.&quot;&quot;&quot;</span>
+
+    <span class="n">scan_interval</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x100</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Scan interval.&quot;&quot;&quot;</span>
+
+    <span class="n">scan_window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x100</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Scan duration.&quot;&quot;&quot;</span>
+
+    <span class="n">init_filter_policy</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x0</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initiator filter policy.&quot;&quot;&quot;</span>
+
+    <span class="n">peer_addr_type</span><span class="p">:</span> <span class="n">AddrType</span> <span class="o">=</span> <span class="n">AddrType</span><span class="o">.</span><span class="n">PUBLIC</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Connectable peer device address type.&quot;&quot;&quot;</span>
+
+    <span class="n">own_addr_type</span><span class="p">:</span> <span class="n">AddrType</span> <span class="o">=</span> <span class="n">AddrType</span><span class="o">.</span><span class="n">PUBLIC</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Own device address type.&quot;&quot;&quot;</span>
+
+    <span class="n">conn_interval_min</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x6</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Connection interval minimum.&quot;&quot;&quot;</span>
+
+    <span class="n">conn_interval_max</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x6</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Connection interval maximum.&quot;&quot;&quot;</span>
+
+    <span class="n">max_latency</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x0000</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximum peripheral latency.&quot;&quot;&quot;</span>
+
+    <span class="n">sup_timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x64</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Supervision timeout.&quot;&quot;&quot;</span>
+
+    <span class="n">min_ce_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x0F10</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Minimum connection event length.&quot;&quot;&quot;</span>
+
+    <span class="n">max_ce_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x0F10</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximum connection event length.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="mh">0x4</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scan_interval</span> <span class="o">&lt;=</span> <span class="mh">0x4000</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Scane interval must be between 0x4 - 0x4000&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="mh">0x4</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scan_window</span> <span class="o">&lt;=</span> <span class="mh">0x4000</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Scane window must be between 0x4 - 0x4000&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_filter_policy</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Init filter policy must be 0x0 or 0x1 </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">init_filter_policy</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">peer_addr_type</span><span class="p">,</span> <span class="n">AddrType</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s2">&quot;Attribute peer_addr_type must be of type AddrType, &quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">peer_addr_type</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">peer_addr</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="o">**</span><span class="mi">48</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Peer address must be representable by 6 octets&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">own_addr_type</span><span class="p">,</span> <span class="n">AddrType</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s2">&quot;Attribute own_addr_type must be of type AddrType, &quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">own_addr_type</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="mh">0x6</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn_interval_max</span> <span class="o">&lt;=</span> <span class="mh">0xC80</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Connection interval min must be between 0x6 - 0xC80&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">print_lns</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">print_lns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">:  </span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">print_lns</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DataPktStats"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.DataPktStats">[docs]</a><span class="k">class</span> <span class="nc">DataPktStats</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generic data stats container for CM and DTM.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">rx_data</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">rx_data_crc</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">rx_data_timeout</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">tx_data</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">err_data</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">rx_setup</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">tx_setup</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">rx_isr</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">tx_isr</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rx_data</span> <span class="o">=</span> <span class="n">rx_data</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Number of packets received correctly.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">rx_data_crc</span> <span class="o">=</span> <span class="n">rx_data_crc</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Number of packets received with a CRC error.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">rx_data_timeout</span> <span class="o">=</span> <span class="n">rx_data_timeout</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Number of RX timeouts.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tx_data</span> <span class="o">=</span> <span class="n">tx_data</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Number of correctly transmitted packets.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">err_data</span> <span class="o">=</span> <span class="n">err_data</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Number of data transaction errors.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">rx_setup</span> <span class="o">=</span> <span class="n">rx_setup</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;RX packet setup watermark in microseconds.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tx_setup</span> <span class="o">=</span> <span class="n">tx_setup</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;TX packet setup watermark in microseconds.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">rx_isr</span> <span class="o">=</span> <span class="n">rx_isr</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;RX ISR processing watermark in microseconds.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tx_isr</span> <span class="o">=</span> <span class="n">tx_isr</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;TX ISR processing watermark in microseconds.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">print_lns</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">print_lns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">:  </span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">print_lns</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DataPktStats.per"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.DataPktStats.per">[docs]</a>    <span class="k">def</span> <span class="nf">per</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">peer_tx_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate PER.</span>
+
+<span class="sd">        Calculates the Packet Error Rate of the current set of</span>
+<span class="sd">        statistics. If number of peer TX packets is not provided,</span>
+<span class="sd">        the value is inferred from the number of correctly received</span>
+<span class="sd">        packets, the number of CRC errors, and the number of timeouts</span>
+<span class="sd">        recorded by the receiver.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        peer_tx_data : Optional[int], optional</span>
+<span class="sd">            Number of packets transmitted by the peer device.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            Calculated PER value.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">peer_tx_data</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">100</span> <span class="o">-</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rx_data</span> <span class="o">/</span> <span class="n">peer_tx_data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">100</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">rx_data</span> <span class="o">/</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rx_data</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">rx_data_crc</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">rx_data_timeout</span>
+        <span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="AdvPktStats"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.AdvPktStats">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">AdvPktStats</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Advertising statistics data container.&quot;&quot;&quot;</span>
+
+    <span class="n">tx_adv</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of sent advertising packets.&quot;&quot;&quot;</span>
+
+    <span class="n">rx_req</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of advertising requests received correctly.&quot;&quot;&quot;</span>
+
+    <span class="n">rx_req_crc</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of advertising requests received with a CRC error.&quot;&quot;&quot;</span>
+
+    <span class="n">rx_req_timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of RX timeouts.&quot;&quot;&quot;</span>
+
+    <span class="n">tx_resp</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of response packets sent.&quot;&quot;&quot;</span>
+
+    <span class="n">err_adv</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of advertising transaction errors.&quot;&quot;&quot;</span>
+
+    <span class="n">rx_setup</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;RX packet setup watermark in microseconds.&quot;&quot;&quot;</span>
+
+    <span class="n">tx_setup</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;TX packet setup watermark in microseconds.&quot;&quot;&quot;</span>
+
+    <span class="n">rx_isr</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;RX ISR processing watermark in microseconds.&quot;&quot;&quot;</span>
+
+    <span class="n">tx_isr</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;TX ISR processing watermark in microseconds.&quot;&quot;&quot;</span>
+
+    <span class="n">tx_chain</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Number of chain packets sent.</span>
+<span class="sd">    </span>
+<span class="sd">    .. note::</span>
+<span class="sd">        Value is only returned when retrieving auxiliary advertising statistics.</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">print_lns</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">print_lns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">:  </span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">print_lns</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ScanPktStats"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.ScanPktStats">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ScanPktStats</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Scanning statistics data container.&quot;&quot;&quot;</span>
+
+    <span class="n">rx_adv</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of advertising packets received correctly.&quot;&quot;&quot;</span>
+
+    <span class="n">rx_adv_crc</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of advertising packets received with a CRC error.&quot;&quot;&quot;</span>
+
+    <span class="n">rx_adv_timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of RX timeouts.&quot;&quot;&quot;</span>
+    <span class="n">tx_req</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of advertising requests sent.&quot;&quot;&quot;</span>
+    <span class="n">rx_rsp</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of advertising response packets received correctly.&quot;&quot;&quot;</span>
+
+    <span class="n">rx_rsp_crc</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of advertising response packets received with a CRC error.&quot;&quot;&quot;</span>
+
+    <span class="n">rx_rsp_timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of advertising response RX timeouts.&quot;&quot;&quot;</span>
+    <span class="n">err_scan</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of scan transaction errors.&quot;&quot;&quot;</span>
+    <span class="n">rx_setup</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;RX packet setup watermark in microseconds.&quot;&quot;&quot;</span>
+
+    <span class="n">tx_setup</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;TX packet setup watermark in microseconds.&quot;&quot;&quot;</span>
+    <span class="n">rx_isr</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;RX ISR processing watermark in microseconds.&quot;&quot;&quot;</span>
+
+    <span class="n">tx_isr</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;TX ISR processing watermark in microseconds.&quot;&quot;&quot;</span>
+    <span class="n">rx_chain</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Number of chain packets received correctly.</span>
+<span class="sd">    </span>
+<span class="sd">    .. note::</span>
+<span class="sd">        Value is only returned when retrieving auxiliary scanning statistics.</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">rx_chain_crc</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Number of chain packets received with a CRC error.</span>
+<span class="sd">    </span>
+<span class="sd">    .. note::</span>
+<span class="sd">        Value is only returned when retrieving auxiliary scanning statistics.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">rx_chain_timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Number of chain packet RX timeouts.</span>
+<span class="sd">    </span>
+<span class="sd">    .. note::</span>
+<span class="sd">        Value is only returned when retrieving auxiliary scanning statistics.</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">print_lns</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">print_lns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">:  </span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">print_lns</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MemPktStats"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.MemPktStats">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">MemPktStats</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Memory statistics data container.&quot;&quot;&quot;</span>
+
+    <span class="n">stack</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of bytes used by the stack.&quot;&quot;&quot;</span>
+
+    <span class="n">sys_assert_cnt</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of times assertions hit.&quot;&quot;&quot;</span>
+
+    <span class="n">free_mem</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Memory free for stack usage.&quot;&quot;&quot;</span>
+
+    <span class="n">used_mem</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Memory used by stack.&quot;&quot;&quot;</span>
+
+    <span class="n">max_connections</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximum number of connections allowed.&quot;&quot;&quot;</span>
+
+    <span class="n">conn_ctx_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of bytes used for connection context.&quot;&quot;&quot;</span>
+
+    <span class="n">cs_watermark_lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Critical section watermark duration in microseconds.&quot;&quot;&quot;</span>
+
+    <span class="n">ll_watermark_lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Link layer handler watermark level in microseconds.&quot;&quot;&quot;</span>
+
+    <span class="n">sch_watermark_lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Scheduler handler watermark level in microseconds.&quot;&quot;&quot;</span>
+
+    <span class="n">lhci_watermark_lvl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;LHCI handler watermark level in microseconds.&quot;&quot;&quot;</span>
+
+    <span class="n">max_adv_sets</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximum number of advertising sets.&quot;&quot;&quot;</span>
+
+    <span class="n">adv_set_ctx_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Advertising set context size in bytes.&quot;&quot;&quot;</span>
+
+    <span class="n">ext_scan_max</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximum number of extended scanners.&quot;&quot;&quot;</span>
+
+    <span class="n">ext_scan_ctx_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extended scanners context size in bytes.&quot;&quot;&quot;</span>
+
+    <span class="n">ext_init_ctx_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extended initiators context size in bytes.&quot;&quot;&quot;</span>
+
+    <span class="n">max_num_ext_init</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximum number of extended initiators.&quot;&quot;&quot;</span>
+
+    <span class="n">max_per_scanners</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximum number of periodic scanners.&quot;&quot;&quot;</span>
+
+    <span class="n">per_scan_ctx_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Periodic scanners context size in bytes.&quot;&quot;&quot;</span>
+
+    <span class="n">max_cig</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximim number of CIG.&quot;&quot;&quot;</span>
+
+    <span class="n">cig_ctx_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;CIG context size in bytes.&quot;&quot;&quot;</span>
+
+    <span class="n">cis_ctx_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;CIS context size in bytes.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">print_lns</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">print_lns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">:  </span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">print_lns</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PduPktStats"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.PduPktStats">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">PduPktStats</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;PDU statistics data container.&quot;&quot;&quot;</span>
+
+    <span class="n">fail_pdu</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of PDUs failing PDU type filter.&quot;&quot;&quot;</span>
+
+    <span class="n">pass_pdu</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of PDUs passing PDU type filter.&quot;&quot;&quot;</span>
+
+    <span class="n">fail_whitelist</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of PDUs failing whitelist filter.&quot;&quot;&quot;</span>
+
+    <span class="n">pass_whitelist</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of PDUs passing whitelist filter.&quot;&quot;&quot;</span>
+
+    <span class="n">fail_peer_addr_match</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of PDUs failing peer address match.&quot;&quot;&quot;</span>
+
+    <span class="n">pass_peer_addr_match</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of PDUs passing peer address match.&quot;&quot;&quot;</span>
+
+    <span class="n">fail_local_addr_match</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of PDUs failing local address match.&quot;&quot;&quot;</span>
+
+    <span class="n">pass_local_addr_match</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of PDUs passing local address match.&quot;&quot;&quot;</span>
+
+    <span class="n">fail_peer_rpa_verify</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of peer RPAs failing verification.&quot;&quot;&quot;</span>
+
+    <span class="n">pass_peer_rpa_verify</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of peer RPAs passing verification.&quot;&quot;&quot;</span>
+
+    <span class="n">fail_local_rpa_verify</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of local RPAs failing verification.&quot;&quot;&quot;</span>
+
+    <span class="n">pass_local_rpa_verify</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of local RPAs passing verification.&quot;&quot;&quot;</span>
+
+    <span class="n">fail_peer_priv_addr</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of peer addresses failing RPA requirements.&quot;&quot;&quot;</span>
+
+    <span class="n">fail_local_priv_addr</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of local addresses failing RPA requirements.&quot;&quot;&quot;</span>
+
+    <span class="n">fail_peer_addr_res_req</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of PDUs failing required peer address resolution.&quot;&quot;&quot;</span>
+
+    <span class="n">pass_peer_addr_res_req</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of PDUs passing required peer address resolution.&quot;&quot;&quot;</span>
+
+    <span class="n">pass_local_addr_res_opt</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of PDUs passing optional local address resolution.&quot;&quot;&quot;</span>
+
+    <span class="n">peer_res_addr_pend</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of peer address resolutions pended.&quot;&quot;&quot;</span>
+
+    <span class="n">local_res_addr_pend</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of local address resolutions pended.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">print_lns</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">print_lns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">:  </span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">print_lns</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestReport"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.TestReport">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">TestReport</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ISO/ACL test report data container.&quot;&quot;&quot;</span>
+
+    <span class="n">rx_pkt_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of packets received.&quot;&quot;&quot;</span>
+
+    <span class="n">rx_oct_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of octets received.&quot;&quot;&quot;</span>
+
+    <span class="n">gen_pkt_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of generated packets.&quot;&quot;&quot;</span>
+
+    <span class="n">gen_oct_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of generated octets.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">print_lns</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">print_lns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">:  </span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">print_lns</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PoolStats"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.PoolStats">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">PoolStats</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Memory pool statistics data container.&quot;&quot;&quot;</span>
+
+    <span class="n">buf_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Buffer size.&quot;&quot;&quot;</span>
+
+    <span class="n">num_buf</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of buffers.&quot;&quot;&quot;</span>
+
+    <span class="n">num_alloc</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of allocations.&quot;&quot;&quot;</span>
+
+    <span class="n">max_alloc</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximum number of allocations.&quot;&quot;&quot;</span>
+
+    <span class="n">max_req_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximum required length.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">print_lns</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">print_lns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">:  </span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">print_lns</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Analog Devices, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

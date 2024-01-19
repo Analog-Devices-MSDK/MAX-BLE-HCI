@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Controller Commands &mdash; MAX BLE HCI 0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=2389946f"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Informational Commands" href="informational_cmds.html" />
+    <link rel="prev" title="Link Control Commands" href="link_control_cmds.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            MAX BLE HCI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="hci_reference.html">HCI Command Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="link_control_cmds.html">Link Control Commands</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Controller Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#set-event-mask">Set Event Mask</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#return-parameters">Return Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#event-s-generated">Event(s) Generated</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#reset">Reset</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">Return Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">Event(s) Generated</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#read-tx-power-level">Read TX Power Level</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id4">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">Return Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">Event(s) Generated</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#set-controller-to-host-flow-control">Set Controller to Host Flow Control</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id7">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id8">Return Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id9">Event(s) Generated</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#host-buffer-size">Host Buffer Size</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id10">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id11">Return Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id12">Event(s) Generated</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#host-number-of-completed-packets">Host Number of Completed Packets</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id13">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id14">Return Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id15">Event(s) Generated</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#set-event-mask-page-2">Set Event Mask Page 2</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id16">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id17">Return Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id18">Event(s) Generated</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#read-authenticated-payload-timeout">Read Authenticated Payload Timeout</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id19">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id20">Return Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id21">Event(s) Generated</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#write-authenticated-payload-timeout">Write Authenticated Payload Timeout</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id22">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id23">Return Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id24">Event(s) Generated</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#configure-data-path">Configure Data Path</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id25">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id26">Return Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id27">Event(s) Generated</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="informational_cmds.html">Informational Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="status_cmds.html">Status Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="le_controller_cmds.html">LE Controller Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vendor_spec_cmds.html">ADI Vendor Specific Commands</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MAX BLE HCI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="hci_reference.html">HCI Command Reference</a></li>
+      <li class="breadcrumb-item active">Controller Commands</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/controller_cmds.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="controller-commands">
+<h1>Controller Commands<a class="headerlink" href="#controller-commands" title="Permalink to this heading"></a></h1>
+<section id="set-event-mask">
+<h2>Set Event Mask<a class="headerlink" href="#set-event-mask" title="Permalink to this heading"></a></h2>
+<p>Control which events are generated by the HCI for the host.
+Setting a bit to 1 enables the corresponding event.</p>
+<table class="docutils align-default" style="width: 100%">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 10%" />
+<col style="width: 30%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>OCF</p></th>
+<th class="head"><p>Command Parameters</p></th>
+<th class="head"><p>Return Parameters</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SET_EVENT_MASK</p></td>
+<td><p>0x0001</p></td>
+<td><p>Event_Mask</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default" id="id28" style="width: 100%">
+<caption><span class="caption-text">Event_Mask, size = 8 octets</span><a class="headerlink" href="#id28" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Bit</p></th>
+<th class="head"><p>Event</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>Inquiry Complete</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>Inquiry Result</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>Connection Complete</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>Connection Request</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>Disconnection Complete</p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p>Authentication Complete</p></td>
+</tr>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>Remote Name Request Complete</p></td>
+</tr>
+<tr class="row-odd"><td><p>7</p></td>
+<td><p>Encryption Change</p></td>
+</tr>
+<tr class="row-even"><td><p>8</p></td>
+<td><p>Change Connection Link Key Complete</p></td>
+</tr>
+<tr class="row-odd"><td><p>9</p></td>
+<td><p>Link Key Type Changed</p></td>
+</tr>
+<tr class="row-even"><td><p>10</p></td>
+<td><p>Read Remote Supported Features Complete</p></td>
+</tr>
+<tr class="row-odd"><td><p>11</p></td>
+<td><p>Read Remote Version Information Complete</p></td>
+</tr>
+<tr class="row-even"><td><p>12</p></td>
+<td><p>QoS Setup Complete</p></td>
+</tr>
+<tr class="row-odd"><td><p>15</p></td>
+<td><p>Hardware Error</p></td>
+</tr>
+<tr class="row-even"><td><p>16</p></td>
+<td><p>Flush Occured</p></td>
+</tr>
+<tr class="row-odd"><td><p>17</p></td>
+<td><p>Role Change</p></td>
+</tr>
+<tr class="row-even"><td><p>19</p></td>
+<td><p>Mode Change</p></td>
+</tr>
+<tr class="row-odd"><td><p>20</p></td>
+<td><p>Return Link Keys</p></td>
+</tr>
+<tr class="row-even"><td><p>21</p></td>
+<td><p>PIN Code Request</p></td>
+</tr>
+<tr class="row-odd"><td><p>22</p></td>
+<td><p>Link Key Request</p></td>
+</tr>
+<tr class="row-even"><td><p>23</p></td>
+<td><p>Link Key Notification</p></td>
+</tr>
+<tr class="row-odd"><td><p>24</p></td>
+<td><p>Loopback Command</p></td>
+</tr>
+<tr class="row-even"><td><p>25</p></td>
+<td><p>Data Buffer Overflow</p></td>
+</tr>
+<tr class="row-odd"><td><p>26</p></td>
+<td><p>Max Slots Change</p></td>
+</tr>
+<tr class="row-even"><td><p>27</p></td>
+<td><p>Read Clock Offset Complete</p></td>
+</tr>
+<tr class="row-odd"><td><p>28</p></td>
+<td><p>Connection Packet Type Changed</p></td>
+</tr>
+<tr class="row-even"><td><p>29</p></td>
+<td><p>QoS Violation</p></td>
+</tr>
+<tr class="row-odd"><td><p>30</p></td>
+<td><p>[Previously used.]</p></td>
+</tr>
+<tr class="row-even"><td><p>31</p></td>
+<td><p>Page Scan Repitition Mode Change</p></td>
+</tr>
+<tr class="row-odd"><td><p>32</p></td>
+<td><p>Flow Specification Complete</p></td>
+</tr>
+<tr class="row-even"><td><p>33</p></td>
+<td><p>Inquiry Result with RSSI</p></td>
+</tr>
+<tr class="row-odd"><td><p>34</p></td>
+<td><p>Read Remote Extended Features Complete</p></td>
+</tr>
+<tr class="row-even"><td><p>43</p></td>
+<td><p>Synchronous Connection Complete</p></td>
+</tr>
+<tr class="row-odd"><td><p>44</p></td>
+<td><p>Synchronous Connection Changed</p></td>
+</tr>
+<tr class="row-even"><td><p>45</p></td>
+<td><p>Sniff Subrating</p></td>
+</tr>
+<tr class="row-odd"><td><p>46</p></td>
+<td><p>Extended Inquiry Result</p></td>
+</tr>
+<tr class="row-even"><td><p>47</p></td>
+<td><p>Encryption Key Refresh Complete</p></td>
+</tr>
+<tr class="row-odd"><td><p>48</p></td>
+<td><p>IO Capability Request</p></td>
+</tr>
+<tr class="row-even"><td><p>49</p></td>
+<td><p>IO Capability Response</p></td>
+</tr>
+<tr class="row-odd"><td><p>50</p></td>
+<td><p>User Confirmation Request</p></td>
+</tr>
+<tr class="row-even"><td><p>51</p></td>
+<td><p>User Passkey Request</p></td>
+</tr>
+<tr class="row-odd"><td><p>52</p></td>
+<td><p>Remote OOB Data Request</p></td>
+</tr>
+<tr class="row-even"><td><p>53</p></td>
+<td><p>Simple Pairing Complete</p></td>
+</tr>
+<tr class="row-odd"><td><p>54</p></td>
+<td><p>[Reserved for future use].</p></td>
+</tr>
+<tr class="row-even"><td><p>55</p></td>
+<td><p>Link Supervision Timeout Changed</p></td>
+</tr>
+<tr class="row-odd"><td><p>56</p></td>
+<td><p>Enhanced Flush Complete</p></td>
+</tr>
+<tr class="row-even"><td><p>57</p></td>
+<td><p>[Reserved for future use].</p></td>
+</tr>
+<tr class="row-odd"><td><p>58</p></td>
+<td><p>User Passkey Notification</p></td>
+</tr>
+<tr class="row-even"><td><p>59</p></td>
+<td><p>Keypress Notification</p></td>
+</tr>
+<tr class="row-odd"><td><p>60</p></td>
+<td><p>Remote Host Supported Features Notification</p></td>
+</tr>
+<tr class="row-even"><td><p>61</p></td>
+<td><p>LE Meta</p></td>
+</tr>
+<tr class="row-odd"><td><p>All other bits</p></td>
+<td><p>[Reserved for future use].</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="return-parameters">
+<h3>Return Parameters<a class="headerlink" href="#return-parameters" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default" id="id29" style="width: 100%">
+<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id29" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00</p></td>
+<td><p>Command completed successfully.</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x01 to 0xFF</p></td>
+<td><p>Command failed.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="event-s-generated">
+<h3>Event(s) Generated<a class="headerlink" href="#event-s-generated" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>COMMAND_COMPLETE</p></li>
+</ul>
+</section>
+</section>
+<section id="reset">
+<h2>Reset<a class="headerlink" href="#reset" title="Permalink to this heading"></a></h2>
+<p>Reset controller/link layer.</p>
+<table class="docutils align-default" style="width: 100%">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 10%" />
+<col style="width: 30%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>OCF</p></th>
+<th class="head"><p>Command Parameters</p></th>
+<th class="head"><p>Return Parameters</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>RESET</p></td>
+<td><p>0x0003</p></td>
+<td></td>
+<td><p>Status</p></td>
+</tr>
+</tbody>
+</table>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
+<p>None.</p>
+</section>
+<section id="id2">
+<h3>Return Parameters<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default" id="id30" style="width: 100%">
+<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id30" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00</p></td>
+<td><p>Command completed successfully.</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x01 to 0xFF</p></td>
+<td><p>Command failed.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id3">
+<h3>Event(s) Generated<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>COMMAND_COMPLETE</p></li>
+</ul>
+</section>
+</section>
+<section id="read-tx-power-level">
+<h2>Read TX Power Level<a class="headerlink" href="#read-tx-power-level" title="Permalink to this heading"></a></h2>
+<p>Read TX power level for a connection.</p>
+<table class="docutils align-default" style="width: 100%">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 10%" />
+<col style="width: 30%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>OCF</p></th>
+<th class="head"><p>Command Parameters</p></th>
+<th class="head"><p>Return Parameters</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>READ_TX_PWR_LVL</p></td>
+<td><p>0x002D</p></td>
+<td><div class="line-block">
+<div class="line">Connection_Handle</div>
+<div class="line">Type</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Status</div>
+<div class="line">Connection_Handle</div>
+<div class="line">TX_Power_Level</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<section id="id4">
+<h3>Parameters<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default" id="id31" style="width: 100%">
+<caption><span class="caption-text">Connection_Handle, size = 2 octets</span><a class="headerlink" href="#id31" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x0000 to 0x0EFF</p></td>
+<td><p>Indicates which connection to retrieve the TX power for.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id32" style="width: 100%">
+<caption><span class="caption-text">Type, size = 1 octet</span><a class="headerlink" href="#id32" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00</p></td>
+<td><p>Read current TX power level.</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x1</p></td>
+<td><p>Read maximum TX power level.</p></td>
+</tr>
+<tr class="row-even"><td><p>All other values</p></td>
+<td><p>[Reserved for future use].</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id5">
+<h3>Return Parameters<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default" id="id33" style="width: 100%">
+<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id33" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00</p></td>
+<td><p>Command completed successfully.</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x01 to 0xFF</p></td>
+<td><p>Command failed.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id34" style="width: 100%">
+<caption><span class="caption-text">Connection_Handle, size = 1 octet</span><a class="headerlink" href="#id34" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x0000 to 0x0EFF</p></td>
+<td><p>Connection handle</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id35" style="width: 100%">
+<caption><span class="caption-text">TX_Power_Level, size = 1 octet</span><a class="headerlink" href="#id35" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00 to 0xFF</p></td>
+<td><div class="line-block">
+<div class="line">TX power level (signed value).</div>
+<div class="line">Range: -30dBm to 20dBm</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id6">
+<h3>Event(s) Generated<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>COMMAND_COMPLETE</p></li>
+</ul>
+</section>
+</section>
+<section id="set-controller-to-host-flow-control">
+<h2>Set Controller to Host Flow Control<a class="headerlink" href="#set-controller-to-host-flow-control" title="Permalink to this heading"></a></h2>
+<p>Turn flow control on/off for data sent from the Controller to
+the Host.</p>
+<table class="docutils align-default" style="width: 100%">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 10%" />
+<col style="width: 30%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>OCF</p></th>
+<th class="head"><p>Command Parameters</p></th>
+<th class="head"><p>Return Parameters</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SET_CONTROLLER_TO_HOST_FC</p></td>
+<td><p>0x0031</p></td>
+<td><p>Flow_Control_Enable</p></td>
+<td><p>Status</p></td>
+</tr>
+</tbody>
+</table>
+<section id="id7">
+<h3>Parameters<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default" id="id36" style="width: 100%">
+<caption><span class="caption-text">Flow_Control_Enable, size = 1 octet</span><a class="headerlink" href="#id36" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00</p></td>
+<td><p>Flow control off.</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x01</p></td>
+<td><p>Flow control on for HCI ACL packets and off for HCI Synchronous packets.</p></td>
+</tr>
+<tr class="row-even"><td><p>0x02</p></td>
+<td><p>Flow control off for HCI ACL packets and on for HCI Synchronous packets.</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x03</p></td>
+<td><p>Flow control on for all packets.</p></td>
+</tr>
+<tr class="row-even"><td><p>All other values</p></td>
+<td><p>[Reserved for future use].</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id8">
+<h3>Return Parameters<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default" id="id37" style="width: 100%">
+<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id37" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00</p></td>
+<td><p>Command completed successfully.</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x01 to 0xFF</p></td>
+<td><p>Command failed.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id9">
+<h3>Event(s) Generated<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>COMMAND_COMPLETE</p></li>
+</ul>
+</section>
+</section>
+<section id="host-buffer-size">
+<h2>Host Buffer Size<a class="headerlink" href="#host-buffer-size" title="Permalink to this heading"></a></h2>
+<p>Notify the Controller about the maximum data size of HCI ACL
+and Synchronous packets sent from the Controller to the Host.</p>
+<table class="docutils align-default" style="width: 100%">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 10%" />
+<col style="width: 30%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>OCF</p></th>
+<th class="head"><p>Command Parameters</p></th>
+<th class="head"><p>Return Parameters</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>HOST_BUFFER_SIZE</p></td>
+<td><p>0x0033</p></td>
+<td><div class="line-block">
+<div class="line">Host_ACL_Data_Packet_Length</div>
+<div class="line">Host_Synchronous_Data_Packet_Length</div>
+<div class="line">Host_Total_Num_ACL_Data_Packets</div>
+<div class="line">Host_Total_Num_Synchronous_Data_Packets</div>
+</div>
+</td>
+<td><p>Status</p></td>
+</tr>
+</tbody>
+</table>
+<section id="id10">
+<h3>Parameters<a class="headerlink" href="#id10" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default" id="id38" style="width: 100%">
+<caption><span class="caption-text">Host_ACL_Data_Packet_Length, size = 2 octets</span><a class="headerlink" href="#id38" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x0000 to 0xFFFF</p></td>
+<td><p>Maximum length (in octets) of data for HCI ACL packets that the Host can accept.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id39" style="width: 100%">
+<caption><span class="caption-text">Host_Synchronous_Data_Packet_Length, size = 1 octet</span><a class="headerlink" href="#id39" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00 to 0xFF</p></td>
+<td><p>Maximum length (in octets) of data for HCI Synchronous packets that the Host can accept.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id40" style="width: 100%">
+<caption><span class="caption-text">Host_Total_Num_ACL_Data_Packets, size = 2 octets</span><a class="headerlink" href="#id40" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x0000 to 0xFFFF</p></td>
+<td><p>Total number of HCI ACL packets that can be stored in the data buffers of the Host.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id41" style="width: 100%">
+<caption><span class="caption-text">Host_Total_Num_Synchronous_Data_Packets, size = 2 octets</span><a class="headerlink" href="#id41" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Values(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x0000 to 0xFFFF</p></td>
+<td><p>Total number of HCI Synchronous packets that can be stored in the data buffers of the Host.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id11">
+<h3>Return Parameters<a class="headerlink" href="#id11" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default" id="id42" style="width: 100%">
+<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id42" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00</p></td>
+<td><p>Command completed successfully.</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x01 to 0xFF</p></td>
+<td><p>Command failed.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id12">
+<h3>Event(s) Generated<a class="headerlink" href="#id12" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>COMMAND_COMPLETE</p></li>
+</ul>
+</section>
+</section>
+<section id="host-number-of-completed-packets">
+<h2>Host Number of Completed Packets<a class="headerlink" href="#host-number-of-completed-packets" title="Permalink to this heading"></a></h2>
+<p>Notify the Controller about the number of HCI packets that have
+been completed for each connection since the previous call of this
+command.</p>
+<table class="docutils align-default" style="width: 100%">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 10%" />
+<col style="width: 30%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>OCF</p></th>
+<th class="head"><p>Command Parameters</p></th>
+<th class="head"><p>Return Parameters</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>HOST_NUM_CMPL_PKTS</p></td>
+<td><p>0x0035</p></td>
+<td><div class="line-block">
+<div class="line">Num_Handles</div>
+<div class="line">Connection_Handle[i]</div>
+<div class="line">Host_Num_Completed_Packets[i]</div>
+</div>
+</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<section id="id13">
+<h3>Parameters<a class="headerlink" href="#id13" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default" id="id43" style="width: 100%">
+<caption><span class="caption-text">Num_Handles, size = 1 octet</span><a class="headerlink" href="#id43" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00 to 0xFF</p></td>
+<td><p>Number of Connection_Handle/Host_Num_Completed_Packets parameter pairs contained in this command.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id44" style="width: 100%">
+<caption><span class="caption-text">Connection_Handle, size = 2*Num_Handles octets</span><a class="headerlink" href="#id44" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x0000 to 0x0EFF</p></td>
+<td><p>Connection handle for which the corresponding number of packets has been completed.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id45" style="width: 100%">
+<caption><span class="caption-text">Host_Num_Completed_Packets, size = 2*Num_Handles octets</span><a class="headerlink" href="#id45" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Values(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x0000 to 0xFFFF</p></td>
+<td><p>Number of packets that have been completed for the corresponding connection handle.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id14">
+<h3>Return Parameters<a class="headerlink" href="#id14" title="Permalink to this heading"></a></h3>
+<p>None.</p>
+</section>
+<section id="id15">
+<h3>Event(s) Generated<a class="headerlink" href="#id15" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>COMMAND_COMPLETE (if command contains invalid parameters)</p></li>
+</ul>
+</section>
+</section>
+<section id="set-event-mask-page-2">
+<h2>Set Event Mask Page 2<a class="headerlink" href="#set-event-mask-page-2" title="Permalink to this heading"></a></h2>
+<p>Control which events are generated by the HCI for the Host
+(continued from SET_EVENT_MASK). Setting a bit to 1 enables
+the corresponding event.</p>
+<table class="docutils align-default" style="width: 100%">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 10%" />
+<col style="width: 30%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>OCF</p></th>
+<th class="head"><p>Command Parameters</p></th>
+<th class="head"><p>Return Parameters</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SET_EVENT_MASK_PAGE2</p></td>
+<td><p>0x0063</p></td>
+<td><p>Event_Mask_Page_2</p></td>
+<td><p>Status</p></td>
+</tr>
+</tbody>
+</table>
+<section id="id16">
+<h3>Parameters<a class="headerlink" href="#id16" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default" id="id46" style="width: 100%">
+<caption><span class="caption-text">Event_Mask_Page_2, size = 8 octets</span><a class="headerlink" href="#id46" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Bit</p></th>
+<th class="head"><p>Event</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>[Previously used].</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>[Previously used].</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>[Previously used].</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>[Previously used].</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>[Previously used].</p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p>[Previously used].</p></td>
+</tr>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>[Previously used].</p></td>
+</tr>
+<tr class="row-odd"><td><p>7</p></td>
+<td><p>[Previously used].</p></td>
+</tr>
+<tr class="row-even"><td><p>8</p></td>
+<td><p>Number of Completed Data Blocks</p></td>
+</tr>
+<tr class="row-odd"><td><p>9</p></td>
+<td><p>[Previously used].</p></td>
+</tr>
+<tr class="row-even"><td><p>10</p></td>
+<td><p>[Previously used].</p></td>
+</tr>
+<tr class="row-odd"><td><p>11</p></td>
+<td><p>[Previously used].</p></td>
+</tr>
+<tr class="row-even"><td><p>12</p></td>
+<td><p>[Previously used].</p></td>
+</tr>
+<tr class="row-odd"><td><p>13</p></td>
+<td><p>[Previously used].</p></td>
+</tr>
+<tr class="row-even"><td><p>14</p></td>
+<td><p>Triggered Clock Capture</p></td>
+</tr>
+<tr class="row-odd"><td><p>15</p></td>
+<td><p>Synchronization Train Complete</p></td>
+</tr>
+<tr class="row-even"><td><p>16</p></td>
+<td><p>Synchronization Train Received</p></td>
+</tr>
+<tr class="row-odd"><td><p>17</p></td>
+<td><p>Connectionless Peripheral Broadcast Received</p></td>
+</tr>
+<tr class="row-even"><td><p>18</p></td>
+<td><p>Connectionless Peripheral Broadcast Timeout</p></td>
+</tr>
+<tr class="row-odd"><td><p>19</p></td>
+<td><p>Truncated Page Complete</p></td>
+</tr>
+<tr class="row-even"><td><p>20</p></td>
+<td><p>Peripheral Page Response Timeout</p></td>
+</tr>
+<tr class="row-odd"><td><p>21</p></td>
+<td><p>Connectionless Peripheral Broadcast Channel Map Change</p></td>
+</tr>
+<tr class="row-even"><td><p>22</p></td>
+<td><p>Inquiry Response Notification</p></td>
+</tr>
+<tr class="row-odd"><td><p>23</p></td>
+<td><p>Authenticated Payload Timeout Expired</p></td>
+</tr>
+<tr class="row-even"><td><p>24</p></td>
+<td><p>SAM Status Change</p></td>
+</tr>
+<tr class="row-odd"><td><p>25</p></td>
+<td><p>Encryption Change (v2)</p></td>
+</tr>
+<tr class="row-even"><td><p>60 to 63</p></td>
+<td><p>[Reserved for future use].</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id17">
+<h3>Return Parameters<a class="headerlink" href="#id17" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default" id="id47" style="width: 100%">
+<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id47" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00</p></td>
+<td><p>Command completed successfully.</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x01 to 0xFF</p></td>
+<td><p>Command failed.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id18">
+<h3>Event(s) Generated<a class="headerlink" href="#id18" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>COMMAND_COMPLETE</p></li>
+</ul>
+</section>
+</section>
+<section id="read-authenticated-payload-timeout">
+<h2>Read Authenticated Payload Timeout<a class="headerlink" href="#read-authenticated-payload-timeout" title="Permalink to this heading"></a></h2>
+<p>Read the authenticated payload timeout for a connection.</p>
+<table class="docutils align-default" style="width: 100%">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 10%" />
+<col style="width: 30%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>OCF</p></th>
+<th class="head"><p>Command Parameters</p></th>
+<th class="head"><p>Return Parameters</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>READ_AUTH_PAYLOAD_TO</p></td>
+<td><p>0x007B</p></td>
+<td><p>Connection_Handle</p></td>
+<td><div class="line-block">
+<div class="line">Status</div>
+<div class="line">Connection_Handle</div>
+<div class="line">Authenticated_Payload_Timeout</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<section id="id19">
+<h3>Parameters<a class="headerlink" href="#id19" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default" id="id48" style="width: 100%">
+<caption><span class="caption-text">Connection_Handle, size = 2 octets</span><a class="headerlink" href="#id48" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x0000 to 0x0EFF</p></td>
+<td><p>Indicates which connection to retrieve the authenticated payload timeout for.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id20">
+<h3>Return Parameters<a class="headerlink" href="#id20" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default" id="id49" style="width: 100%">
+<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id49" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00</p></td>
+<td><p>Command completed successfully.</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x01 to 0xFF</p></td>
+<td><p>Command failed.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id50" style="width: 100%">
+<caption><span class="caption-text">Connection_Handle, size = 2 octets</span><a class="headerlink" href="#id50" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x0000 to 0x0EFF</p></td>
+<td><p>Connection handle</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id51" style="width: 100%">
+<caption><span class="caption-text">Authenticated_Payload_Timeout, size = 2 octets</span><a class="headerlink" href="#id51" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x0001 to 0xFFFF</p></td>
+<td><div class="line-block">
+<div class="line">Maximum amount of time specified between packed authenticated by an MIC.</div>
+<div class="line">Time = value * 10ms</div>
+<div class="line">Time Range = 10ms to 655350ms</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id21">
+<h3>Event(s) Generated<a class="headerlink" href="#id21" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>COMMAND_COMPLETE</p></li>
+</ul>
+</section>
+</section>
+<section id="write-authenticated-payload-timeout">
+<h2>Write Authenticated Payload Timeout<a class="headerlink" href="#write-authenticated-payload-timeout" title="Permalink to this heading"></a></h2>
+<p>Write the authenticated payload timeout value for a connection.</p>
+<table class="docutils align-default" style="width: 100%">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 10%" />
+<col style="width: 30%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>OCF</p></th>
+<th class="head"><p>Command Parameters</p></th>
+<th class="head"><p>Return Parameters</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>WRITE_AUTH_PAYLOAD_TO</p></td>
+<td><p>0x007C</p></td>
+<td><div class="line-block">
+<div class="line">Connection_Handle</div>
+<div class="line">Authenticated_Payload_Timeout</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Status</div>
+<div class="line">Connection_Handle</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<section id="id22">
+<h3>Parameters<a class="headerlink" href="#id22" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default" id="id52" style="width: 100%">
+<caption><span class="caption-text">Connection_Handle, size = 2 octets</span><a class="headerlink" href="#id52" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x0000 to 0x0EFF</p></td>
+<td><p>Indicates which connection to write the authenticated payload timeout for.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id53" style="width: 100%">
+<caption><span class="caption-text">Authenticated_Payload_Timeout, size = 2 octets</span><a class="headerlink" href="#id53" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x0001 to 0xFFFF</p></td>
+<td><div class="line-block">
+<div class="line">Maximum amount of time specified between packets authenticated by a valic MIC.</div>
+<div class="line">Time = value * 10ms</div>
+<div class="line">Time Range = 10ms to 655350ms</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id23">
+<h3>Return Parameters<a class="headerlink" href="#id23" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default" id="id54" style="width: 100%">
+<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id54" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00</p></td>
+<td><p>Command completed successfully.</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x01 to 0xFF</p></td>
+<td><p>Command failed.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id55" style="width: 100%">
+<caption><span class="caption-text">Connection_Handle, size = 2 octets</span><a class="headerlink" href="#id55" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x0000 to 0x0EFF</p></td>
+<td><p>Connection handle.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id24">
+<h3>Event(s) Generated<a class="headerlink" href="#id24" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>COMMAND_COMPLETE</p></li>
+</ul>
+</section>
+</section>
+<section id="configure-data-path">
+<h2>Configure Data Path<a class="headerlink" href="#configure-data-path" title="Permalink to this heading"></a></h2>
+<p>Configure the data transport path in between the Controller and
+the Host in the indicated direction.</p>
+<table class="docutils align-default" style="width: 100%">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 10%" />
+<col style="width: 30%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>OCF</p></th>
+<th class="head"><p>Command Parameters</p></th>
+<th class="head"><p>Return Parameters</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CONFIG_DATA_PATH</p></td>
+<td><p>0x0083</p></td>
+<td><div class="line-block">
+<div class="line">Data_Path_Direction</div>
+<div class="line">Data_Path_ID</div>
+<div class="line">Vendor_Specific_Config_Length</div>
+<div class="line">Vendor_Specific_Config</div>
+</div>
+</td>
+<td><p>Status</p></td>
+</tr>
+</tbody>
+</table>
+<section id="id25">
+<h3>Parameters<a class="headerlink" href="#id25" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default" id="id56" style="width: 100%">
+<caption><span class="caption-text">Data_Path_Direction, size = 1 octet</span><a class="headerlink" href="#id56" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00</p></td>
+<td><p>Configure input path (Host to Controller).</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x01</p></td>
+<td><p>Configure output path (Controller to Host).</p></td>
+</tr>
+<tr class="row-even"><td><p>All other values</p></td>
+<td><p>[Reserved for future use].</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id57" style="width: 100%">
+<caption><span class="caption-text">Data_Path_ID, size = 1 octet</span><a class="headerlink" href="#id57" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00</p></td>
+<td><p>[Reserved for future use].</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x01 to 0xFE</p></td>
+<td><p>Logic channel number, vendor-specific.</p></td>
+</tr>
+<tr class="row-even"><td><p>0xFF</p></td>
+<td><p>[Reserved for future use].</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id58" style="width: 100%">
+<caption><span class="caption-text">Vendor_Specific_Config_Length, size = 1 octet</span><a class="headerlink" href="#id58" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00 to 0xFF</p></td>
+<td><p>Length of the vendor-specific configuration data.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id59" style="width: 100%">
+<caption><span class="caption-text">Vendor_Specific_Config, size = Vendor_Specific_Config_Length octets</span><a class="headerlink" href="#id59" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Values(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Variable</p></td>
+<td><p>Vendor-specific configuration for the indicated data path.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id26">
+<h3>Return Parameters<a class="headerlink" href="#id26" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default" id="id60" style="width: 100%">
+<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id60" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00</p></td>
+<td><p>Command completed successfully.</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x01 to 0xFF</p></td>
+<td><p>Command failed.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id27">
+<h3>Event(s) Generated<a class="headerlink" href="#id27" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>COMMAND_COMPLETE</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="link_control_cmds.html" class="btn btn-neutral float-left" title="Link Control Commands" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="informational_cmds.html" class="btn btn-neutral float-right" title="Informational Commands" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Analog Devices, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

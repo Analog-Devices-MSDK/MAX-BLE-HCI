@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>max_ble_hci.packet_codes &mdash; MAX BLE HCI 0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=2389946f"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="max_ble_hci.packet_defs" href="packet_defs.html" />
+    <link rel="prev" title="max_ble_hci.hci_packets" href="hci_packets.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            MAX BLE HCI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ble_hci.html">max_ble_hci.ble_hci</a></li>
+<li class="toctree-l2"><a class="reference internal" href="constants.html">max_ble_hci.constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_params.html">max_ble_hci.data_params</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hci_packets.html">max_ble_hci.hci_packets</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">max_ble_hci.packet_codes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.packet_codes.EventCode"><code class="docutils literal notranslate"><span class="pre">EventCode</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventCode.AUTH_PAYLOAD_TIMEOUT_EXPIRED"><code class="docutils literal notranslate"><span class="pre">EventCode.AUTH_PAYLOAD_TIMEOUT_EXPIRED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventCode.COMMAND_COMPLETE"><code class="docutils literal notranslate"><span class="pre">EventCode.COMMAND_COMPLETE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventCode.COMMAND_STATUS"><code class="docutils literal notranslate"><span class="pre">EventCode.COMMAND_STATUS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventCode.DATA_BUFF_OVERFLOW"><code class="docutils literal notranslate"><span class="pre">EventCode.DATA_BUFF_OVERFLOW</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventCode.DICON_COMPLETE"><code class="docutils literal notranslate"><span class="pre">EventCode.DICON_COMPLETE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventCode.ENC_CHANGE"><code class="docutils literal notranslate"><span class="pre">EventCode.ENC_CHANGE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventCode.ENC_KEY_REFRESH_COMPLETE"><code class="docutils literal notranslate"><span class="pre">EventCode.ENC_KEY_REFRESH_COMPLETE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventCode.HARDWARE_ERROR"><code class="docutils literal notranslate"><span class="pre">EventCode.HARDWARE_ERROR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventCode.LE_META"><code class="docutils literal notranslate"><span class="pre">EventCode.LE_META</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventCode.NUM_COMPLETED_PACKETS"><code class="docutils literal notranslate"><span class="pre">EventCode.NUM_COMPLETED_PACKETS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventCode.READ_REMOTE_VERSION_INFO_COMPLETE"><code class="docutils literal notranslate"><span class="pre">EventCode.READ_REMOTE_VERSION_INFO_COMPLETE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventCode.VENDOR_SPEC"><code class="docutils literal notranslate"><span class="pre">EventCode.VENDOR_SPEC</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode"><code class="docutils literal notranslate"><span class="pre">EventSubcode</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.ADVERTISING_REPORT"><code class="docutils literal notranslate"><span class="pre">EventSubcode.ADVERTISING_REPORT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.ADVERTISING_SET_TERMINATED"><code class="docutils literal notranslate"><span class="pre">EventSubcode.ADVERTISING_SET_TERMINATED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.BIGINFO_ADVERTISING_REPORT"><code class="docutils literal notranslate"><span class="pre">EventSubcode.BIGINFO_ADVERTISING_REPORT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.BIG_SYNC_ESTABLISHED"><code class="docutils literal notranslate"><span class="pre">EventSubcode.BIG_SYNC_ESTABLISHED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.BIG_SYNC_LOST"><code class="docutils literal notranslate"><span class="pre">EventSubcode.BIG_SYNC_LOST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.CHANNEL_SELECTION_ALGORITHM"><code class="docutils literal notranslate"><span class="pre">EventSubcode.CHANNEL_SELECTION_ALGORITHM</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.CIS_ESTABLISHED"><code class="docutils literal notranslate"><span class="pre">EventSubcode.CIS_ESTABLISHED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.CIS_REQUEST"><code class="docutils literal notranslate"><span class="pre">EventSubcode.CIS_REQUEST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.CONNECTIONLESS_IQ_REPORT"><code class="docutils literal notranslate"><span class="pre">EventSubcode.CONNECTIONLESS_IQ_REPORT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.CONNECTION_COMPLETE"><code class="docutils literal notranslate"><span class="pre">EventSubcode.CONNECTION_COMPLETE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.CONNECTION_IQ_REPORT"><code class="docutils literal notranslate"><span class="pre">EventSubcode.CONNECTION_IQ_REPORT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.CONNECTION_UPDATE"><code class="docutils literal notranslate"><span class="pre">EventSubcode.CONNECTION_UPDATE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.CREATE_BIG_COMPLETE"><code class="docutils literal notranslate"><span class="pre">EventSubcode.CREATE_BIG_COMPLETE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.CTE_REQUEST_FAILED"><code class="docutils literal notranslate"><span class="pre">EventSubcode.CTE_REQUEST_FAILED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.DATA_LENGTH_CHANGE"><code class="docutils literal notranslate"><span class="pre">EventSubcode.DATA_LENGTH_CHANGE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.DIRECTED_ADVERTISIING_REPORT"><code class="docutils literal notranslate"><span class="pre">EventSubcode.DIRECTED_ADVERTISIING_REPORT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.ENHANCED_CONNECTION_COMPLETE"><code class="docutils literal notranslate"><span class="pre">EventSubcode.ENHANCED_CONNECTION_COMPLETE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.EXTENDED_ADVERTISING_REPORT"><code class="docutils literal notranslate"><span class="pre">EventSubcode.EXTENDED_ADVERTISING_REPORT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.GENERATE_DHKEY_COMPLETE"><code class="docutils literal notranslate"><span class="pre">EventSubcode.GENERATE_DHKEY_COMPLETE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.LONG_TERM_KEY_REQUEST"><code class="docutils literal notranslate"><span class="pre">EventSubcode.LONG_TERM_KEY_REQUEST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.PATH_LOSS_THRESHOLD"><code class="docutils literal notranslate"><span class="pre">EventSubcode.PATH_LOSS_THRESHOLD</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.PERIODIC_ADVERTISING_REPORT"><code class="docutils literal notranslate"><span class="pre">EventSubcode.PERIODIC_ADVERTISING_REPORT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.PERIODIC_ADVERTISING_SYNC_ESTABLISHED"><code class="docutils literal notranslate"><span class="pre">EventSubcode.PERIODIC_ADVERTISING_SYNC_ESTABLISHED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.PERIODIC_ADVERTISING_SYNC_LOST"><code class="docutils literal notranslate"><span class="pre">EventSubcode.PERIODIC_ADVERTISING_SYNC_LOST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.PERIODIC_ADVERTISING_SYNC_TRANSER_RECEIVED"><code class="docutils literal notranslate"><span class="pre">EventSubcode.PERIODIC_ADVERTISING_SYNC_TRANSER_RECEIVED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.PHY_UPDATE_COMPLETE"><code class="docutils literal notranslate"><span class="pre">EventSubcode.PHY_UPDATE_COMPLETE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.READ_LOCAL_P256_PUBLIC_KEY_COMPLETE"><code class="docutils literal notranslate"><span class="pre">EventSubcode.READ_LOCAL_P256_PUBLIC_KEY_COMPLETE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.READ_REMOTE_FEATURES_COMPLETE"><code class="docutils literal notranslate"><span class="pre">EventSubcode.READ_REMOTE_FEATURES_COMPLETE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.REMOTE_CONNECTION_PARAMETER_REQUEST"><code class="docutils literal notranslate"><span class="pre">EventSubcode.REMOTE_CONNECTION_PARAMETER_REQUEST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.REQUEST_PEER_SCA_COMPLETE"><code class="docutils literal notranslate"><span class="pre">EventSubcode.REQUEST_PEER_SCA_COMPLETE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.SCAN_REQUEST_RECEIVED"><code class="docutils literal notranslate"><span class="pre">EventSubcode.SCAN_REQUEST_RECEIVED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.SCAN_TIMEOUT"><code class="docutils literal notranslate"><span class="pre">EventSubcode.SCAN_TIMEOUT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.TERMINATE_BIG_COMPLETE"><code class="docutils literal notranslate"><span class="pre">EventSubcode.TERMINATE_BIG_COMPLETE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.EventSubcode.TRANSMIT_POWER_REPORTING"><code class="docutils literal notranslate"><span class="pre">EventSubcode.TRANSMIT_POWER_REPORTING</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode"><code class="docutils literal notranslate"><span class="pre">StatusCode</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.DECODE_FAILURE"><code class="docutils literal notranslate"><span class="pre">StatusCode.DECODE_FAILURE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_ACL_CONN_ALREADY_EXISTS"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_ACL_CONN_ALREADY_EXISTS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_ADV_TIMEOUT"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_ADV_TIMEOUT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_AUTH_FAILURE"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_AUTH_FAILURE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CHAN_ASSESSMENT_NOT_SUPPORTED"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_CHAN_ASSESSMENT_NOT_SUPPORTED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CMD_DISALLOWED"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_CMD_DISALLOWED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_COARSE_CLK_ADJ_REJ"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_COARSE_CLK_ADJ_REJ</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONN_ACCEPT_TIMEOUT_EXCEEDED"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_CONN_ACCEPT_TIMEOUT_EXCEEDED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONN_FAILED_TO_ESTABLISH"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_CONN_FAILED_TO_ESTABLISH</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONN_LIMIT_EXCEEDED"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_CONN_LIMIT_EXCEEDED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONN_REJECTED_SECURITY_REASONS"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_CONN_REJECTED_SECURITY_REASONS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONN_REJECTED_UNACCEPTABLE_BDADDR"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_CONN_REJECTED_UNACCEPTABLE_BDADDR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONN_REJ_LIMITED_RESOURCES"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_CONN_REJ_LIMITED_RESOURCES</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONN_REJ_NO_SUITABLE_CHAN_FOUND"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_CONN_REJ_NO_SUITABLE_CHAN_FOUND</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONN_TERM_BY_LOCAL_HOST"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_CONN_TERM_BY_LOCAL_HOST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONN_TERM_MIC_FAILURE"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_CONN_TERM_MIC_FAILURE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONN_TIMEOUT"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_CONN_TIMEOUT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONTROLLER_BUSY"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_CONTROLLER_BUSY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_DIFFERENT_TRANSACTION_COLLISION"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_DIFFERENT_TRANSACTION_COLLISION</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_ENCRYPT_MODE_NOT_ACCEPTABLE"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_ENCRYPT_MODE_NOT_ACCEPTABLE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_EXTENDED_INQUIRY_RESP_TOO_LARGE"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_EXTENDED_INQUIRY_RESP_TOO_LARGE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_HOST_BUSY_PAIRING"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_HOST_BUSY_PAIRING</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_HW_FAILURE"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_HW_FAILURE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_INSTANT_PASSED"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_INSTANT_PASSED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_INSUFFICIENT_SECURITY"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_INSUFFICIENT_SECURITY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_INVALID_HCI_CMD_PARAMS"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_INVALID_HCI_CMD_PARAMS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_INVALID_LMP_PARAMS"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_INVALID_LMP_PARAMS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_LIMIT_REACHED"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_LIMIT_REACHED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_LINK_KEY_CAN_NOT_BE_CHANGED"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_LINK_KEY_CAN_NOT_BE_CHANGED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_LMP_ERR_TRANSACTION_COLLISION"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_LMP_ERR_TRANSACTION_COLLISION</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_LMP_LL_RESP_TIMEOUT"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_LMP_LL_RESP_TIMEOUT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_LMP_PDU_NOT_ALLOWED"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_LMP_PDU_NOT_ALLOWED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_MAC_CONN_FAILED"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_MAC_CONN_FAILED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_MEM_CAP_EXCEEDED"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_MEM_CAP_EXCEEDED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_OP_CANCELLED_BY_HOST"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_OP_CANCELLED_BY_HOST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_PAGE_TIMEOUT"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_PAGE_TIMEOUT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_PAIRING_NOT_ALLOWED"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_PAIRING_NOT_ALLOWED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_PAIRING_WITH_UNIT_KEY_NOT_SUPPORTED"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_PAIRING_WITH_UNIT_KEY_NOT_SUPPORTED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_PARAM_OUT_OF_MANDATORY_RANGE"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_PARAM_OUT_OF_MANDATORY_RANGE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_PIN_KEY_MISSING"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_PIN_KEY_MISSING</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_PKT_TOO_LONG"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_PKT_TOO_LONG</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_QOS_REJ"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_QOS_REJ</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_QOS_UNACCEPTABLE_PARAM"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_QOS_UNACCEPTABLE_PARAM</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_REMOTE_DEVICE_TERM_CONN_LOW_RESOURCES"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_REMOTE_DEVICE_TERM_CONN_LOW_RESOURCES</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_REMOTE_DEVICE_TERM_CONN_POWER_OFF"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_REMOTE_DEVICE_TERM_CONN_POWER_OFF</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_REMOTE_USER_TERM_CONN"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_REMOTE_USER_TERM_CONN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_REPEATED_ATTEMPTS"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_REPEATED_ATTEMPTS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_REQ_QOS_NOT_SUPPORTED"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_REQ_QOS_NOT_SUPPORTED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_RESERVED1"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_RESERVED1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_RESERVED2"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_RESERVED2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_RESERVED3"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_RESERVED3</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_RESERVED_SLOT_VIOLATION"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_RESERVED_SLOT_VIOLATION</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_ROLE_CHANGE_NOT_ALLOWED"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_ROLE_CHANGE_NOT_ALLOWED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_ROLE_SWITCH_FAILED"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_ROLE_SWITCH_FAILED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_ROLE_SWITCH_PENDING"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_ROLE_SWITCH_PENDING</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_SCO_AIR_MODE_REJ"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_SCO_AIR_MODE_REJ</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_SCO_INTERVAL_REJ"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_SCO_INTERVAL_REJ</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_SCO_OFFSET_REJ"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_SCO_OFFSET_REJ</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_SIMPLE_PAIRING_NOT_SUPPORTED_BY_HOST"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_SIMPLE_PAIRING_NOT_SUPPORTED_BY_HOST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_SYNCH_CONN_LIMIT_EXCEEDED"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_SYNCH_CONN_LIMIT_EXCEEDED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_TYPE0_SUBMAP_NOT_DEF"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_TYPE0_SUBMAP_NOT_DEF</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_UNACCEPTABLE_CONN_INTERVAL"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_UNACCEPTABLE_CONN_INTERVAL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_UNKNOWN_ADV_ID"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_UNKNOWN_ADV_ID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_UNKNOWN_CONN_ID"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_UNKNOWN_CONN_ID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_UNKNOWN_HCI_CMD"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_UNKNOWN_HCI_CMD</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_UNKNOWN_LMP_PDU"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_UNKNOWN_LMP_PDU</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_UNSPECIFIED_ERROR"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_UNSPECIFIED_ERROR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_UNSUPPORTED_FEATURE_PARAM_VALUE"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_UNSUPPORTED_FEATURE_PARAM_VALUE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_UNSUPPORTED_LMP_PARAM_VAL"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_UNSUPPORTED_LMP_PARAM_VAL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_UNSUPPORTED_REMOTE_FEATURE"><code class="docutils literal notranslate"><span class="pre">StatusCode.ERROR_CODE_UNSUPPORTED_REMOTE_FEATURE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_codes.StatusCode.SUCCESS"><code class="docutils literal notranslate"><span class="pre">StatusCode.SUCCESS</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="packet_defs.html">max_ble_hci.packet_defs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-max_ble_hci">Package Contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hci_reference.html">HCI Command Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MAX BLE HCI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">API Reference</a></li>
+      <li class="breadcrumb-item active">max_ble_hci.packet_codes</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/packet_codes.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-max_ble_hci.packet_codes">
+<span id="max-ble-hci-packet-codes"></span><h1>max_ble_hci.packet_codes<a class="headerlink" href="#module-max_ble_hci.packet_codes" title="Permalink to this heading"></a></h1>
+<p>Contains definitions for BLE standard codes utilized in HCI packet creation/parsing.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventCode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EventCode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/packet_codes.html#EventCode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.packet_codes.EventCode" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>Supported HCI Event Codes</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventCode.AUTH_PAYLOAD_TIMEOUT_EXPIRED">
+<span class="sig-name descname"><span class="pre">AUTH_PAYLOAD_TIMEOUT_EXPIRED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">87</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventCode.AUTH_PAYLOAD_TIMEOUT_EXPIRED" title="Permalink to this definition"></a></dt>
+<dd><p>Authenticated payload timeout expired event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventCode.COMMAND_COMPLETE">
+<span class="sig-name descname"><span class="pre">COMMAND_COMPLETE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">14</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventCode.COMMAND_COMPLETE" title="Permalink to this definition"></a></dt>
+<dd><p>Command complete event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventCode.COMMAND_STATUS">
+<span class="sig-name descname"><span class="pre">COMMAND_STATUS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">15</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventCode.COMMAND_STATUS" title="Permalink to this definition"></a></dt>
+<dd><p>Command status event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventCode.DATA_BUFF_OVERFLOW">
+<span class="sig-name descname"><span class="pre">DATA_BUFF_OVERFLOW</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">26</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventCode.DATA_BUFF_OVERFLOW" title="Permalink to this definition"></a></dt>
+<dd><p>Data buffer overflow event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventCode.DICON_COMPLETE">
+<span class="sig-name descname"><span class="pre">DICON_COMPLETE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventCode.DICON_COMPLETE" title="Permalink to this definition"></a></dt>
+<dd><p>Disconnection complete event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventCode.ENC_CHANGE">
+<span class="sig-name descname"><span class="pre">ENC_CHANGE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">8</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventCode.ENC_CHANGE" title="Permalink to this definition"></a></dt>
+<dd><p>Encryption change event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventCode.ENC_KEY_REFRESH_COMPLETE">
+<span class="sig-name descname"><span class="pre">ENC_KEY_REFRESH_COMPLETE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">48</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventCode.ENC_KEY_REFRESH_COMPLETE" title="Permalink to this definition"></a></dt>
+<dd><p>Encryption key refresh complete event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventCode.HARDWARE_ERROR">
+<span class="sig-name descname"><span class="pre">HARDWARE_ERROR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">16</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventCode.HARDWARE_ERROR" title="Permalink to this definition"></a></dt>
+<dd><p>Hardware error event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventCode.LE_META">
+<span class="sig-name descname"><span class="pre">LE_META</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">62</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventCode.LE_META" title="Permalink to this definition"></a></dt>
+<dd><p>LE meta event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventCode.NUM_COMPLETED_PACKETS">
+<span class="sig-name descname"><span class="pre">NUM_COMPLETED_PACKETS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">19</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventCode.NUM_COMPLETED_PACKETS" title="Permalink to this definition"></a></dt>
+<dd><p>Number of completed packets event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventCode.READ_REMOTE_VERSION_INFO_COMPLETE">
+<span class="sig-name descname"><span class="pre">READ_REMOTE_VERSION_INFO_COMPLETE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">12</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventCode.READ_REMOTE_VERSION_INFO_COMPLETE" title="Permalink to this definition"></a></dt>
+<dd><p>Read remote version information complete event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventCode.VENDOR_SPEC">
+<span class="sig-name descname"><span class="pre">VENDOR_SPEC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">255</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventCode.VENDOR_SPEC" title="Permalink to this definition"></a></dt>
+<dd><p>Vendor specific event.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EventSubcode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/packet_codes.html#EventSubcode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>Supported LE Meta event subcodes.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.ADVERTISING_REPORT">
+<span class="sig-name descname"><span class="pre">ADVERTISING_REPORT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.ADVERTISING_REPORT" title="Permalink to this definition"></a></dt>
+<dd><p>Advertising report event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.ADVERTISING_SET_TERMINATED">
+<span class="sig-name descname"><span class="pre">ADVERTISING_SET_TERMINATED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">18</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.ADVERTISING_SET_TERMINATED" title="Permalink to this definition"></a></dt>
+<dd><p>Advertising set terminated event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.BIGINFO_ADVERTISING_REPORT">
+<span class="sig-name descname"><span class="pre">BIGINFO_ADVERTISING_REPORT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">34</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.BIGINFO_ADVERTISING_REPORT" title="Permalink to this definition"></a></dt>
+<dd><p>BIGInfo advertising report event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.BIG_SYNC_ESTABLISHED">
+<span class="sig-name descname"><span class="pre">BIG_SYNC_ESTABLISHED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">29</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.BIG_SYNC_ESTABLISHED" title="Permalink to this definition"></a></dt>
+<dd><p>BIG sync established event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.BIG_SYNC_LOST">
+<span class="sig-name descname"><span class="pre">BIG_SYNC_LOST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">30</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.BIG_SYNC_LOST" title="Permalink to this definition"></a></dt>
+<dd><p>BIG sync list event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.CHANNEL_SELECTION_ALGORITHM">
+<span class="sig-name descname"><span class="pre">CHANNEL_SELECTION_ALGORITHM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">20</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.CHANNEL_SELECTION_ALGORITHM" title="Permalink to this definition"></a></dt>
+<dd><p>Channel selection algorithm event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.CIS_ESTABLISHED">
+<span class="sig-name descname"><span class="pre">CIS_ESTABLISHED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">25</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.CIS_ESTABLISHED" title="Permalink to this definition"></a></dt>
+<dd><p>CIS established event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.CIS_REQUEST">
+<span class="sig-name descname"><span class="pre">CIS_REQUEST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">26</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.CIS_REQUEST" title="Permalink to this definition"></a></dt>
+<dd><p>CIS request event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.CONNECTIONLESS_IQ_REPORT">
+<span class="sig-name descname"><span class="pre">CONNECTIONLESS_IQ_REPORT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">21</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.CONNECTIONLESS_IQ_REPORT" title="Permalink to this definition"></a></dt>
+<dd><p>Connectionless IQ report event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.CONNECTION_COMPLETE">
+<span class="sig-name descname"><span class="pre">CONNECTION_COMPLETE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.CONNECTION_COMPLETE" title="Permalink to this definition"></a></dt>
+<dd><p>Connection complete event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.CONNECTION_IQ_REPORT">
+<span class="sig-name descname"><span class="pre">CONNECTION_IQ_REPORT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">22</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.CONNECTION_IQ_REPORT" title="Permalink to this definition"></a></dt>
+<dd><p>Connection IQ report event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.CONNECTION_UPDATE">
+<span class="sig-name descname"><span class="pre">CONNECTION_UPDATE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.CONNECTION_UPDATE" title="Permalink to this definition"></a></dt>
+<dd><p>Connection update complete event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.CREATE_BIG_COMPLETE">
+<span class="sig-name descname"><span class="pre">CREATE_BIG_COMPLETE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">27</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.CREATE_BIG_COMPLETE" title="Permalink to this definition"></a></dt>
+<dd><p>Create BIG complete event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.CTE_REQUEST_FAILED">
+<span class="sig-name descname"><span class="pre">CTE_REQUEST_FAILED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">23</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.CTE_REQUEST_FAILED" title="Permalink to this definition"></a></dt>
+<dd><p>CTE request failed event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.DATA_LENGTH_CHANGE">
+<span class="sig-name descname"><span class="pre">DATA_LENGTH_CHANGE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">7</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.DATA_LENGTH_CHANGE" title="Permalink to this definition"></a></dt>
+<dd><p>Data length change event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.DIRECTED_ADVERTISIING_REPORT">
+<span class="sig-name descname"><span class="pre">DIRECTED_ADVERTISIING_REPORT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">11</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.DIRECTED_ADVERTISIING_REPORT" title="Permalink to this definition"></a></dt>
+<dd><p>Directed advertising report event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.ENHANCED_CONNECTION_COMPLETE">
+<span class="sig-name descname"><span class="pre">ENHANCED_CONNECTION_COMPLETE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.ENHANCED_CONNECTION_COMPLETE" title="Permalink to this definition"></a></dt>
+<dd><p>Enhanced connection complete event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.EXTENDED_ADVERTISING_REPORT">
+<span class="sig-name descname"><span class="pre">EXTENDED_ADVERTISING_REPORT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">13</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.EXTENDED_ADVERTISING_REPORT" title="Permalink to this definition"></a></dt>
+<dd><p>Extended advertising report event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.GENERATE_DHKEY_COMPLETE">
+<span class="sig-name descname"><span class="pre">GENERATE_DHKEY_COMPLETE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">9</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.GENERATE_DHKEY_COMPLETE" title="Permalink to this definition"></a></dt>
+<dd><p>Generate DHKey complete event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.LONG_TERM_KEY_REQUEST">
+<span class="sig-name descname"><span class="pre">LONG_TERM_KEY_REQUEST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.LONG_TERM_KEY_REQUEST" title="Permalink to this definition"></a></dt>
+<dd><p>Long term key request event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.PATH_LOSS_THRESHOLD">
+<span class="sig-name descname"><span class="pre">PATH_LOSS_THRESHOLD</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">32</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.PATH_LOSS_THRESHOLD" title="Permalink to this definition"></a></dt>
+<dd><p>Path loss threshold event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.PERIODIC_ADVERTISING_REPORT">
+<span class="sig-name descname"><span class="pre">PERIODIC_ADVERTISING_REPORT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">15</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.PERIODIC_ADVERTISING_REPORT" title="Permalink to this definition"></a></dt>
+<dd><p>Periodic advertising report event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.PERIODIC_ADVERTISING_SYNC_ESTABLISHED">
+<span class="sig-name descname"><span class="pre">PERIODIC_ADVERTISING_SYNC_ESTABLISHED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">14</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.PERIODIC_ADVERTISING_SYNC_ESTABLISHED" title="Permalink to this definition"></a></dt>
+<dd><p>Periodic advertising sync established event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.PERIODIC_ADVERTISING_SYNC_LOST">
+<span class="sig-name descname"><span class="pre">PERIODIC_ADVERTISING_SYNC_LOST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">16</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.PERIODIC_ADVERTISING_SYNC_LOST" title="Permalink to this definition"></a></dt>
+<dd><p>Periodic advertising sync lost event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.PERIODIC_ADVERTISING_SYNC_TRANSER_RECEIVED">
+<span class="sig-name descname"><span class="pre">PERIODIC_ADVERTISING_SYNC_TRANSER_RECEIVED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">24</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.PERIODIC_ADVERTISING_SYNC_TRANSER_RECEIVED" title="Permalink to this definition"></a></dt>
+<dd><p>Periodic advertising sync transfer received event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.PHY_UPDATE_COMPLETE">
+<span class="sig-name descname"><span class="pre">PHY_UPDATE_COMPLETE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">12</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.PHY_UPDATE_COMPLETE" title="Permalink to this definition"></a></dt>
+<dd><p>PHY update complete event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.READ_LOCAL_P256_PUBLIC_KEY_COMPLETE">
+<span class="sig-name descname"><span class="pre">READ_LOCAL_P256_PUBLIC_KEY_COMPLETE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">8</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.READ_LOCAL_P256_PUBLIC_KEY_COMPLETE" title="Permalink to this definition"></a></dt>
+<dd><p>Read local P-256 public key complete event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.READ_REMOTE_FEATURES_COMPLETE">
+<span class="sig-name descname"><span class="pre">READ_REMOTE_FEATURES_COMPLETE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.READ_REMOTE_FEATURES_COMPLETE" title="Permalink to this definition"></a></dt>
+<dd><p>Read remote feature complete event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.REMOTE_CONNECTION_PARAMETER_REQUEST">
+<span class="sig-name descname"><span class="pre">REMOTE_CONNECTION_PARAMETER_REQUEST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.REMOTE_CONNECTION_PARAMETER_REQUEST" title="Permalink to this definition"></a></dt>
+<dd><p>Remote connection parameter request event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.REQUEST_PEER_SCA_COMPLETE">
+<span class="sig-name descname"><span class="pre">REQUEST_PEER_SCA_COMPLETE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">31</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.REQUEST_PEER_SCA_COMPLETE" title="Permalink to this definition"></a></dt>
+<dd><p>Request peeer SCA complete event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.SCAN_REQUEST_RECEIVED">
+<span class="sig-name descname"><span class="pre">SCAN_REQUEST_RECEIVED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">19</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.SCAN_REQUEST_RECEIVED" title="Permalink to this definition"></a></dt>
+<dd><p>Scan request received event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.SCAN_TIMEOUT">
+<span class="sig-name descname"><span class="pre">SCAN_TIMEOUT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">17</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.SCAN_TIMEOUT" title="Permalink to this definition"></a></dt>
+<dd><p>Scan timeout event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.TERMINATE_BIG_COMPLETE">
+<span class="sig-name descname"><span class="pre">TERMINATE_BIG_COMPLETE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">28</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.TERMINATE_BIG_COMPLETE" title="Permalink to this definition"></a></dt>
+<dd><p>Terminate BIG complete event.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.EventSubcode.TRANSMIT_POWER_REPORTING">
+<span class="sig-name descname"><span class="pre">TRANSMIT_POWER_REPORTING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">33</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.EventSubcode.TRANSMIT_POWER_REPORTING" title="Permalink to this definition"></a></dt>
+<dd><p>Transmit power reporting event.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">StatusCode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/packet_codes.html#StatusCode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>BLE-defined status codes.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.DECODE_FAILURE">
+<span class="sig-name descname"><span class="pre">DECODE_FAILURE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">255</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.DECODE_FAILURE" title="Permalink to this definition"></a></dt>
+<dd><p>ADI vendor specific, returns when the status is not properly set.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_ACL_CONN_ALREADY_EXISTS">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_ACL_CONN_ALREADY_EXISTS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">11</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_ACL_CONN_ALREADY_EXISTS" title="Permalink to this definition"></a></dt>
+<dd><p>Connection already exists.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_ADV_TIMEOUT">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_ADV_TIMEOUT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">60</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_ADV_TIMEOUT" title="Permalink to this definition"></a></dt>
+<dd><p>Advertising timeout.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_AUTH_FAILURE">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_AUTH_FAILURE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_AUTH_FAILURE" title="Permalink to this definition"></a></dt>
+<dd><p>Authentication failure.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CHAN_ASSESSMENT_NOT_SUPPORTED">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_CHAN_ASSESSMENT_NOT_SUPPORTED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">46</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CHAN_ASSESSMENT_NOT_SUPPORTED" title="Permalink to this definition"></a></dt>
+<dd><p>Channel classification not supported error.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CMD_DISALLOWED">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_CMD_DISALLOWED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">12</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CMD_DISALLOWED" title="Permalink to this definition"></a></dt>
+<dd><p>Command disallowed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_COARSE_CLK_ADJ_REJ">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_COARSE_CLK_ADJ_REJ</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">64</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_COARSE_CLK_ADJ_REJ" title="Permalink to this definition"></a></dt>
+<dd><p>Coarse cloack adjustment rejected but will try to adjust clock
+using clock dragging.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONN_ACCEPT_TIMEOUT_EXCEEDED">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_CONN_ACCEPT_TIMEOUT_EXCEEDED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">16</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONN_ACCEPT_TIMEOUT_EXCEEDED" title="Permalink to this definition"></a></dt>
+<dd><p>Connection accept timeout exceeded.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONN_FAILED_TO_ESTABLISH">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_CONN_FAILED_TO_ESTABLISH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">62</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONN_FAILED_TO_ESTABLISH" title="Permalink to this definition"></a></dt>
+<dd><p>Connection failed to be established / Synchronization timeout.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONN_LIMIT_EXCEEDED">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_CONN_LIMIT_EXCEEDED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">9</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONN_LIMIT_EXCEEDED" title="Permalink to this definition"></a></dt>
+<dd><p>Connection limit exceeded.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONN_REJECTED_SECURITY_REASONS">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_CONN_REJECTED_SECURITY_REASONS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">14</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONN_REJECTED_SECURITY_REASONS" title="Permalink to this definition"></a></dt>
+<dd><p>Connection rejected due to security reasons.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONN_REJECTED_UNACCEPTABLE_BDADDR">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_CONN_REJECTED_UNACCEPTABLE_BDADDR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">15</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONN_REJECTED_UNACCEPTABLE_BDADDR" title="Permalink to this definition"></a></dt>
+<dd><p>Connection rejected dur to unacceptable BD address.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONN_REJ_LIMITED_RESOURCES">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_CONN_REJ_LIMITED_RESOURCES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">13</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONN_REJ_LIMITED_RESOURCES" title="Permalink to this definition"></a></dt>
+<dd><p>connection rejection due to limited resources.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONN_REJ_NO_SUITABLE_CHAN_FOUND">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_CONN_REJ_NO_SUITABLE_CHAN_FOUND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">57</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONN_REJ_NO_SUITABLE_CHAN_FOUND" title="Permalink to this definition"></a></dt>
+<dd><p>Connection rejected dur to no suitable channel found.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONN_TERM_BY_LOCAL_HOST">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_CONN_TERM_BY_LOCAL_HOST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">22</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONN_TERM_BY_LOCAL_HOST" title="Permalink to this definition"></a></dt>
+<dd><p>Connection terminated by local host.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONN_TERM_MIC_FAILURE">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_CONN_TERM_MIC_FAILURE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">61</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONN_TERM_MIC_FAILURE" title="Permalink to this definition"></a></dt>
+<dd><p>Connection terminated due to MIC failure.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONN_TIMEOUT">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_CONN_TIMEOUT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">8</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONN_TIMEOUT" title="Permalink to this definition"></a></dt>
+<dd><p>Connection timeout.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONTROLLER_BUSY">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_CONTROLLER_BUSY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">58</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_CONTROLLER_BUSY" title="Permalink to this definition"></a></dt>
+<dd><p>Controller busy.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_DIFFERENT_TRANSACTION_COLLISION">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_DIFFERENT_TRANSACTION_COLLISION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">42</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_DIFFERENT_TRANSACTION_COLLISION" title="Permalink to this definition"></a></dt>
+<dd><p>Different transaction collision.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_ENCRYPT_MODE_NOT_ACCEPTABLE">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_ENCRYPT_MODE_NOT_ACCEPTABLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">37</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_ENCRYPT_MODE_NOT_ACCEPTABLE" title="Permalink to this definition"></a></dt>
+<dd><p>Encryption mode not acceptable.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_EXTENDED_INQUIRY_RESP_TOO_LARGE">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_EXTENDED_INQUIRY_RESP_TOO_LARGE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">54</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_EXTENDED_INQUIRY_RESP_TOO_LARGE" title="Permalink to this definition"></a></dt>
+<dd><p>Extended inquiry response too large.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_HOST_BUSY_PAIRING">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_HOST_BUSY_PAIRING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">56</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_HOST_BUSY_PAIRING" title="Permalink to this definition"></a></dt>
+<dd><p>Host busy - pairing.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_HW_FAILURE">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_HW_FAILURE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_HW_FAILURE" title="Permalink to this definition"></a></dt>
+<dd><p>Hardware failure.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_INSTANT_PASSED">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_INSTANT_PASSED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">40</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_INSTANT_PASSED" title="Permalink to this definition"></a></dt>
+<dd><p>Instance passed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_INSUFFICIENT_SECURITY">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_INSUFFICIENT_SECURITY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">47</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_INSUFFICIENT_SECURITY" title="Permalink to this definition"></a></dt>
+<dd><p>Insufficient security.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_INVALID_HCI_CMD_PARAMS">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_INVALID_HCI_CMD_PARAMS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">18</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_INVALID_HCI_CMD_PARAMS" title="Permalink to this definition"></a></dt>
+<dd><p>Invalid HCI command parameters.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_INVALID_LMP_PARAMS">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_INVALID_LMP_PARAMS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">30</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_INVALID_LMP_PARAMS" title="Permalink to this definition"></a></dt>
+<dd><p>Invalid LMP parameters / Invalid LL parameters.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_LIMIT_REACHED">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_LIMIT_REACHED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">67</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_LIMIT_REACHED" title="Permalink to this definition"></a></dt>
+<dd><p>Limit reached.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_LINK_KEY_CAN_NOT_BE_CHANGED">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_LINK_KEY_CAN_NOT_BE_CHANGED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">38</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_LINK_KEY_CAN_NOT_BE_CHANGED" title="Permalink to this definition"></a></dt>
+<dd><p>Link key cannot be changed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_LMP_ERR_TRANSACTION_COLLISION">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_LMP_ERR_TRANSACTION_COLLISION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">35</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_LMP_ERR_TRANSACTION_COLLISION" title="Permalink to this definition"></a></dt>
+<dd><p>LMP error transaction collision / LL procedure collision.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_LMP_LL_RESP_TIMEOUT">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_LMP_LL_RESP_TIMEOUT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">34</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_LMP_LL_RESP_TIMEOUT" title="Permalink to this definition"></a></dt>
+<dd><p>LMP response timeout / LL response timeout.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_LMP_PDU_NOT_ALLOWED">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_LMP_PDU_NOT_ALLOWED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">36</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_LMP_PDU_NOT_ALLOWED" title="Permalink to this definition"></a></dt>
+<dd><p>LMP PDU not allowed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_MAC_CONN_FAILED">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_MAC_CONN_FAILED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">63</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_MAC_CONN_FAILED" title="Permalink to this definition"></a></dt>
+<dd><p>MAC connection failed [previously used].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_MEM_CAP_EXCEEDED">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_MEM_CAP_EXCEEDED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">7</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_MEM_CAP_EXCEEDED" title="Permalink to this definition"></a></dt>
+<dd><p>Memory capacity exceeded.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_OP_CANCELLED_BY_HOST">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_OP_CANCELLED_BY_HOST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">68</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_OP_CANCELLED_BY_HOST" title="Permalink to this definition"></a></dt>
+<dd><p>Operation cancelled by host.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_PAGE_TIMEOUT">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_PAGE_TIMEOUT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_PAGE_TIMEOUT" title="Permalink to this definition"></a></dt>
+<dd><p>Page timeout.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_PAIRING_NOT_ALLOWED">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_PAIRING_NOT_ALLOWED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">24</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_PAIRING_NOT_ALLOWED" title="Permalink to this definition"></a></dt>
+<dd><p>Pairing not allowed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_PAIRING_WITH_UNIT_KEY_NOT_SUPPORTED">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_PAIRING_WITH_UNIT_KEY_NOT_SUPPORTED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">41</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_PAIRING_WITH_UNIT_KEY_NOT_SUPPORTED" title="Permalink to this definition"></a></dt>
+<dd><p>Pairing with unit key not supported.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_PARAM_OUT_OF_MANDATORY_RANGE">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_PARAM_OUT_OF_MANDATORY_RANGE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">48</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_PARAM_OUT_OF_MANDATORY_RANGE" title="Permalink to this definition"></a></dt>
+<dd><p>Parameter out of mandatory range.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_PIN_KEY_MISSING">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_PIN_KEY_MISSING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_PIN_KEY_MISSING" title="Permalink to this definition"></a></dt>
+<dd><p>PIN or key missing.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_PKT_TOO_LONG">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_PKT_TOO_LONG</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">69</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_PKT_TOO_LONG" title="Permalink to this definition"></a></dt>
+<dd><p>Packet too long.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_QOS_REJ">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_QOS_REJ</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">45</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_QOS_REJ" title="Permalink to this definition"></a></dt>
+<dd><p>QoS rejected.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_QOS_UNACCEPTABLE_PARAM">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_QOS_UNACCEPTABLE_PARAM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">44</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_QOS_UNACCEPTABLE_PARAM" title="Permalink to this definition"></a></dt>
+<dd><p>QoS unacceptable parameter.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_REMOTE_DEVICE_TERM_CONN_LOW_RESOURCES">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_REMOTE_DEVICE_TERM_CONN_LOW_RESOURCES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">20</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_REMOTE_DEVICE_TERM_CONN_LOW_RESOURCES" title="Permalink to this definition"></a></dt>
+<dd><p>Remote device terminated connection due to low resources.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_REMOTE_DEVICE_TERM_CONN_POWER_OFF">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_REMOTE_DEVICE_TERM_CONN_POWER_OFF</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">21</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_REMOTE_DEVICE_TERM_CONN_POWER_OFF" title="Permalink to this definition"></a></dt>
+<dd><p>Remote device terminated connection due to power off.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_REMOTE_USER_TERM_CONN">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_REMOTE_USER_TERM_CONN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">19</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_REMOTE_USER_TERM_CONN" title="Permalink to this definition"></a></dt>
+<dd><p>Remote user terminated connection.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_REPEATED_ATTEMPTS">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_REPEATED_ATTEMPTS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">23</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_REPEATED_ATTEMPTS" title="Permalink to this definition"></a></dt>
+<dd><p>Repeated attempts.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_REQ_QOS_NOT_SUPPORTED">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_REQ_QOS_NOT_SUPPORTED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">39</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_REQ_QOS_NOT_SUPPORTED" title="Permalink to this definition"></a></dt>
+<dd><p>Requested QoS not supported.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_RESERVED1">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_RESERVED1</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">43</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_RESERVED1" title="Permalink to this definition"></a></dt>
+<dd><p>Reserved for future use.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_RESERVED2">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_RESERVED2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">49</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_RESERVED2" title="Permalink to this definition"></a></dt>
+<dd><p>Reserved for future use.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_RESERVED3">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_RESERVED3</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">51</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_RESERVED3" title="Permalink to this definition"></a></dt>
+<dd><p>Reserved for future use.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_RESERVED_SLOT_VIOLATION">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_RESERVED_SLOT_VIOLATION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">52</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_RESERVED_SLOT_VIOLATION" title="Permalink to this definition"></a></dt>
+<dd><p>Reserved slot violation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_ROLE_CHANGE_NOT_ALLOWED">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_ROLE_CHANGE_NOT_ALLOWED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">33</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_ROLE_CHANGE_NOT_ALLOWED" title="Permalink to this definition"></a></dt>
+<dd><p>Role change not allowed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_ROLE_SWITCH_FAILED">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_ROLE_SWITCH_FAILED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">53</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_ROLE_SWITCH_FAILED" title="Permalink to this definition"></a></dt>
+<dd><p>Role switch failed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_ROLE_SWITCH_PENDING">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_ROLE_SWITCH_PENDING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">50</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_ROLE_SWITCH_PENDING" title="Permalink to this definition"></a></dt>
+<dd><p>Role switch pending.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_SCO_AIR_MODE_REJ">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_SCO_AIR_MODE_REJ</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">29</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_SCO_AIR_MODE_REJ" title="Permalink to this definition"></a></dt>
+<dd><p>SCO air mode rejected.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_SCO_INTERVAL_REJ">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_SCO_INTERVAL_REJ</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">28</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_SCO_INTERVAL_REJ" title="Permalink to this definition"></a></dt>
+<dd><p>SCO interval rejected.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_SCO_OFFSET_REJ">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_SCO_OFFSET_REJ</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">27</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_SCO_OFFSET_REJ" title="Permalink to this definition"></a></dt>
+<dd><p>SCO offset rejected.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_SIMPLE_PAIRING_NOT_SUPPORTED_BY_HOST">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_SIMPLE_PAIRING_NOT_SUPPORTED_BY_HOST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">55</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_SIMPLE_PAIRING_NOT_SUPPORTED_BY_HOST" title="Permalink to this definition"></a></dt>
+<dd><p>Secure simple pairing not supported by host.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_SYNCH_CONN_LIMIT_EXCEEDED">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_SYNCH_CONN_LIMIT_EXCEEDED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_SYNCH_CONN_LIMIT_EXCEEDED" title="Permalink to this definition"></a></dt>
+<dd><p>Synchronous connection limit to a device exceeded.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_TYPE0_SUBMAP_NOT_DEF">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_TYPE0_SUBMAP_NOT_DEF</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">65</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_TYPE0_SUBMAP_NOT_DEF" title="Permalink to this definition"></a></dt>
+<dd><p>Type0 submap noot defined.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_UNACCEPTABLE_CONN_INTERVAL">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_UNACCEPTABLE_CONN_INTERVAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">59</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_UNACCEPTABLE_CONN_INTERVAL" title="Permalink to this definition"></a></dt>
+<dd><p>Unacceptable connection parameters.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_UNKNOWN_ADV_ID">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_UNKNOWN_ADV_ID</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">66</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_UNKNOWN_ADV_ID" title="Permalink to this definition"></a></dt>
+<dd><p>Unknown advertising identifier.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_UNKNOWN_CONN_ID">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_UNKNOWN_CONN_ID</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_UNKNOWN_CONN_ID" title="Permalink to this definition"></a></dt>
+<dd><p>Unknown connection identifier.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_UNKNOWN_HCI_CMD">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_UNKNOWN_HCI_CMD</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_UNKNOWN_HCI_CMD" title="Permalink to this definition"></a></dt>
+<dd><p>Unknown HCI command error.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_UNKNOWN_LMP_PDU">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_UNKNOWN_LMP_PDU</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">25</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_UNKNOWN_LMP_PDU" title="Permalink to this definition"></a></dt>
+<dd><p>Unknown LMP PDU.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_UNSPECIFIED_ERROR">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_UNSPECIFIED_ERROR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">31</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_UNSPECIFIED_ERROR" title="Permalink to this definition"></a></dt>
+<dd><p>Unspecified error.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_UNSUPPORTED_FEATURE_PARAM_VALUE">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_UNSUPPORTED_FEATURE_PARAM_VALUE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">17</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_UNSUPPORTED_FEATURE_PARAM_VALUE" title="Permalink to this definition"></a></dt>
+<dd><p>Unsupported feature or parameter value.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_UNSUPPORTED_LMP_PARAM_VAL">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_UNSUPPORTED_LMP_PARAM_VAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">32</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_UNSUPPORTED_LMP_PARAM_VAL" title="Permalink to this definition"></a></dt>
+<dd><p>Unsupported LMP parameter value / Unsupported LL parameter value.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.ERROR_CODE_UNSUPPORTED_REMOTE_FEATURE">
+<span class="sig-name descname"><span class="pre">ERROR_CODE_UNSUPPORTED_REMOTE_FEATURE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">26</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_UNSUPPORTED_REMOTE_FEATURE" title="Permalink to this definition"></a></dt>
+<dd><p>Unsupported remote feature.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_codes.StatusCode.SUCCESS">
+<span class="sig-name descname"><span class="pre">SUCCESS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#max_ble_hci.packet_codes.StatusCode.SUCCESS" title="Permalink to this definition"></a></dt>
+<dd><p>Success.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="hci_packets.html" class="btn btn-neutral float-left" title="max_ble_hci.hci_packets" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="packet_defs.html" class="btn btn-neutral float-right" title="max_ble_hci.packet_defs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Analog Devices, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

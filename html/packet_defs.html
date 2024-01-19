@@ -1,0 +1,1784 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>max_ble_hci.packet_defs &mdash; MAX BLE HCI 0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=2389946f"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="HCI Command Reference" href="hci_reference.html" />
+    <link rel="prev" title="max_ble_hci.packet_codes" href="packet_codes.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            MAX BLE HCI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ble_hci.html">max_ble_hci.ble_hci</a></li>
+<li class="toctree-l2"><a class="reference internal" href="constants.html">max_ble_hci.constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_params.html">max_ble_hci.data_params</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hci_packets.html">max_ble_hci.hci_packets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packet_codes.html">max_ble_hci.packet_codes</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">max_ble_hci.packet_defs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.packet_defs.ControllerOCF"><code class="docutils literal notranslate"><span class="pre">ControllerOCF</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.ControllerOCF.CONFIG_DATA_PATH"><code class="docutils literal notranslate"><span class="pre">ControllerOCF.CONFIG_DATA_PATH</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.ControllerOCF.HOST_BUFFER_SIZE"><code class="docutils literal notranslate"><span class="pre">ControllerOCF.HOST_BUFFER_SIZE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.ControllerOCF.HOST_NUM_CMPL_PKTS"><code class="docutils literal notranslate"><span class="pre">ControllerOCF.HOST_NUM_CMPL_PKTS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.ControllerOCF.READ_AUTH_PAYLOAD_TO"><code class="docutils literal notranslate"><span class="pre">ControllerOCF.READ_AUTH_PAYLOAD_TO</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.ControllerOCF.READ_TX_PWR_LVL"><code class="docutils literal notranslate"><span class="pre">ControllerOCF.READ_TX_PWR_LVL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.ControllerOCF.RESET"><code class="docutils literal notranslate"><span class="pre">ControllerOCF.RESET</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.ControllerOCF.SET_CONTROLLER_TO_HOST_FC"><code class="docutils literal notranslate"><span class="pre">ControllerOCF.SET_CONTROLLER_TO_HOST_FC</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.ControllerOCF.SET_EVENT_MASK"><code class="docutils literal notranslate"><span class="pre">ControllerOCF.SET_EVENT_MASK</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.ControllerOCF.SET_EVENT_MASK_PAGE2"><code class="docutils literal notranslate"><span class="pre">ControllerOCF.SET_EVENT_MASK_PAGE2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.ControllerOCF.WRITE_AUTH_PAYLOAD_TO"><code class="docutils literal notranslate"><span class="pre">ControllerOCF.WRITE_AUTH_PAYLOAD_TO</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.packet_defs.InformationalOCF"><code class="docutils literal notranslate"><span class="pre">InformationalOCF</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.InformationalOCF.READ_BD_ADDR"><code class="docutils literal notranslate"><span class="pre">InformationalOCF.READ_BD_ADDR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.InformationalOCF.READ_BUF_SIZE"><code class="docutils literal notranslate"><span class="pre">InformationalOCF.READ_BUF_SIZE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.InformationalOCF.READ_LOCAL_SUP_CMDS"><code class="docutils literal notranslate"><span class="pre">InformationalOCF.READ_LOCAL_SUP_CMDS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.InformationalOCF.READ_LOCAL_SUP_CODECS"><code class="docutils literal notranslate"><span class="pre">InformationalOCF.READ_LOCAL_SUP_CODECS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.InformationalOCF.READ_LOCAL_SUP_CODEC_CAP"><code class="docutils literal notranslate"><span class="pre">InformationalOCF.READ_LOCAL_SUP_CODEC_CAP</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.InformationalOCF.READ_LOCAL_SUP_CONTROLLER_DLY"><code class="docutils literal notranslate"><span class="pre">InformationalOCF.READ_LOCAL_SUP_CONTROLLER_DLY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.InformationalOCF.READ_LOCAL_SUP_FEAT"><code class="docutils literal notranslate"><span class="pre">InformationalOCF.READ_LOCAL_SUP_FEAT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.InformationalOCF.READ_LOCAL_VER_INFO"><code class="docutils literal notranslate"><span class="pre">InformationalOCF.READ_LOCAL_VER_INFO</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.ACCEPT_CIS_REQ"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.ACCEPT_CIS_REQ</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.ADD_DEV_PER_ADV_LIST"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.ADD_DEV_PER_ADV_LIST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.ADD_DEV_RES_LIST"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.ADD_DEV_RES_LIST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.ADD_DEV_WHITE_LIST"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.ADD_DEV_WHITE_LIST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.BIG_CREATE_SYNC"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.BIG_CREATE_SYNC</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.BIG_TERMINATE_SYNC"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.BIG_TERMINATE_SYNC</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.CLEAR_ADV_SETS"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.CLEAR_ADV_SETS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.CLEAR_PER_ADV_LIST"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.CLEAR_PER_ADV_LIST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.CLEAR_RES_LIST"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.CLEAR_RES_LIST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.CLEAR_WHITE_LIST"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.CLEAR_WHITE_LIST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.CONN_CTE_REQ_ENABLE"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.CONN_CTE_REQ_ENABLE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.CONN_CTE_RSP_ENABLE"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.CONN_CTE_RSP_ENABLE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.CONN_UPDATE"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.CONN_UPDATE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.CREATE_BIG"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.CREATE_BIG</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.CREATE_BIG_TEST"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.CREATE_BIG_TEST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.CREATE_CIS"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.CREATE_CIS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.CREATE_CONN"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.CREATE_CONN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.CREATE_CONN_CANCEL"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.CREATE_CONN_CANCEL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.ENCRYPT"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.ENCRYPT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.ENHANCED_RECEIVER_TEST"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.ENHANCED_RECEIVER_TEST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.ENHANCED_TRANSMITTER_TEST"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.ENHANCED_TRANSMITTER_TEST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.EXT_CREATE_CONN"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.EXT_CREATE_CONN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.GENERATE_DHKEY"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.GENERATE_DHKEY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.GENERATE_DHKEY_V2"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.GENERATE_DHKEY_V2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.ISO_READ_TEST_COUNTERS"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.ISO_READ_TEST_COUNTERS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.ISO_RX_TEST"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.ISO_RX_TEST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.ISO_TEST_END"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.ISO_TEST_END</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.ISO_TX_TEST"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.ISO_TX_TEST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.LTK_REQ_NEG_REPL"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.LTK_REQ_NEG_REPL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.LTK_REQ_REPL"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.LTK_REQ_REPL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.MODIFY_SLEEP_CLK_ACC"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.MODIFY_SLEEP_CLK_ACC</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.PER_ADV_CREATE_SYNC"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.PER_ADV_CREATE_SYNC</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.PER_ADV_CREATE_SYNC_CANCEL"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.PER_ADV_CREATE_SYNC_CANCEL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.PER_ADV_SET_INFO_TRANSFER"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.PER_ADV_SET_INFO_TRANSFER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.PER_ADV_SYNC_TRANSFER"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.PER_ADV_SYNC_TRANSFER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.PER_ADV_TERM_SYNC"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.PER_ADV_TERM_SYNC</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.RAND"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.RAND</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_ADV_TX_POWER"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.READ_ADV_TX_POWER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_ANTENNA_INFO"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.READ_ANTENNA_INFO</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_BUF_SIZE"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.READ_BUF_SIZE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_BUF_SIZE_V2"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.READ_BUF_SIZE_V2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_CHAN_MAP"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.READ_CHAN_MAP</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_DEF_DATA_LEN"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.READ_DEF_DATA_LEN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_ENHANCED_TX_POWER"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.READ_ENHANCED_TX_POWER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_ISO_LINK_QUAL"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.READ_ISO_LINK_QUAL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_ISO_TX_SYNC"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.READ_ISO_TX_SYNC</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_LOCAL_P256_PUB_KEY"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.READ_LOCAL_P256_PUB_KEY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_LOCAL_RES_ADDR"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.READ_LOCAL_RES_ADDR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_LOCAL_SUP_FEAT"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.READ_LOCAL_SUP_FEAT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_MAX_ADV_DATA_LEN"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.READ_MAX_ADV_DATA_LEN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_MAX_DATA_LEN"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.READ_MAX_DATA_LEN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_NUM_SUP_ADV_SETS"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.READ_NUM_SUP_ADV_SETS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_PEER_RES_ADDR"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.READ_PEER_RES_ADDR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_PER_ADV_LIST_SIZE"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.READ_PER_ADV_LIST_SIZE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_PHY"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.READ_PHY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_REMOTE_FEAT"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.READ_REMOTE_FEAT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_REMOTE_TX_POWER"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.READ_REMOTE_TX_POWER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_RES_LIST_SIZE"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.READ_RES_LIST_SIZE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_RF_PATH_COMP"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.READ_RF_PATH_COMP</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_SUP_STATES"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.READ_SUP_STATES</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_TX_POWER"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.READ_TX_POWER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_WHITE_LIST_SIZE"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.READ_WHITE_LIST_SIZE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.RECEIVER_TEST"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.RECEIVER_TEST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.RECEIVER_TEST_V3"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.RECEIVER_TEST_V3</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.REJECT_CIS_REQ"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.REJECT_CIS_REQ</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.REMOVE_ADV_SET"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.REMOVE_ADV_SET</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.REMOVE_CIG"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.REMOVE_CIG</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.REMOVE_DEV_PER_ADV_LIST"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.REMOVE_DEV_PER_ADV_LIST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.REMOVE_DEV_RES_LIST"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.REMOVE_DEV_RES_LIST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.REMOVE_DEV_WHITE_LIST"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.REMOVE_DEV_WHITE_LIST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.REMOVE_ISO_DATA_PATH"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.REMOVE_ISO_DATA_PATH</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.REM_CONN_PARAM_NEG_REP"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.REM_CONN_PARAM_NEG_REP</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.REM_CONN_PARAM_REP"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.REM_CONN_PARAM_REP</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.REQUEST_PEER_SCA"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.REQUEST_PEER_SCA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SETUP_ISO_DATA_PATH"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SETUP_ISO_DATA_PATH</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_ADDR_RES_ENABLE"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_ADDR_RES_ENABLE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_ADV_DATA"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_ADV_DATA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_ADV_ENABLE"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_ADV_ENABLE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_ADV_PARAM"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_ADV_PARAM</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_ADV_SET_RAND_ADDR"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_ADV_SET_RAND_ADDR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_CIG_PARAMS"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_CIG_PARAMS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_CIG_PARAMS_TEST"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_CIG_PARAMS_TEST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_CONNLESS_CTE_TX_ENABLE"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_CONNLESS_CTE_TX_ENABLE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_CONNLESS_CTE_TX_PARAMS"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_CONNLESS_CTE_TX_PARAMS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_CONNLESS_IQ_SAMP_ENABLE"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_CONNLESS_IQ_SAMP_ENABLE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_CONN_CTE_RX_PARAMS"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_CONN_CTE_RX_PARAMS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_CONN_CTE_TX_PARAMS"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_CONN_CTE_TX_PARAMS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_DATA_LEN"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_DATA_LEN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_DATA_RELATED_ADDRESS_CHANGES"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_DATA_RELATED_ADDRESS_CHANGES</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_DEFAULT_PAST_PARAM"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_DEFAULT_PAST_PARAM</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_DEF_PHY"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_DEF_PHY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_DEF_SUBRATE"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_DEF_SUBRATE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_EVENT_MASK"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_EVENT_MASK</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_EXT_ADV_DATA"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_EXT_ADV_DATA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_EXT_ADV_ENABLE"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_EXT_ADV_ENABLE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_EXT_ADV_PARAM"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_EXT_ADV_PARAM</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_EXT_SCAN_ENABLE"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_EXT_SCAN_ENABLE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_EXT_SCAN_PARAM"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_EXT_SCAN_PARAM</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_EXT_SCAN_RESP_DATA"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_EXT_SCAN_RESP_DATA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_HOST_CHAN_CLASS"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_HOST_CHAN_CLASS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_HOST_FEATURE"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_HOST_FEATURE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_PAST_PARAM"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_PAST_PARAM</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_PATH_LOSS_REPORTING_ENABLE"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_PATH_LOSS_REPORTING_ENABLE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_PATH_LOSS_REPORTING_PARAMS"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_PATH_LOSS_REPORTING_PARAMS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_PER_ADV_DATA"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_PER_ADV_DATA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_PER_ADV_ENABLE"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_PER_ADV_ENABLE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_PER_ADV_PARAM"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_PER_ADV_PARAM</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_PER_ADV_RCV_ENABLE"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_PER_ADV_RCV_ENABLE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_PHY"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_PHY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_PRIVACY_MODE"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_PRIVACY_MODE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_RAND_ADDR"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_RAND_ADDR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_RES_PRIV_ADDR_TO"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_RES_PRIV_ADDR_TO</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_SCAN_ENABLE"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_SCAN_ENABLE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_SCAN_PARAM"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_SCAN_PARAM</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_SCAN_RESP_DATA"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_SCAN_RESP_DATA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_TX_POWER_REPORT_ENABLE"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SET_TX_POWER_REPORT_ENABLE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.START_ENCRYPTION"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.START_ENCRYPTION</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.SUBRATE_REQ"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.SUBRATE_REQ</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.TERMINATE_BIG"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.TERMINATE_BIG</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.TEST_END"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.TEST_END</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.TRANSMITTER_TEST"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.TRANSMITTER_TEST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.TRANSMITTER_TEST_V3"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.TRANSMITTER_TEST_V3</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.WRITE_DEF_DATA_LEN"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.WRITE_DEF_DATA_LEN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.WRITE_RF_PATH_COMP"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.WRITE_RF_PATH_COMP</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.packet_defs.LinkControlOCF"><code class="docutils literal notranslate"><span class="pre">LinkControlOCF</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LinkControlOCF.DISCONNECT"><code class="docutils literal notranslate"><span class="pre">LinkControlOCF.DISCONNECT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LinkControlOCF.READ_REMOTE_VER_INFO"><code class="docutils literal notranslate"><span class="pre">LinkControlOCF.READ_REMOTE_VER_INFO</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.packet_defs.NOpOCF"><code class="docutils literal notranslate"><span class="pre">NOpOCF</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.NOpOCF.NOP"><code class="docutils literal notranslate"><span class="pre">NOpOCF.NOP</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.packet_defs.OCF"><code class="docutils literal notranslate"><span class="pre">OCF</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.OCF.CONTROLLER"><code class="docutils literal notranslate"><span class="pre">OCF.CONTROLLER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.OCF.INFORMATIONAL"><code class="docutils literal notranslate"><span class="pre">OCF.INFORMATIONAL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.OCF.LE_CONTROLLER"><code class="docutils literal notranslate"><span class="pre">OCF.LE_CONTROLLER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.OCF.LINK_CONTROL"><code class="docutils literal notranslate"><span class="pre">OCF.LINK_CONTROL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.OCF.LINK_POLICY"><code class="docutils literal notranslate"><span class="pre">OCF.LINK_POLICY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.OCF.NOP"><code class="docutils literal notranslate"><span class="pre">OCF.NOP</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.OCF.STATUS"><code class="docutils literal notranslate"><span class="pre">OCF.STATUS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.OCF.TESTING"><code class="docutils literal notranslate"><span class="pre">OCF.TESTING</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.OCF.VENDOR_SPEC"><code class="docutils literal notranslate"><span class="pre">OCF.VENDOR_SPEC</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.packet_defs.OGF"><code class="docutils literal notranslate"><span class="pre">OGF</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.OGF.CONTROLLER"><code class="docutils literal notranslate"><span class="pre">OGF.CONTROLLER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.OGF.INFORMATIONAL"><code class="docutils literal notranslate"><span class="pre">OGF.INFORMATIONAL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.OGF.LE_CONTROLLER"><code class="docutils literal notranslate"><span class="pre">OGF.LE_CONTROLLER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.OGF.LINK_CONTROL"><code class="docutils literal notranslate"><span class="pre">OGF.LINK_CONTROL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.OGF.LINK_POLICY"><code class="docutils literal notranslate"><span class="pre">OGF.LINK_POLICY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.OGF.NOP"><code class="docutils literal notranslate"><span class="pre">OGF.NOP</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.OGF.STATUS"><code class="docutils literal notranslate"><span class="pre">OGF.STATUS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.OGF.TESTING"><code class="docutils literal notranslate"><span class="pre">OGF.TESTING</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.OGF.VENDOR_SPEC"><code class="docutils literal notranslate"><span class="pre">OGF.VENDOR_SPEC</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.packet_defs.PacketType"><code class="docutils literal notranslate"><span class="pre">PacketType</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.PacketType.ASYNC"><code class="docutils literal notranslate"><span class="pre">PacketType.ASYNC</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.PacketType.COMMAND"><code class="docutils literal notranslate"><span class="pre">PacketType.COMMAND</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.PacketType.EVENT"><code class="docutils literal notranslate"><span class="pre">PacketType.EVENT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.PacketType.EXTENDED"><code class="docutils literal notranslate"><span class="pre">PacketType.EXTENDED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.PacketType.SYNC"><code class="docutils literal notranslate"><span class="pre">PacketType.SYNC</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.packet_defs.StatusOCF"><code class="docutils literal notranslate"><span class="pre">StatusOCF</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.StatusOCF.READ_RSSI"><code class="docutils literal notranslate"><span class="pre">StatusOCF.READ_RSSI</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.BB_DIS"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.BB_DIS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.BB_EN"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.BB_EN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.ENA_ACL_SINK"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.ENA_ACL_SINK</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.ENA_AUTO_GEN_ACL"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.ENA_AUTO_GEN_ACL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.ENA_AUTO_GEN_ISO"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.ENA_AUTO_GEN_ISO</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.ENA_ISO_SINK"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.ENA_ISO_SINK</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GENERATE_ACL"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.GENERATE_ACL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GENERATE_ISO"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.GENERATE_ISO</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_ACL_TEST_REPORT"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.GET_ACL_TEST_REPORT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_ADV_STATS"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.GET_ADV_STATS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_AUX_ADV_STATS"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.GET_AUX_ADV_STATS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_AUX_SCAN_STATS"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.GET_AUX_SCAN_STATS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_CIS_STATS"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.GET_CIS_STATS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_CONN_STATS"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.GET_CONN_STATS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_ISO_TEST_REPORT"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.GET_ISO_TEST_REPORT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_PDU_FILT_STATS"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.GET_PDU_FILT_STATS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_PEER_MIN_USED_CHAN"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.GET_PEER_MIN_USED_CHAN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_PER_CHAN_MAP"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.GET_PER_CHAN_MAP</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_PER_SCAN_STATS"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.GET_PER_SCAN_STATS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_POOL_STATS"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.GET_POOL_STATS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_RAND_ADDR"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.GET_RAND_ADDR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_RSSI"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.GET_RSSI</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_SCAN_STATS"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.GET_SCAN_STATS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_SYS_STATS"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.GET_SYS_STATS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_TEST_STATS"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.GET_TEST_STATS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.REG_READ"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.REG_READ</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.REG_WRITE"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.REG_WRITE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.RESET_CONN_STATS"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.RESET_CONN_STATS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.RESET_TEST_STATS"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.RESET_TEST_STATS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.RX_TEST"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.RX_TEST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_ADV_TX_PWR"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.SET_ADV_TX_PWR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_AUX_DELAY"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.SET_AUX_DELAY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_BD_ADDR"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.SET_BD_ADDR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_CHAN_MAP"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.SET_CHAN_MAP</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_CONN_OP_FLAGS"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.SET_CONN_OP_FLAGS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_CONN_PHY_TX_PWR"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.SET_CONN_PHY_TX_PWR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_CONN_TX_PWR"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.SET_CONN_TX_PWR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_DIAG_MODE"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.SET_DIAG_MODE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_ENC_MODE"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.SET_ENC_MODE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_EVENT_MASK"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.SET_EVENT_MASK</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_EXT_ADV_DEF_PHY_OPTS"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.SET_EXT_ADV_DEF_PHY_OPTS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_EXT_ADV_FRAG_LEN"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.SET_EXT_ADV_FRAG_LEN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_EXT_ADV_PHY_OPTS"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.SET_EXT_ADV_PHY_OPTS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_LOCAL_FEAT"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.SET_LOCAL_FEAT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_LOCAL_MIN_USED_CHAN"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.SET_LOCAL_MIN_USED_CHAN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_OP_FLAGS"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.SET_OP_FLAGS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_P256_PRIV_KEY"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.SET_P256_PRIV_KEY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_SCAN_CH_MAP"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.SET_SCAN_CH_MAP</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_SNIFFER_ENABLE"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.SET_SNIFFER_ENABLE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_TX_TEST_ERR_PATT"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.SET_TX_TEST_ERR_PATT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.TX_TEST"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.TX_TEST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.VALIDATE_PUB_KEY_MODE"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.VALIDATE_PUB_KEY_MODE</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-max_ble_hci">Package Contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hci_reference.html">HCI Command Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MAX BLE HCI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">API Reference</a></li>
+      <li class="breadcrumb-item active">max_ble_hci.packet_defs</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/packet_defs.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-max_ble_hci.packet_defs">
+<span id="max-ble-hci-packet-defs"></span><h1>max_ble_hci.packet_defs<a class="headerlink" href="#module-max_ble_hci.packet_defs" title="Permalink to this heading"></a></h1>
+<p>DOCSTRING</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.ControllerOCF">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ControllerOCF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/packet_defs.html#ControllerOCF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.packet_defs.ControllerOCF" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>BLE-defined Controller group Opcode Command Field values.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.ControllerOCF.CONFIG_DATA_PATH">
+<span class="sig-name descname"><span class="pre">CONFIG_DATA_PATH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">131</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.ControllerOCF.CONFIG_DATA_PATH" title="Permalink to this definition"></a></dt>
+<dd><p>Configure data path command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.ControllerOCF.HOST_BUFFER_SIZE">
+<span class="sig-name descname"><span class="pre">HOST_BUFFER_SIZE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">51</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.ControllerOCF.HOST_BUFFER_SIZE" title="Permalink to this definition"></a></dt>
+<dd><p>Host buffer size command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.ControllerOCF.HOST_NUM_CMPL_PKTS">
+<span class="sig-name descname"><span class="pre">HOST_NUM_CMPL_PKTS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">53</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.ControllerOCF.HOST_NUM_CMPL_PKTS" title="Permalink to this definition"></a></dt>
+<dd><p>Host number of completed packets command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.ControllerOCF.READ_AUTH_PAYLOAD_TO">
+<span class="sig-name descname"><span class="pre">READ_AUTH_PAYLOAD_TO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">123</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.ControllerOCF.READ_AUTH_PAYLOAD_TO" title="Permalink to this definition"></a></dt>
+<dd><p>Read authenticated payload timeout command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.ControllerOCF.READ_TX_PWR_LVL">
+<span class="sig-name descname"><span class="pre">READ_TX_PWR_LVL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">45</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.ControllerOCF.READ_TX_PWR_LVL" title="Permalink to this definition"></a></dt>
+<dd><p>Read TX power level command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.ControllerOCF.RESET">
+<span class="sig-name descname"><span class="pre">RESET</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.ControllerOCF.RESET" title="Permalink to this definition"></a></dt>
+<dd><p>Reset command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.ControllerOCF.SET_CONTROLLER_TO_HOST_FC">
+<span class="sig-name descname"><span class="pre">SET_CONTROLLER_TO_HOST_FC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">49</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.ControllerOCF.SET_CONTROLLER_TO_HOST_FC" title="Permalink to this definition"></a></dt>
+<dd><p>Set controller to host flow control command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.ControllerOCF.SET_EVENT_MASK">
+<span class="sig-name descname"><span class="pre">SET_EVENT_MASK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.ControllerOCF.SET_EVENT_MASK" title="Permalink to this definition"></a></dt>
+<dd><p>Set event mask command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.ControllerOCF.SET_EVENT_MASK_PAGE2">
+<span class="sig-name descname"><span class="pre">SET_EVENT_MASK_PAGE2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">99</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.ControllerOCF.SET_EVENT_MASK_PAGE2" title="Permalink to this definition"></a></dt>
+<dd><p>Set event mask page 2 command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.ControllerOCF.WRITE_AUTH_PAYLOAD_TO">
+<span class="sig-name descname"><span class="pre">WRITE_AUTH_PAYLOAD_TO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">124</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.ControllerOCF.WRITE_AUTH_PAYLOAD_TO" title="Permalink to this definition"></a></dt>
+<dd><p>Write authenticated payload timeout command.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.InformationalOCF">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">InformationalOCF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/packet_defs.html#InformationalOCF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.packet_defs.InformationalOCF" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>BLE-defined Information group Opcode Command Field values.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.InformationalOCF.READ_BD_ADDR">
+<span class="sig-name descname"><span class="pre">READ_BD_ADDR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">9</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.InformationalOCF.READ_BD_ADDR" title="Permalink to this definition"></a></dt>
+<dd><p>Read BD address command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.InformationalOCF.READ_BUF_SIZE">
+<span class="sig-name descname"><span class="pre">READ_BUF_SIZE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.InformationalOCF.READ_BUF_SIZE" title="Permalink to this definition"></a></dt>
+<dd><p>Read buffer size command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.InformationalOCF.READ_LOCAL_SUP_CMDS">
+<span class="sig-name descname"><span class="pre">READ_LOCAL_SUP_CMDS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.InformationalOCF.READ_LOCAL_SUP_CMDS" title="Permalink to this definition"></a></dt>
+<dd><p>Read local supported commands command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.InformationalOCF.READ_LOCAL_SUP_CODECS">
+<span class="sig-name descname"><span class="pre">READ_LOCAL_SUP_CODECS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">13</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.InformationalOCF.READ_LOCAL_SUP_CODECS" title="Permalink to this definition"></a></dt>
+<dd><p>Read local supported codecs command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.InformationalOCF.READ_LOCAL_SUP_CODEC_CAP">
+<span class="sig-name descname"><span class="pre">READ_LOCAL_SUP_CODEC_CAP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">14</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.InformationalOCF.READ_LOCAL_SUP_CODEC_CAP" title="Permalink to this definition"></a></dt>
+<dd><p>Read local supported codec capabilities command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.InformationalOCF.READ_LOCAL_SUP_CONTROLLER_DLY">
+<span class="sig-name descname"><span class="pre">READ_LOCAL_SUP_CONTROLLER_DLY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">15</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.InformationalOCF.READ_LOCAL_SUP_CONTROLLER_DLY" title="Permalink to this definition"></a></dt>
+<dd><p>Read local supported controller delay command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.InformationalOCF.READ_LOCAL_SUP_FEAT">
+<span class="sig-name descname"><span class="pre">READ_LOCAL_SUP_FEAT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.InformationalOCF.READ_LOCAL_SUP_FEAT" title="Permalink to this definition"></a></dt>
+<dd><p>Read local supported features command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.InformationalOCF.READ_LOCAL_VER_INFO">
+<span class="sig-name descname"><span class="pre">READ_LOCAL_VER_INFO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.InformationalOCF.READ_LOCAL_VER_INFO" title="Permalink to this definition"></a></dt>
+<dd><p>Read local version information command.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LEControllerOCF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/packet_defs.html#LEControllerOCF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>BLE-defined LE Controller group Opcode Command Field values.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.ACCEPT_CIS_REQ">
+<span class="sig-name descname"><span class="pre">ACCEPT_CIS_REQ</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">102</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.ACCEPT_CIS_REQ" title="Permalink to this definition"></a></dt>
+<dd><p>Accept CIS request command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.ADD_DEV_PER_ADV_LIST">
+<span class="sig-name descname"><span class="pre">ADD_DEV_PER_ADV_LIST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">71</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.ADD_DEV_PER_ADV_LIST" title="Permalink to this definition"></a></dt>
+<dd><p>Add devoce to periodic advertiser list command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.ADD_DEV_RES_LIST">
+<span class="sig-name descname"><span class="pre">ADD_DEV_RES_LIST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">39</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.ADD_DEV_RES_LIST" title="Permalink to this definition"></a></dt>
+<dd><p>Add device to resolving list command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.ADD_DEV_WHITE_LIST">
+<span class="sig-name descname"><span class="pre">ADD_DEV_WHITE_LIST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">17</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.ADD_DEV_WHITE_LIST" title="Permalink to this definition"></a></dt>
+<dd><p>Add device to filter accept list command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.BIG_CREATE_SYNC">
+<span class="sig-name descname"><span class="pre">BIG_CREATE_SYNC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">107</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.BIG_CREATE_SYNC" title="Permalink to this definition"></a></dt>
+<dd><p>BIG create sync command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.BIG_TERMINATE_SYNC">
+<span class="sig-name descname"><span class="pre">BIG_TERMINATE_SYNC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">108</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.BIG_TERMINATE_SYNC" title="Permalink to this definition"></a></dt>
+<dd><p>BIG terminate sync command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.CLEAR_ADV_SETS">
+<span class="sig-name descname"><span class="pre">CLEAR_ADV_SETS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">61</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.CLEAR_ADV_SETS" title="Permalink to this definition"></a></dt>
+<dd><p>Clear advertising sets command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.CLEAR_PER_ADV_LIST">
+<span class="sig-name descname"><span class="pre">CLEAR_PER_ADV_LIST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">73</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.CLEAR_PER_ADV_LIST" title="Permalink to this definition"></a></dt>
+<dd><p>Clear periodic advertiser list command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.CLEAR_RES_LIST">
+<span class="sig-name descname"><span class="pre">CLEAR_RES_LIST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">41</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.CLEAR_RES_LIST" title="Permalink to this definition"></a></dt>
+<dd><p>Clear resolving list command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.CLEAR_WHITE_LIST">
+<span class="sig-name descname"><span class="pre">CLEAR_WHITE_LIST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">16</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.CLEAR_WHITE_LIST" title="Permalink to this definition"></a></dt>
+<dd><p>Clear filter accept list command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.CONN_CTE_REQ_ENABLE">
+<span class="sig-name descname"><span class="pre">CONN_CTE_REQ_ENABLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">86</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.CONN_CTE_REQ_ENABLE" title="Permalink to this definition"></a></dt>
+<dd><p>Connection CTE request enable command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.CONN_CTE_RSP_ENABLE">
+<span class="sig-name descname"><span class="pre">CONN_CTE_RSP_ENABLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">87</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.CONN_CTE_RSP_ENABLE" title="Permalink to this definition"></a></dt>
+<dd><p>Connection CTE response enable command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.CONN_UPDATE">
+<span class="sig-name descname"><span class="pre">CONN_UPDATE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">19</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.CONN_UPDATE" title="Permalink to this definition"></a></dt>
+<dd><p>Connection update command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.CREATE_BIG">
+<span class="sig-name descname"><span class="pre">CREATE_BIG</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">104</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.CREATE_BIG" title="Permalink to this definition"></a></dt>
+<dd><p>Create BIG command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.CREATE_BIG_TEST">
+<span class="sig-name descname"><span class="pre">CREATE_BIG_TEST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">105</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.CREATE_BIG_TEST" title="Permalink to this definition"></a></dt>
+<dd><p>Create BIG test command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.CREATE_CIS">
+<span class="sig-name descname"><span class="pre">CREATE_CIS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">100</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.CREATE_CIS" title="Permalink to this definition"></a></dt>
+<dd><p>Create CIS command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.CREATE_CONN">
+<span class="sig-name descname"><span class="pre">CREATE_CONN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">13</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.CREATE_CONN" title="Permalink to this definition"></a></dt>
+<dd><p>Create connection command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.CREATE_CONN_CANCEL">
+<span class="sig-name descname"><span class="pre">CREATE_CONN_CANCEL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">14</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.CREATE_CONN_CANCEL" title="Permalink to this definition"></a></dt>
+<dd><p>Create connection cancel command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.ENCRYPT">
+<span class="sig-name descname"><span class="pre">ENCRYPT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">23</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.ENCRYPT" title="Permalink to this definition"></a></dt>
+<dd><p>Encrypt command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.ENHANCED_RECEIVER_TEST">
+<span class="sig-name descname"><span class="pre">ENHANCED_RECEIVER_TEST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">51</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.ENHANCED_RECEIVER_TEST" title="Permalink to this definition"></a></dt>
+<dd><p>Enhanced receiver test command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.ENHANCED_TRANSMITTER_TEST">
+<span class="sig-name descname"><span class="pre">ENHANCED_TRANSMITTER_TEST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">52</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.ENHANCED_TRANSMITTER_TEST" title="Permalink to this definition"></a></dt>
+<dd><p>Enhanced transmitter test command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.EXT_CREATE_CONN">
+<span class="sig-name descname"><span class="pre">EXT_CREATE_CONN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">67</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.EXT_CREATE_CONN" title="Permalink to this definition"></a></dt>
+<dd><p>Extended create connection command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.GENERATE_DHKEY">
+<span class="sig-name descname"><span class="pre">GENERATE_DHKEY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">38</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.GENERATE_DHKEY" title="Permalink to this definition"></a></dt>
+<dd><p>Generate DHKey command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.GENERATE_DHKEY_V2">
+<span class="sig-name descname"><span class="pre">GENERATE_DHKEY_V2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">94</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.GENERATE_DHKEY_V2" title="Permalink to this definition"></a></dt>
+<dd><p>Generate DHKey version2 command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.ISO_READ_TEST_COUNTERS">
+<span class="sig-name descname"><span class="pre">ISO_READ_TEST_COUNTERS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">114</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.ISO_READ_TEST_COUNTERS" title="Permalink to this definition"></a></dt>
+<dd><p>ISO read test counters command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.ISO_RX_TEST">
+<span class="sig-name descname"><span class="pre">ISO_RX_TEST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">113</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.ISO_RX_TEST" title="Permalink to this definition"></a></dt>
+<dd><p>ISO RX test command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.ISO_TEST_END">
+<span class="sig-name descname"><span class="pre">ISO_TEST_END</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">115</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.ISO_TEST_END" title="Permalink to this definition"></a></dt>
+<dd><p>ISO test end command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.ISO_TX_TEST">
+<span class="sig-name descname"><span class="pre">ISO_TX_TEST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">112</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.ISO_TX_TEST" title="Permalink to this definition"></a></dt>
+<dd><p>ISO TX test command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.LTK_REQ_NEG_REPL">
+<span class="sig-name descname"><span class="pre">LTK_REQ_NEG_REPL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">27</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.LTK_REQ_NEG_REPL" title="Permalink to this definition"></a></dt>
+<dd><p>Long term key request negative reply command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.LTK_REQ_REPL">
+<span class="sig-name descname"><span class="pre">LTK_REQ_REPL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">26</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.LTK_REQ_REPL" title="Permalink to this definition"></a></dt>
+<dd><p>Long term key requency reply command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.MODIFY_SLEEP_CLK_ACC">
+<span class="sig-name descname"><span class="pre">MODIFY_SLEEP_CLK_ACC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">95</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.MODIFY_SLEEP_CLK_ACC" title="Permalink to this definition"></a></dt>
+<dd><p>Modify sleep clock accuracy command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.PER_ADV_CREATE_SYNC">
+<span class="sig-name descname"><span class="pre">PER_ADV_CREATE_SYNC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">68</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.PER_ADV_CREATE_SYNC" title="Permalink to this definition"></a></dt>
+<dd><p>Periodic advertising create sync command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.PER_ADV_CREATE_SYNC_CANCEL">
+<span class="sig-name descname"><span class="pre">PER_ADV_CREATE_SYNC_CANCEL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">69</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.PER_ADV_CREATE_SYNC_CANCEL" title="Permalink to this definition"></a></dt>
+<dd><p>Periodic advertising create sync cancel command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.PER_ADV_SET_INFO_TRANSFER">
+<span class="sig-name descname"><span class="pre">PER_ADV_SET_INFO_TRANSFER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">91</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.PER_ADV_SET_INFO_TRANSFER" title="Permalink to this definition"></a></dt>
+<dd><p>Periodic advertising set info transfer command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.PER_ADV_SYNC_TRANSFER">
+<span class="sig-name descname"><span class="pre">PER_ADV_SYNC_TRANSFER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">90</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.PER_ADV_SYNC_TRANSFER" title="Permalink to this definition"></a></dt>
+<dd><p>Periodic advertising sync transfer command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.PER_ADV_TERM_SYNC">
+<span class="sig-name descname"><span class="pre">PER_ADV_TERM_SYNC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">70</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.PER_ADV_TERM_SYNC" title="Permalink to this definition"></a></dt>
+<dd><p>Periodic advertising terminate sync command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.RAND">
+<span class="sig-name descname"><span class="pre">RAND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">24</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.RAND" title="Permalink to this definition"></a></dt>
+<dd><p>Rand command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.READ_ADV_TX_POWER">
+<span class="sig-name descname"><span class="pre">READ_ADV_TX_POWER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">7</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_ADV_TX_POWER" title="Permalink to this definition"></a></dt>
+<dd><p>Read advertising physical channel TX power command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.READ_ANTENNA_INFO">
+<span class="sig-name descname"><span class="pre">READ_ANTENNA_INFO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">88</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_ANTENNA_INFO" title="Permalink to this definition"></a></dt>
+<dd><p>Read antenna information command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.READ_BUF_SIZE">
+<span class="sig-name descname"><span class="pre">READ_BUF_SIZE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_BUF_SIZE" title="Permalink to this definition"></a></dt>
+<dd><p>Read buffer size command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.READ_BUF_SIZE_V2">
+<span class="sig-name descname"><span class="pre">READ_BUF_SIZE_V2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">96</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_BUF_SIZE_V2" title="Permalink to this definition"></a></dt>
+<dd><p>Read buffer size version2 command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.READ_CHAN_MAP">
+<span class="sig-name descname"><span class="pre">READ_CHAN_MAP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">21</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_CHAN_MAP" title="Permalink to this definition"></a></dt>
+<dd><p>Read channel map command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.READ_DEF_DATA_LEN">
+<span class="sig-name descname"><span class="pre">READ_DEF_DATA_LEN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">35</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_DEF_DATA_LEN" title="Permalink to this definition"></a></dt>
+<dd><p>Read suggested default data length command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.READ_ENHANCED_TX_POWER">
+<span class="sig-name descname"><span class="pre">READ_ENHANCED_TX_POWER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">118</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_ENHANCED_TX_POWER" title="Permalink to this definition"></a></dt>
+<dd><p>Enhanced read TX power level command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.READ_ISO_LINK_QUAL">
+<span class="sig-name descname"><span class="pre">READ_ISO_LINK_QUAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">117</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_ISO_LINK_QUAL" title="Permalink to this definition"></a></dt>
+<dd><p>Read ISO link quality command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.READ_ISO_TX_SYNC">
+<span class="sig-name descname"><span class="pre">READ_ISO_TX_SYNC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">97</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_ISO_TX_SYNC" title="Permalink to this definition"></a></dt>
+<dd><p>Read ISO TX sync command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.READ_LOCAL_P256_PUB_KEY">
+<span class="sig-name descname"><span class="pre">READ_LOCAL_P256_PUB_KEY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">37</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_LOCAL_P256_PUB_KEY" title="Permalink to this definition"></a></dt>
+<dd><p>Read local P-256 public key command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.READ_LOCAL_RES_ADDR">
+<span class="sig-name descname"><span class="pre">READ_LOCAL_RES_ADDR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">44</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_LOCAL_RES_ADDR" title="Permalink to this definition"></a></dt>
+<dd><p>Read local resolvable address command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.READ_LOCAL_SUP_FEAT">
+<span class="sig-name descname"><span class="pre">READ_LOCAL_SUP_FEAT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_LOCAL_SUP_FEAT" title="Permalink to this definition"></a></dt>
+<dd><p>Read local supported features command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.READ_MAX_ADV_DATA_LEN">
+<span class="sig-name descname"><span class="pre">READ_MAX_ADV_DATA_LEN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">58</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_MAX_ADV_DATA_LEN" title="Permalink to this definition"></a></dt>
+<dd><p>Read maximum advertising data length command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.READ_MAX_DATA_LEN">
+<span class="sig-name descname"><span class="pre">READ_MAX_DATA_LEN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">47</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_MAX_DATA_LEN" title="Permalink to this definition"></a></dt>
+<dd><p>Read maximum data length command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.READ_NUM_SUP_ADV_SETS">
+<span class="sig-name descname"><span class="pre">READ_NUM_SUP_ADV_SETS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">59</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_NUM_SUP_ADV_SETS" title="Permalink to this definition"></a></dt>
+<dd><p>Read number of supported advertising sets command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.READ_PEER_RES_ADDR">
+<span class="sig-name descname"><span class="pre">READ_PEER_RES_ADDR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">43</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_PEER_RES_ADDR" title="Permalink to this definition"></a></dt>
+<dd><p>Read peer resolvable address command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.READ_PER_ADV_LIST_SIZE">
+<span class="sig-name descname"><span class="pre">READ_PER_ADV_LIST_SIZE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">74</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_PER_ADV_LIST_SIZE" title="Permalink to this definition"></a></dt>
+<dd><p>Read periodic advertising list size command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.READ_PHY">
+<span class="sig-name descname"><span class="pre">READ_PHY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">48</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_PHY" title="Permalink to this definition"></a></dt>
+<dd><p>Read PHY command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.READ_REMOTE_FEAT">
+<span class="sig-name descname"><span class="pre">READ_REMOTE_FEAT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">22</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_REMOTE_FEAT" title="Permalink to this definition"></a></dt>
+<dd><p>Read remove features command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.READ_REMOTE_TX_POWER">
+<span class="sig-name descname"><span class="pre">READ_REMOTE_TX_POWER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">119</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_REMOTE_TX_POWER" title="Permalink to this definition"></a></dt>
+<dd><p>Read remote TX power command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.READ_RES_LIST_SIZE">
+<span class="sig-name descname"><span class="pre">READ_RES_LIST_SIZE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">42</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_RES_LIST_SIZE" title="Permalink to this definition"></a></dt>
+<dd><p>Read resolving list size command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.READ_RF_PATH_COMP">
+<span class="sig-name descname"><span class="pre">READ_RF_PATH_COMP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">76</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_RF_PATH_COMP" title="Permalink to this definition"></a></dt>
+<dd><p>Read RF path compensation command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.READ_SUP_STATES">
+<span class="sig-name descname"><span class="pre">READ_SUP_STATES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">28</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_SUP_STATES" title="Permalink to this definition"></a></dt>
+<dd><p>Read supported states command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.READ_TX_POWER">
+<span class="sig-name descname"><span class="pre">READ_TX_POWER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">75</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_TX_POWER" title="Permalink to this definition"></a></dt>
+<dd><p>Read TX power command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.READ_WHITE_LIST_SIZE">
+<span class="sig-name descname"><span class="pre">READ_WHITE_LIST_SIZE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">15</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.READ_WHITE_LIST_SIZE" title="Permalink to this definition"></a></dt>
+<dd><p>Read fileter accept list size command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.RECEIVER_TEST">
+<span class="sig-name descname"><span class="pre">RECEIVER_TEST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">29</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.RECEIVER_TEST" title="Permalink to this definition"></a></dt>
+<dd><p>Receiver test command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.RECEIVER_TEST_V3">
+<span class="sig-name descname"><span class="pre">RECEIVER_TEST_V3</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">79</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.RECEIVER_TEST_V3" title="Permalink to this definition"></a></dt>
+<dd><p>Receiver test version3 command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.REJECT_CIS_REQ">
+<span class="sig-name descname"><span class="pre">REJECT_CIS_REQ</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">103</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.REJECT_CIS_REQ" title="Permalink to this definition"></a></dt>
+<dd><p>Reject CIS request command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.REMOVE_ADV_SET">
+<span class="sig-name descname"><span class="pre">REMOVE_ADV_SET</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">60</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.REMOVE_ADV_SET" title="Permalink to this definition"></a></dt>
+<dd><p>Remove advertising set command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.REMOVE_CIG">
+<span class="sig-name descname"><span class="pre">REMOVE_CIG</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">101</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.REMOVE_CIG" title="Permalink to this definition"></a></dt>
+<dd><p>Remove CIG command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.REMOVE_DEV_PER_ADV_LIST">
+<span class="sig-name descname"><span class="pre">REMOVE_DEV_PER_ADV_LIST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">72</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.REMOVE_DEV_PER_ADV_LIST" title="Permalink to this definition"></a></dt>
+<dd><p>Remove device from periodic advertiser list command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.REMOVE_DEV_RES_LIST">
+<span class="sig-name descname"><span class="pre">REMOVE_DEV_RES_LIST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">40</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.REMOVE_DEV_RES_LIST" title="Permalink to this definition"></a></dt>
+<dd><p>Remove device from resolving list command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.REMOVE_DEV_WHITE_LIST">
+<span class="sig-name descname"><span class="pre">REMOVE_DEV_WHITE_LIST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">18</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.REMOVE_DEV_WHITE_LIST" title="Permalink to this definition"></a></dt>
+<dd><p>Remove device from filter accept list command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.REMOVE_ISO_DATA_PATH">
+<span class="sig-name descname"><span class="pre">REMOVE_ISO_DATA_PATH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">111</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.REMOVE_ISO_DATA_PATH" title="Permalink to this definition"></a></dt>
+<dd><p>Remove ISO data path command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.REM_CONN_PARAM_NEG_REP">
+<span class="sig-name descname"><span class="pre">REM_CONN_PARAM_NEG_REP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">33</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.REM_CONN_PARAM_NEG_REP" title="Permalink to this definition"></a></dt>
+<dd><p>Remote connection parameter request negative reply command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.REM_CONN_PARAM_REP">
+<span class="sig-name descname"><span class="pre">REM_CONN_PARAM_REP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">32</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.REM_CONN_PARAM_REP" title="Permalink to this definition"></a></dt>
+<dd><p>Remote connection parameter request reply command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.REQUEST_PEER_SCA">
+<span class="sig-name descname"><span class="pre">REQUEST_PEER_SCA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">109</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.REQUEST_PEER_SCA" title="Permalink to this definition"></a></dt>
+<dd><p>Request peer SCA command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SETUP_ISO_DATA_PATH">
+<span class="sig-name descname"><span class="pre">SETUP_ISO_DATA_PATH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">110</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SETUP_ISO_DATA_PATH" title="Permalink to this definition"></a></dt>
+<dd><p>Setup ISO data path command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_ADDR_RES_ENABLE">
+<span class="sig-name descname"><span class="pre">SET_ADDR_RES_ENABLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">45</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_ADDR_RES_ENABLE" title="Permalink to this definition"></a></dt>
+<dd><p>Set address resolution enable command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_ADV_DATA">
+<span class="sig-name descname"><span class="pre">SET_ADV_DATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">8</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_ADV_DATA" title="Permalink to this definition"></a></dt>
+<dd><p>Set advertising data command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_ADV_ENABLE">
+<span class="sig-name descname"><span class="pre">SET_ADV_ENABLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_ADV_ENABLE" title="Permalink to this definition"></a></dt>
+<dd><p>Set advertising enable command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_ADV_PARAM">
+<span class="sig-name descname"><span class="pre">SET_ADV_PARAM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_ADV_PARAM" title="Permalink to this definition"></a></dt>
+<dd><p>Set advertising parameters command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_ADV_SET_RAND_ADDR">
+<span class="sig-name descname"><span class="pre">SET_ADV_SET_RAND_ADDR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">53</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_ADV_SET_RAND_ADDR" title="Permalink to this definition"></a></dt>
+<dd><p>Set advertising set random address command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_CIG_PARAMS">
+<span class="sig-name descname"><span class="pre">SET_CIG_PARAMS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">98</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_CIG_PARAMS" title="Permalink to this definition"></a></dt>
+<dd><p>Set CIG parameters command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_CIG_PARAMS_TEST">
+<span class="sig-name descname"><span class="pre">SET_CIG_PARAMS_TEST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">99</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_CIG_PARAMS_TEST" title="Permalink to this definition"></a></dt>
+<dd><p>Set CIG parameters test command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_CONNLESS_CTE_TX_ENABLE">
+<span class="sig-name descname"><span class="pre">SET_CONNLESS_CTE_TX_ENABLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">82</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_CONNLESS_CTE_TX_ENABLE" title="Permalink to this definition"></a></dt>
+<dd><p>Set connectionless CTE transmit enable command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_CONNLESS_CTE_TX_PARAMS">
+<span class="sig-name descname"><span class="pre">SET_CONNLESS_CTE_TX_PARAMS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">81</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_CONNLESS_CTE_TX_PARAMS" title="Permalink to this definition"></a></dt>
+<dd><p>Set connectionless CTE transmit parameters command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_CONNLESS_IQ_SAMP_ENABLE">
+<span class="sig-name descname"><span class="pre">SET_CONNLESS_IQ_SAMP_ENABLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">83</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_CONNLESS_IQ_SAMP_ENABLE" title="Permalink to this definition"></a></dt>
+<dd><p>Set connectionless IQ sampling enable command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_CONN_CTE_RX_PARAMS">
+<span class="sig-name descname"><span class="pre">SET_CONN_CTE_RX_PARAMS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">84</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_CONN_CTE_RX_PARAMS" title="Permalink to this definition"></a></dt>
+<dd><p>Set connection CTE receive parameters command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_CONN_CTE_TX_PARAMS">
+<span class="sig-name descname"><span class="pre">SET_CONN_CTE_TX_PARAMS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">85</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_CONN_CTE_TX_PARAMS" title="Permalink to this definition"></a></dt>
+<dd><p>Set connection CTE transmit parameters command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_DATA_LEN">
+<span class="sig-name descname"><span class="pre">SET_DATA_LEN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">34</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_DATA_LEN" title="Permalink to this definition"></a></dt>
+<dd><p>Set data length command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_DATA_RELATED_ADDRESS_CHANGES">
+<span class="sig-name descname"><span class="pre">SET_DATA_RELATED_ADDRESS_CHANGES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">124</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_DATA_RELATED_ADDRESS_CHANGES" title="Permalink to this definition"></a></dt>
+<dd><p>Set data related address changes command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_DEFAULT_PAST_PARAM">
+<span class="sig-name descname"><span class="pre">SET_DEFAULT_PAST_PARAM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">93</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_DEFAULT_PAST_PARAM" title="Permalink to this definition"></a></dt>
+<dd><p>Set default periodic advertising sync transfer parameters command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_DEF_PHY">
+<span class="sig-name descname"><span class="pre">SET_DEF_PHY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">49</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_DEF_PHY" title="Permalink to this definition"></a></dt>
+<dd><p>Set default PHY command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_DEF_SUBRATE">
+<span class="sig-name descname"><span class="pre">SET_DEF_SUBRATE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">125</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_DEF_SUBRATE" title="Permalink to this definition"></a></dt>
+<dd><p>Set default subrate command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_EVENT_MASK">
+<span class="sig-name descname"><span class="pre">SET_EVENT_MASK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_EVENT_MASK" title="Permalink to this definition"></a></dt>
+<dd><p>Set event mask command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_EXT_ADV_DATA">
+<span class="sig-name descname"><span class="pre">SET_EXT_ADV_DATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">55</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_EXT_ADV_DATA" title="Permalink to this definition"></a></dt>
+<dd><p>Set extended advertising data command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_EXT_ADV_ENABLE">
+<span class="sig-name descname"><span class="pre">SET_EXT_ADV_ENABLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">57</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_EXT_ADV_ENABLE" title="Permalink to this definition"></a></dt>
+<dd><p>Set extended advertising enable command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_EXT_ADV_PARAM">
+<span class="sig-name descname"><span class="pre">SET_EXT_ADV_PARAM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">54</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_EXT_ADV_PARAM" title="Permalink to this definition"></a></dt>
+<dd><p>Set extended advertising parameters command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_EXT_SCAN_ENABLE">
+<span class="sig-name descname"><span class="pre">SET_EXT_SCAN_ENABLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">66</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_EXT_SCAN_ENABLE" title="Permalink to this definition"></a></dt>
+<dd><p>Set extended scan enable command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_EXT_SCAN_PARAM">
+<span class="sig-name descname"><span class="pre">SET_EXT_SCAN_PARAM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">65</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_EXT_SCAN_PARAM" title="Permalink to this definition"></a></dt>
+<dd><p>Set extended scan parameters command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_EXT_SCAN_RESP_DATA">
+<span class="sig-name descname"><span class="pre">SET_EXT_SCAN_RESP_DATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">56</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_EXT_SCAN_RESP_DATA" title="Permalink to this definition"></a></dt>
+<dd><p>Set extended scan response data command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_HOST_CHAN_CLASS">
+<span class="sig-name descname"><span class="pre">SET_HOST_CHAN_CLASS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">20</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_HOST_CHAN_CLASS" title="Permalink to this definition"></a></dt>
+<dd><p>Set host channel classification command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_HOST_FEATURE">
+<span class="sig-name descname"><span class="pre">SET_HOST_FEATURE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">116</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_HOST_FEATURE" title="Permalink to this definition"></a></dt>
+<dd><p>Set host feature command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_PAST_PARAM">
+<span class="sig-name descname"><span class="pre">SET_PAST_PARAM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">92</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_PAST_PARAM" title="Permalink to this definition"></a></dt>
+<dd><p>Set periodic advertising sync transfer parameters command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_PATH_LOSS_REPORTING_ENABLE">
+<span class="sig-name descname"><span class="pre">SET_PATH_LOSS_REPORTING_ENABLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">121</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_PATH_LOSS_REPORTING_ENABLE" title="Permalink to this definition"></a></dt>
+<dd><p>Set path loss reporting enable command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_PATH_LOSS_REPORTING_PARAMS">
+<span class="sig-name descname"><span class="pre">SET_PATH_LOSS_REPORTING_PARAMS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">120</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_PATH_LOSS_REPORTING_PARAMS" title="Permalink to this definition"></a></dt>
+<dd><p>Set path loss repoting parameters command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_PER_ADV_DATA">
+<span class="sig-name descname"><span class="pre">SET_PER_ADV_DATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">63</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_PER_ADV_DATA" title="Permalink to this definition"></a></dt>
+<dd><p>Set periodic advertising data command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_PER_ADV_ENABLE">
+<span class="sig-name descname"><span class="pre">SET_PER_ADV_ENABLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">64</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_PER_ADV_ENABLE" title="Permalink to this definition"></a></dt>
+<dd><p>Set periodic advertising enable command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_PER_ADV_PARAM">
+<span class="sig-name descname"><span class="pre">SET_PER_ADV_PARAM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">62</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_PER_ADV_PARAM" title="Permalink to this definition"></a></dt>
+<dd><p>Set periodic advertising parameters command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_PER_ADV_RCV_ENABLE">
+<span class="sig-name descname"><span class="pre">SET_PER_ADV_RCV_ENABLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">89</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_PER_ADV_RCV_ENABLE" title="Permalink to this definition"></a></dt>
+<dd><p>Set periodic advertising receive enable command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_PHY">
+<span class="sig-name descname"><span class="pre">SET_PHY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">50</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_PHY" title="Permalink to this definition"></a></dt>
+<dd><p>Set PHY command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_PRIVACY_MODE">
+<span class="sig-name descname"><span class="pre">SET_PRIVACY_MODE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">78</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_PRIVACY_MODE" title="Permalink to this definition"></a></dt>
+<dd><p>Set privacy mode command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_RAND_ADDR">
+<span class="sig-name descname"><span class="pre">SET_RAND_ADDR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_RAND_ADDR" title="Permalink to this definition"></a></dt>
+<dd><p>Set random address command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_RES_PRIV_ADDR_TO">
+<span class="sig-name descname"><span class="pre">SET_RES_PRIV_ADDR_TO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">46</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_RES_PRIV_ADDR_TO" title="Permalink to this definition"></a></dt>
+<dd><p>Set resolvable private address timeout command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_SCAN_ENABLE">
+<span class="sig-name descname"><span class="pre">SET_SCAN_ENABLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">12</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_SCAN_ENABLE" title="Permalink to this definition"></a></dt>
+<dd><p>Set scan enable command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_SCAN_PARAM">
+<span class="sig-name descname"><span class="pre">SET_SCAN_PARAM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">11</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_SCAN_PARAM" title="Permalink to this definition"></a></dt>
+<dd><p>Set scan parameters command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_SCAN_RESP_DATA">
+<span class="sig-name descname"><span class="pre">SET_SCAN_RESP_DATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">9</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_SCAN_RESP_DATA" title="Permalink to this definition"></a></dt>
+<dd><p>Set scan response data command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SET_TX_POWER_REPORT_ENABLE">
+<span class="sig-name descname"><span class="pre">SET_TX_POWER_REPORT_ENABLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">122</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SET_TX_POWER_REPORT_ENABLE" title="Permalink to this definition"></a></dt>
+<dd><p>Set TX power reporting enable command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.START_ENCRYPTION">
+<span class="sig-name descname"><span class="pre">START_ENCRYPTION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">25</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.START_ENCRYPTION" title="Permalink to this definition"></a></dt>
+<dd><p>Enable encryption command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.SUBRATE_REQ">
+<span class="sig-name descname"><span class="pre">SUBRATE_REQ</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">126</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.SUBRATE_REQ" title="Permalink to this definition"></a></dt>
+<dd><p>Subrate request command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.TERMINATE_BIG">
+<span class="sig-name descname"><span class="pre">TERMINATE_BIG</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">106</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.TERMINATE_BIG" title="Permalink to this definition"></a></dt>
+<dd><p>Terminate BIG command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.TEST_END">
+<span class="sig-name descname"><span class="pre">TEST_END</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">31</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.TEST_END" title="Permalink to this definition"></a></dt>
+<dd><p>Test end command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.TRANSMITTER_TEST">
+<span class="sig-name descname"><span class="pre">TRANSMITTER_TEST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">30</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.TRANSMITTER_TEST" title="Permalink to this definition"></a></dt>
+<dd><p>Transmitter test command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.TRANSMITTER_TEST_V3">
+<span class="sig-name descname"><span class="pre">TRANSMITTER_TEST_V3</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">80</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.TRANSMITTER_TEST_V3" title="Permalink to this definition"></a></dt>
+<dd><p>Transmitter test version3 command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.WRITE_DEF_DATA_LEN">
+<span class="sig-name descname"><span class="pre">WRITE_DEF_DATA_LEN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">36</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.WRITE_DEF_DATA_LEN" title="Permalink to this definition"></a></dt>
+<dd><p>Write suggested default data length command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.WRITE_RF_PATH_COMP">
+<span class="sig-name descname"><span class="pre">WRITE_RF_PATH_COMP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">77</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.WRITE_RF_PATH_COMP" title="Permalink to this definition"></a></dt>
+<dd><p>Write RF path compensation command.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LinkControlOCF">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LinkControlOCF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/packet_defs.html#LinkControlOCF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.packet_defs.LinkControlOCF" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>BLE-defined Link Control group Opcode Command Field values</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LinkControlOCF.DISCONNECT">
+<span class="sig-name descname"><span class="pre">DISCONNECT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LinkControlOCF.DISCONNECT" title="Permalink to this definition"></a></dt>
+<dd><p>Disconnect command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LinkControlOCF.READ_REMOTE_VER_INFO">
+<span class="sig-name descname"><span class="pre">READ_REMOTE_VER_INFO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">29</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LinkControlOCF.READ_REMOTE_VER_INFO" title="Permalink to this definition"></a></dt>
+<dd><p>Read remote version info command.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.NOpOCF">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NOpOCF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/packet_defs.html#NOpOCF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.packet_defs.NOpOCF" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>BLE-defined NOP group Opcode Command Field values.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.NOpOCF.NOP">
+<span class="sig-name descname"><span class="pre">NOP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.NOpOCF.NOP" title="Permalink to this definition"></a></dt>
+<dd><p>No operation.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.OCF">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">OCF</span></span><a class="reference internal" href="_modules/max_ble_hci/packet_defs.html#OCF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.packet_defs.OCF" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Supported Opcode Command Field values.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.OCF.CONTROLLER">
+<span class="sig-name descname"><span class="pre">CONTROLLER</span></span><a class="headerlink" href="#max_ble_hci.packet_defs.OCF.CONTROLLER" title="Permalink to this definition"></a></dt>
+<dd><p>Controller group OCF values.</p>
+<p>alias of <a class="reference internal" href="#max_ble_hci.packet_defs.ControllerOCF" title="max_ble_hci.packet_defs.ControllerOCF"><code class="xref py py-class docutils literal notranslate"><span class="pre">ControllerOCF</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.OCF.INFORMATIONAL">
+<span class="sig-name descname"><span class="pre">INFORMATIONAL</span></span><a class="headerlink" href="#max_ble_hci.packet_defs.OCF.INFORMATIONAL" title="Permalink to this definition"></a></dt>
+<dd><p>Informational group OCF values.</p>
+<p>alias of <a class="reference internal" href="#max_ble_hci.packet_defs.InformationalOCF" title="max_ble_hci.packet_defs.InformationalOCF"><code class="xref py py-class docutils literal notranslate"><span class="pre">InformationalOCF</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.OCF.LE_CONTROLLER">
+<span class="sig-name descname"><span class="pre">LE_CONTROLLER</span></span><a class="headerlink" href="#max_ble_hci.packet_defs.OCF.LE_CONTROLLER" title="Permalink to this definition"></a></dt>
+<dd><p>LE Controller group OCF values.</p>
+<p>alias of <a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF" title="max_ble_hci.packet_defs.LEControllerOCF"><code class="xref py py-class docutils literal notranslate"><span class="pre">LEControllerOCF</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.OCF.LINK_CONTROL">
+<span class="sig-name descname"><span class="pre">LINK_CONTROL</span></span><a class="headerlink" href="#max_ble_hci.packet_defs.OCF.LINK_CONTROL" title="Permalink to this definition"></a></dt>
+<dd><p>Link Control group OCF values.</p>
+<p>alias of <a class="reference internal" href="#max_ble_hci.packet_defs.LinkControlOCF" title="max_ble_hci.packet_defs.LinkControlOCF"><code class="xref py py-class docutils literal notranslate"><span class="pre">LinkControlOCF</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.OCF.LINK_POLICY">
+<span class="sig-name descname"><span class="pre">LINK_POLICY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.OCF.LINK_POLICY" title="Permalink to this definition"></a></dt>
+<dd><p>Link Policy group OCF values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.OCF.NOP">
+<span class="sig-name descname"><span class="pre">NOP</span></span><a class="headerlink" href="#max_ble_hci.packet_defs.OCF.NOP" title="Permalink to this definition"></a></dt>
+<dd><p>NOP ground OCF values.</p>
+<p>alias of <a class="reference internal" href="#max_ble_hci.packet_defs.NOpOCF" title="max_ble_hci.packet_defs.NOpOCF"><code class="xref py py-class docutils literal notranslate"><span class="pre">NOpOCF</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.OCF.STATUS">
+<span class="sig-name descname"><span class="pre">STATUS</span></span><a class="headerlink" href="#max_ble_hci.packet_defs.OCF.STATUS" title="Permalink to this definition"></a></dt>
+<dd><p>Status group OCF values.</p>
+<p>alias of <a class="reference internal" href="#max_ble_hci.packet_defs.StatusOCF" title="max_ble_hci.packet_defs.StatusOCF"><code class="xref py py-class docutils literal notranslate"><span class="pre">StatusOCF</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.OCF.TESTING">
+<span class="sig-name descname"><span class="pre">TESTING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.OCF.TESTING" title="Permalink to this definition"></a></dt>
+<dd><p>Testing group OCF values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.OCF.VENDOR_SPEC">
+<span class="sig-name descname"><span class="pre">VENDOR_SPEC</span></span><a class="headerlink" href="#max_ble_hci.packet_defs.OCF.VENDOR_SPEC" title="Permalink to this definition"></a></dt>
+<dd><p>ADI Vendor Specific group OCF values.</p>
+<p>alias of <a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF" title="max_ble_hci.packet_defs.VendorSpecificOCF"><code class="xref py py-class docutils literal notranslate"><span class="pre">VendorSpecificOCF</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.OGF">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">OGF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/packet_defs.html#OGF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.packet_defs.OGF" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>BLE-defined Opcode Group Field values.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.OGF.CONTROLLER">
+<span class="sig-name descname"><span class="pre">CONTROLLER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.OGF.CONTROLLER" title="Permalink to this definition"></a></dt>
+<dd><p>Controller group field.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.OGF.INFORMATIONAL">
+<span class="sig-name descname"><span class="pre">INFORMATIONAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.OGF.INFORMATIONAL" title="Permalink to this definition"></a></dt>
+<dd><p>Informational group field.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.OGF.LE_CONTROLLER">
+<span class="sig-name descname"><span class="pre">LE_CONTROLLER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">8</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.OGF.LE_CONTROLLER" title="Permalink to this definition"></a></dt>
+<dd><p>LE controller group field.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.OGF.LINK_CONTROL">
+<span class="sig-name descname"><span class="pre">LINK_CONTROL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.OGF.LINK_CONTROL" title="Permalink to this definition"></a></dt>
+<dd><p>Link control group field.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.OGF.LINK_POLICY">
+<span class="sig-name descname"><span class="pre">LINK_POLICY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.OGF.LINK_POLICY" title="Permalink to this definition"></a></dt>
+<dd><p>Link policy group field.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.OGF.NOP">
+<span class="sig-name descname"><span class="pre">NOP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.OGF.NOP" title="Permalink to this definition"></a></dt>
+<dd><p>No operation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.OGF.STATUS">
+<span class="sig-name descname"><span class="pre">STATUS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.OGF.STATUS" title="Permalink to this definition"></a></dt>
+<dd><p>Status group field.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.OGF.TESTING">
+<span class="sig-name descname"><span class="pre">TESTING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.OGF.TESTING" title="Permalink to this definition"></a></dt>
+<dd><p>Testing group field.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.OGF.VENDOR_SPEC">
+<span class="sig-name descname"><span class="pre">VENDOR_SPEC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">63</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.OGF.VENDOR_SPEC" title="Permalink to this definition"></a></dt>
+<dd><p>Vendor specific group field.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.PacketType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PacketType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/packet_defs.html#PacketType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.packet_defs.PacketType" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>BT standard packet types.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.PacketType.ASYNC">
+<span class="sig-name descname"><span class="pre">ASYNC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.PacketType.ASYNC" title="Permalink to this definition"></a></dt>
+<dd><p>Asynchronous Connection-Less packet type.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.PacketType.COMMAND">
+<span class="sig-name descname"><span class="pre">COMMAND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.PacketType.COMMAND" title="Permalink to this definition"></a></dt>
+<dd><p>Command packet type.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.PacketType.EVENT">
+<span class="sig-name descname"><span class="pre">EVENT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.PacketType.EVENT" title="Permalink to this definition"></a></dt>
+<dd><p>Event packet type.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.PacketType.EXTENDED">
+<span class="sig-name descname"><span class="pre">EXTENDED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">9</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.PacketType.EXTENDED" title="Permalink to this definition"></a></dt>
+<dd><p>Extended command packet type.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.PacketType.SYNC">
+<span class="sig-name descname"><span class="pre">SYNC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.PacketType.SYNC" title="Permalink to this definition"></a></dt>
+<dd><p>Synchronous packet type.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Synchronous data packets are not used in BLE.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.StatusOCF">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">StatusOCF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/packet_defs.html#StatusOCF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.packet_defs.StatusOCF" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>BLE-defined Status group Opcode Command Field values.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.StatusOCF.READ_RSSI">
+<span class="sig-name descname"><span class="pre">READ_RSSI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.StatusOCF.READ_RSSI" title="Permalink to this definition"></a></dt>
+<dd><p>Read RSSI command.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">VendorSpecificOCF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/packet_defs.html#VendorSpecificOCF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>ADI Vendor Specific group Opcode Command Field values.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.BB_DIS">
+<span class="sig-name descname"><span class="pre">BB_DIS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">776</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.BB_DIS" title="Permalink to this definition"></a></dt>
+<dd><p>PHY disable command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.BB_EN">
+<span class="sig-name descname"><span class="pre">BB_EN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">775</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.BB_EN" title="Permalink to this definition"></a></dt>
+<dd><p>PHY enable command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.ENA_ACL_SINK">
+<span class="sig-name descname"><span class="pre">ENA_ACL_SINK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">995</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.ENA_ACL_SINK" title="Permalink to this definition"></a></dt>
+<dd><p>Enable ACL sink command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.ENA_AUTO_GEN_ACL">
+<span class="sig-name descname"><span class="pre">ENA_AUTO_GEN_ACL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">997</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.ENA_AUTO_GEN_ACL" title="Permalink to this definition"></a></dt>
+<dd><p>Enable autogenerate ACL command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.ENA_AUTO_GEN_ISO">
+<span class="sig-name descname"><span class="pre">ENA_AUTO_GEN_ISO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">984</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.ENA_AUTO_GEN_ISO" title="Permalink to this definition"></a></dt>
+<dd><p>Enable autogenerate ISO packets command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.ENA_ISO_SINK">
+<span class="sig-name descname"><span class="pre">ENA_ISO_SINK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">983</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.ENA_ISO_SINK" title="Permalink to this definition"></a></dt>
+<dd><p>Enable ISO sink command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.GENERATE_ACL">
+<span class="sig-name descname"><span class="pre">GENERATE_ACL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">996</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GENERATE_ACL" title="Permalink to this definition"></a></dt>
+<dd><p>Generate ACL command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.GENERATE_ISO">
+<span class="sig-name descname"><span class="pre">GENERATE_ISO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">981</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GENERATE_ISO" title="Permalink to this definition"></a></dt>
+<dd><p>Generate ISO packets command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.GET_ACL_TEST_REPORT">
+<span class="sig-name descname"><span class="pre">GET_ACL_TEST_REPORT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1001</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_ACL_TEST_REPORT" title="Permalink to this definition"></a></dt>
+<dd><p>Get ACL test report command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.GET_ADV_STATS">
+<span class="sig-name descname"><span class="pre">GET_ADV_STATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1019</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_ADV_STATS" title="Permalink to this definition"></a></dt>
+<dd><p>Get advertising statistics command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.GET_AUX_ADV_STATS">
+<span class="sig-name descname"><span class="pre">GET_AUX_ADV_STATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">986</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_AUX_ADV_STATS" title="Permalink to this definition"></a></dt>
+<dd><p>Get auxiliary advertising statistics command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.GET_AUX_SCAN_STATS">
+<span class="sig-name descname"><span class="pre">GET_AUX_SCAN_STATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">987</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_AUX_SCAN_STATS" title="Permalink to this definition"></a></dt>
+<dd><p>Get auxiliary scan statistics command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.GET_CIS_STATS">
+<span class="sig-name descname"><span class="pre">GET_CIS_STATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">985</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_CIS_STATS" title="Permalink to this definition"></a></dt>
+<dd><p>Get CIS statistics command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.GET_CONN_STATS">
+<span class="sig-name descname"><span class="pre">GET_CONN_STATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1021</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_CONN_STATS" title="Permalink to this definition"></a></dt>
+<dd><p>Get connection statistics command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.GET_ISO_TEST_REPORT">
+<span class="sig-name descname"><span class="pre">GET_ISO_TEST_REPORT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">982</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_ISO_TEST_REPORT" title="Permalink to this definition"></a></dt>
+<dd><p>Get ISO test report command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.GET_PDU_FILT_STATS">
+<span class="sig-name descname"><span class="pre">GET_PDU_FILT_STATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1012</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_PDU_FILT_STATS" title="Permalink to this definition"></a></dt>
+<dd><p>Get PDU filter statistics command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.GET_PEER_MIN_USED_CHAN">
+<span class="sig-name descname"><span class="pre">GET_PEER_MIN_USED_CHAN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1003</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_PEER_MIN_USED_CHAN" title="Permalink to this definition"></a></dt>
+<dd><p>Get peer minimum number of used channels command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.GET_PER_CHAN_MAP">
+<span class="sig-name descname"><span class="pre">GET_PER_CHAN_MAP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">990</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_PER_CHAN_MAP" title="Permalink to this definition"></a></dt>
+<dd><p>Get periodic scan/advertising channel map command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.GET_PER_SCAN_STATS">
+<span class="sig-name descname"><span class="pre">GET_PER_SCAN_STATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">988</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_PER_SCAN_STATS" title="Permalink to this definition"></a></dt>
+<dd><p>Get periodic scan statistics command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.GET_POOL_STATS">
+<span class="sig-name descname"><span class="pre">GET_POOL_STATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1023</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_POOL_STATS" title="Permalink to this definition"></a></dt>
+<dd><p>Get pool statistics command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.GET_RAND_ADDR">
+<span class="sig-name descname"><span class="pre">GET_RAND_ADDR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1009</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_RAND_ADDR" title="Permalink to this definition"></a></dt>
+<dd><p>Get random address command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.GET_RSSI">
+<span class="sig-name descname"><span class="pre">GET_RSSI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">774</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_RSSI" title="Permalink to this definition"></a></dt>
+<dd><p>Get RSSI command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.GET_SCAN_STATS">
+<span class="sig-name descname"><span class="pre">GET_SCAN_STATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1020</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_SCAN_STATS" title="Permalink to this definition"></a></dt>
+<dd><p>Get scan statistics command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.GET_SYS_STATS">
+<span class="sig-name descname"><span class="pre">GET_SYS_STATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1018</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_SYS_STATS" title="Permalink to this definition"></a></dt>
+<dd><p>Get system statistics command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.GET_TEST_STATS">
+<span class="sig-name descname"><span class="pre">GET_TEST_STATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1022</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_TEST_STATS" title="Permalink to this definition"></a></dt>
+<dd><p>Get test statistics command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.REG_READ">
+<span class="sig-name descname"><span class="pre">REG_READ</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">769</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.REG_READ" title="Permalink to this definition"></a></dt>
+<dd><p>Register read command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.REG_WRITE">
+<span class="sig-name descname"><span class="pre">REG_WRITE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">768</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.REG_WRITE" title="Permalink to this definition"></a></dt>
+<dd><p>Register write command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.RESET_CONN_STATS">
+<span class="sig-name descname"><span class="pre">RESET_CONN_STATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">770</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.RESET_CONN_STATS" title="Permalink to this definition"></a></dt>
+<dd><p>Reset connection statistics command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.RESET_TEST_STATS">
+<span class="sig-name descname"><span class="pre">RESET_TEST_STATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">772</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.RESET_TEST_STATS" title="Permalink to this definition"></a></dt>
+<dd><p>Reset test statistics command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.RX_TEST">
+<span class="sig-name descname"><span class="pre">RX_TEST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">773</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.RX_TEST" title="Permalink to this definition"></a></dt>
+<dd><p>Receiver test command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.SET_ADV_TX_PWR">
+<span class="sig-name descname"><span class="pre">SET_ADV_TX_PWR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1013</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_ADV_TX_PWR" title="Permalink to this definition"></a></dt>
+<dd><p>Set advertising TX power command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.SET_AUX_DELAY">
+<span class="sig-name descname"><span class="pre">SET_AUX_DELAY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">976</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_AUX_DELAY" title="Permalink to this definition"></a></dt>
+<dd><p>Set auxiliary packet offset delay command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.SET_BD_ADDR">
+<span class="sig-name descname"><span class="pre">SET_BD_ADDR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1008</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_BD_ADDR" title="Permalink to this definition"></a></dt>
+<dd><p>Set BD address command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.SET_CHAN_MAP">
+<span class="sig-name descname"><span class="pre">SET_CHAN_MAP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1016</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_CHAN_MAP" title="Permalink to this definition"></a></dt>
+<dd><p>Set channel map command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.SET_CONN_OP_FLAGS">
+<span class="sig-name descname"><span class="pre">SET_CONN_OP_FLAGS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">999</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_CONN_OP_FLAGS" title="Permalink to this definition"></a></dt>
+<dd><p>Set connection operational flags command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.SET_CONN_PHY_TX_PWR">
+<span class="sig-name descname"><span class="pre">SET_CONN_PHY_TX_PWR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">989</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_CONN_PHY_TX_PWR" title="Permalink to this definition"></a></dt>
+<dd><p>Set connection PHY TX power command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.SET_CONN_TX_PWR">
+<span class="sig-name descname"><span class="pre">SET_CONN_TX_PWR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1014</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_CONN_TX_PWR" title="Permalink to this definition"></a></dt>
+<dd><p>Set connection TX power command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.SET_DIAG_MODE">
+<span class="sig-name descname"><span class="pre">SET_DIAG_MODE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1017</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_DIAG_MODE" title="Permalink to this definition"></a></dt>
+<dd><p>Set diagnostic mode command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.SET_ENC_MODE">
+<span class="sig-name descname"><span class="pre">SET_ENC_MODE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1015</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_ENC_MODE" title="Permalink to this definition"></a></dt>
+<dd><p>Set encryption mode command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.SET_EVENT_MASK">
+<span class="sig-name descname"><span class="pre">SET_EVENT_MASK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">993</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_EVENT_MASK" title="Permalink to this definition"></a></dt>
+<dd><p>Set event mask command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.SET_EXT_ADV_DEF_PHY_OPTS">
+<span class="sig-name descname"><span class="pre">SET_EXT_ADV_DEF_PHY_OPTS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">979</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_EXT_ADV_DEF_PHY_OPTS" title="Permalink to this definition"></a></dt>
+<dd><p>Set extended advertising default PHY options command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.SET_EXT_ADV_FRAG_LEN">
+<span class="sig-name descname"><span class="pre">SET_EXT_ADV_FRAG_LEN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">977</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_EXT_ADV_FRAG_LEN" title="Permalink to this definition"></a></dt>
+<dd><p>Set extended advertising data fragmentation length command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.SET_EXT_ADV_PHY_OPTS">
+<span class="sig-name descname"><span class="pre">SET_EXT_ADV_PHY_OPTS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">978</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_EXT_ADV_PHY_OPTS" title="Permalink to this definition"></a></dt>
+<dd><p>Set extended advertising PHY options command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.SET_LOCAL_FEAT">
+<span class="sig-name descname"><span class="pre">SET_LOCAL_FEAT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1010</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_LOCAL_FEAT" title="Permalink to this definition"></a></dt>
+<dd><p>Set local features command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.SET_LOCAL_MIN_USED_CHAN">
+<span class="sig-name descname"><span class="pre">SET_LOCAL_MIN_USED_CHAN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1002</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_LOCAL_MIN_USED_CHAN" title="Permalink to this definition"></a></dt>
+<dd><p>Set local minimum number of used channels command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.SET_OP_FLAGS">
+<span class="sig-name descname"><span class="pre">SET_OP_FLAGS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1011</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_OP_FLAGS" title="Permalink to this definition"></a></dt>
+<dd><p>Set operational flags command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.SET_P256_PRIV_KEY">
+<span class="sig-name descname"><span class="pre">SET_P256_PRIV_KEY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1000</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_P256_PRIV_KEY" title="Permalink to this definition"></a></dt>
+<dd><p>Set P-256 private key command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.SET_SCAN_CH_MAP">
+<span class="sig-name descname"><span class="pre">SET_SCAN_CH_MAP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">992</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_SCAN_CH_MAP" title="Permalink to this definition"></a></dt>
+<dd><p>Set scan channel map command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.SET_SNIFFER_ENABLE">
+<span class="sig-name descname"><span class="pre">SET_SNIFFER_ENABLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">973</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_SNIFFER_ENABLE" title="Permalink to this definition"></a></dt>
+<dd><p>Set sniffer packet forwarding enable command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.SET_TX_TEST_ERR_PATT">
+<span class="sig-name descname"><span class="pre">SET_TX_TEST_ERR_PATT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">998</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_TX_TEST_ERR_PATT" title="Permalink to this definition"></a></dt>
+<dd><p>Set TX test error pattern command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.TX_TEST">
+<span class="sig-name descname"><span class="pre">TX_TEST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">771</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.TX_TEST" title="Permalink to this definition"></a></dt>
+<dd><p>Transmitter test command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.VALIDATE_PUB_KEY_MODE">
+<span class="sig-name descname"><span class="pre">VALIDATE_PUB_KEY_MODE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1004</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.VALIDATE_PUB_KEY_MODE" title="Permalink to this definition"></a></dt>
+<dd><p>Set validate public key mode command.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="packet_codes.html" class="btn btn-neutral float-left" title="max_ble_hci.packet_codes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="hci_reference.html" class="btn btn-neutral float-right" title="HCI Command Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Analog Devices, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

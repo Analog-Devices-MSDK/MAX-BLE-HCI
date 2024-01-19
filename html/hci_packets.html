@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>max_ble_hci.hci_packets &mdash; MAX BLE HCI 0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=2389946f"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="max_ble_hci.packet_codes" href="packet_codes.html" />
+    <link rel="prev" title="max_ble_hci.data_params" href="data_params.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            MAX BLE HCI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ble_hci.html">max_ble_hci.ble_hci</a></li>
+<li class="toctree-l2"><a class="reference internal" href="constants.html">max_ble_hci.constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_params.html">max_ble_hci.data_params</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">max_ble_hci.hci_packets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.hci_packets.AsyncPacket"><code class="docutils literal notranslate"><span class="pre">AsyncPacket</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.AsyncPacket.handle"><code class="docutils literal notranslate"><span class="pre">AsyncPacket.handle</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.AsyncPacket.pb_flag"><code class="docutils literal notranslate"><span class="pre">AsyncPacket.pb_flag</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.AsyncPacket.bc_flag"><code class="docutils literal notranslate"><span class="pre">AsyncPacket.bc_flag</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.AsyncPacket.length"><code class="docutils literal notranslate"><span class="pre">AsyncPacket.length</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.AsyncPacket.data"><code class="docutils literal notranslate"><span class="pre">AsyncPacket.data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.AsyncPacket.from_bytes"><code class="docutils literal notranslate"><span class="pre">AsyncPacket.from_bytes()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.hci_packets.CommandPacket"><code class="docutils literal notranslate"><span class="pre">CommandPacket</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.CommandPacket.ogf"><code class="docutils literal notranslate"><span class="pre">CommandPacket.ogf</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.CommandPacket.ocf"><code class="docutils literal notranslate"><span class="pre">CommandPacket.ocf</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.CommandPacket.length"><code class="docutils literal notranslate"><span class="pre">CommandPacket.length</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.CommandPacket.opcode"><code class="docutils literal notranslate"><span class="pre">CommandPacket.opcode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.CommandPacket.params"><code class="docutils literal notranslate"><span class="pre">CommandPacket.params</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.CommandPacket.make_hci_opcode"><code class="docutils literal notranslate"><span class="pre">CommandPacket.make_hci_opcode()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.CommandPacket.to_bytes"><code class="docutils literal notranslate"><span class="pre">CommandPacket.to_bytes()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.hci_packets.EventPacket"><code class="docutils literal notranslate"><span class="pre">EventPacket</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.EventPacket.evt_code"><code class="docutils literal notranslate"><span class="pre">EventPacket.evt_code</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.EventPacket.length"><code class="docutils literal notranslate"><span class="pre">EventPacket.length</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.EventPacket.status"><code class="docutils literal notranslate"><span class="pre">EventPacket.status</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.EventPacket.evt_subcode"><code class="docutils literal notranslate"><span class="pre">EventPacket.evt_subcode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.EventPacket.evt_params"><code class="docutils literal notranslate"><span class="pre">EventPacket.evt_params</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.EventPacket.from_bytes"><code class="docutils literal notranslate"><span class="pre">EventPacket.from_bytes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.EventPacket.get_return_params"><code class="docutils literal notranslate"><span class="pre">EventPacket.get_return_params()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.hci_packets.ExtendedPacket"><code class="docutils literal notranslate"><span class="pre">ExtendedPacket</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.ExtendedPacket.ogf"><code class="docutils literal notranslate"><span class="pre">ExtendedPacket.ogf</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.ExtendedPacket.ocf"><code class="docutils literal notranslate"><span class="pre">ExtendedPacket.ocf</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.ExtendedPacket.length"><code class="docutils literal notranslate"><span class="pre">ExtendedPacket.length</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.ExtendedPacket.opcode"><code class="docutils literal notranslate"><span class="pre">ExtendedPacket.opcode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.ExtendedPacket.payload"><code class="docutils literal notranslate"><span class="pre">ExtendedPacket.payload</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.ExtendedPacket.make_hci_opcode"><code class="docutils literal notranslate"><span class="pre">ExtendedPacket.make_hci_opcode()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.ExtendedPacket.to_bytes"><code class="docutils literal notranslate"><span class="pre">ExtendedPacket.to_bytes()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.hci_packets.byte_length"><code class="docutils literal notranslate"><span class="pre">byte_length()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="packet_codes.html">max_ble_hci.packet_codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packet_defs.html">max_ble_hci.packet_defs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-max_ble_hci">Package Contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hci_reference.html">HCI Command Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MAX BLE HCI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">API Reference</a></li>
+      <li class="breadcrumb-item active">max_ble_hci.hci_packets</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/hci_packets.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-max_ble_hci.hci_packets">
+<span id="max-ble-hci-hci-packets"></span><h1>max_ble_hci.hci_packets<a class="headerlink" href="#module-max_ble_hci.hci_packets" title="Permalink to this heading"></a></h1>
+<p>Contains objects used for the creation of HCI packets.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.AsyncPacket">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AsyncPacket</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pb_flag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bc_flag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/hci_packets.html#AsyncPacket"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.hci_packets.AsyncPacket" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Deserializer for HCI ACL packets.</p>
+<p>Object defines a deserializer/data container for HCI
+Asynchronous Connection-Less packets. To create an
+instance directly from bytes, use the static function
+<cite>from_bytes</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> (<em>int</em>) – Packet handle value.</p></li>
+<li><p><strong>pb_flag</strong> (<em>int</em>) – Packet PB flag.</p></li>
+<li><p><strong>bc_flag</strong> (<em>int</em>) – Packet BC flag.</p></li>
+<li><p><strong>length</strong> (<em>int</em>) – Packet data length.</p></li>
+<li><p><strong>data</strong> (<em>bytes</em>) – Packet data.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.AsyncPacket.handle">
+<span class="sig-name descname"><span class="pre">handle</span></span><a class="headerlink" href="#max_ble_hci.hci_packets.AsyncPacket.handle" title="Permalink to this definition"></a></dt>
+<dd><p>Packet handle value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.AsyncPacket.pb_flag">
+<span class="sig-name descname"><span class="pre">pb_flag</span></span><a class="headerlink" href="#max_ble_hci.hci_packets.AsyncPacket.pb_flag" title="Permalink to this definition"></a></dt>
+<dd><p>Packet PB flag.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.AsyncPacket.bc_flag">
+<span class="sig-name descname"><span class="pre">bc_flag</span></span><a class="headerlink" href="#max_ble_hci.hci_packets.AsyncPacket.bc_flag" title="Permalink to this definition"></a></dt>
+<dd><p>Packet BC flag.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.AsyncPacket.length">
+<span class="sig-name descname"><span class="pre">length</span></span><a class="headerlink" href="#max_ble_hci.hci_packets.AsyncPacket.length" title="Permalink to this definition"></a></dt>
+<dd><p>Packet data length.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.AsyncPacket.data">
+<span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#max_ble_hci.hci_packets.AsyncPacket.data" title="Permalink to this definition"></a></dt>
+<dd><p>Packet data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bytes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.AsyncPacket.from_bytes">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_bytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pkt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#max_ble_hci.hci_packets.AsyncPacket" title="max_ble_hci.hci_packets.AsyncPacket"><span class="pre">AsyncPacket</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/hci_packets.html#AsyncPacket.from_bytes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.hci_packets.AsyncPacket.from_bytes" title="Permalink to this definition"></a></dt>
+<dd><p>Deserialize an HCI ACL packet.</p>
+<p>Deserializes an HCI Asynchronous Connection-Less packet
+from a bytes object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pkt</strong> (<em>bytes</em>) – Serialized async packet.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The deserialized packet.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#max_ble_hci.hci_packets.AsyncPacket" title="max_ble_hci.hci_packets.AsyncPacket">AsyncPacket</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.CommandPacket">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CommandPacket</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ogf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.OGF" title="max_ble_hci.packet_defs.OGF"><span class="pre">OGF</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ocf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.OCF" title="max_ble_hci.packet_defs.OCF"><span class="pre">OCF</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/hci_packets.html#CommandPacket"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.hci_packets.CommandPacket" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Serializer for HCI command packets.</p>
+<p>Object defines a container/serializer for HCI command
+packets. Initializing an instance of the object creates
+a container which stores the desired command opcode and
+parameters. A serialized command can then be generated
+through the use of the <cite>to_bytes</cite> function. In the event
+that an opcode is needed but a full packet is not, the
+static method <cite>make_hci_opcode</cite> can be called without
+initializing an instance of the object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ogf</strong> (<em>Union</em><em>[</em><a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.OGF" title="max_ble_hci.packet_defs.OGF"><em>OGF</em></a><em>, </em><em>int</em><em>]</em>) – Opcode group field.</p></li>
+<li><p><strong>ocf</strong> (<em>Union</em><em>[</em><a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.OCF" title="max_ble_hci.packet_defs.OCF"><em>OCF</em></a><em>, </em><em>int</em><em>]</em>) – Opcode command field.</p></li>
+<li><p><strong>params</strong> (<em>Union</em><em>[</em><em>List</em><em>[</em><em>int</em><em>]</em><em>, </em><em>int</em><em>]</em><em>, </em><em>optional</em>) – Command parameters, if any.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.CommandPacket.ogf">
+<span class="sig-name descname"><span class="pre">ogf</span></span><a class="headerlink" href="#max_ble_hci.hci_packets.CommandPacket.ogf" title="Permalink to this definition"></a></dt>
+<dd><p>Opcode group field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.OGF" title="max_ble_hci.packet_defs.OGF">OGF</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.CommandPacket.ocf">
+<span class="sig-name descname"><span class="pre">ocf</span></span><a class="headerlink" href="#max_ble_hci.hci_packets.CommandPacket.ocf" title="Permalink to this definition"></a></dt>
+<dd><p>Opcode command field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.OCF" title="max_ble_hci.packet_defs.OCF">OCF</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.CommandPacket.length">
+<span class="sig-name descname"><span class="pre">length</span></span><a class="headerlink" href="#max_ble_hci.hci_packets.CommandPacket.length" title="Permalink to this definition"></a></dt>
+<dd><p>Total length of command parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.CommandPacket.opcode">
+<span class="sig-name descname"><span class="pre">opcode</span></span><a class="headerlink" href="#max_ble_hci.hci_packets.CommandPacket.opcode" title="Permalink to this definition"></a></dt>
+<dd><p>Command opcode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.CommandPacket.params">
+<span class="sig-name descname"><span class="pre">params</span></span><a class="headerlink" href="#max_ble_hci.hci_packets.CommandPacket.params" title="Permalink to this definition"></a></dt>
+<dd><p>Command parameters, if any.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Union[List[int], int], optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.CommandPacket.make_hci_opcode">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_hci_opcode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ogf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.OGF" title="max_ble_hci.packet_defs.OGF"><span class="pre">OGF</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ocf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.OCF" title="max_ble_hci.packet_defs.OCF"><span class="pre">OCF</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/max_ble_hci/hci_packets.html#CommandPacket.make_hci_opcode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.hci_packets.CommandPacket.make_hci_opcode" title="Permalink to this definition"></a></dt>
+<dd><p>Make an HCI opcode.</p>
+<p>Creates an HCI opcode from the given Opcode Group Field (OGF)
+and Opcode Command Field (OCF) values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ogf</strong> (<em>Union</em><em>[</em><a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.OGF" title="max_ble_hci.packet_defs.OGF"><em>OGF</em></a><em>, </em><em>int</em><em>]</em>) – Opcode group field.</p></li>
+<li><p><strong>ocf</strong> (<em>Union</em><em>[</em><a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.OCF" title="max_ble_hci.packet_defs.OCF"><em>OCF</em></a><em>, </em><em>int</em><em>]</em>) – Opcode command field.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The generated HCI opcode.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.CommandPacket.to_bytes">
+<span class="sig-name descname"><span class="pre">to_bytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endianness</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="constants.html#max_ble_hci.constants.Endian" title="max_ble_hci.constants.Endian"><span class="pre">Endian</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Endian.LITTLE</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytearray</span></span></span><a class="reference internal" href="_modules/max_ble_hci/hci_packets.html#CommandPacket.to_bytes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.hci_packets.CommandPacket.to_bytes" title="Permalink to this definition"></a></dt>
+<dd><p>Serialize a command packet.</p>
+<p>Serializes a command packets from the stored attribute
+values into a command data byte array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>endianness</strong> (<a class="reference internal" href="constants.html#max_ble_hci.constants.Endian" title="max_ble_hci.constants.Endian"><em>Endian</em></a>) – Endian byte order to apply during serialization.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The serialized command.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bytearray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.EventPacket">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EventPacket</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">evt_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evt_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evt_subcode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/hci_packets.html#EventPacket"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.hci_packets.EventPacket" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Deserializer for HCI event packets.</p>
+<p>Object defines a deserializer/data container for HCI
+event packets. To create an instance directly from
+bytes, use the static function <cite>from_bytes</cite>. Event
+packet return parameters can be retrieved by calling
+the <cite>get_return_params</cite> function once an instance of
+the object has been created.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>evt_code</strong> (<em>int</em>) – Packet event code.</p></li>
+<li><p><strong>length</strong> (<em>int</em>) – Packet data length.</p></li>
+<li><p><strong>status</strong> (<em>int</em>) – Packet status code.</p></li>
+<li><p><strong>evt_params</strong> (<em>bytes</em>) – Packet return parameters.</p></li>
+<li><p><strong>evt_subcode</strong> (<em>int</em><em>, </em><em>optional</em>) – Packet event subcode.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.EventPacket.evt_code">
+<span class="sig-name descname"><span class="pre">evt_code</span></span><a class="headerlink" href="#max_ble_hci.hci_packets.EventPacket.evt_code" title="Permalink to this definition"></a></dt>
+<dd><p>Packet event code.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.EventCode" title="max_ble_hci.packet_codes.EventCode">EventCode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.EventPacket.length">
+<span class="sig-name descname"><span class="pre">length</span></span><a class="headerlink" href="#max_ble_hci.hci_packets.EventPacket.length" title="Permalink to this definition"></a></dt>
+<dd><p>Packet data length.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.EventPacket.status">
+<span class="sig-name descname"><span class="pre">status</span></span><a class="headerlink" href="#max_ble_hci.hci_packets.EventPacket.status" title="Permalink to this definition"></a></dt>
+<dd><p>Packet status code.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.EventPacket.evt_subcode">
+<span class="sig-name descname"><span class="pre">evt_subcode</span></span><a class="headerlink" href="#max_ble_hci.hci_packets.EventPacket.evt_subcode" title="Permalink to this definition"></a></dt>
+<dd><p>Packet event subcode</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.EventSubcode" title="max_ble_hci.packet_codes.EventSubcode">EventSubcode</a>, optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.EventPacket.evt_params">
+<span class="sig-name descname"><span class="pre">evt_params</span></span><a class="headerlink" href="#max_ble_hci.hci_packets.EventPacket.evt_params" title="Permalink to this definition"></a></dt>
+<dd><p>Packet return parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bytes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.EventPacket.from_bytes">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_bytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">serialized_event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#max_ble_hci.hci_packets.EventPacket" title="max_ble_hci.hci_packets.EventPacket"><span class="pre">EventPacket</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/hci_packets.html#EventPacket.from_bytes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.hci_packets.EventPacket.from_bytes" title="Permalink to this definition"></a></dt>
+<dd><p>Deserialize an HCI event packet.</p>
+<p>Deserializes an HCI event packet from a bytes object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>serialized_event</strong> (<em>bytes</em>) – Serialized event packet.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The deserialized packet.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#max_ble_hci.hci_packets.EventPacket" title="max_ble_hci.hci_packets.EventPacket">EventPacket</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.EventPacket.get_return_params">
+<span class="sig-name descname"><span class="pre">get_return_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param_lens</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endianness</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="constants.html#max_ble_hci.constants.Endian" title="max_ble_hci.constants.Endian"><span class="pre">Endian</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Endian.LITTLE</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></span><a class="reference internal" href="_modules/max_ble_hci/hci_packets.html#EventPacket.get_return_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.hci_packets.EventPacket.get_return_params" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieve packet return parameters.</p>
+<p>Parses the packet return parameters from the bytes stored
+in the <cite>evt_params</cite> attribute in accordance with the given
+lengths and deserialization parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>param_lens</strong> (<em>List</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – The length values of each expected return parameter. If
+only 1 return is expected, this value does not need to
+be provided.</p></li>
+<li><p><strong>endianness</strong> (<a class="reference internal" href="constants.html#max_ble_hci.constants.Endian" title="max_ble_hci.constants.Endian"><em>Endian</em></a>) – Endian byte order to apply during deserialization.</p></li>
+<li><p><strong>signed</strong> (<em>bool</em>) – Are the return values signed integers?</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The parsed return parameter(s).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Union[List[int], int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.ExtendedPacket">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ExtendedPacket</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ogf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.OGF" title="max_ble_hci.packet_defs.OGF"><span class="pre">OGF</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ocf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.OCF" title="max_ble_hci.packet_defs.OCF"><span class="pre">OCF</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/hci_packets.html#ExtendedPacket"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.hci_packets.ExtendedPacket" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Serializer for HCI extended command packets.</p>
+<p>Object defines a container/serializer for HCI extended command
+packets. Initializing an instance of the object creates a container
+which stores the desired extended command opcode and payload. A
+serialized command can then be generated through the use of the
+<cite>to_bytes</cite> function. In the event that an opcode is needed but a
+full packet is not, the static method <cite>make_hci_opcode</cite> can be used
+without initializing an instance of the object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ogf</strong> (<em>Union</em><em>[</em><a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.OGF" title="max_ble_hci.packet_defs.OGF"><em>OGF</em></a><em>, </em><em>int</em><em>]</em>) – Opcode group field.</p></li>
+<li><p><strong>ocf</strong> (<em>Union</em><em>[</em><a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.OCF" title="max_ble_hci.packet_defs.OCF"><em>OCF</em></a><em>, </em><em>int</em><em>]</em>) – Opcode command field.</p></li>
+<li><p><strong>payload</strong> (<em>Union</em><em>[</em><em>List</em><em>[</em><em>int</em><em>]</em><em>, </em><em>int</em><em>]</em><em>, </em><em>optional</em>) – Command parameters, if any.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.ExtendedPacket.ogf">
+<span class="sig-name descname"><span class="pre">ogf</span></span><a class="headerlink" href="#max_ble_hci.hci_packets.ExtendedPacket.ogf" title="Permalink to this definition"></a></dt>
+<dd><p>Opcode group field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.OGF" title="max_ble_hci.packet_defs.OGF">OGF</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.ExtendedPacket.ocf">
+<span class="sig-name descname"><span class="pre">ocf</span></span><a class="headerlink" href="#max_ble_hci.hci_packets.ExtendedPacket.ocf" title="Permalink to this definition"></a></dt>
+<dd><p>Opcode command field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.OCF" title="max_ble_hci.packet_defs.OCF">OCF</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.ExtendedPacket.length">
+<span class="sig-name descname"><span class="pre">length</span></span><a class="headerlink" href="#max_ble_hci.hci_packets.ExtendedPacket.length" title="Permalink to this definition"></a></dt>
+<dd><p>Total length of command parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.ExtendedPacket.opcode">
+<span class="sig-name descname"><span class="pre">opcode</span></span><a class="headerlink" href="#max_ble_hci.hci_packets.ExtendedPacket.opcode" title="Permalink to this definition"></a></dt>
+<dd><p>Command opcode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.ExtendedPacket.payload">
+<span class="sig-name descname"><span class="pre">payload</span></span><a class="headerlink" href="#max_ble_hci.hci_packets.ExtendedPacket.payload" title="Permalink to this definition"></a></dt>
+<dd><p>Command parameters, if any.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Union[List[int], int], optional</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.ExtendedPacket.make_hci_opcode">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_hci_opcode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ogf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.OGF" title="max_ble_hci.packet_defs.OGF"><span class="pre">OGF</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ocf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.OCF" title="max_ble_hci.packet_defs.OCF"><span class="pre">OCF</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/max_ble_hci/hci_packets.html#ExtendedPacket.make_hci_opcode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.hci_packets.ExtendedPacket.make_hci_opcode" title="Permalink to this definition"></a></dt>
+<dd><p>Make an HCI opcode.</p>
+<p>Creates an HCI opcode from the given Opcode Group Field (OGF)
+and Opcode Command Field (OCF) values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ogf</strong> (<em>Union</em><em>[</em><a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.OGF" title="max_ble_hci.packet_defs.OGF"><em>OGF</em></a><em>, </em><em>int</em><em>]</em>) – Opcode group field.</p></li>
+<li><p><strong>ocf</strong> (<em>Union</em><em>[</em><a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.OCF" title="max_ble_hci.packet_defs.OCF"><em>OCF</em></a><em>, </em><em>int</em><em>]</em>) – Opcode command field.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The generated HCI opcode.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.ExtendedPacket.to_bytes">
+<span class="sig-name descname"><span class="pre">to_bytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endianness</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="constants.html#max_ble_hci.constants.Endian" title="max_ble_hci.constants.Endian"><span class="pre">Endian</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Endian.LITTLE</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytearray</span></span></span><a class="reference internal" href="_modules/max_ble_hci/hci_packets.html#ExtendedPacket.to_bytes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.hci_packets.ExtendedPacket.to_bytes" title="Permalink to this definition"></a></dt>
+<dd><p>Serialize a command packet.</p>
+<p>Serializes a command packets from the stored attribute
+values into a command data byte array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>endianness</strong> (<a class="reference internal" href="constants.html#max_ble_hci.constants.Endian" title="max_ble_hci.constants.Endian"><em>Endian</em></a>) – Endian byte order to apply during serialization.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The serialized command.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bytearray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.byte_length">
+<span class="sig-name descname"><span class="pre">byte_length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/hci_packets.html#byte_length"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.hci_packets.byte_length" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the length of an integer in bytes.</p>
+<p>PRIVATE</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="data_params.html" class="btn btn-neutral float-left" title="max_ble_hci.data_params" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="packet_codes.html" class="btn btn-neutral float-right" title="max_ble_hci.packet_codes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Analog Devices, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

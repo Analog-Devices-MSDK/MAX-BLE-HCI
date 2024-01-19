@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>max_ble_hci.constants &mdash; MAX BLE HCI 0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=2389946f"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="max_ble_hci.data_params" href="data_params.html" />
+    <link rel="prev" title="max_ble_hci.ble_hci" href="ble_hci.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            MAX BLE HCI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ble_hci.html">max_ble_hci.ble_hci</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">max_ble_hci.constants</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.constants.AddrType"><code class="docutils literal notranslate"><span class="pre">AddrType</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.constants.AddrType.PUBLIC"><code class="docutils literal notranslate"><span class="pre">AddrType.PUBLIC</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.constants.AddrType.PUBLIC_IDENTITY"><code class="docutils literal notranslate"><span class="pre">AddrType.PUBLIC_IDENTITY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.constants.AddrType.RANDOM"><code class="docutils literal notranslate"><span class="pre">AddrType.RANDOM</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.constants.AddrType.RANDOM_IDENTITY"><code class="docutils literal notranslate"><span class="pre">AddrType.RANDOM_IDENTITY</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.constants.Endian"><code class="docutils literal notranslate"><span class="pre">Endian</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.constants.Endian.BIG"><code class="docutils literal notranslate"><span class="pre">Endian.BIG</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.constants.Endian.LITTLE"><code class="docutils literal notranslate"><span class="pre">Endian.LITTLE</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.constants.MAX_U16"><code class="docutils literal notranslate"><span class="pre">MAX_U16</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.constants.MAX_U32"><code class="docutils literal notranslate"><span class="pre">MAX_U32</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.constants.MAX_U64"><code class="docutils literal notranslate"><span class="pre">MAX_U64</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.constants.PayloadOption"><code class="docutils literal notranslate"><span class="pre">PayloadOption</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.constants.PayloadOption.PLD_00000000"><code class="docutils literal notranslate"><span class="pre">PayloadOption.PLD_00000000</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.constants.PayloadOption.PLD_00001111"><code class="docutils literal notranslate"><span class="pre">PayloadOption.PLD_00001111</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.constants.PayloadOption.PLD_01010101"><code class="docutils literal notranslate"><span class="pre">PayloadOption.PLD_01010101</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.constants.PayloadOption.PLD_10101010"><code class="docutils literal notranslate"><span class="pre">PayloadOption.PLD_10101010</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.constants.PayloadOption.PLD_11110000"><code class="docutils literal notranslate"><span class="pre">PayloadOption.PLD_11110000</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.constants.PayloadOption.PLD_11111111"><code class="docutils literal notranslate"><span class="pre">PayloadOption.PLD_11111111</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.constants.PayloadOption.PLD_PRBS15"><code class="docutils literal notranslate"><span class="pre">PayloadOption.PLD_PRBS15</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.constants.PayloadOption.PLD_PRBS9"><code class="docutils literal notranslate"><span class="pre">PayloadOption.PLD_PRBS9</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.constants.PhyOption"><code class="docutils literal notranslate"><span class="pre">PhyOption</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.constants.PhyOption.PHY_1M"><code class="docutils literal notranslate"><span class="pre">PhyOption.PHY_1M</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.constants.PhyOption.PHY_2M"><code class="docutils literal notranslate"><span class="pre">PhyOption.PHY_2M</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.constants.PhyOption.PHY_CODED"><code class="docutils literal notranslate"><span class="pre">PhyOption.PHY_CODED</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.constants.PhyOption.PHY_CODED_S2"><code class="docutils literal notranslate"><span class="pre">PhyOption.PHY_CODED_S2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.constants.PhyOption.PHY_CODED_S8"><code class="docutils literal notranslate"><span class="pre">PhyOption.PHY_CODED_S8</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.constants.PubKeyValidateMode"><code class="docutils literal notranslate"><span class="pre">PubKeyValidateMode</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.constants.PubKeyValidateMode.ALT1"><code class="docutils literal notranslate"><span class="pre">PubKeyValidateMode.ALT1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.constants.PubKeyValidateMode.ALT2"><code class="docutils literal notranslate"><span class="pre">PubKeyValidateMode.ALT2</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="data_params.html">max_ble_hci.data_params</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hci_packets.html">max_ble_hci.hci_packets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packet_codes.html">max_ble_hci.packet_codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packet_defs.html">max_ble_hci.packet_defs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-max_ble_hci">Package Contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hci_reference.html">HCI Command Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MAX BLE HCI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">API Reference</a></li>
+      <li class="breadcrumb-item active">max_ble_hci.constants</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/constants.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-max_ble_hci.constants">
+<span id="max-ble-hci-constants"></span><h1>max_ble_hci.constants<a class="headerlink" href="#module-max_ble_hci.constants" title="Permalink to this heading"></a></h1>
+<p>Contains HCI constants definitions.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.constants.AddrType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AddrType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/constants.html#AddrType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.constants.AddrType" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>BLE-defined peer address types.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.constants.AddrType.PUBLIC">
+<span class="sig-name descname"><span class="pre">PUBLIC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#max_ble_hci.constants.AddrType.PUBLIC" title="Permalink to this definition"></a></dt>
+<dd><p>Public device address.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.constants.AddrType.PUBLIC_IDENTITY">
+<span class="sig-name descname"><span class="pre">PUBLIC_IDENTITY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#max_ble_hci.constants.AddrType.PUBLIC_IDENTITY" title="Permalink to this definition"></a></dt>
+<dd><p>Resolvable Private address based on local IRK from
+resolving list, or public address if no match is found.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For advertising, this value is valid for own device
+address type only. For connection, this value is valid
+for both own device address type and connectable peer
+device address type.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.constants.AddrType.RANDOM">
+<span class="sig-name descname"><span class="pre">RANDOM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#max_ble_hci.constants.AddrType.RANDOM" title="Permalink to this definition"></a></dt>
+<dd><p>Random device address.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.constants.AddrType.RANDOM_IDENTITY">
+<span class="sig-name descname"><span class="pre">RANDOM_IDENTITY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#max_ble_hci.constants.AddrType.RANDOM_IDENTITY" title="Permalink to this definition"></a></dt>
+<dd><p>Resolvable Private address based on local IRK from
+resolving list, or random address is no match is found.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For advertising, this value is valid for own device
+address type only. For connection, this value is valid
+for both own device address type and connectable peer
+device address type.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.constants.Endian">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Endian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/constants.html#Endian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.constants.Endian" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>Endian byte-order definitions.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.constants.Endian.BIG">
+<span class="sig-name descname"><span class="pre">BIG</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'big'</span></em><a class="headerlink" href="#max_ble_hci.constants.Endian.BIG" title="Permalink to this definition"></a></dt>
+<dd><p>Big endian byte order.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.constants.Endian.LITTLE">
+<span class="sig-name descname"><span class="pre">LITTLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'little'</span></em><a class="headerlink" href="#max_ble_hci.constants.Endian.LITTLE" title="Permalink to this definition"></a></dt>
+<dd><p>Little endian byte order.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="max_ble_hci.constants.MAX_U16">
+<span class="sig-name descname"><span class="pre">MAX_U16</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">65535</span></em><a class="headerlink" href="#max_ble_hci.constants.MAX_U16" title="Permalink to this definition"></a></dt>
+<dd><p>Maximum value for a 16-bit unsigned integer.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="max_ble_hci.constants.MAX_U32">
+<span class="sig-name descname"><span class="pre">MAX_U32</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4294967295</span></em><a class="headerlink" href="#max_ble_hci.constants.MAX_U32" title="Permalink to this definition"></a></dt>
+<dd><p>Maximum value for a 32-bit unsigned integer.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="max_ble_hci.constants.MAX_U64">
+<span class="sig-name descname"><span class="pre">MAX_U64</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">18446744073709551615</span></em><a class="headerlink" href="#max_ble_hci.constants.MAX_U64" title="Permalink to this definition"></a></dt>
+<dd><p>Maximum value for a 64-bit unsigned integer.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.constants.PayloadOption">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PayloadOption</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/constants.html#PayloadOption"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.constants.PayloadOption" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>BLE-definded payload options.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.constants.PayloadOption.PLD_00000000">
+<span class="sig-name descname"><span class="pre">PLD_00000000</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#max_ble_hci.constants.PayloadOption.PLD_00000000" title="Permalink to this definition"></a></dt>
+<dd><p>00000000 payload option.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.constants.PayloadOption.PLD_00001111">
+<span class="sig-name descname"><span class="pre">PLD_00001111</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#max_ble_hci.constants.PayloadOption.PLD_00001111" title="Permalink to this definition"></a></dt>
+<dd><p>00001111 payload option.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.constants.PayloadOption.PLD_01010101">
+<span class="sig-name descname"><span class="pre">PLD_01010101</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">7</span></em><a class="headerlink" href="#max_ble_hci.constants.PayloadOption.PLD_01010101" title="Permalink to this definition"></a></dt>
+<dd><p>01010101 payload option.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.constants.PayloadOption.PLD_10101010">
+<span class="sig-name descname"><span class="pre">PLD_10101010</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#max_ble_hci.constants.PayloadOption.PLD_10101010" title="Permalink to this definition"></a></dt>
+<dd><p>10101010 payload option.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.constants.PayloadOption.PLD_11110000">
+<span class="sig-name descname"><span class="pre">PLD_11110000</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#max_ble_hci.constants.PayloadOption.PLD_11110000" title="Permalink to this definition"></a></dt>
+<dd><p>11110000 payload option.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.constants.PayloadOption.PLD_11111111">
+<span class="sig-name descname"><span class="pre">PLD_11111111</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#max_ble_hci.constants.PayloadOption.PLD_11111111" title="Permalink to this definition"></a></dt>
+<dd><p>11111111 payload option.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.constants.PayloadOption.PLD_PRBS15">
+<span class="sig-name descname"><span class="pre">PLD_PRBS15</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#max_ble_hci.constants.PayloadOption.PLD_PRBS15" title="Permalink to this definition"></a></dt>
+<dd><p>PRBS15 payload option.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.constants.PayloadOption.PLD_PRBS9">
+<span class="sig-name descname"><span class="pre">PLD_PRBS9</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#max_ble_hci.constants.PayloadOption.PLD_PRBS9" title="Permalink to this definition"></a></dt>
+<dd><p>PRBS9 payload option.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.constants.PhyOption">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PhyOption</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/constants.html#PhyOption"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.constants.PhyOption" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>BLE-defined PHY options.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.constants.PhyOption.PHY_1M">
+<span class="sig-name descname"><span class="pre">PHY_1M</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#max_ble_hci.constants.PhyOption.PHY_1M" title="Permalink to this definition"></a></dt>
+<dd><p>1M PHY option.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.constants.PhyOption.PHY_2M">
+<span class="sig-name descname"><span class="pre">PHY_2M</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#max_ble_hci.constants.PhyOption.PHY_2M" title="Permalink to this definition"></a></dt>
+<dd><p>2M PHY option.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.constants.PhyOption.PHY_CODED">
+<span class="sig-name descname"><span class="pre">PHY_CODED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#max_ble_hci.constants.PhyOption.PHY_CODED" title="Permalink to this definition"></a></dt>
+<dd><p>Generic coded PHY option.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.constants.PhyOption.PHY_CODED_S2">
+<span class="sig-name descname"><span class="pre">PHY_CODED_S2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#max_ble_hci.constants.PhyOption.PHY_CODED_S2" title="Permalink to this definition"></a></dt>
+<dd><p>Coded S2 PHY option.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.constants.PhyOption.PHY_CODED_S8">
+<span class="sig-name descname"><span class="pre">PHY_CODED_S8</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#max_ble_hci.constants.PhyOption.PHY_CODED_S8" title="Permalink to this definition"></a></dt>
+<dd><p>Coded S8 PHY option.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.constants.PubKeyValidateMode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PubKeyValidateMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/constants.html#PubKeyValidateMode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.constants.PubKeyValidateMode" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>Public key validation modes.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.constants.PubKeyValidateMode.ALT1">
+<span class="sig-name descname"><span class="pre">ALT1</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#max_ble_hci.constants.PubKeyValidateMode.ALT1" title="Permalink to this definition"></a></dt>
+<dd><p>ALT1 validation mode.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.constants.PubKeyValidateMode.ALT2">
+<span class="sig-name descname"><span class="pre">ALT2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#max_ble_hci.constants.PubKeyValidateMode.ALT2" title="Permalink to this definition"></a></dt>
+<dd><p>ALT2 validation mode.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ble_hci.html" class="btn btn-neutral float-left" title="max_ble_hci.ble_hci" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="data_params.html" class="btn btn-neutral float-right" title="max_ble_hci.data_params" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Analog Devices, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

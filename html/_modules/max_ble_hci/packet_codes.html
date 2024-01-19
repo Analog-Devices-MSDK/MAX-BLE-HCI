@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>max_ble_hci.packet_codes &mdash; MAX BLE HCI 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=2389946f"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MAX BLE HCI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hci_reference.html">HCI Command Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MAX BLE HCI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">max_ble_hci.packet_codes</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for max_ble_hci.packet_codes</h1><div class="highlight"><pre>
+<span></span><span class="ch">#! /usr/bin/env python3</span>
+<span class="c1">###############################################################################</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (C) 2023 Maxim Integrated Products, Inc., All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a</span>
+<span class="c1"># copy of this software and associated documentation files (the &quot;Software&quot;),</span>
+<span class="c1"># to deal in the Software without restriction, including without limitation</span>
+<span class="c1"># the rights to use, copy, modify, merge, publish, distribute, sublicense,</span>
+<span class="c1"># and/or sell copies of the Software, and to permit persons to whom the</span>
+<span class="c1"># Software is furnished to do so, subject to the following conditions:</span>
+<span class="c1">#</span>
+<span class="c1"># The above copyright notice and this permission notice shall be included</span>
+<span class="c1"># in all copies or substantial portions of the Software.</span>
+<span class="c1">#</span>
+<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS</span>
+<span class="c1"># OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF</span>
+<span class="c1"># MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.</span>
+<span class="c1"># IN NO EVENT SHALL MAXIM INTEGRATED BE LIABLE FOR ANY CLAIM, DAMAGES</span>
+<span class="c1"># OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,</span>
+<span class="c1"># ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR</span>
+<span class="c1"># OTHER DEALINGS IN THE SOFTWARE.</span>
+<span class="c1">#</span>
+<span class="c1"># Except as contained in this notice, the name of Maxim Integrated</span>
+<span class="c1"># Products, Inc. shall not be used except as stated in the Maxim Integrated</span>
+<span class="c1"># Products, Inc. Branding Policy.</span>
+<span class="c1">#</span>
+<span class="c1"># The mere transfer of this software does not imply any licenses</span>
+<span class="c1"># of trade secrets, proprietary technology, copyrights, patents,</span>
+<span class="c1"># trademarks, maskwork rights, or any other form of intellectual</span>
+<span class="c1"># property whatsoever. Maxim Integrated Products, Inc. retains all</span>
+<span class="c1"># ownership rights.</span>
+<span class="c1">#</span>
+<span class="c1">##############################################################################</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright 2023 Analog Devices, Inc.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+<span class="c1">#</span>
+<span class="c1">##############################################################################</span>
+<span class="sd">&quot;&quot;&quot;Contains definitions for BLE standard codes utilized in HCI packet creation/parsing.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+
+
+<div class="viewcode-block" id="EventCode"><a class="viewcode-back" href="../../packet_codes.html#max_ble_hci.packet_codes.EventCode">[docs]</a><span class="k">class</span> <span class="nc">EventCode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Supported HCI Event Codes&quot;&quot;&quot;</span>
+
+    <span class="n">DICON_COMPLETE</span> <span class="o">=</span> <span class="mh">0x05</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Disconnection complete event.&quot;&quot;&quot;</span>
+
+    <span class="n">ENC_CHANGE</span> <span class="o">=</span> <span class="mh">0x08</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Encryption change event.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_REMOTE_VERSION_INFO_COMPLETE</span> <span class="o">=</span> <span class="mh">0x0C</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read remote version information complete event.&quot;&quot;&quot;</span>
+
+    <span class="n">COMMAND_COMPLETE</span> <span class="o">=</span> <span class="mh">0x0E</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Command complete event.&quot;&quot;&quot;</span>
+
+    <span class="n">COMMAND_STATUS</span> <span class="o">=</span> <span class="mh">0x0F</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Command status event.&quot;&quot;&quot;</span>
+
+    <span class="n">HARDWARE_ERROR</span> <span class="o">=</span> <span class="mh">0x10</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Hardware error event.&quot;&quot;&quot;</span>
+
+    <span class="n">NUM_COMPLETED_PACKETS</span> <span class="o">=</span> <span class="mh">0x13</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of completed packets event.&quot;&quot;&quot;</span>
+
+    <span class="n">DATA_BUFF_OVERFLOW</span> <span class="o">=</span> <span class="mh">0x1A</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Data buffer overflow event.&quot;&quot;&quot;</span>
+
+    <span class="n">ENC_KEY_REFRESH_COMPLETE</span> <span class="o">=</span> <span class="mh">0x30</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Encryption key refresh complete event.&quot;&quot;&quot;</span>
+
+    <span class="n">LE_META</span> <span class="o">=</span> <span class="mh">0x3E</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;LE meta event.&quot;&quot;&quot;</span>
+
+    <span class="n">AUTH_PAYLOAD_TIMEOUT_EXPIRED</span> <span class="o">=</span> <span class="mh">0x57</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Authenticated payload timeout expired event.&quot;&quot;&quot;</span>
+
+    <span class="n">VENDOR_SPEC</span> <span class="o">=</span> <span class="mh">0xFF</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Vendor specific event.&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="EventSubcode"><a class="viewcode-back" href="../../packet_codes.html#max_ble_hci.packet_codes.EventSubcode">[docs]</a><span class="k">class</span> <span class="nc">EventSubcode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Supported LE Meta event subcodes.&quot;&quot;&quot;</span>
+
+    <span class="n">CONNECTION_COMPLETE</span> <span class="o">=</span> <span class="mh">0x1</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Connection complete event.&quot;&quot;&quot;</span>
+
+    <span class="n">ADVERTISING_REPORT</span> <span class="o">=</span> <span class="mh">0x2</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Advertising report event.&quot;&quot;&quot;</span>
+
+    <span class="n">CONNECTION_UPDATE</span> <span class="o">=</span> <span class="mh">0x3</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Connection update complete event.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_REMOTE_FEATURES_COMPLETE</span> <span class="o">=</span> <span class="mh">0x4</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read remote feature complete event.&quot;&quot;&quot;</span>
+
+    <span class="n">LONG_TERM_KEY_REQUEST</span> <span class="o">=</span> <span class="mh">0x5</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Long term key request event.&quot;&quot;&quot;</span>
+
+    <span class="n">REMOTE_CONNECTION_PARAMETER_REQUEST</span> <span class="o">=</span> <span class="mh">0x6</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remote connection parameter request event.&quot;&quot;&quot;</span>
+
+    <span class="n">DATA_LENGTH_CHANGE</span> <span class="o">=</span> <span class="mh">0x7</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Data length change event.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_LOCAL_P256_PUBLIC_KEY_COMPLETE</span> <span class="o">=</span> <span class="mh">0x8</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read local P-256 public key complete event.&quot;&quot;&quot;</span>
+
+    <span class="n">GENERATE_DHKEY_COMPLETE</span> <span class="o">=</span> <span class="mh">0x9</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate DHKey complete event.&quot;&quot;&quot;</span>
+
+    <span class="n">ENHANCED_CONNECTION_COMPLETE</span> <span class="o">=</span> <span class="mh">0xA</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enhanced connection complete event.&quot;&quot;&quot;</span>
+
+    <span class="n">DIRECTED_ADVERTISIING_REPORT</span> <span class="o">=</span> <span class="mh">0xB</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Directed advertising report event.&quot;&quot;&quot;</span>
+
+    <span class="n">PHY_UPDATE_COMPLETE</span> <span class="o">=</span> <span class="mh">0xC</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;PHY update complete event.&quot;&quot;&quot;</span>
+
+    <span class="n">EXTENDED_ADVERTISING_REPORT</span> <span class="o">=</span> <span class="mh">0xD</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extended advertising report event.&quot;&quot;&quot;</span>
+
+    <span class="n">PERIODIC_ADVERTISING_SYNC_ESTABLISHED</span> <span class="o">=</span> <span class="mh">0xE</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Periodic advertising sync established event.&quot;&quot;&quot;</span>
+
+    <span class="n">PERIODIC_ADVERTISING_REPORT</span> <span class="o">=</span> <span class="mh">0xF</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Periodic advertising report event.&quot;&quot;&quot;</span>
+
+    <span class="n">PERIODIC_ADVERTISING_SYNC_LOST</span> <span class="o">=</span> <span class="mh">0x10</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Periodic advertising sync lost event.&quot;&quot;&quot;</span>
+
+    <span class="n">SCAN_TIMEOUT</span> <span class="o">=</span> <span class="mh">0x11</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Scan timeout event.&quot;&quot;&quot;</span>
+
+    <span class="n">ADVERTISING_SET_TERMINATED</span> <span class="o">=</span> <span class="mh">0x12</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Advertising set terminated event.&quot;&quot;&quot;</span>
+
+    <span class="n">SCAN_REQUEST_RECEIVED</span> <span class="o">=</span> <span class="mh">0x13</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Scan request received event.&quot;&quot;&quot;</span>
+
+    <span class="n">CHANNEL_SELECTION_ALGORITHM</span> <span class="o">=</span> <span class="mh">0x14</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Channel selection algorithm event.&quot;&quot;&quot;</span>
+
+    <span class="n">CONNECTIONLESS_IQ_REPORT</span> <span class="o">=</span> <span class="mh">0x15</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Connectionless IQ report event.&quot;&quot;&quot;</span>
+
+    <span class="n">CONNECTION_IQ_REPORT</span> <span class="o">=</span> <span class="mh">0x16</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Connection IQ report event.&quot;&quot;&quot;</span>
+
+    <span class="n">CTE_REQUEST_FAILED</span> <span class="o">=</span> <span class="mh">0x17</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;CTE request failed event.&quot;&quot;&quot;</span>
+
+    <span class="n">PERIODIC_ADVERTISING_SYNC_TRANSER_RECEIVED</span> <span class="o">=</span> <span class="mh">0x18</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Periodic advertising sync transfer received event.&quot;&quot;&quot;</span>
+
+    <span class="n">CIS_ESTABLISHED</span> <span class="o">=</span> <span class="mh">0x19</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;CIS established event.&quot;&quot;&quot;</span>
+
+    <span class="n">CIS_REQUEST</span> <span class="o">=</span> <span class="mh">0x1A</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;CIS request event.&quot;&quot;&quot;</span>
+
+    <span class="n">CREATE_BIG_COMPLETE</span> <span class="o">=</span> <span class="mh">0x1B</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create BIG complete event.&quot;&quot;&quot;</span>
+
+    <span class="n">TERMINATE_BIG_COMPLETE</span> <span class="o">=</span> <span class="mh">0x1C</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Terminate BIG complete event.&quot;&quot;&quot;</span>
+
+    <span class="n">BIG_SYNC_ESTABLISHED</span> <span class="o">=</span> <span class="mh">0x1D</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;BIG sync established event.&quot;&quot;&quot;</span>
+
+    <span class="n">BIG_SYNC_LOST</span> <span class="o">=</span> <span class="mh">0x1E</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;BIG sync list event.&quot;&quot;&quot;</span>
+
+    <span class="n">REQUEST_PEER_SCA_COMPLETE</span> <span class="o">=</span> <span class="mh">0x1F</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Request peeer SCA complete event.&quot;&quot;&quot;</span>
+
+    <span class="n">PATH_LOSS_THRESHOLD</span> <span class="o">=</span> <span class="mh">0x20</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Path loss threshold event.&quot;&quot;&quot;</span>
+
+    <span class="n">TRANSMIT_POWER_REPORTING</span> <span class="o">=</span> <span class="mh">0x21</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transmit power reporting event.&quot;&quot;&quot;</span>
+
+    <span class="n">BIGINFO_ADVERTISING_REPORT</span> <span class="o">=</span> <span class="mh">0x22</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;BIGInfo advertising report event.&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="StatusCode"><a class="viewcode-back" href="../../packet_codes.html#max_ble_hci.packet_codes.StatusCode">[docs]</a><span class="k">class</span> <span class="nc">StatusCode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;BLE-defined status codes.&quot;&quot;&quot;</span>
+
+    <span class="n">SUCCESS</span> <span class="o">=</span> <span class="mh">0x00</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Success.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_UNKNOWN_HCI_CMD</span> <span class="o">=</span> <span class="mh">0x01</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Unknown HCI command error.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_UNKNOWN_CONN_ID</span> <span class="o">=</span> <span class="mh">0x2</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Unknown connection identifier.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_HW_FAILURE</span> <span class="o">=</span> <span class="mh">0x03</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Hardware failure.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_PAGE_TIMEOUT</span> <span class="o">=</span> <span class="mh">0x04</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Page timeout.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_AUTH_FAILURE</span> <span class="o">=</span> <span class="mh">0x05</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Authentication failure.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_PIN_KEY_MISSING</span> <span class="o">=</span> <span class="mh">0x06</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;PIN or key missing.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_MEM_CAP_EXCEEDED</span> <span class="o">=</span> <span class="mh">0x07</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Memory capacity exceeded.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_CONN_TIMEOUT</span> <span class="o">=</span> <span class="mh">0x08</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Connection timeout.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_CONN_LIMIT_EXCEEDED</span> <span class="o">=</span> <span class="mh">0x09</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Connection limit exceeded.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_SYNCH_CONN_LIMIT_EXCEEDED</span> <span class="o">=</span> <span class="mh">0x0A</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Synchronous connection limit to a device exceeded.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_ACL_CONN_ALREADY_EXISTS</span> <span class="o">=</span> <span class="mh">0x0B</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Connection already exists.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_CMD_DISALLOWED</span> <span class="o">=</span> <span class="mh">0x0C</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Command disallowed.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_CONN_REJ_LIMITED_RESOURCES</span> <span class="o">=</span> <span class="mh">0x0D</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;connection rejection due to limited resources.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_CONN_REJECTED_SECURITY_REASONS</span> <span class="o">=</span> <span class="mh">0x0E</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Connection rejected due to security reasons.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_CONN_REJECTED_UNACCEPTABLE_BDADDR</span> <span class="o">=</span> <span class="mh">0x0F</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Connection rejected dur to unacceptable BD address.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_CONN_ACCEPT_TIMEOUT_EXCEEDED</span> <span class="o">=</span> <span class="mh">0x10</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Connection accept timeout exceeded.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_UNSUPPORTED_FEATURE_PARAM_VALUE</span> <span class="o">=</span> <span class="mh">0x11</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Unsupported feature or parameter value.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_INVALID_HCI_CMD_PARAMS</span> <span class="o">=</span> <span class="mh">0x12</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Invalid HCI command parameters.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_REMOTE_USER_TERM_CONN</span> <span class="o">=</span> <span class="mh">0x13</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remote user terminated connection.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_REMOTE_DEVICE_TERM_CONN_LOW_RESOURCES</span> <span class="o">=</span> <span class="mh">0x14</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remote device terminated connection due to low resources.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_REMOTE_DEVICE_TERM_CONN_POWER_OFF</span> <span class="o">=</span> <span class="mh">0x15</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remote device terminated connection due to power off.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_CONN_TERM_BY_LOCAL_HOST</span> <span class="o">=</span> <span class="mh">0x16</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Connection terminated by local host.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_REPEATED_ATTEMPTS</span> <span class="o">=</span> <span class="mh">0x17</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Repeated attempts.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_PAIRING_NOT_ALLOWED</span> <span class="o">=</span> <span class="mh">0x18</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Pairing not allowed.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_UNKNOWN_LMP_PDU</span> <span class="o">=</span> <span class="mh">0x19</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Unknown LMP PDU.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_UNSUPPORTED_REMOTE_FEATURE</span> <span class="o">=</span> <span class="mh">0x1A</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Unsupported remote feature.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_SCO_OFFSET_REJ</span> <span class="o">=</span> <span class="mh">0x1B</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;SCO offset rejected.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_SCO_INTERVAL_REJ</span> <span class="o">=</span> <span class="mh">0x1C</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;SCO interval rejected.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_SCO_AIR_MODE_REJ</span> <span class="o">=</span> <span class="mh">0x1D</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;SCO air mode rejected.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_INVALID_LMP_PARAMS</span> <span class="o">=</span> <span class="mh">0x1E</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Invalid LMP parameters / Invalid LL parameters.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_UNSPECIFIED_ERROR</span> <span class="o">=</span> <span class="mh">0x1F</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Unspecified error.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_UNSUPPORTED_LMP_PARAM_VAL</span> <span class="o">=</span> <span class="mh">0x20</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Unsupported LMP parameter value / Unsupported LL parameter value.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_ROLE_CHANGE_NOT_ALLOWED</span> <span class="o">=</span> <span class="mh">0x21</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Role change not allowed.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_LMP_LL_RESP_TIMEOUT</span> <span class="o">=</span> <span class="mh">0x22</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;LMP response timeout / LL response timeout.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_LMP_ERR_TRANSACTION_COLLISION</span> <span class="o">=</span> <span class="mh">0x23</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;LMP error transaction collision / LL procedure collision.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_LMP_PDU_NOT_ALLOWED</span> <span class="o">=</span> <span class="mh">0x24</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;LMP PDU not allowed.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_ENCRYPT_MODE_NOT_ACCEPTABLE</span> <span class="o">=</span> <span class="mh">0x25</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Encryption mode not acceptable.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_LINK_KEY_CAN_NOT_BE_CHANGED</span> <span class="o">=</span> <span class="mh">0x26</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Link key cannot be changed.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_REQ_QOS_NOT_SUPPORTED</span> <span class="o">=</span> <span class="mh">0x27</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Requested QoS not supported.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_INSTANT_PASSED</span> <span class="o">=</span> <span class="mh">0x28</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Instance passed.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_PAIRING_WITH_UNIT_KEY_NOT_SUPPORTED</span> <span class="o">=</span> <span class="mh">0x29</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Pairing with unit key not supported.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_DIFFERENT_TRANSACTION_COLLISION</span> <span class="o">=</span> <span class="mh">0x2A</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Different transaction collision.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_RESERVED1</span> <span class="o">=</span> <span class="mh">0x2B</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reserved for future use.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_QOS_UNACCEPTABLE_PARAM</span> <span class="o">=</span> <span class="mh">0x2C</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;QoS unacceptable parameter.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_QOS_REJ</span> <span class="o">=</span> <span class="mh">0x2D</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;QoS rejected.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_CHAN_ASSESSMENT_NOT_SUPPORTED</span> <span class="o">=</span> <span class="mh">0x2E</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Channel classification not supported error.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_INSUFFICIENT_SECURITY</span> <span class="o">=</span> <span class="mh">0x2F</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Insufficient security.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_PARAM_OUT_OF_MANDATORY_RANGE</span> <span class="o">=</span> <span class="mh">0x30</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parameter out of mandatory range.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_RESERVED2</span> <span class="o">=</span> <span class="mh">0x31</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reserved for future use.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_ROLE_SWITCH_PENDING</span> <span class="o">=</span> <span class="mh">0x32</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Role switch pending.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_RESERVED3</span> <span class="o">=</span> <span class="mh">0x33</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reserved for future use.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_RESERVED_SLOT_VIOLATION</span> <span class="o">=</span> <span class="mh">0x34</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reserved slot violation.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_ROLE_SWITCH_FAILED</span> <span class="o">=</span> <span class="mh">0x35</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Role switch failed.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_EXTENDED_INQUIRY_RESP_TOO_LARGE</span> <span class="o">=</span> <span class="mh">0x36</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extended inquiry response too large.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_SIMPLE_PAIRING_NOT_SUPPORTED_BY_HOST</span> <span class="o">=</span> <span class="mh">0x37</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Secure simple pairing not supported by host.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_HOST_BUSY_PAIRING</span> <span class="o">=</span> <span class="mh">0x38</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Host busy - pairing.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_CONN_REJ_NO_SUITABLE_CHAN_FOUND</span> <span class="o">=</span> <span class="mh">0x39</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Connection rejected dur to no suitable channel found.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_CONTROLLER_BUSY</span> <span class="o">=</span> <span class="mh">0x3A</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Controller busy.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_UNACCEPTABLE_CONN_INTERVAL</span> <span class="o">=</span> <span class="mh">0x3B</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Unacceptable connection parameters.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_ADV_TIMEOUT</span> <span class="o">=</span> <span class="mh">0x3C</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Advertising timeout.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_CONN_TERM_MIC_FAILURE</span> <span class="o">=</span> <span class="mh">0x3D</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Connection terminated due to MIC failure.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_CONN_FAILED_TO_ESTABLISH</span> <span class="o">=</span> <span class="mh">0x3E</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Connection failed to be established / Synchronization timeout.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_MAC_CONN_FAILED</span> <span class="o">=</span> <span class="mh">0x3F</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;MAC connection failed [previously used].&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_COARSE_CLK_ADJ_REJ</span> <span class="o">=</span> <span class="mh">0x40</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Coarse cloack adjustment rejected but will try to adjust clock</span>
+<span class="sd">    using clock dragging.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_TYPE0_SUBMAP_NOT_DEF</span> <span class="o">=</span> <span class="mh">0x41</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Type0 submap noot defined.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_UNKNOWN_ADV_ID</span> <span class="o">=</span> <span class="mh">0x42</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Unknown advertising identifier.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_LIMIT_REACHED</span> <span class="o">=</span> <span class="mh">0x43</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Limit reached.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_OP_CANCELLED_BY_HOST</span> <span class="o">=</span> <span class="mh">0x44</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Operation cancelled by host.&quot;&quot;&quot;</span>
+
+    <span class="n">ERROR_CODE_PKT_TOO_LONG</span> <span class="o">=</span> <span class="mh">0x45</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Packet too long.&quot;&quot;&quot;</span>
+
+    <span class="n">DECODE_FAILURE</span> <span class="o">=</span> <span class="mh">0xFF</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ADI vendor specific, returns when the status is not properly set.&quot;&quot;&quot;</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Analog Devices, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
