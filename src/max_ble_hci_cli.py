@@ -75,17 +75,12 @@ from max_ble_hci.constants import PhyOption, PayloadOption
 from max_ble_hci.data_params import ConnParams, AdvParams, ScanParams
 
 
-# Create a logger
 logger = logging.getLogger(__name__)
-
-# Set the log level
 logger.setLevel(logging.DEBUG)
 
-# Create a console handler and set the level to debug
 console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.DEBUG)
 
-# Create a colored formatter
 formatter = ColoredFormatter(
     "%(log_color)s%(levelname)-8s%(reset)s %(blue)s%(message)s",
     datefmt=None,
@@ -101,10 +96,7 @@ formatter = ColoredFormatter(
     style="%",
 )
 
-# Add the formatter to the console handler
 console_handler.setFormatter(formatter)
-
-# Add the console handler to the logger
 logger.addHandler(console_handler)
 
 
