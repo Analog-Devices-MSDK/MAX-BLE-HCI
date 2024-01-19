@@ -276,7 +276,9 @@ class DataPktStats:
         """
         if peer_tx_data:
             return 100 - 100 * (self.rx_data / peer_tx_data)
-        return self.rx_data / (self.rx_data + self.rx_data_crc + self.rx_data_timeout)
+        return 100 - self.rx_data / (
+            self.rx_data + self.rx_data_crc + self.rx_data_timeout
+        )
 
 
 @dataclass
@@ -344,7 +346,28 @@ class ScanPktStats:
 
     rx_adv_timeout: int = None
     """Number of RX timeouts."""
+    tx_req: int = None
+    """Number of advertising requests sent."""
+    rx_rsp: int = None
+    """Number of advertising response packets received correctly."""
 
+    rx_rsp_crc: int = None
+    """Number of advertising response packets received with a CRC error."""
+
+    rx_rsp_timeout: int = None
+    """Number of advertising response RX timeouts."""
+    err_scan: int = None
+    """Number of scan transaction errors."""
+    rx_setup: int = None
+    """RX packet setup watermark in microseconds."""
+
+    tx_setup: int = None
+    """TX packet setup watermark in microseconds."""
+    rx_isr: int = None
+    """RX ISR processing watermark in microseconds."""
+
+    tx_isr: int = None
+    """TX ISR processing watermark in microseconds."""
     rx_chain: Optional[int] = None
     """
     Number of chain packets received correctly.
@@ -371,33 +394,6 @@ class ScanPktStats:
         Value is only returned when retrieving auxiliary scanning statistics.
     
     """
-
-    err_scan: int = None
-    """Number of scan transaction errors."""
-
-    rx_setup: int = None
-    """RX packet setup watermark in microseconds."""
-
-    tx_setup: int = None
-    """TX packet setup watermark in microseconds."""
-
-    rx_isr: int = None
-    """RX ISR processing watermark in microseconds."""
-
-    tx_isr: int = None
-    """TX ISR processing watermark in microseconds."""
-
-    tx_req: int = None
-    """Number of advertising requests sent."""
-
-    rx_rsp: int = None
-    """Number of advertising response packets received correctly."""
-
-    rx_rsp_crc: int = None
-    """Number of advertising response packets received with a CRC error."""
-
-    rx_rsp_timeout: int = None
-    """Number of advertising response RX timeouts."""
 
     def __repr__(self) -> str:
         print_lns = []

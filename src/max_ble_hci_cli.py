@@ -75,17 +75,12 @@ from max_ble_hci.constants import PhyOption, PayloadOption
 from max_ble_hci.data_params import ConnParams, AdvParams, ScanParams
 
 
-# Create a logger
 logger = logging.getLogger(__name__)
-
-# Set the log level
 logger.setLevel(logging.DEBUG)
 
-# Create a console handler and set the level to debug
 console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.DEBUG)
 
-# Create a colored formatter
 formatter = ColoredFormatter(
     "%(log_color)s%(levelname)-8s%(reset)s %(blue)s%(message)s",
     datefmt=None,
@@ -101,10 +96,7 @@ formatter = ColoredFormatter(
     style="%",
 )
 
-# Add the formatter to the console handler
 console_handler.setFormatter(formatter)
-
-# Add the console handler to the logger
 logger.addHandler(console_handler)
 
 
@@ -139,7 +131,7 @@ def _signal_handler(_signal, _fname):  # pylint: disable=unused-argument
     sys.exit(0)
 
 
-def _run_input_cmds(commands):
+def _run_input_cmds(commands, terminal):
     for cmd in commands:
         try:
             # pylint: disable=used-before-assignment
@@ -157,15 +149,18 @@ def _run_input_cmds(commands):
     return True
 
 
-################## MAIN ##################
-if __name__ == "__main__":
-    COMMAND_STATE = ""
+def main():
+    """
+    MAIN
+    """
+    # pylint: disable=too-many-locals,too-many-branches,too-many-statements
+    command_state = ""
 
     # Setup the signal handler to catch the ctrl-C
     signal.signal(signal.SIGINT, _signal_handler)
 
     # Setup the command line description text
-    DESC_TEXT = f"""
+    cli_description = f"""
         Bluetooth Low Energy HCI tool.
         This tool is used in tandem with the BLE controller examples. 
         This tool sends HCI commands through the serial port to the target device. 
@@ -175,7 +170,7 @@ if __name__ == "__main__":
 
     # Parse the command line arguments
     parser = argparse.ArgumentParser(
-        description=DESC_TEXT, formatter_class=RawTextHelpFormatter
+        description=cli_description, formatter_class=RawTextHelpFormatter
     )
     parser.add_argument("serial_port", help="Serial port path or COM#")
     parser.add_argument(
@@ -226,8 +221,6 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    PORT_INITIALIZED = True
-
     hci = BleHci(
         args.serial_port,
         baud=args.baudRate,
@@ -242,19 +235,19 @@ if __name__ == "__main__":
     print(f"Monitor Trace Msg Serial Port: {args.monPort}")
     print(f"8N1 {args.baudRate}")
 
-    COMMANDS = args.commands
-    if COMMANDS:
-        if len(COMMANDS) > 1:
-            COMMANDS = " ".join(COMMANDS)
+    commands = args.commands
+    if commands:
+        if len(commands) > 1:
+            commands = " ".join(commands)
         else:
-            COMMANDS = COMMANDS[0]
+            commands = commands[0]
 
-        COMMANDS = COMMANDS.split(";")
-        COMMANDS = [x.strip() for x in COMMANDS]
+        commands = commands.split(";")
+        commands = [x.strip() for x in commands]
 
         print("Startup commands: ")
-        for x in COMMANDS:
-            print(f"\t{x}")
+        for command in commands:
+            print(f"\t{command}")
 
     # Start the terminal argparse
     terminal = ArgumentParser(prog="", add_help=True)
@@ -428,14 +421,14 @@ if __name__ == "__main__":
         func=lambda _: print(hci.enable_acl_sink(bool(args.enable))),
     )
 
-    connStats_parser = subparsers.add_parser(
+    conn_stats_parser = subparsers.add_parser(
         "conn-stats",
         aliases=["cs"],
         help="Get the connection stats",
         formatter_class=RawTextHelpFormatter,
     )
 
-    connStats_parser.set_defaults(
+    conn_stats_parser.set_defaults(
         func=lambda _: print(hci.get_conn_stats()), which="connstats"
     )
 
@@ -824,34 +817,23 @@ if __name__ == "__main__":
     readline.parse_and_bind("tab: complete")
     readline.set_completer_delims(readline.get_completer_delims().replace("-", ""))
 
-    COMMANDS_RUN = False
-    if COMMANDS:
-        COMMANDS_RUN = _run_input_cmds(COMMANDS)
+    command_run = False
+    if commands:
+        command_run = _run_input_cmds(commands, terminal)
 
     while True:
-        if COMMANDS and not COMMANDS_RUN and PORT_INITIALIZED:
+        if commands and not command_run:
             logger.info("Port set, running input commands.")
-            COMMANDS_RUN = _run_input_cmds(COMMANDS)
+            command_run = _run_input_cmds(commands, terminal)
 
-        astr = input(f"{COMMAND_STATE}>>> ")
+        astr = input(f"{command_state}>>> ")
         try:
             args = terminal.parse_args(astr.split())
-
-            if (
-                not PORT_INITIALIZED
-                and not args.which == "port"
-                and not args.which == "help"
-                and not args.which == "exit"
-            ):
-                logger.error(
-                    "Serial port is not set. Set serial port using the 'port' command."
-                )
-            else:
-                try:
-                    args.func(args)
-                except AttributeError as err:
-                    logger.error(str(err))
-                    continue
+            try:
+                args.func(args)
+            except AttributeError as err:
+                logger.error(str(err))
+                continue
 
         except SystemExit as err:
             if err.code == EXIT_FUNC_MAGIC:
@@ -863,3 +845,8 @@ if __name__ == "__main__":
 
         except Exception as err:  # pylint: disable=broad-exception-caught
             logger.error("Unexpected exception %s", type(err).__name__)
+
+
+################## MAIN ##################
+if __name__ == "__main__":
+    main()
