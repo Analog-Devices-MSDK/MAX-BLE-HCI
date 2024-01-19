@@ -276,7 +276,9 @@ class DataPktStats:
         """
         if peer_tx_data:
             return 100 - 100 * (self.rx_data / peer_tx_data)
-        return 100 - self.rx_data / (self.rx_data + self.rx_data_crc + self.rx_data_timeout)
+        return 100 - self.rx_data / (
+            self.rx_data + self.rx_data_crc + self.rx_data_timeout
+        )
 
 
 @dataclass
