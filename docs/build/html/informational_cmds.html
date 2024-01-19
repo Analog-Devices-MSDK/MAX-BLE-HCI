@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Informational Commands &mdash; MAX BLE HCI 0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=2389946f"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Status Commands" href="status_cmds.html" />
+    <link rel="prev" title="Controller Commands" href="controller_cmds.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            MAX BLE HCI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="hci_reference.html">HCI Command Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="link_control_cmds.html">Link Control Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="controller_cmds.html">Controller Commands</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Informational Commands</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#read-local-version-information">Read Local Version Information</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#parameters">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#return-parameters">Return Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#event-s-generated">Event(s) Generated</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#read-local-supported-commands">Read Local Supported Commands</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">Return Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">Event(s) Generated</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#read-local-supported-features">Read Local Supported Features</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id4">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">Return Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">Event(s) Generated</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#read-buffer-size">Read Buffer Size</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id7">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id8">Return Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id9">Event(s) Generated</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#read-bd-addr">Read BD_ADDR</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id10">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id11">Return Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id12">Event(s) Generated</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#read-local-supported-codecs">Read Local Supported Codecs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id13">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id14">Return Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id15">Event(s) Generated</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#read-local-supported-codec-capabilities">Read Local Supported Codec Capabilities</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id16">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id17">Return Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id18">Event(s) Generated</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#read-local-supported-controller-delay">Read Local Supported Controller Delay</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id19">Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id20">Return Parameters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id21">Event(s) Generated</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="status_cmds.html">Status Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="le_controller_cmds.html">LE Controller Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vendor_spec_cmds.html">ADI Vendor Specific Commands</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MAX BLE HCI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="hci_reference.html">HCI Command Reference</a></li>
+      <li class="breadcrumb-item active">Informational Commands</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/informational_cmds.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="informational-commands">
+<h1>Informational Commands<a class="headerlink" href="#informational-commands" title="Permalink to this heading"></a></h1>
+<section id="read-local-version-information">
+<h2>Read Local Version Information<a class="headerlink" href="#read-local-version-information" title="Permalink to this heading"></a></h2>
+<p>Read the version information values for the local Controller.</p>
+<table class="docutils align-default" style="width: 100%">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 10%" />
+<col style="width: 30%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>OCF</p></th>
+<th class="head"><p>Command Parameters</p></th>
+<th class="head"><p>Return Parameters</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>READ_LOCAL_VER_INFO</p></td>
+<td><p>0x0001</p></td>
+<td></td>
+<td><div class="line-block">
+<div class="line">Status</div>
+<div class="line">HCI_Version</div>
+<div class="line">HCI_Subversion</div>
+<div class="line">LMP_Version</div>
+<div class="line">Company_Identifier</div>
+<div class="line">LMP_Subversion</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading"></a></h3>
+<p>None.</p>
+</section>
+<section id="return-parameters">
+<h3>Return Parameters<a class="headerlink" href="#return-parameters" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default" id="id22" style="width: 100%">
+<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id22" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00</p></td>
+<td><p>Command completed successfully</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x01 to 0xFF</p></td>
+<td><p>Command failed.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id23" style="width: 100%">
+<caption><span class="caption-text">HCI_Version, size = 1 octet</span><a class="headerlink" href="#id23" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00 to 0xFF</p></td>
+<td><p>HCI specification version supported by the Controller.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id24" style="width: 100%">
+<caption><span class="caption-text">HCI_Subversion, size = 2 octets</span><a class="headerlink" href="#id24" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x0000 to 0xFFFF</p></td>
+<td><p>Controller HCI revision, vendor-specific.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id25" style="width: 100%">
+<caption><span class="caption-text">LMP_Version, size = 1 octet</span><a class="headerlink" href="#id25" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00 to 0xFF</p></td>
+<td><p>Current LMP version supported by the Controller.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id26" style="width: 100%">
+<caption><span class="caption-text">Company_Identifier, size = 2 octets</span><a class="headerlink" href="#id26" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x0000 to 0xFFFF</p></td>
+<td><p>Company ID for the manufacturer of the Controller.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id27" style="width: 100%">
+<caption><span class="caption-text">LMP_Subversion, size = 2 octets</span><a class="headerlink" href="#id27" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x0000 to 0xFFFF</p></td>
+<td><p>Controller Current LMP subversion, vendor-specific.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="event-s-generated">
+<h3>Event(s) Generated<a class="headerlink" href="#event-s-generated" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>COMMAND_COMPLETE</p></li>
+</ul>
+</section>
+</section>
+<section id="read-local-supported-commands">
+<h2>Read Local Supported Commands<a class="headerlink" href="#read-local-supported-commands" title="Permalink to this heading"></a></h2>
+<p>Reads the list of HCI commands supported by the local Controller.</p>
+<table class="docutils align-default" style="width: 100%">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 10%" />
+<col style="width: 30%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>OCF</p></th>
+<th class="head"><p>Command Parameters</p></th>
+<th class="head"><p>Return Parameters</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>READ_LOCAL_SUP_CMDS</p></td>
+<td><p>0x0002</p></td>
+<td></td>
+<td><div class="line-block">
+<div class="line">Status</div>
+<div class="line">Supported_Commands</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
+<p>None.</p>
+</section>
+<section id="id2">
+<h3>Return Parameters<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default" id="id28" style="width: 100%">
+<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id28" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00</p></td>
+<td><p>Command completed successfully.</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x01 to 0xFF</p></td>
+<td><p>Command failed.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id29" style="width: 100%">
+<caption><span class="caption-text">Supported_Commands, size = 64 octets</span><a class="headerlink" href="#id29" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>N/A</p></td>
+<td><div class="line-block">
+<div class="line">Bit mask for each HCI command, such that when</div>
+<div class="line">Bit X = 1: Command indicated by Bit X is supported.</div>
+<div class="line">Bit X = 0: Command indicated by Bit X is not supported.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id3">
+<h3>Event(s) Generated<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>COMMAND_COMPLETE</p></li>
+</ul>
+</section>
+</section>
+<section id="read-local-supported-features">
+<h2>Read Local Supported Features<a class="headerlink" href="#read-local-supported-features" title="Permalink to this heading"></a></h2>
+<p>Reads a list of features supported by the local Controller.</p>
+<table class="docutils align-default" style="width: 100%">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 10%" />
+<col style="width: 30%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>OCF</p></th>
+<th class="head"><p>Command Parameters</p></th>
+<th class="head"><p>Return Parameters</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>READ_LOCAL_SUP_FEAT</p></td>
+<td><p>0x0003</p></td>
+<td></td>
+<td><div class="line-block">
+<div class="line">Status</div>
+<div class="line">LMP_Features</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<section id="id4">
+<h3>Parameters<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h3>
+<p>None.</p>
+</section>
+<section id="id5">
+<h3>Return Parameters<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default" id="id30" style="width: 100%">
+<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id30" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00</p></td>
+<td><p>Command completed successfully.</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x01 to 0xFF</p></td>
+<td><p>Command failed.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id31" style="width: 100%">
+<caption><span class="caption-text">LMP_Features, size = 8 octets</span><a class="headerlink" href="#id31" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>N/A</p></td>
+<td><div class="line-block">
+<div class="line">Bit mask for LMP features, such that when</div>
+<div class="line">Bit X = 1: Feature indicated by Bit X is supported</div>
+<div class="line">Bit X = 0: Feature indicated by Bit X is not supported</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id6">
+<h3>Event(s) Generated<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>COMMAND_COMPLETE</p></li>
+</ul>
+</section>
+</section>
+<section id="read-buffer-size">
+<h2>Read Buffer Size<a class="headerlink" href="#read-buffer-size" title="Permalink to this heading"></a></h2>
+<p>Read the maximum data size of HCI ACL and Synchronous packets
+sent from the Host to the Controller.</p>
+<table class="docutils align-default" style="width: 100%">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 10%" />
+<col style="width: 30%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>OCF</p></th>
+<th class="head"><p>Command Parameters</p></th>
+<th class="head"><p>Return Parameters</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>READ_BUF_SIZE</p></td>
+<td><p>0x0005</p></td>
+<td></td>
+<td><div class="line-block">
+<div class="line">Status</div>
+<div class="line">ACL_Data_Packet_Length</div>
+<div class="line">Synchronous_Data_Packet_Length</div>
+<div class="line">Total_Num_ACL_Data_Packets</div>
+<div class="line">Total_Num_Synchronous_Data_Packets</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<section id="id7">
+<h3>Parameters<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h3>
+<p>None.</p>
+</section>
+<section id="id8">
+<h3>Return Parameters<a class="headerlink" href="#id8" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default" id="id32" style="width: 100%">
+<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id32" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00</p></td>
+<td><p>Command completed successfully.</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x01 to 0xFF</p></td>
+<td><p>Command failed.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id33" style="width: 100%">
+<caption><span class="caption-text">ACL_Data_Packet_Length, size = 2 octets</span><a class="headerlink" href="#id33" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x0001 to 0xFFFF</p></td>
+<td><p>Maximum length (in octets) of data for HCI ACL packets that the Controller can accept.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id34" style="width: 100%">
+<caption><span class="caption-text">Synchronous_Data_Packet_Length, size = 1 octet</span><a class="headerlink" href="#id34" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00 to 0xFF</p></td>
+<td><p>Maximum length (in octets) of data for HCI Synchronous packets that the Controller can accept.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id35" style="width: 100%">
+<caption><span class="caption-text">Total_Num_ACL_Data_Packets, size = 2 octets</span><a class="headerlink" href="#id35" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x0001 to 0xFFFF</p></td>
+<td><p>Total number of HCI ACL packets that can be stored in the data buffers of the Controller.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id36" style="width: 100%">
+<caption><span class="caption-text">Total_Num_Synchronous_Data_Packets, size = 2 octets</span><a class="headerlink" href="#id36" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x0000 to 0xFFFF</p></td>
+<td><p>Total number of HCI Synchronous Data packets that can be stored in the data buffers of the Controller.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id9">
+<h3>Event(s) Generated<a class="headerlink" href="#id9" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>COMMAND_COMPLETE</p></li>
+</ul>
+</section>
+</section>
+<section id="read-bd-addr">
+<h2>Read BD_ADDR<a class="headerlink" href="#read-bd-addr" title="Permalink to this heading"></a></h2>
+<p>Read the Public Device Address.</p>
+<table class="docutils align-default" style="width: 100%">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 10%" />
+<col style="width: 30%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>OCF</p></th>
+<th class="head"><p>Command Parameters</p></th>
+<th class="head"><p>Return Parameters</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>READ_BD_ADDR</p></td>
+<td><p>0x0009</p></td>
+<td></td>
+<td><div class="line-block">
+<div class="line">Status</div>
+<div class="line">BD_ADDR</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<section id="id10">
+<h3>Parameters<a class="headerlink" href="#id10" title="Permalink to this heading"></a></h3>
+<p>None.</p>
+</section>
+<section id="id11">
+<h3>Return Parameters<a class="headerlink" href="#id11" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default" id="id37" style="width: 100%">
+<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id37" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00</p></td>
+<td><p>Command completed successfully.</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x01 to 0xFF</p></td>
+<td><p>Command failed.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id38" style="width: 100%">
+<caption><span class="caption-text">BD_ADDR, size = 6 octets</span><a class="headerlink" href="#id38" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>N/A</p></td>
+<td><p>BD_ADDR of the device.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id12">
+<h3>Event(s) Generated<a class="headerlink" href="#id12" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>COMMAND_COMPLETE</p></li>
+</ul>
+</section>
+</section>
+<section id="read-local-supported-codecs">
+<h2>Read Local Supported Codecs<a class="headerlink" href="#read-local-supported-codecs" title="Permalink to this heading"></a></h2>
+<p>Read a list of the Bluetooth SIG approved codecs from the
+Controller. Return parameters are organized as such:</p>
+<div class="line-block">
+<div class="line">Status</div>
+<div class="line">Num_Supported_Standard_Codecs</div>
+<div class="line">Standard_Codec_ID[0]</div>
+<div class="line">Standard_Codec_Transport[0]</div>
+<div class="line">…</div>
+<div class="line">Standard_Codec_ID[i]</div>
+<div class="line">Standard_Codec_Transport[i]</div>
+<div class="line">Num_Supported_Vendor_Specific_Codecs</div>
+<div class="line">Vendor_Specific_Codec_ID[0]</div>
+<div class="line">Vendor_Specific_Codec_Transport[0]</div>
+<div class="line">…</div>
+<div class="line">Vendor_Specific_Codec_ID[k]</div>
+<div class="line">Vendor_Specific_Codec_Transport[k]</div>
+</div>
+<table class="docutils align-default" style="width: 100%">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 10%" />
+<col style="width: 30%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>OCF</p></th>
+<th class="head"><p>Command Parameters</p></th>
+<th class="head"><p>Return Parameters</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>READ_LOCAL_SUP_CODECS</p></td>
+<td><p>0x000D</p></td>
+<td></td>
+<td><div class="line-block">
+<div class="line">Status</div>
+<div class="line">Num_Supported_Standard_Codecs</div>
+<div class="line">Standard_Codec_ID[i]</div>
+<div class="line">Standard_Codec_Transport[i]</div>
+<div class="line">Num_Supported_Vendor_Specific_Codecs</div>
+<div class="line">Vendor_Specific_Codec_ID[k]</div>
+<div class="line">Vendor_Specific_Codec_Transport[k]</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<section id="id13">
+<h3>Parameters<a class="headerlink" href="#id13" title="Permalink to this heading"></a></h3>
+<p>None.</p>
+</section>
+<section id="id14">
+<h3>Return Parameters<a class="headerlink" href="#id14" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default" id="id39" style="width: 100%">
+<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id39" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00</p></td>
+<td><p>Command completed successfully.</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x01 to 0xFF</p></td>
+<td><p>Command failed.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id40" style="width: 100%">
+<caption><span class="caption-text">Num_Supported_Standard_Codecs, size = 1 octet</span><a class="headerlink" href="#id40" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00 to 0xFF</p></td>
+<td><p>Total number of codecs supported.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id41" style="width: 100%">
+<caption><span class="caption-text">Standard_Codec_ID, size = 1*Num_Supported_Standard_Codecs octet</span><a class="headerlink" href="#id41" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00 to 0xFF</p></td>
+<td><p>Codec identifier.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id42" style="width: 100%">
+<caption><span class="caption-text">Standard_Codec_Transport, size = 1*Num_Supported_Standard_Codecs octet</span><a class="headerlink" href="#id42" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Bit Number</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>Codec supported over BR/EDR ACL.</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>Codec supported over BR/EDR SCO and eSCO.</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>Codec supported over LE CIS.</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>Codec supported over LE BIS.</p></td>
+</tr>
+<tr class="row-even"><td><p>All other bits</p></td>
+<td><p>[Reserved for future use].</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id43" style="width: 100%">
+<caption><span class="caption-text">Num_Supported_Vendor_Specific_Codecs, size = 1 octet</span><a class="headerlink" href="#id43" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00 to 0xFF</p></td>
+<td><p>Total number of vendor-specific codecs supported.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id44" style="width: 100%">
+<caption><span class="caption-text">Vendor_Specific_Codec_ID, size = 4*Num_Supported_Vendor_Specific_Codecs octet</span><a class="headerlink" href="#id44" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Octet Number</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0 and 1</p></td>
+<td><p>Company identifier.</p></td>
+</tr>
+<tr class="row-odd"><td><p>2 and 3</p></td>
+<td><p>Vendor-defined codec ID.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id45" style="width: 100%">
+<caption><span class="caption-text">Vendor_Specific_Codec_Transport, size = 1*Num_Supported_Vendor_Specific_Codecs octet</span><a class="headerlink" href="#id45" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Bit Number</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>Codec supported over BR/EDR ACL.</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>Codec supported over BR/EDR SCO and eSCO.</p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>Codec supported over LE CIS.</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>Codec supported over LE BIS.</p></td>
+</tr>
+<tr class="row-even"><td><p>All other bits</p></td>
+<td><p>[Reserved for future use].</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id15">
+<h3>Event(s) Generated<a class="headerlink" href="#id15" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>COMMAND_COMPLETE</p></li>
+</ul>
+</section>
+</section>
+<section id="read-local-supported-codec-capabilities">
+<h2>Read Local Supported Codec Capabilities<a class="headerlink" href="#read-local-supported-codec-capabilities" title="Permalink to this heading"></a></h2>
+<p>Read a list of capabilities supported by the controller for the
+indicated codec. Return parameters are organized as such:</p>
+<div class="line-block">
+<div class="line">Status</div>
+<div class="line">Num_Codec_Capabilities</div>
+<div class="line">Codec_Capability_Length[0]</div>
+<div class="line">Codec_Capability[0]</div>
+<div class="line">…</div>
+<div class="line">Codec_Capability_Length[i]</div>
+<div class="line">Codec_Capability[i]</div>
+</div>
+<table class="docutils align-default" style="width: 100%">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 10%" />
+<col style="width: 30%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>OCF</p></th>
+<th class="head"><p>Command Parameters</p></th>
+<th class="head"><p>Return Parameters</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>READ_LOCAL_SUP_CODEC_CAP</p></td>
+<td><p>0x000E</p></td>
+<td><div class="line-block">
+<div class="line">Codec_ID</div>
+<div class="line">Logical_Transport_Type</div>
+<div class="line">Direction</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Status</div>
+<div class="line">Num_Codec_Capabilities</div>
+<div class="line">Codec_Capability_Length[i]</div>
+<div class="line">Codec_Capability[i]</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<section id="id16">
+<h3>Parameters<a class="headerlink" href="#id16" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default" id="id46" style="width: 100%">
+<caption><span class="caption-text">Codec_ID, size = 5 octets</span><a class="headerlink" href="#id46" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Octet Number</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>Codec ID, or 0xFF for vendor-specific codec.</p></td>
+</tr>
+<tr class="row-odd"><td><p>1 to 2</p></td>
+<td><p>Company ID, ignored if octet 0 is not 0xFF.</p></td>
+</tr>
+<tr class="row-even"><td><p>3 to 4</p></td>
+<td><p>Vendor-defined codec ID, ignored if octet 0 is not 0xFF.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id47" style="width: 100%">
+<caption><span class="caption-text">Logical_Transport_Type, size = 1 octet</span><a class="headerlink" href="#id47" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00</p></td>
+<td><p>BR/EDR ACL</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x01</p></td>
+<td><p>BR/EDR SCO or eSCO</p></td>
+</tr>
+<tr class="row-even"><td><p>0x02</p></td>
+<td><p>LE CIS</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x03</p></td>
+<td><p>LE BIS</p></td>
+</tr>
+<tr class="row-even"><td><p>All other values</p></td>
+<td><p>[Reserved for future use].</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id48" style="width: 100%">
+<caption><span class="caption-text">Direction, size = 1 octet</span><a class="headerlink" href="#id48" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00</p></td>
+<td><p>Input (Host to Controller)</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x01</p></td>
+<td><p>Output (Controller to Host)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id17">
+<h3>Return Parameters<a class="headerlink" href="#id17" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default" id="id49" style="width: 100%">
+<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id49" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00</p></td>
+<td><p>Command completed successfully.</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x01 to 0xFF</p></td>
+<td><p>Command failed.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id50" style="width: 100%">
+<caption><span class="caption-text">Num_Codec_Capabilities, size = 1 octet</span><a class="headerlink" href="#id50" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00 to 0xFF</p></td>
+<td><p>Number of codec capabilities returned.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id51" style="width: 100%">
+<caption><span class="caption-text">Codec_Capability_Length, size = 1*Num_Codec_Capabilities octet</span><a class="headerlink" href="#id51" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00 to 0xFF</p></td>
+<td><p>Length of the corresponding Codec_Capability field.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id52" style="width: 100%">
+<caption><span class="caption-text">Codec_Capability, size = SUM(Codec_Capability_Length) octets</span><a class="headerlink" href="#id52" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Variable</p></td>
+<td><p>Codec-specific capability data.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id18">
+<h3>Event(s) Generated<a class="headerlink" href="#id18" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>COMMAND_COMPLETE</p></li>
+</ul>
+</section>
+</section>
+<section id="read-local-supported-controller-delay">
+<h2>Read Local Supported Controller Delay<a class="headerlink" href="#read-local-supported-controller-delay" title="Permalink to this heading"></a></h2>
+<p>Read the range of supported Controller delays for the indicated
+codec.</p>
+<table class="docutils align-default" style="width: 100%">
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 10%" />
+<col style="width: 30%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>OCF</p></th>
+<th class="head"><p>Command Parameters</p></th>
+<th class="head"><p>Return Parameters</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>READ_LOCAL_SUP_CONTROLLER_DLY</p></td>
+<td><p>0x000F</p></td>
+<td><div class="line-block">
+<div class="line">Codec_ID</div>
+<div class="line">Logical_Transport_Type</div>
+<div class="line">Direction</div>
+<div class="line">Codec_Configuration_Length</div>
+<div class="line">Codec_Configuration</div>
+</div>
+</td>
+<td><div class="line-block">
+<div class="line">Status</div>
+<div class="line">Min_Controller_Delay</div>
+<div class="line">Max_Controller_Delay</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<section id="id19">
+<h3>Parameters<a class="headerlink" href="#id19" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default" id="id53" style="width: 100%">
+<caption><span class="caption-text">Codec_ID, size = 5 octets</span><a class="headerlink" href="#id53" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Octet Number</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>Codec ID, or 0xFF for vendor-specific codec.</p></td>
+</tr>
+<tr class="row-odd"><td><p>1 to 2</p></td>
+<td><p>Company ID, ignored if octet 0 is not 0xFF.</p></td>
+</tr>
+<tr class="row-even"><td><p>3 to 4</p></td>
+<td><p>Vendor-defined codec ID, ignored if octet 0 is not 0xFF.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id54" style="width: 100%">
+<caption><span class="caption-text">Logical_Transport_Type, size = 1 octet</span><a class="headerlink" href="#id54" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00</p></td>
+<td><p>BR/EDR ACL</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x01</p></td>
+<td><p>BR/EDR SCO or eSCO</p></td>
+</tr>
+<tr class="row-even"><td><p>0x02</p></td>
+<td><p>LE CIS</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x03</p></td>
+<td><p>LE BIS</p></td>
+</tr>
+<tr class="row-even"><td><p>All other values</p></td>
+<td><p>[Reserved for future use].</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id55" style="width: 100%">
+<caption><span class="caption-text">Direction, size = 1 octet</span><a class="headerlink" href="#id55" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00</p></td>
+<td><p>Input (Host to Controller)</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x01</p></td>
+<td><p>Output (Controller to Host)</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id56" style="width: 100%">
+<caption><span class="caption-text">Codec_Configuration_Length, size = 1 octet</span><a class="headerlink" href="#id56" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00 to 0xFF</p></td>
+<td><p>Length of codec configuration.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id57" style="width: 100%">
+<caption><span class="caption-text">Codec_Configuration, size = Codec_Configuration_Length octets</span><a class="headerlink" href="#id57" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Variable</p></td>
+<td><p>Codec-specific configuration data.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id20">
+<h3>Return Parameters<a class="headerlink" href="#id20" title="Permalink to this heading"></a></h3>
+<table class="docutils align-default" id="id58" style="width: 100%">
+<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id58" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00</p></td>
+<td><p>Command completed successfully.</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x01 to 0xFF</p></td>
+<td><p>Command failed.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id59" style="width: 100%">
+<caption><span class="caption-text">Min_Controller_Delay, size = 3 octets</span><a class="headerlink" href="#id59" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Values(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x000000 to 0x3D0900</p></td>
+<td><div class="line-block">
+<div class="line">Minimum Controller delay in microseconds.</div>
+<div class="line">Time range: 0s to 4s</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table class="docutils align-default" id="id60" style="width: 100%">
+<caption><span class="caption-text">Max_Controller_Delay, size = 3 octets</span><a class="headerlink" href="#id60" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x000000 to 0x3D0900</p></td>
+<td><div class="line-block">
+<div class="line">Maximum Controller delay in microseconds</div>
+<div class="line">Time range: 0s to 4s</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id21">
+<h3>Event(s) Generated<a class="headerlink" href="#id21" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>COMMAND_COMPLETE</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="controller_cmds.html" class="btn btn-neutral float-left" title="Controller Commands" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="status_cmds.html" class="btn btn-neutral float-right" title="Status Commands" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Analog Devices, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

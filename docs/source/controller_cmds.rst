@@ -118,13 +118,13 @@ Parameters
     * - 53
       - Simple Pairing Complete
     * - 54
-      - 
+      - [Reserved for future use].
     * - 55
       - Link Supervision Timeout Changed
     * - 56
       - Enhanced Flush Complete
     * - 57
-      - 
+      - [Reserved for future use].
     * - 58
       - User Passkey Notification
     * - 59

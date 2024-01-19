@@ -14,7 +14,7 @@ API Reference
 Package Contents
 ----------------
 
-.. automodule:: ble_hci
+.. automodule:: max_ble_hci
    :members:
    :undoc-members:
    :show-inheritance:
