@@ -73,8 +73,8 @@ class TestHci(unittest.TestCase):
 
         stats, status = hci1.get_adv_stats()
         self.assertTrue(stats is not None and status == pc.StatusCode.SUCCESS)
-        # stats, status = hci1.get_sca()
-        # self.assertTrue(stats is not None and status == pc.StatusCode.SUCCESS)
+        stats, status = hci1.get_scan_stats()
+        self.assertTrue(stats is not None and status == pc.StatusCode.SUCCESS)
 
         stats, status = hci1.get_conn_stats()
         self.assertTrue(stats is not None and status == pc.StatusCode.SUCCESS)
@@ -91,9 +91,6 @@ class TestHci(unittest.TestCase):
             hci1.set_connection_phy_tx_power(1, 0, PhyOption.PHY_1M),
             pc.StatusCode.ERROR_CODE_UNKNOWN_CONN_ID,
         )
-
-        # stats, status = hci1.get_periodic_scanning_stats()
-        # self.assertTrue(stats is not None and status == pc.StatusCode.SUCCESS)
 
 
 if __name__ == "__main__":
