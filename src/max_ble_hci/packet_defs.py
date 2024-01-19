@@ -676,9 +676,6 @@ class VendorSpecificOCF(Enum):
     SET_EXT_ADV_DEF_PHY_OPTS = 0x3D3
     """Set extended advertising default PHY options command."""
 
-    SET_EXT_SCAN_PHY_OPTS = 0x3D4
-    """Set extended scan PHY options."""
-
     GENERATE_ISO = 0x3D5
     """Generate ISO packets command."""
 

@@ -2402,7 +2402,7 @@ Parameters
     * - All other values
       - [Reserved for future use].
     
-.. list-table:: Antenna_IDs[i], size = 1*Switching_Pattern_Length octets
+.. list-table:: Antenna_IDs, size = 1*Switching_Pattern_Length octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -2438,20 +2438,20 @@ Transmitter Test
 ----------------
 
 Start a test where DUT generates test reference packets at a
-fixed interval. For v4, command parameters should be organized
+fixed interval. For v4, command parameters should be organized 
 as such:
 
-TX_Channel
-Test_Data_Length
-Packet_Payload
-PHY
-CTE_Length
-CTE_Type
-Switching_Pattern_Length
-Antenna_IDs[0]
-...
-Antenna_IDs[i]
-TX_Power_Level
+| TX_Channel
+| Test_Data_Length
+| Packet_Payload
+| PHY
+| CTE_Length
+| CTE_Type
+| Switching_Pattern_Length
+| Antenna_IDs[0]
+| ...
+| Antenna_IDs[i]
+| TX_Power_Level
 
 .. list-table::
     :width: 100%
@@ -2608,7 +2608,7 @@ Parameters
     * - All other values
       - [Reserved for future use].
 
-.. list-table:: Antenna_IDs[i], size = 1*Switching_Pattern_Length octets
+.. list-table:: Antenna_IDs, size = 1*Switching_Pattern_Length octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -4824,7 +4824,7 @@ Parameters
     * - All other values
       - [Reserved for future use].
 
-.. list-table:: Advertising_Handle[i], size = 1*Num_Sets octets
+.. list-table:: Advertising_Handle, size = 1*Num_Sets octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -4834,7 +4834,7 @@ Parameters
     * - 0x00 to 0xEF
       - Advertising set identifier
 
-.. list-table:: Duration[i], size = 2*Num_Sets octets
+.. list-table:: Duration, size = 2*Num_Sets octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -4848,7 +4848,7 @@ Parameters
         | Time = value * 10ms
         | Time Range = 10ms to 655350ms.
 
-.. list-table:: Max_Extended_Advertising_Events[i], 1*Num_Sets octets
+.. list-table:: Max_Extended_Advertising_Events, 1*Num_Sets octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -5449,7 +5449,7 @@ Parameters
     * - All other bits
       - [Reserved for future use].
 
-.. list-table:: Scan_Type[i], size = 1*(Bits set in Scanning_PHYs) octets
+.. list-table:: Scan_Type, size = 1*(Bits set in Scanning_PHYs) octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -5461,7 +5461,7 @@ Parameters
     * - 0x01
       - Active Scanning. Scan request PDUs may be sent.
 
-.. list-table:: Scan_Interval[i], size = 2*(Bits set in Scanning_PHYs) octets
+.. list-table:: Scan_Interval, size = 2*(Bits set in Scanning_PHYs) octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -5473,7 +5473,7 @@ Parameters
         | Time = value * 0.625ms
         | Time Range = 2.5ms to 40.95s
 
-.. list-table:: Scan_Window[i], size = 2*(Bits set in Scanning_PHYs) octets
+.. list-table:: Scan_Window, size = 2*(Bits set in Scanning_PHYs) octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -5740,7 +5740,7 @@ Parameters
     * - All other bits
       - [Reserved for future use].
 
-.. list-table:: Scan_Interval[i], size = 2*(Bits set in Initiating_PHYs) octets
+.. list-table:: Scan_Interval, size = 2*(Bits set in Initiating_PHYs) octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -5752,7 +5752,7 @@ Parameters
         | Time = value * 0.625ms
         | Time Range = 2.5ms to 10.24s
 
-.. list-table:: Scan_Window[i], size = 2*(Bits set in Initiating_PHYs) octets
+.. list-table:: Scan_Window, size = 2*(Bits set in Initiating_PHYs) octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -5764,7 +5764,7 @@ Parameters
         | Time = value * 0.625ms
         | Time Range = 2.5ms to 10.24s
 
-.. list-table:: Connection_Interval_Min[i], size = 2*(Bits set in Initiating_PHYs) octets
+.. list-table:: Connection_Interval_Min, size = 2*(Bits set in Initiating_PHYs) octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -5776,7 +5776,7 @@ Parameters
         | Time = value * 1.25ms
         | Time Range = 7.5ms to 4s
 
-.. list-table:: Connection_Interval_Max[i], size = 2*(Bits set in Initiating_PHYs) octets
+.. list-table:: Connection_Interval_Max, size = 2*(Bits set in Initiating_PHYs) octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -5788,7 +5788,7 @@ Parameters
         | Time = value * 1.25ms
         | Time Range = 7.5ms to 4s
 
-.. list-table:: Max_Latency[i], size = 2*(Bits set in Initiating_PHYs) octets
+.. list-table:: Max_Latency, size = 2*(Bits set in Initiating_PHYs) octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -5798,7 +5798,7 @@ Parameters
     * - 0x000 to 0x01F3
       - Maximum peripheral latency for the connection given as a number of connection events.
 
-.. list-table:: Supervision_Timeout[i], 2*(Bits set in Initiating_PHYs) octets
+.. list-table:: Supervision_Timeout, 2*(Bits set in Initiating_PHYs) octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -5810,7 +5810,7 @@ Parameters
         | Time = value * 10ms
         | Time Range = 100ms to 32s
 
-.. list-table:: Min_CE_Length[i], size = 2*(Bits set in Initiating_PHYs) octets
+.. list-table:: Min_CE_Length, size = 2*(Bits set in Initiating_PHYs) octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -5822,7 +5822,7 @@ Parameters
         | Time = value * 0.625ms
         | Time Range = 0s to 40.95s
 
-.. list-table:: Max_CE_Length[i], size = 2*(Bits set in Initiating_PHYs) octets
+.. list-table:: Max_CE_Length, size = 2*(Bits set in Initiating_PHYs) octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -6737,7 +6737,7 @@ Parameters
     * - All other values
       - [Reserved for future use].
 
-.. list-table:: Antenna_IDs[i], size = 1*Switching_Pattern_Length octets
+.. list-table:: Antenna_IDs, size = 1*Switching_Pattern_Length octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -6928,7 +6928,7 @@ Parameters
     * - All other values
       - [Reserved for future use].
 
-.. list-table:: Antenna_IDs[i], size = 1*Switching_Pattern_Length octets
+.. list-table:: Antenna_IDs, size = 1*Switching_Pattern_Length octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -7047,7 +7047,7 @@ Parameters
     * - All other values
       - [Reserved for future use].
 
-.. list-table:: Antenna_IDs[i], size = 1*Switching_Pattern_Length octets
+.. list-table:: Antenna_IDs, size = 1*Switching_Pattern_Length octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -7153,7 +7153,7 @@ Parameters
     * - All other values
       - [Reserved for future use].
 
-.. list-table:: Antenna_IDs[i], size = 1*Switching_Pattern_Length octets
+.. list-table:: Antenna_IDs, size = 1*Switching_Pattern_Length octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -8302,7 +8302,7 @@ Parameters
     * - All other values
       - [Reserved for future use].
 
-.. list-table:: CIS_ID[i], size = 1*CIS_Count octets
+.. list-table:: CIS_ID, size = 1*CIS_Count octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -8312,7 +8312,7 @@ Parameters
     * - 0x00 to 0xEF
       - CIS identifier.
 
-.. list-table:: Max_SDU_C_To_P[i], size = 2*CIS_Count octets
+.. list-table:: Max_SDU_C_To_P, size = 2*CIS_Count octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -8322,7 +8322,7 @@ Parameters
     * - 0x0000 to 0xFFFF
       - Maximum SDU payload size from the Central.
 
-.. list-table:: Max_SDU_P_To_C[i], size = 2*CIS_Count octets
+.. list-table:: Max_SDU_P_To_C, size = 2*CIS_Count octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -8332,7 +8332,7 @@ Parameters
     * - 0x0000 to 0xFFFF
       - Maximum SDU payload size from the Peripheral.
 
-.. list-table:: PHY_C_To_P[i], size = 1*CIS_Count octets
+.. list-table:: PHY_C_To_P, size = 1*CIS_Count octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -8348,7 +8348,7 @@ Parameters
     * - All other bits
       - [Reserved for future use].
   
-.. list-table:: PHY_P_To_C[i], size = 1*CIS_Count octets
+.. list-table:: PHY_P_To_C, size = 1*CIS_Count octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -8364,7 +8364,7 @@ Parameters
     * - All other bits
       - [Reserved for future use].
 
-.. list-table:: RTN_C_To_P[i], size = 1*CIS_Count octets
+.. list-table:: RTN_C_To_P, size = 1*CIS_Count octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -8374,7 +8374,7 @@ Parameters
     * - 0x00 to 0xFF
       - Number of times each CIS Data PDU should be retransmitted from Central to Peripheral.
 
-.. list-table:: RTN_P_To_C[i], size = 1*CIS_Count octets
+.. list-table:: RTN_P_To_C, size = 1*CIS_Count octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -8421,7 +8421,7 @@ Return Parameters
     * - All other values
       - [Reserved for future use].
 
-.. list-table:: Connection_Handle[i], size = 2*CIS_Count octets
+.. list-table:: Connection_Handle, size = 2*CIS_Count octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -8614,7 +8614,7 @@ Parameters
     * - All other values
       - [Reserved for future use].
 
-.. list-table:: CIS_ID[i], size = 1*CIS_Count octets
+.. list-table:: CIS_ID, size = 1*CIS_Count octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -8624,7 +8624,7 @@ Parameters
     * - 0x00 to 0xEF
       - CIS identifier.
 
-.. list-table:: NSE[i], size = 1*CIS_Count octets
+.. list-table:: NSE, size = 1*CIS_Count octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -8636,7 +8636,7 @@ Parameters
     * - All other values
       - [Reserved for future use].
 
-.. list-table:: Max_SDU_C_To_P[i], size = 2*CIS_Count octets
+.. list-table:: Max_SDU_C_To_P, size = 2*CIS_Count octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -8646,7 +8646,7 @@ Parameters
     * - 0x0000 to 0xFFFF
       - Maximum SDU payload size from the Central.
 
-.. list-table:: Max_SDU_P_To_C[i], size = 2*CIS_Count octets
+.. list-table:: Max_SDU_P_To_C, size = 2*CIS_Count octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -8656,7 +8656,7 @@ Parameters
     * - 0x0000 to 0xFFFF
       - Maximum SDU payload size from the Peripheral.
 
-.. list-table:: Max_PDU_C_To_P[i], size = 2*CIS_Count octets
+.. list-table:: Max_PDU_C_To_P, size = 2*CIS_Count octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -8666,7 +8666,7 @@ Parameters
     * - 0x0000 to 0xFFFF
       - Maximum PDU payload size from the Central Link Layer.
 
-.. list-table:: Max_PDU_P_To_C[i], size = 2*CIS_Count octets
+.. list-table:: Max_PDU_P_To_C, size = 2*CIS_Count octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -8676,7 +8676,7 @@ Parameters
     * - 0x0000 to 0xFFFF
       - Maximum PDU payload size from the Peripheral Link Layer.
 
-.. list-table:: PHY_C_To_P[i], size = 1*CIS_Count octets
+.. list-table:: PHY_C_To_P, size = 1*CIS_Count octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -8692,7 +8692,7 @@ Parameters
     * - All other bits
       - [Reserved for future use].
   
-.. list-table:: PHY_P_To_C[i], size = 1*CIS_Count octets
+.. list-table:: PHY_P_To_C, size = 1*CIS_Count octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -8708,7 +8708,7 @@ Parameters
     * - All other bits
       - [Reserved for future use].
 
-.. list-table:: BN_C_To_P[i], size = 1*CIS_Count octets
+.. list-table:: BN_C_To_P, size = 1*CIS_Count octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -8722,7 +8722,7 @@ Parameters
     * - All other values
       - [Reserved for future use].
 
-.. list-table:: BN_P_To_C[i], size = 1*CIS_Count octets
+.. list-table:: BN_P_To_C, size = 1*CIS_Count octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -8773,7 +8773,7 @@ Return Parameters
     * - All other values
       - [Reserved for future use].
 
-.. list-table:: Connection_Handle[i], size = 2*CIS_Count octets
+.. list-table:: Connection_Handle, size = 2*CIS_Count octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -8825,7 +8825,7 @@ Parameters
     * - All other values
       - [Reserved for future use].
 
-.. list-table:: CIS_Connection_Handle[i], size = 2*CIS_Count octets
+.. list-table:: CIS_Connection_Handle, size = 2*CIS_Count octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -8835,7 +8835,7 @@ Parameters
     * - 0x0000 to 0x0EFF
       - CIS connection identifier.
 
-.. list-table:: ACL_Connection_Handle[i], size = 2*CIS_Count octets
+.. list-table:: ACL_Connection_Handle, size = 2*CIS_Count octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -9327,7 +9327,7 @@ Parameters
         | Time = value * 1.25ms
         | Time Range = 5ms to 4s
 
-.. list-table:: NSE[i], size = 1 octet
+.. list-table:: NSE, size = 1 octet
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -9648,7 +9648,7 @@ Parameters
     * - All other values
       - [Reserved for future use].
 
-.. list-table:: BIS[i], size = 1*Num_BIS octets
+.. list-table:: BIS, size = 1*Num_BIS octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
