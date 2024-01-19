@@ -20,9 +20,9 @@ jobs:
           ./install.sh
       - name: Sphinx build
         run: |
-          sphinx-build docs/source docs/build
+          sphinx-build docs build
       - name: Publish
         uses: JamesIves/github-pages-deploy-action@v4.3.0
         with:
           branch: gh-pages # The branch the action should deploy to.
-          folder: docs/build/ # Deploy the built docs folder
+          folder: build # Deploy the built docs folder
