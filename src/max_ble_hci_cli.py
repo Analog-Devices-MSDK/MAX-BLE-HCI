@@ -139,7 +139,7 @@ def _signal_handler(_signal, _fname):  # pylint: disable=unused-argument
     sys.exit(0)
 
 
-def _run_input_cmds(commands):
+def _run_input_cmds(commands, terminal):
     for cmd in commands:
         try:
             # pylint: disable=used-before-assignment
@@ -158,13 +158,17 @@ def _run_input_cmds(commands):
 
 
 def main():
-    COMMAND_STATE = ""
+    """
+    MAIN
+    """
+    # pylint: disable=too-many-locals,too-many-branches,too-many-statements
+    command_state = ""
 
     # Setup the signal handler to catch the ctrl-C
     signal.signal(signal.SIGINT, _signal_handler)
 
     # Setup the command line description text
-    DESC_TEXT = f"""
+    cli_description = f"""
         Bluetooth Low Energy HCI tool.
         This tool is used in tandem with the BLE controller examples. 
         This tool sends HCI commands through the serial port to the target device. 
@@ -174,7 +178,7 @@ def main():
 
     # Parse the command line arguments
     parser = argparse.ArgumentParser(
-        description=DESC_TEXT, formatter_class=RawTextHelpFormatter
+        description=cli_description, formatter_class=RawTextHelpFormatter
     )
     parser.add_argument("serial_port", help="Serial port path or COM#")
     parser.add_argument(
@@ -225,8 +229,6 @@ def main():
 
     args = parser.parse_args()
 
-    PORT_INITIALIZED = True
-
     hci = BleHci(
         args.serial_port,
         baud=args.baudRate,
@@ -241,19 +243,19 @@ def main():
     print(f"Monitor Trace Msg Serial Port: {args.monPort}")
     print(f"8N1 {args.baudRate}")
 
-    COMMANDS = args.commands
-    if COMMANDS:
-        if len(COMMANDS) > 1:
-            COMMANDS = " ".join(COMMANDS)
+    commands = args.commands
+    if commands:
+        if len(commands) > 1:
+            commands = " ".join(commands)
         else:
-            COMMANDS = COMMANDS[0]
+            commands = commands[0]
 
-        COMMANDS = COMMANDS.split(";")
-        COMMANDS = [x.strip() for x in COMMANDS]
+        commands = commands.split(";")
+        commands = [x.strip() for x in commands]
 
         print("Startup commands: ")
-        for x in COMMANDS:
-            print(f"\t{x}")
+        for command in commands:
+            print(f"\t{command}")
 
     # Start the terminal argparse
     terminal = ArgumentParser(prog="", add_help=True)
@@ -427,14 +429,14 @@ def main():
         func=lambda _: print(hci.enable_acl_sink(bool(args.enable))),
     )
 
-    connStats_parser = subparsers.add_parser(
+    conn_stats_parser = subparsers.add_parser(
         "conn-stats",
         aliases=["cs"],
         help="Get the connection stats",
         formatter_class=RawTextHelpFormatter,
     )
 
-    connStats_parser.set_defaults(
+    conn_stats_parser.set_defaults(
         func=lambda _: print(hci.get_conn_stats()), which="connstats"
     )
 
@@ -823,22 +825,21 @@ def main():
     readline.parse_and_bind("tab: complete")
     readline.set_completer_delims(readline.get_completer_delims().replace("-", ""))
 
-    COMMANDS_RUN = False
-    if COMMANDS:
-        COMMANDS_RUN = _run_input_cmds(COMMANDS)
+    command_run = False
+    if commands:
+        command_run = _run_input_cmds(commands, terminal)
 
     while True:
-        if COMMANDS and not COMMANDS_RUN and PORT_INITIALIZED:
+        if commands and not command_run:
             logger.info("Port set, running input commands.")
-            COMMANDS_RUN = _run_input_cmds(COMMANDS)
+            command_run = _run_input_cmds(commands, terminal)
 
-        astr = input(f"{COMMAND_STATE}>>> ")
+        astr = input(f"{command_state}>>> ")
         try:
             args = terminal.parse_args(astr.split())
 
             if (
-                not PORT_INITIALIZED
-                and not args.which == "port"
+                not args.which == "port"
                 and not args.which == "help"
                 and not args.which == "exit"
             ):
