@@ -14,8 +14,7 @@ Welcome to the MAX BLE HCI documentation!
    installation
    examples
    modules
-   link_control_cmds
-   controller_cmds
+   hci_reference
 
 
 Indices and tables

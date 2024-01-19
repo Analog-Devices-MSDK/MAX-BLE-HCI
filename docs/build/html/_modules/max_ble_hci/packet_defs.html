@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>max_ble_hci.packet_defs &mdash; MAX BLE HCI 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=2389946f"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MAX BLE HCI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hci_reference.html">HCI Command Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MAX BLE HCI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">max_ble_hci.packet_defs</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for max_ble_hci.packet_defs</h1><div class="highlight"><pre>
+<span></span><span class="ch">#! /usr/bin/env python3</span>
+<span class="c1">###############################################################################</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (C) 2023 Maxim Integrated Products, Inc., All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a</span>
+<span class="c1"># copy of this software and associated documentation files (the &quot;Software&quot;),</span>
+<span class="c1"># to deal in the Software without restriction, including without limitation</span>
+<span class="c1"># the rights to use, copy, modify, merge, publish, distribute, sublicense,</span>
+<span class="c1"># and/or sell copies of the Software, and to permit persons to whom the</span>
+<span class="c1"># Software is furnished to do so, subject to the following conditions:</span>
+<span class="c1">#</span>
+<span class="c1"># The above copyright notice and this permission notice shall be included</span>
+<span class="c1"># in all copies or substantial portions of the Software.</span>
+<span class="c1">#</span>
+<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS</span>
+<span class="c1"># OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF</span>
+<span class="c1"># MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.</span>
+<span class="c1"># IN NO EVENT SHALL MAXIM INTEGRATED BE LIABLE FOR ANY CLAIM, DAMAGES</span>
+<span class="c1"># OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,</span>
+<span class="c1"># ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR</span>
+<span class="c1"># OTHER DEALINGS IN THE SOFTWARE.</span>
+<span class="c1">#</span>
+<span class="c1"># Except as contained in this notice, the name of Maxim Integrated</span>
+<span class="c1"># Products, Inc. shall not be used except as stated in the Maxim Integrated</span>
+<span class="c1"># Products, Inc. Branding Policy.</span>
+<span class="c1">#</span>
+<span class="c1"># The mere transfer of this software does not imply any licenses</span>
+<span class="c1"># of trade secrets, proprietary technology, copyrights, patents,</span>
+<span class="c1"># trademarks, maskwork rights, or any other form of intellectual</span>
+<span class="c1"># property whatsoever. Maxim Integrated Products, Inc. retains all</span>
+<span class="c1"># ownership rights.</span>
+<span class="c1">#</span>
+<span class="c1">##############################################################################</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright 2023 Analog Devices, Inc.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+<span class="c1">#</span>
+<span class="c1">##############################################################################</span>
+<span class="sd">&quot;&quot;&quot;DOCSTRING&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+
+
+<div class="viewcode-block" id="PacketType"><a class="viewcode-back" href="../../packet_defs.html#max_ble_hci.packet_defs.PacketType">[docs]</a><span class="k">class</span> <span class="nc">PacketType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;BT standard packet types.&quot;&quot;&quot;</span>
+
+    <span class="n">COMMAND</span> <span class="o">=</span> <span class="mh">0x1</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Command packet type.&quot;&quot;&quot;</span>
+
+    <span class="n">ASYNC</span> <span class="o">=</span> <span class="mh">0x2</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Asynchronous Connection-Less packet type.&quot;&quot;&quot;</span>
+
+    <span class="n">SYNC</span> <span class="o">=</span> <span class="mh">0x3</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Synchronous packet type.</span>
+<span class="sd">    </span>
+<span class="sd">    .. note::</span>
+<span class="sd">        Synchronous data packets are not used in BLE.</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">EVENT</span> <span class="o">=</span> <span class="mh">0x4</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Event packet type.&quot;&quot;&quot;</span>
+
+    <span class="n">EXTENDED</span> <span class="o">=</span> <span class="mh">0x9</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extended command packet type.&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="OGF"><a class="viewcode-back" href="../../packet_defs.html#max_ble_hci.packet_defs.OGF">[docs]</a><span class="k">class</span> <span class="nc">OGF</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;BLE-defined Opcode Group Field values.&quot;&quot;&quot;</span>
+
+    <span class="n">NOP</span> <span class="o">=</span> <span class="mh">0x00</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;No operation.&quot;&quot;&quot;</span>
+
+    <span class="n">LINK_CONTROL</span> <span class="o">=</span> <span class="mh">0x01</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Link control group field.&quot;&quot;&quot;</span>
+
+    <span class="n">LINK_POLICY</span> <span class="o">=</span> <span class="mh">0x02</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Link policy group field.&quot;&quot;&quot;</span>
+
+    <span class="n">CONTROLLER</span> <span class="o">=</span> <span class="mh">0x03</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Controller group field.&quot;&quot;&quot;</span>
+
+    <span class="n">INFORMATIONAL</span> <span class="o">=</span> <span class="mh">0x04</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Informational group field.&quot;&quot;&quot;</span>
+
+    <span class="n">STATUS</span> <span class="o">=</span> <span class="mh">0x05</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Status group field.&quot;&quot;&quot;</span>
+
+    <span class="n">TESTING</span> <span class="o">=</span> <span class="mh">0x06</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Testing group field.&quot;&quot;&quot;</span>
+
+    <span class="n">LE_CONTROLLER</span> <span class="o">=</span> <span class="mh">0x08</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;LE controller group field.&quot;&quot;&quot;</span>
+
+    <span class="n">VENDOR_SPEC</span> <span class="o">=</span> <span class="mh">0x3F</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Vendor specific group field.&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="NOpOCF"><a class="viewcode-back" href="../../packet_defs.html#max_ble_hci.packet_defs.NOpOCF">[docs]</a><span class="k">class</span> <span class="nc">NOpOCF</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;BLE-defined NOP group Opcode Command Field values.&quot;&quot;&quot;</span>
+
+    <span class="n">NOP</span> <span class="o">=</span> <span class="mh">0x00</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;No operation.&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="LinkControlOCF"><a class="viewcode-back" href="../../packet_defs.html#max_ble_hci.packet_defs.LinkControlOCF">[docs]</a><span class="k">class</span> <span class="nc">LinkControlOCF</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;BLE-defined Link Control group Opcode Command Field values&quot;&quot;&quot;</span>
+
+    <span class="n">DISCONNECT</span> <span class="o">=</span> <span class="mh">0x06</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Disconnect command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_REMOTE_VER_INFO</span> <span class="o">=</span> <span class="mh">0x1D</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read remote version info command.&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="ControllerOCF"><a class="viewcode-back" href="../../packet_defs.html#max_ble_hci.packet_defs.ControllerOCF">[docs]</a><span class="k">class</span> <span class="nc">ControllerOCF</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;BLE-defined Controller group Opcode Command Field values.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_EVENT_MASK</span> <span class="o">=</span> <span class="mh">0x01</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set event mask command.&quot;&quot;&quot;</span>
+
+    <span class="n">RESET</span> <span class="o">=</span> <span class="mh">0x03</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reset command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_TX_PWR_LVL</span> <span class="o">=</span> <span class="mh">0x2D</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read TX power level command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_CONTROLLER_TO_HOST_FC</span> <span class="o">=</span> <span class="mh">0x31</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set controller to host flow control command.&quot;&quot;&quot;</span>
+
+    <span class="n">HOST_BUFFER_SIZE</span> <span class="o">=</span> <span class="mh">0x33</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Host buffer size command.&quot;&quot;&quot;</span>
+
+    <span class="n">HOST_NUM_CMPL_PKTS</span> <span class="o">=</span> <span class="mh">0x35</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Host number of completed packets command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_EVENT_MASK_PAGE2</span> <span class="o">=</span> <span class="mh">0x63</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set event mask page 2 command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_AUTH_PAYLOAD_TO</span> <span class="o">=</span> <span class="mh">0x7B</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read authenticated payload timeout command.&quot;&quot;&quot;</span>
+
+    <span class="n">WRITE_AUTH_PAYLOAD_TO</span> <span class="o">=</span> <span class="mh">0x7C</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write authenticated payload timeout command.&quot;&quot;&quot;</span>
+
+    <span class="n">CONFIG_DATA_PATH</span> <span class="o">=</span> <span class="mh">0x83</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configure data path command.&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="InformationalOCF"><a class="viewcode-back" href="../../packet_defs.html#max_ble_hci.packet_defs.InformationalOCF">[docs]</a><span class="k">class</span> <span class="nc">InformationalOCF</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;BLE-defined Information group Opcode Command Field values.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_LOCAL_VER_INFO</span> <span class="o">=</span> <span class="mh">0x01</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read local version information command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_LOCAL_SUP_CMDS</span> <span class="o">=</span> <span class="mh">0x02</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read local supported commands command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_LOCAL_SUP_FEAT</span> <span class="o">=</span> <span class="mh">0x03</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read local supported features command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_BUF_SIZE</span> <span class="o">=</span> <span class="mh">0x05</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read buffer size command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_BD_ADDR</span> <span class="o">=</span> <span class="mh">0x09</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read BD address command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_LOCAL_SUP_CODECS</span> <span class="o">=</span> <span class="mh">0x0D</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read local supported codecs command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_LOCAL_SUP_CODEC_CAP</span> <span class="o">=</span> <span class="mh">0x0E</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read local supported codec capabilities command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_LOCAL_SUP_CONTROLLER_DLY</span> <span class="o">=</span> <span class="mh">0x0F</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read local supported controller delay command.&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="StatusOCF"><a class="viewcode-back" href="../../packet_defs.html#max_ble_hci.packet_defs.StatusOCF">[docs]</a><span class="k">class</span> <span class="nc">StatusOCF</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;BLE-defined Status group Opcode Command Field values.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_RSSI</span> <span class="o">=</span> <span class="mh">0x05</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read RSSI command.&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="LEControllerOCF"><a class="viewcode-back" href="../../packet_defs.html#max_ble_hci.packet_defs.LEControllerOCF">[docs]</a><span class="k">class</span> <span class="nc">LEControllerOCF</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;BLE-defined LE Controller group Opcode Command Field values.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_EVENT_MASK</span> <span class="o">=</span> <span class="mh">0x01</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set event mask command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_BUF_SIZE</span> <span class="o">=</span> <span class="mh">0x02</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read buffer size command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_LOCAL_SUP_FEAT</span> <span class="o">=</span> <span class="mh">0x03</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read local supported features command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_RAND_ADDR</span> <span class="o">=</span> <span class="mh">0x05</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set random address command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_ADV_PARAM</span> <span class="o">=</span> <span class="mh">0x06</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set advertising parameters command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_ADV_TX_POWER</span> <span class="o">=</span> <span class="mh">0x07</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read advertising physical channel TX power command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_ADV_DATA</span> <span class="o">=</span> <span class="mh">0x08</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set advertising data command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_SCAN_RESP_DATA</span> <span class="o">=</span> <span class="mh">0x09</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set scan response data command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_ADV_ENABLE</span> <span class="o">=</span> <span class="mh">0x0A</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set advertising enable command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_SCAN_PARAM</span> <span class="o">=</span> <span class="mh">0x0B</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set scan parameters command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_SCAN_ENABLE</span> <span class="o">=</span> <span class="mh">0x0C</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set scan enable command.&quot;&quot;&quot;</span>
+
+    <span class="n">CREATE_CONN</span> <span class="o">=</span> <span class="mh">0x0D</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create connection command.&quot;&quot;&quot;</span>
+
+    <span class="n">CREATE_CONN_CANCEL</span> <span class="o">=</span> <span class="mh">0x0E</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create connection cancel command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_WHITE_LIST_SIZE</span> <span class="o">=</span> <span class="mh">0x0F</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read fileter accept list size command.&quot;&quot;&quot;</span>
+
+    <span class="n">CLEAR_WHITE_LIST</span> <span class="o">=</span> <span class="mh">0x10</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Clear filter accept list command.&quot;&quot;&quot;</span>
+
+    <span class="n">ADD_DEV_WHITE_LIST</span> <span class="o">=</span> <span class="mh">0x11</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add device to filter accept list command.&quot;&quot;&quot;</span>
+
+    <span class="n">REMOVE_DEV_WHITE_LIST</span> <span class="o">=</span> <span class="mh">0x12</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove device from filter accept list command.&quot;&quot;&quot;</span>
+
+    <span class="n">CONN_UPDATE</span> <span class="o">=</span> <span class="mh">0x13</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Connection update command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_HOST_CHAN_CLASS</span> <span class="o">=</span> <span class="mh">0x14</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set host channel classification command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_CHAN_MAP</span> <span class="o">=</span> <span class="mh">0x15</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read channel map command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_REMOTE_FEAT</span> <span class="o">=</span> <span class="mh">0x16</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read remove features command.&quot;&quot;&quot;</span>
+
+    <span class="n">ENCRYPT</span> <span class="o">=</span> <span class="mh">0x17</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Encrypt command.&quot;&quot;&quot;</span>
+
+    <span class="n">RAND</span> <span class="o">=</span> <span class="mh">0x18</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Rand command.&quot;&quot;&quot;</span>
+
+    <span class="n">START_ENCRYPTION</span> <span class="o">=</span> <span class="mh">0x19</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enable encryption command.&quot;&quot;&quot;</span>
+
+    <span class="n">LTK_REQ_REPL</span> <span class="o">=</span> <span class="mh">0x1A</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Long term key requency reply command.&quot;&quot;&quot;</span>
+
+    <span class="n">LTK_REQ_NEG_REPL</span> <span class="o">=</span> <span class="mh">0x1B</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Long term key request negative reply command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_SUP_STATES</span> <span class="o">=</span> <span class="mh">0x1C</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read supported states command.&quot;&quot;&quot;</span>
+
+    <span class="n">RECEIVER_TEST</span> <span class="o">=</span> <span class="mh">0x1D</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Receiver test command.&quot;&quot;&quot;</span>
+
+    <span class="n">TRANSMITTER_TEST</span> <span class="o">=</span> <span class="mh">0x1E</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transmitter test command.&quot;&quot;&quot;</span>
+
+    <span class="n">TEST_END</span> <span class="o">=</span> <span class="mh">0x1F</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test end command.&quot;&quot;&quot;</span>
+
+    <span class="n">REM_CONN_PARAM_REP</span> <span class="o">=</span> <span class="mh">0x20</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remote connection parameter request reply command.&quot;&quot;&quot;</span>
+
+    <span class="n">REM_CONN_PARAM_NEG_REP</span> <span class="o">=</span> <span class="mh">0x21</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remote connection parameter request negative reply command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_DATA_LEN</span> <span class="o">=</span> <span class="mh">0x22</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set data length command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_DEF_DATA_LEN</span> <span class="o">=</span> <span class="mh">0x23</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read suggested default data length command.&quot;&quot;&quot;</span>
+
+    <span class="n">WRITE_DEF_DATA_LEN</span> <span class="o">=</span> <span class="mh">0x24</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write suggested default data length command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_LOCAL_P256_PUB_KEY</span> <span class="o">=</span> <span class="mh">0x25</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read local P-256 public key command.&quot;&quot;&quot;</span>
+
+    <span class="n">GENERATE_DHKEY</span> <span class="o">=</span> <span class="mh">0x26</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate DHKey command.&quot;&quot;&quot;</span>
+
+    <span class="n">ADD_DEV_RES_LIST</span> <span class="o">=</span> <span class="mh">0x27</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add device to resolving list command.&quot;&quot;&quot;</span>
+
+    <span class="n">REMOVE_DEV_RES_LIST</span> <span class="o">=</span> <span class="mh">0x28</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove device from resolving list command.&quot;&quot;&quot;</span>
+
+    <span class="n">CLEAR_RES_LIST</span> <span class="o">=</span> <span class="mh">0x29</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Clear resolving list command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_RES_LIST_SIZE</span> <span class="o">=</span> <span class="mh">0x2A</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read resolving list size command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_PEER_RES_ADDR</span> <span class="o">=</span> <span class="mh">0x2B</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read peer resolvable address command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_LOCAL_RES_ADDR</span> <span class="o">=</span> <span class="mh">0x2C</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read local resolvable address command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_ADDR_RES_ENABLE</span> <span class="o">=</span> <span class="mh">0x2D</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set address resolution enable command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_RES_PRIV_ADDR_TO</span> <span class="o">=</span> <span class="mh">0x2E</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set resolvable private address timeout command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_MAX_DATA_LEN</span> <span class="o">=</span> <span class="mh">0x2F</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read maximum data length command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_PHY</span> <span class="o">=</span> <span class="mh">0x30</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read PHY command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_DEF_PHY</span> <span class="o">=</span> <span class="mh">0x31</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set default PHY command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_PHY</span> <span class="o">=</span> <span class="mh">0x32</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set PHY command.&quot;&quot;&quot;</span>
+
+    <span class="n">ENHANCED_RECEIVER_TEST</span> <span class="o">=</span> <span class="mh">0x33</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enhanced receiver test command.&quot;&quot;&quot;</span>
+
+    <span class="n">ENHANCED_TRANSMITTER_TEST</span> <span class="o">=</span> <span class="mh">0x34</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enhanced transmitter test command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_ADV_SET_RAND_ADDR</span> <span class="o">=</span> <span class="mh">0x35</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set advertising set random address command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_EXT_ADV_PARAM</span> <span class="o">=</span> <span class="mh">0x36</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set extended advertising parameters command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_EXT_ADV_DATA</span> <span class="o">=</span> <span class="mh">0x37</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set extended advertising data command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_EXT_SCAN_RESP_DATA</span> <span class="o">=</span> <span class="mh">0x38</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set extended scan response data command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_EXT_ADV_ENABLE</span> <span class="o">=</span> <span class="mh">0x39</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set extended advertising enable command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_MAX_ADV_DATA_LEN</span> <span class="o">=</span> <span class="mh">0x3A</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read maximum advertising data length command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_NUM_SUP_ADV_SETS</span> <span class="o">=</span> <span class="mh">0x3B</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read number of supported advertising sets command.&quot;&quot;&quot;</span>
+
+    <span class="n">REMOVE_ADV_SET</span> <span class="o">=</span> <span class="mh">0x3C</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove advertising set command.&quot;&quot;&quot;</span>
+
+    <span class="n">CLEAR_ADV_SETS</span> <span class="o">=</span> <span class="mh">0x3D</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Clear advertising sets command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_PER_ADV_PARAM</span> <span class="o">=</span> <span class="mh">0x3E</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set periodic advertising parameters command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_PER_ADV_DATA</span> <span class="o">=</span> <span class="mh">0x3F</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set periodic advertising data command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_PER_ADV_ENABLE</span> <span class="o">=</span> <span class="mh">0x40</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set periodic advertising enable command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_EXT_SCAN_PARAM</span> <span class="o">=</span> <span class="mh">0x41</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set extended scan parameters command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_EXT_SCAN_ENABLE</span> <span class="o">=</span> <span class="mh">0x42</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set extended scan enable command.&quot;&quot;&quot;</span>
+
+    <span class="n">EXT_CREATE_CONN</span> <span class="o">=</span> <span class="mh">0x43</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extended create connection command.&quot;&quot;&quot;</span>
+
+    <span class="n">PER_ADV_CREATE_SYNC</span> <span class="o">=</span> <span class="mh">0x44</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Periodic advertising create sync command.&quot;&quot;&quot;</span>
+
+    <span class="n">PER_ADV_CREATE_SYNC_CANCEL</span> <span class="o">=</span> <span class="mh">0x45</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Periodic advertising create sync cancel command.&quot;&quot;&quot;</span>
+
+    <span class="n">PER_ADV_TERM_SYNC</span> <span class="o">=</span> <span class="mh">0x46</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Periodic advertising terminate sync command.&quot;&quot;&quot;</span>
+
+    <span class="n">ADD_DEV_PER_ADV_LIST</span> <span class="o">=</span> <span class="mh">0x47</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add devoce to periodic advertiser list command.&quot;&quot;&quot;</span>
+
+    <span class="n">REMOVE_DEV_PER_ADV_LIST</span> <span class="o">=</span> <span class="mh">0x48</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove device from periodic advertiser list command.&quot;&quot;&quot;</span>
+
+    <span class="n">CLEAR_PER_ADV_LIST</span> <span class="o">=</span> <span class="mh">0x49</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Clear periodic advertiser list command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_PER_ADV_LIST_SIZE</span> <span class="o">=</span> <span class="mh">0x4A</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read periodic advertising list size command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_TX_POWER</span> <span class="o">=</span> <span class="mh">0x4B</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read TX power command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_RF_PATH_COMP</span> <span class="o">=</span> <span class="mh">0x4C</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read RF path compensation command.&quot;&quot;&quot;</span>
+
+    <span class="n">WRITE_RF_PATH_COMP</span> <span class="o">=</span> <span class="mh">0x4D</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write RF path compensation command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_PRIVACY_MODE</span> <span class="o">=</span> <span class="mh">0x4E</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set privacy mode command.&quot;&quot;&quot;</span>
+
+    <span class="n">RECEIVER_TEST_V3</span> <span class="o">=</span> <span class="mh">0x4F</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Receiver test version3 command.&quot;&quot;&quot;</span>
+
+    <span class="n">TRANSMITTER_TEST_V3</span> <span class="o">=</span> <span class="mh">0x50</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transmitter test version3 command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_CONNLESS_CTE_TX_PARAMS</span> <span class="o">=</span> <span class="mh">0x51</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set connectionless CTE transmit parameters command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_CONNLESS_CTE_TX_ENABLE</span> <span class="o">=</span> <span class="mh">0x52</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set connectionless CTE transmit enable command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_CONNLESS_IQ_SAMP_ENABLE</span> <span class="o">=</span> <span class="mh">0x53</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set connectionless IQ sampling enable command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_CONN_CTE_RX_PARAMS</span> <span class="o">=</span> <span class="mh">0x54</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set connection CTE receive parameters command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_CONN_CTE_TX_PARAMS</span> <span class="o">=</span> <span class="mh">0x55</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set connection CTE transmit parameters command.&quot;&quot;&quot;</span>
+
+    <span class="n">CONN_CTE_REQ_ENABLE</span> <span class="o">=</span> <span class="mh">0x56</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Connection CTE request enable command.&quot;&quot;&quot;</span>
+
+    <span class="n">CONN_CTE_RSP_ENABLE</span> <span class="o">=</span> <span class="mh">0x57</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Connection CTE response enable command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_ANTENNA_INFO</span> <span class="o">=</span> <span class="mh">0x58</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read antenna information command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_PER_ADV_RCV_ENABLE</span> <span class="o">=</span> <span class="mh">0x59</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set periodic advertising receive enable command.&quot;&quot;&quot;</span>
+
+    <span class="n">PER_ADV_SYNC_TRANSFER</span> <span class="o">=</span> <span class="mh">0x5A</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Periodic advertising sync transfer command.&quot;&quot;&quot;</span>
+
+    <span class="n">PER_ADV_SET_INFO_TRANSFER</span> <span class="o">=</span> <span class="mh">0x5B</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Periodic advertising set info transfer command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_PAST_PARAM</span> <span class="o">=</span> <span class="mh">0x5C</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set periodic advertising sync transfer parameters command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_DEFAULT_PAST_PARAM</span> <span class="o">=</span> <span class="mh">0x5D</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set default periodic advertising sync transfer parameters command.&quot;&quot;&quot;</span>
+
+    <span class="n">GENERATE_DHKEY_V2</span> <span class="o">=</span> <span class="mh">0x5E</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate DHKey version2 command.&quot;&quot;&quot;</span>
+
+    <span class="n">MODIFY_SLEEP_CLK_ACC</span> <span class="o">=</span> <span class="mh">0x5F</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Modify sleep clock accuracy command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_BUF_SIZE_V2</span> <span class="o">=</span> <span class="mh">0x60</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read buffer size version2 command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_ISO_TX_SYNC</span> <span class="o">=</span> <span class="mh">0x61</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read ISO TX sync command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_CIG_PARAMS</span> <span class="o">=</span> <span class="mh">0x62</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set CIG parameters command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_CIG_PARAMS_TEST</span> <span class="o">=</span> <span class="mh">0x63</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set CIG parameters test command.&quot;&quot;&quot;</span>
+
+    <span class="n">CREATE_CIS</span> <span class="o">=</span> <span class="mh">0x64</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create CIS command.&quot;&quot;&quot;</span>
+
+    <span class="n">REMOVE_CIG</span> <span class="o">=</span> <span class="mh">0x65</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove CIG command.&quot;&quot;&quot;</span>
+
+    <span class="n">ACCEPT_CIS_REQ</span> <span class="o">=</span> <span class="mh">0x66</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Accept CIS request command.&quot;&quot;&quot;</span>
+
+    <span class="n">REJECT_CIS_REQ</span> <span class="o">=</span> <span class="mh">0x67</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reject CIS request command.&quot;&quot;&quot;</span>
+
+    <span class="n">CREATE_BIG</span> <span class="o">=</span> <span class="mh">0x68</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create BIG command.&quot;&quot;&quot;</span>
+
+    <span class="n">CREATE_BIG_TEST</span> <span class="o">=</span> <span class="mh">0x69</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create BIG test command.&quot;&quot;&quot;</span>
+
+    <span class="n">TERMINATE_BIG</span> <span class="o">=</span> <span class="mh">0x6A</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Terminate BIG command.&quot;&quot;&quot;</span>
+
+    <span class="n">BIG_CREATE_SYNC</span> <span class="o">=</span> <span class="mh">0x6B</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;BIG create sync command.&quot;&quot;&quot;</span>
+
+    <span class="n">BIG_TERMINATE_SYNC</span> <span class="o">=</span> <span class="mh">0x6C</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;BIG terminate sync command.&quot;&quot;&quot;</span>
+
+    <span class="n">REQUEST_PEER_SCA</span> <span class="o">=</span> <span class="mh">0x6D</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Request peer SCA command.&quot;&quot;&quot;</span>
+
+    <span class="n">SETUP_ISO_DATA_PATH</span> <span class="o">=</span> <span class="mh">0x6E</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Setup ISO data path command.&quot;&quot;&quot;</span>
+
+    <span class="n">REMOVE_ISO_DATA_PATH</span> <span class="o">=</span> <span class="mh">0x6F</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove ISO data path command.&quot;&quot;&quot;</span>
+
+    <span class="n">ISO_TX_TEST</span> <span class="o">=</span> <span class="mh">0x70</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ISO TX test command.&quot;&quot;&quot;</span>
+
+    <span class="n">ISO_RX_TEST</span> <span class="o">=</span> <span class="mh">0x71</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ISO RX test command.&quot;&quot;&quot;</span>
+
+    <span class="n">ISO_READ_TEST_COUNTERS</span> <span class="o">=</span> <span class="mh">0x72</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ISO read test counters command.&quot;&quot;&quot;</span>
+
+    <span class="n">ISO_TEST_END</span> <span class="o">=</span> <span class="mh">0x73</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ISO test end command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_HOST_FEATURE</span> <span class="o">=</span> <span class="mh">0x74</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set host feature command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_ISO_LINK_QUAL</span> <span class="o">=</span> <span class="mh">0x75</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read ISO link quality command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_ENHANCED_TX_POWER</span> <span class="o">=</span> <span class="mh">0x76</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enhanced read TX power level command.&quot;&quot;&quot;</span>
+
+    <span class="n">READ_REMOTE_TX_POWER</span> <span class="o">=</span> <span class="mh">0x77</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read remote TX power command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_PATH_LOSS_REPORTING_PARAMS</span> <span class="o">=</span> <span class="mh">0x78</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set path loss repoting parameters command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_PATH_LOSS_REPORTING_ENABLE</span> <span class="o">=</span> <span class="mh">0x79</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set path loss reporting enable command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_TX_POWER_REPORT_ENABLE</span> <span class="o">=</span> <span class="mh">0x7A</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set TX power reporting enable command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_DATA_RELATED_ADDRESS_CHANGES</span> <span class="o">=</span> <span class="mh">0x7C</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set data related address changes command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_DEF_SUBRATE</span> <span class="o">=</span> <span class="mh">0x7D</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set default subrate command.&quot;&quot;&quot;</span>
+
+    <span class="n">SUBRATE_REQ</span> <span class="o">=</span> <span class="mh">0x7E</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Subrate request command.&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="VendorSpecificOCF"><a class="viewcode-back" href="../../packet_defs.html#max_ble_hci.packet_defs.VendorSpecificOCF">[docs]</a><span class="k">class</span> <span class="nc">VendorSpecificOCF</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ADI Vendor Specific group Opcode Command Field values.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_SCAN_CH_MAP</span> <span class="o">=</span> <span class="mh">0x3E0</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set scan channel map command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_EVENT_MASK</span> <span class="o">=</span> <span class="mh">0x3E1</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set event mask command.&quot;&quot;&quot;</span>
+
+    <span class="n">ENA_ACL_SINK</span> <span class="o">=</span> <span class="mh">0x3E3</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enable ACL sink command.&quot;&quot;&quot;</span>
+
+    <span class="n">GENERATE_ACL</span> <span class="o">=</span> <span class="mh">0x3E4</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate ACL command.&quot;&quot;&quot;</span>
+
+    <span class="n">ENA_AUTO_GEN_ACL</span> <span class="o">=</span> <span class="mh">0x3E5</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enable autogenerate ACL command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_TX_TEST_ERR_PATT</span> <span class="o">=</span> <span class="mh">0x3E6</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set TX test error pattern command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_CONN_OP_FLAGS</span> <span class="o">=</span> <span class="mh">0x3E7</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set connection operational flags command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_P256_PRIV_KEY</span> <span class="o">=</span> <span class="mh">0x3E8</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set P-256 private key command.&quot;&quot;&quot;</span>
+
+    <span class="n">GET_PER_CHAN_MAP</span> <span class="o">=</span> <span class="mh">0x3DE</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get periodic scan/advertising channel map command.&quot;&quot;&quot;</span>
+
+    <span class="n">GET_ACL_TEST_REPORT</span> <span class="o">=</span> <span class="mh">0x3E9</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get ACL test report command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_LOCAL_MIN_USED_CHAN</span> <span class="o">=</span> <span class="mh">0x3EA</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set local minimum number of used channels command.&quot;&quot;&quot;</span>
+
+    <span class="n">GET_PEER_MIN_USED_CHAN</span> <span class="o">=</span> <span class="mh">0x3EB</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get peer minimum number of used channels command.&quot;&quot;&quot;</span>
+
+    <span class="n">VALIDATE_PUB_KEY_MODE</span> <span class="o">=</span> <span class="mh">0x3EC</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set validate public key mode command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_BD_ADDR</span> <span class="o">=</span> <span class="mh">0x3F0</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set BD address command.&quot;&quot;&quot;</span>
+
+    <span class="n">GET_RAND_ADDR</span> <span class="o">=</span> <span class="mh">0x3F1</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get random address command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_LOCAL_FEAT</span> <span class="o">=</span> <span class="mh">0x3F2</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set local features command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_OP_FLAGS</span> <span class="o">=</span> <span class="mh">0x3F3</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set operational flags command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_ADV_TX_PWR</span> <span class="o">=</span> <span class="mh">0x3F5</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set advertising TX power command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_CONN_TX_PWR</span> <span class="o">=</span> <span class="mh">0x3F6</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set connection TX power command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_ENC_MODE</span> <span class="o">=</span> <span class="mh">0x3F7</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set encryption mode command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_CHAN_MAP</span> <span class="o">=</span> <span class="mh">0x3F8</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set channel map command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_DIAG_MODE</span> <span class="o">=</span> <span class="mh">0x3F9</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set diagnostic mode command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_SNIFFER_ENABLE</span> <span class="o">=</span> <span class="mh">0x3CD</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set sniffer packet forwarding enable command.&quot;&quot;&quot;</span>
+
+    <span class="n">GET_PDU_FILT_STATS</span> <span class="o">=</span> <span class="mh">0x3F4</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get PDU filter statistics command.&quot;&quot;&quot;</span>
+
+    <span class="n">GET_SYS_STATS</span> <span class="o">=</span> <span class="mh">0x3FA</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get system statistics command.&quot;&quot;&quot;</span>
+
+    <span class="n">GET_ADV_STATS</span> <span class="o">=</span> <span class="mh">0x3FB</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get advertising statistics command.&quot;&quot;&quot;</span>
+
+    <span class="n">GET_SCAN_STATS</span> <span class="o">=</span> <span class="mh">0x3FC</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get scan statistics command.&quot;&quot;&quot;</span>
+
+    <span class="n">GET_CONN_STATS</span> <span class="o">=</span> <span class="mh">0x3FD</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get connection statistics command.&quot;&quot;&quot;</span>
+
+    <span class="n">GET_TEST_STATS</span> <span class="o">=</span> <span class="mh">0x3FE</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get test statistics command.&quot;&quot;&quot;</span>
+
+    <span class="n">GET_POOL_STATS</span> <span class="o">=</span> <span class="mh">0x3FF</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get pool statistics command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_AUX_DELAY</span> <span class="o">=</span> <span class="mh">0x3D0</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set auxiliary packet offset delay command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_EXT_ADV_FRAG_LEN</span> <span class="o">=</span> <span class="mh">0x3D1</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set extended advertising data fragmentation length command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_EXT_ADV_PHY_OPTS</span> <span class="o">=</span> <span class="mh">0x3D2</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set extended advertising PHY options command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_EXT_ADV_DEF_PHY_OPTS</span> <span class="o">=</span> <span class="mh">0x3D3</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set extended advertising default PHY options command.&quot;&quot;&quot;</span>
+
+    <span class="n">GENERATE_ISO</span> <span class="o">=</span> <span class="mh">0x3D5</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate ISO packets command.&quot;&quot;&quot;</span>
+
+    <span class="n">GET_ISO_TEST_REPORT</span> <span class="o">=</span> <span class="mh">0x3D6</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get ISO test report command.&quot;&quot;&quot;</span>
+
+    <span class="n">ENA_ISO_SINK</span> <span class="o">=</span> <span class="mh">0x3D7</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enable ISO sink command.&quot;&quot;&quot;</span>
+
+    <span class="n">ENA_AUTO_GEN_ISO</span> <span class="o">=</span> <span class="mh">0x3D8</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enable autogenerate ISO packets command.&quot;&quot;&quot;</span>
+
+    <span class="n">GET_CIS_STATS</span> <span class="o">=</span> <span class="mh">0x3D9</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get CIS statistics command.&quot;&quot;&quot;</span>
+
+    <span class="n">GET_AUX_ADV_STATS</span> <span class="o">=</span> <span class="mh">0x3DA</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get auxiliary advertising statistics command.&quot;&quot;&quot;</span>
+
+    <span class="n">GET_AUX_SCAN_STATS</span> <span class="o">=</span> <span class="mh">0x3DB</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get auxiliary scan statistics command.&quot;&quot;&quot;</span>
+
+    <span class="n">GET_PER_SCAN_STATS</span> <span class="o">=</span> <span class="mh">0x3DC</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get periodic scan statistics command.&quot;&quot;&quot;</span>
+
+    <span class="n">SET_CONN_PHY_TX_PWR</span> <span class="o">=</span> <span class="mh">0x3DD</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set connection PHY TX power command.&quot;&quot;&quot;</span>
+
+    <span class="n">REG_WRITE</span> <span class="o">=</span> <span class="mh">0x300</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Register write command.&quot;&quot;&quot;</span>
+
+    <span class="n">REG_READ</span> <span class="o">=</span> <span class="mh">0x301</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Register read command.&quot;&quot;&quot;</span>
+
+    <span class="n">RESET_CONN_STATS</span> <span class="o">=</span> <span class="mh">0x302</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reset connection statistics command.&quot;&quot;&quot;</span>
+
+    <span class="n">TX_TEST</span> <span class="o">=</span> <span class="mh">0x303</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transmitter test command.&quot;&quot;&quot;</span>
+
+    <span class="n">RESET_TEST_STATS</span> <span class="o">=</span> <span class="mh">0x304</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reset test statistics command.&quot;&quot;&quot;</span>
+
+    <span class="n">RX_TEST</span> <span class="o">=</span> <span class="mh">0x305</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Receiver test command.&quot;&quot;&quot;</span>
+
+    <span class="n">GET_RSSI</span> <span class="o">=</span> <span class="mh">0x306</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get RSSI command.&quot;&quot;&quot;</span>
+
+    <span class="n">BB_EN</span> <span class="o">=</span> <span class="mh">0x307</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;PHY enable command.&quot;&quot;&quot;</span>
+
+    <span class="n">BB_DIS</span> <span class="o">=</span> <span class="mh">0x308</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;PHY disable command.&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="OCF"><a class="viewcode-back" href="../../packet_defs.html#max_ble_hci.packet_defs.OCF">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">OCF</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Supported Opcode Command Field values.&quot;&quot;&quot;</span>
+
+    <span class="n">NOP</span> <span class="o">=</span> <span class="n">NOpOCF</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;NOP ground OCF values.&quot;&quot;&quot;</span>
+
+    <span class="n">LINK_CONTROL</span> <span class="o">=</span> <span class="n">LinkControlOCF</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Link Control group OCF values.&quot;&quot;&quot;</span>
+
+    <span class="n">LINK_POLICY</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Link Policy group OCF values.&quot;&quot;&quot;</span>
+
+    <span class="n">CONTROLLER</span> <span class="o">=</span> <span class="n">ControllerOCF</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Controller group OCF values.&quot;&quot;&quot;</span>
+
+    <span class="n">INFORMATIONAL</span> <span class="o">=</span> <span class="n">InformationalOCF</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Informational group OCF values.&quot;&quot;&quot;</span>
+
+    <span class="n">STATUS</span> <span class="o">=</span> <span class="n">StatusOCF</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Status group OCF values.&quot;&quot;&quot;</span>
+
+    <span class="n">TESTING</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Testing group OCF values.&quot;&quot;&quot;</span>
+
+    <span class="n">LE_CONTROLLER</span> <span class="o">=</span> <span class="n">LEControllerOCF</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;LE Controller group OCF values.&quot;&quot;&quot;</span>
+
+    <span class="n">VENDOR_SPEC</span> <span class="o">=</span> <span class="n">VendorSpecificOCF</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ADI Vendor Specific group OCF values.&quot;&quot;&quot;</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Analog Devices, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

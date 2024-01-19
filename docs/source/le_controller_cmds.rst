@@ -758,8 +758,7 @@ Event(s) Generated
 ------------------
 
 - COMMAND_COMPLETE
-- CONNECTION_COMPLETE or ENHANCED_CONNECTION COMPLETE (if advertising type is undirected connectable,
-high duty cycle directed connectable, or low duty cycle directed connectable)
+- CONNECTION_COMPLETE or ENHANCED_CONNECTION COMPLETE (if advertising type is undirected connectable, high duty cycle directed connectable, or low duty cycle directed connectable)
 
 
 Set Scan Parameters
@@ -1024,6 +1023,7 @@ Parameters
       - Parameter Description
     * - 0x00
       - Filter Accept List not used to determine connection. Peer_Address and Peer_Address_Type will be used.
+    * - 0x01
       - Filter Accept List used to determine connection. Peer_Address and Peer_Address_Type will not be used.
     * - All other values
       - [Reserved for future use].
@@ -2185,7 +2185,7 @@ Return Parameters
         | Initiating
     * - 17
       - | Scannable Undirected Advertising
-      - | Initiating
+        | Initiating
     * - 18
       - | Non-Connectable and Non-Scannable Undirected Advertising
         | Connection (Central Role)
@@ -2226,7 +2226,7 @@ Return Parameters
         | Passive Scanning
     * - 31
       - | Low Duty Cycle Connectable Directed Advertising
-      - | Active Scanning
+        | Active Scanning
     * - 32
       - | Connectable and Scannable Undirected Advertising
         | Initiating
@@ -2329,7 +2329,7 @@ Parameters
       - Use LE 2M PHY.
     * - 0x03
       - Use LE Coded PHY.
-    * All other values
+    * - All other values
       - [Reserved for future use].
 
 .. list-table:: Modulation_Index, size = 1 octet
@@ -2959,7 +2959,7 @@ Parameters
 
     * - Value(s)
       - Parameter Description
-    * 0x0000 to 0x0EFF
+    * - 0x0000 to 0x0EFF
       - Connection handle.
 
 .. list-table:: TX_Octets, size = 2 octets
@@ -4109,7 +4109,7 @@ Parameters
 
     * - Value(s)
       - Parameter Description
-    * 0x0000 to 0x0EFF
+    * - 0x0000 to 0x0EFF
       - Connection handle to set PHY preferences for.
 
 .. list-table:: All_PHYs, size = 1 octet
@@ -4458,8 +4458,7 @@ Parameters
     * - 0x00
       - AUX_ADV_IND shall be sent prior to the next advertising event.
     * - 0x01 to 0xFF
-      - Maximum advertising events the Controller can skip before 
-      sending AUX_ADV_IND on the secondary physical channel.
+      - Maximum advertising events the Controller can skip before sending AUX_ADV_IND on the secondary physical channel.
     
 .. list-table:: Secondary_Advertising_PHY, size = 1 octet
     :width: 100%
@@ -7549,7 +7548,7 @@ Parameters
       - | Duplicate filtering:
         | 0: Disabled
         | 1: Enabled
-    * All other bits
+    * - All other bits
       - [Reserved for future use].
 
 Return Parameters

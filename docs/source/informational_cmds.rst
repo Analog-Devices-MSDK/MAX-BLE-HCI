@@ -292,10 +292,14 @@ Return Parameters
       - Total number of HCI ACL packets that can be stored in the data buffers of the Controller.
 
 .. list-table:: Total_Num_Synchronous_Data_Packets, size = 2 octets
-  * - Value(s)
-    - Parameter Description
-  * - 0x0000 to 0xFFFF
-    - Total number of HCI Synchronous Data packets that can be stored in the data buffers of the Controller.
+    :width: 100%
+    :widths: 20 80
+    :header-rows: 1
+
+    * - Value(s)
+      - Parameter Description
+    * - 0x0000 to 0xFFFF
+      - Total number of HCI Synchronous Data packets that can be stored in the data buffers of the Controller.
 
 Event(s) Generated
 ```````````````````
@@ -350,7 +354,7 @@ Return Parameters
 
     * - Value(s)
       - Parameter Description
-      - N/A
+    * - N/A
       - BD_ADDR of the device.
 
 Event(s) Generated

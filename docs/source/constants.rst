@@ -1,7 +1,7 @@
-ble\_hci.constants
-==================
+max\_ble\_hci.constants
+=======================
 
-.. automodule:: ble_hci.constants
+.. automodule:: max_ble_hci.constants
     :members:
     :undoc-members:
     :show-inheritance:

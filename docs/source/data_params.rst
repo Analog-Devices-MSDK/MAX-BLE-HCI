@@ -1,7 +1,7 @@
-ble\_hci.data\_params
-=====================
+max\_ble\_hci.data\_params
+==========================
 
-.. automodule:: ble_hci.data_params
+.. automodule:: max_ble_hci.data_params
     :members:
     :undoc-members:
     :show-inheritance:

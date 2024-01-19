@@ -2778,7 +2778,7 @@ Parameters
       - Set for LE 2M PHY (possibly among others).
     * - 2
       - Set for LE Coded PHY (possibly among others).
-    * All other bits
+    * - All other bits
       - [Reserved for future use].
 
 .. list-table:: Power_Thresh, size = 1 octet
@@ -3559,7 +3559,7 @@ Parameters
       - Parameter Description
     * - 0x00 to 0xFF
       - | Advertising TX power level (signed value).
-      - | Range = -127dBm to 6dBm
+        | Range = -127dBm to 6dBm
 
 Return Parameters
 `````````````````
@@ -3625,7 +3625,7 @@ Parameters
       - Parameter Description
     * - 0x00 to 0xFF
       - | Connection TX power level (signed value).
-      - | Range = -127dBm to 6dBm
+        | Range = -127dBm to 6dBm
 
 Return Parameters
 `````````````````

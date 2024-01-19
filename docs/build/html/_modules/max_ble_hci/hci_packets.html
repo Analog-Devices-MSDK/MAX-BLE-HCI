@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>max_ble_hci.hci_packets &mdash; MAX BLE HCI 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=2389946f"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MAX BLE HCI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hci_reference.html">HCI Command Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MAX BLE HCI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">max_ble_hci.hci_packets</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for max_ble_hci.hci_packets</h1><div class="highlight"><pre>
+<span></span><span class="ch">#! /usr/bin/env python3</span>
+<span class="c1">###############################################################################</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (C) 2023 Maxim Integrated Products, Inc., All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a</span>
+<span class="c1"># copy of this software and associated documentation files (the &quot;Software&quot;),</span>
+<span class="c1"># to deal in the Software without restriction, including without limitation</span>
+<span class="c1"># the rights to use, copy, modify, merge, publish, distribute, sublicense,</span>
+<span class="c1"># and/or sell copies of the Software, and to permit persons to whom the</span>
+<span class="c1"># Software is furnished to do so, subject to the following conditions:</span>
+<span class="c1">#</span>
+<span class="c1"># The above copyright notice and this permission notice shall be included</span>
+<span class="c1"># in all copies or substantial portions of the Software.</span>
+<span class="c1">#</span>
+<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS</span>
+<span class="c1"># OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF</span>
+<span class="c1"># MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.</span>
+<span class="c1"># IN NO EVENT SHALL MAXIM INTEGRATED BE LIABLE FOR ANY CLAIM, DAMAGES</span>
+<span class="c1"># OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,</span>
+<span class="c1"># ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR</span>
+<span class="c1"># OTHER DEALINGS IN THE SOFTWARE.</span>
+<span class="c1">#</span>
+<span class="c1"># Except as contained in this notice, the name of Maxim Integrated</span>
+<span class="c1"># Products, Inc. shall not be used except as stated in the Maxim Integrated</span>
+<span class="c1"># Products, Inc. Branding Policy.</span>
+<span class="c1">#</span>
+<span class="c1"># The mere transfer of this software does not imply any licenses</span>
+<span class="c1"># of trade secrets, proprietary technology, copyrights, patents,</span>
+<span class="c1"># trademarks, maskwork rights, or any other form of intellectual</span>
+<span class="c1"># property whatsoever. Maxim Integrated Products, Inc. retains all</span>
+<span class="c1"># ownership rights.</span>
+<span class="c1">#</span>
+<span class="c1">##############################################################################</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright 2023 Analog Devices, Inc.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+<span class="c1">#</span>
+<span class="c1">##############################################################################</span>
+<span class="sd">&quot;&quot;&quot;Contains objects used for the creation of HCI packets.&quot;&quot;&quot;</span>
+<span class="c1"># pylint: disable=too-many-arguments</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">.packet_codes</span> <span class="kn">import</span> <span class="n">EventCode</span><span class="p">,</span> <span class="n">EventSubcode</span><span class="p">,</span> <span class="n">StatusCode</span>
+<span class="kn">from</span> <span class="nn">.packet_defs</span> <span class="kn">import</span> <span class="n">OCF</span><span class="p">,</span> <span class="n">OGF</span><span class="p">,</span> <span class="n">PacketType</span>
+<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">Endian</span>
+
+
+<div class="viewcode-block" id="byte_length"><a class="viewcode-back" href="../../hci_packets.html#max_ble_hci.hci_packets.byte_length">[docs]</a><span class="k">def</span> <span class="nf">byte_length</span><span class="p">(</span><span class="n">num</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the length of an integer in bytes.</span>
+
+<span class="sd">    PRIVATE</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">max</span><span class="p">((</span><span class="n">num</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span> <span class="o">+</span> <span class="mi">7</span><span class="p">)</span> <span class="o">//</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CommandPacket"><a class="viewcode-back" href="../../hci_packets.html#max_ble_hci.hci_packets.CommandPacket">[docs]</a><span class="k">class</span> <span class="nc">CommandPacket</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Serializer for HCI command packets.</span>
+
+<span class="sd">    Object defines a container/serializer for HCI command</span>
+<span class="sd">    packets. Initializing an instance of the object creates</span>
+<span class="sd">    a container which stores the desired command opcode and</span>
+<span class="sd">    parameters. A serialized command can then be generated</span>
+<span class="sd">    through the use of the `to_bytes` function. In the event</span>
+<span class="sd">    that an opcode is needed but a full packet is not, the</span>
+<span class="sd">    static method `make_hci_opcode` can be called without</span>
+<span class="sd">    initializing an instance of the object.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ogf : Union[OGF, int]</span>
+<span class="sd">        Opcode group field.</span>
+<span class="sd">    ocf : Union[OCF, int]</span>
+<span class="sd">        Opcode command field.</span>
+<span class="sd">    params : Union[List[int], int], optional</span>
+<span class="sd">        Command parameters, if any.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ogf : OGF</span>
+<span class="sd">        Opcode group field.</span>
+<span class="sd">    ocf : OCF</span>
+<span class="sd">        Opcode command field.</span>
+<span class="sd">    length : int</span>
+<span class="sd">        Total length of command parameters.</span>
+<span class="sd">    opcode : int</span>
+<span class="sd">        Command opcode.</span>
+<span class="sd">    params : Union[List[int], int], optional</span>
+<span class="sd">        Command parameters, if any.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">ogf</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">OGF</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+        <span class="n">ocf</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">OCF</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+        <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ogf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enum_to_int</span><span class="p">(</span><span class="n">ogf</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ocf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enum_to_int</span><span class="p">(</span><span class="n">ocf</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_length</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">opcode</span> <span class="o">=</span> <span class="n">CommandPacket</span><span class="o">.</span><span class="n">make_hci_opcode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ogf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ocf</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">params</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">params</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="n">params</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_enum_to_int</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert an enumeration value to an integer.</span>
+
+<span class="sd">        PRIVATE</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">num</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">return</span> <span class="n">num</span>
+
+    <span class="k">def</span> <span class="nf">_get_length</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get parameters length.</span>
+
+<span class="sd">        PRIVATE</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">byte_length</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">byte_length</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">params</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CommandPacket.make_hci_opcode"><a class="viewcode-back" href="../../hci_packets.html#max_ble_hci.hci_packets.CommandPacket.make_hci_opcode">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">make_hci_opcode</span><span class="p">(</span><span class="n">ogf</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">OGF</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">ocf</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">OCF</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Make an HCI opcode.</span>
+
+<span class="sd">        Creates an HCI opcode from the given Opcode Group Field (OGF)</span>
+<span class="sd">        and Opcode Command Field (OCF) values.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ogf : Union[OGF, int]</span>
+<span class="sd">            Opcode group field.</span>
+<span class="sd">        ocf : Union[OCF, int]</span>
+<span class="sd">            Opcode command field.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The generated HCI opcode.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ogf</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ogf</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+                <span class="n">ogf</span> <span class="o">=</span> <span class="n">ogf</span><span class="o">.</span><span class="n">value</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                    <span class="s2">&quot;Parameter &#39;ogf&#39; must be an integer or an OGF enumeration.&quot;</span>
+                <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ocf</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ocf</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+                <span class="n">ocf</span> <span class="o">=</span> <span class="n">ocf</span><span class="o">.</span><span class="n">value</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                    <span class="s2">&quot;Parameter &#39;ogf&#39; must be an integer or an OCF enumeration.&quot;</span>
+                <span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">ogf</span> <span class="o">&lt;&lt;</span> <span class="mi">10</span><span class="p">)</span> <span class="o">|</span> <span class="n">ocf</span></div>
+
+<div class="viewcode-block" id="CommandPacket.to_bytes"><a class="viewcode-back" href="../../hci_packets.html#max_ble_hci.hci_packets.CommandPacket.to_bytes">[docs]</a>    <span class="k">def</span> <span class="nf">to_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endianness</span><span class="p">:</span> <span class="n">Endian</span> <span class="o">=</span> <span class="n">Endian</span><span class="o">.</span><span class="n">LITTLE</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytearray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Serialize a command packet.</span>
+
+<span class="sd">        Serializes a command packets from the stored attribute</span>
+<span class="sd">        values into a command data byte array.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        endianness : Endian</span>
+<span class="sd">            Endian byte order to apply during serialization.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bytearray</span>
+<span class="sd">            The serialized command.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">serialized_cmd</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+        <span class="n">serialized_cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PacketType</span><span class="o">.</span><span class="n">COMMAND</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">serialized_cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">opcode</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>
+        <span class="n">serialized_cmd</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">opcode</span> <span class="o">&amp;</span> <span class="mh">0xFF00</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">)</span>
+
+        <span class="n">serialized_cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">:</span>
+                <span class="n">num_bytes</span> <span class="o">=</span> <span class="n">byte_length</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">serialized_cmd</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="n">num_bytes</span><span class="p">,</span> <span class="n">endianness</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+                <span class="k">except</span> <span class="ne">OverflowError</span><span class="p">:</span>
+                    <span class="n">serialized_cmd</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                        <span class="n">param</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="n">num_bytes</span><span class="p">,</span> <span class="n">endianness</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">signed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">serialized_cmd</span></div></div>
+
+
+<div class="viewcode-block" id="ExtendedPacket"><a class="viewcode-back" href="../../hci_packets.html#max_ble_hci.hci_packets.ExtendedPacket">[docs]</a><span class="k">class</span> <span class="nc">ExtendedPacket</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Serializer for HCI extended command packets.</span>
+
+<span class="sd">    Object defines a container/serializer for HCI extended command</span>
+<span class="sd">    packets. Initializing an instance of the object creates a container</span>
+<span class="sd">    which stores the desired extended command opcode and payload. A</span>
+<span class="sd">    serialized command can then be generated through the use of the</span>
+<span class="sd">    `to_bytes` function. In the event that an opcode is needed but a</span>
+<span class="sd">    full packet is not, the static method `make_hci_opcode` can be used</span>
+<span class="sd">    without initializing an instance of the object.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ogf : Union[OGF, int]</span>
+<span class="sd">        Opcode group field.</span>
+<span class="sd">    ocf : Union[OCF, int]</span>
+<span class="sd">        Opcode command field.</span>
+<span class="sd">    payload : Union[List[int], int], optional</span>
+<span class="sd">        Command parameters, if any.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ogf : OGF</span>
+<span class="sd">        Opcode group field.</span>
+<span class="sd">    ocf : OCF</span>
+<span class="sd">        Opcode command field.</span>
+<span class="sd">    length : int</span>
+<span class="sd">        Total length of command parameters.</span>
+<span class="sd">    opcode : int</span>
+<span class="sd">        Command opcode.</span>
+<span class="sd">    payload : Union[List[int], int], optional</span>
+<span class="sd">        Command parameters, if any.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">ogf</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">OGF</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+        <span class="n">ocf</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">OCF</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+        <span class="n">payload</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ogf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enum_to_int</span><span class="p">(</span><span class="n">ogf</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ocf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_enum_to_int</span><span class="p">(</span><span class="n">ocf</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_length</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">opcode</span> <span class="o">=</span> <span class="n">ExtendedPacket</span><span class="o">.</span><span class="n">make_hci_opcode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ogf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ocf</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">payload</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">payload</span> <span class="o">=</span> <span class="n">payload</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="n">payload</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">payload</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_enum_to_int</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert an enumeration value to an integer.</span>
+
+<span class="sd">        PRIVATE</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">num</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">return</span> <span class="n">num</span>
+
+    <span class="k">def</span> <span class="nf">_get_length</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pld</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get payload length.</span>
+
+<span class="sd">        PRIVATE</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">pld</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pld</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">byte_length</span><span class="p">(</span><span class="n">pld</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">byte_length</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">pld</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ExtendedPacket.make_hci_opcode"><a class="viewcode-back" href="../../hci_packets.html#max_ble_hci.hci_packets.ExtendedPacket.make_hci_opcode">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">make_hci_opcode</span><span class="p">(</span><span class="n">ogf</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">OGF</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">ocf</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">OCF</span><span class="p">,</span> <span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Make an HCI opcode.</span>
+
+<span class="sd">        Creates an HCI opcode from the given Opcode Group Field (OGF)</span>
+<span class="sd">        and Opcode Command Field (OCF) values.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ogf : Union[OGF, int]</span>
+<span class="sd">            Opcode group field.</span>
+<span class="sd">        ocf : Union[OCF, int]</span>
+<span class="sd">            Opcode command field.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The generated HCI opcode.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ogf</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ogf</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+                <span class="n">ogf</span> <span class="o">=</span> <span class="n">ogf</span><span class="o">.</span><span class="n">value</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                    <span class="s2">&quot;Parameter &#39;ogf&#39; must be an integer or an OGF enumeration.&quot;</span>
+                <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ocf</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ocf</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+                <span class="n">ocf</span> <span class="o">=</span> <span class="n">ocf</span><span class="o">.</span><span class="n">value</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                    <span class="s2">&quot;Parameter &#39;ogf&#39; must be an integer or an OCF enumeration.&quot;</span>
+                <span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">ogf</span> <span class="o">&lt;&lt;</span> <span class="mi">10</span><span class="p">)</span> <span class="o">|</span> <span class="n">ocf</span></div>
+
+<div class="viewcode-block" id="ExtendedPacket.to_bytes"><a class="viewcode-back" href="../../hci_packets.html#max_ble_hci.hci_packets.ExtendedPacket.to_bytes">[docs]</a>    <span class="k">def</span> <span class="nf">to_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">endianness</span><span class="p">:</span> <span class="n">Endian</span> <span class="o">=</span> <span class="n">Endian</span><span class="o">.</span><span class="n">LITTLE</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytearray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Serialize a command packet.</span>
+
+<span class="sd">        Serializes a command packets from the stored attribute</span>
+<span class="sd">        values into a command data byte array.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        endianness : Endian</span>
+<span class="sd">            Endian byte order to apply during serialization.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bytearray</span>
+<span class="sd">            The serialized command.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">serialized_cmd</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+        <span class="n">serialized_cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PacketType</span><span class="o">.</span><span class="n">EXTENDED</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">serialized_cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">opcode</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>
+        <span class="n">serialized_cmd</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">opcode</span> <span class="o">&amp;</span> <span class="mh">0xFF00</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">)</span>
+
+        <span class="n">serialized_cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">&amp;</span> <span class="mh">0xFF</span><span class="p">)</span>
+        <span class="n">serialized_cmd</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">&amp;</span> <span class="mh">0xFF00</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">payload</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">payload</span><span class="p">:</span>
+                <span class="n">num_bytes</span> <span class="o">=</span> <span class="n">byte_length</span><span class="p">(</span><span class="n">param</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">serialized_cmd</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="n">num_bytes</span><span class="p">,</span> <span class="n">endianness</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
+                <span class="k">except</span> <span class="ne">OverflowError</span><span class="p">:</span>
+                    <span class="n">serialized_cmd</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                        <span class="n">param</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="n">num_bytes</span><span class="p">,</span> <span class="n">endianness</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">signed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">serialized_cmd</span></div></div>
+
+
+<div class="viewcode-block" id="AsyncPacket"><a class="viewcode-back" href="../../hci_packets.html#max_ble_hci.hci_packets.AsyncPacket">[docs]</a><span class="k">class</span> <span class="nc">AsyncPacket</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Deserializer for HCI ACL packets.</span>
+
+<span class="sd">    Object defines a deserializer/data container for HCI</span>
+<span class="sd">    Asynchronous Connection-Less packets. To create an</span>
+<span class="sd">    instance directly from bytes, use the static function</span>
+<span class="sd">    `from_bytes`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    handle : int</span>
+<span class="sd">        Packet handle value.</span>
+<span class="sd">    pb_flag : int</span>
+<span class="sd">        Packet PB flag.</span>
+<span class="sd">    bc_flag : int</span>
+<span class="sd">        Packet BC flag.</span>
+<span class="sd">    length : int</span>
+<span class="sd">        Packet data length.</span>
+<span class="sd">    data : bytes</span>
+<span class="sd">        Packet data.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    handle : int</span>
+<span class="sd">        Packet handle value.</span>
+<span class="sd">    pb_flag : int</span>
+<span class="sd">        Packet PB flag.</span>
+<span class="sd">    bc_flag : int</span>
+<span class="sd">        Packet BC flag.</span>
+<span class="sd">    length : int</span>
+<span class="sd">        Packet data length.</span>
+<span class="sd">    data : bytes</span>
+<span class="sd">        Packet data.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">pb_flag</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">bc_flag</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handle</span> <span class="o">=</span> <span class="n">handle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pb_flag</span> <span class="o">=</span> <span class="n">pb_flag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bc_flag</span> <span class="o">=</span> <span class="n">bc_flag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="n">length</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AsyncPacket.from_bytes"><a class="viewcode-back" href="../../hci_packets.html#max_ble_hci.hci_packets.AsyncPacket.from_bytes">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_bytes</span><span class="p">(</span><span class="n">pkt</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncPacket</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Deserialize an HCI ACL packet.</span>
+
+<span class="sd">        Deserializes an HCI Asynchronous Connection-Less packet</span>
+<span class="sd">        from a bytes object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pkt : bytes</span>
+<span class="sd">            Serialized async packet.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        AsyncPacket</span>
+<span class="sd">            The deserialized packet.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">AsyncPacket</span><span class="p">(</span>
+            <span class="n">handle</span><span class="o">=</span><span class="p">(</span><span class="n">pkt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&amp;</span> <span class="mh">0xF0</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">pkt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">),</span>
+            <span class="n">pb_flag</span><span class="o">=</span><span class="p">(</span><span class="n">pkt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&amp;</span> <span class="mh">0xC</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="n">bc_flag</span><span class="o">=</span><span class="n">pkt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&amp;</span> <span class="mh">0x3</span><span class="p">,</span>
+            <span class="n">length</span><span class="o">=</span><span class="n">pkt</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">pkt</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="p">),</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">pkt</span><span class="p">[</span><span class="mi">4</span><span class="p">:]</span> <span class="k">if</span> <span class="n">pkt</span><span class="p">[</span><span class="mi">4</span><span class="p">:]</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="EventPacket"><a class="viewcode-back" href="../../hci_packets.html#max_ble_hci.hci_packets.EventPacket">[docs]</a><span class="k">class</span> <span class="nc">EventPacket</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Deserializer for HCI event packets.</span>
+
+<span class="sd">    Object defines a deserializer/data container for HCI</span>
+<span class="sd">    event packets. To create an instance directly from</span>
+<span class="sd">    bytes, use the static function `from_bytes`. Event</span>
+<span class="sd">    packet return parameters can be retrieved by calling</span>
+<span class="sd">    the `get_return_params` function once an instance of</span>
+<span class="sd">    the object has been created.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    evt_code : int</span>
+<span class="sd">        Packet event code.</span>
+<span class="sd">    length : int</span>
+<span class="sd">        Packet data length.</span>
+<span class="sd">    status : int</span>
+<span class="sd">        Packet status code.</span>
+<span class="sd">    evt_params : bytes</span>
+<span class="sd">        Packet return parameters.</span>
+<span class="sd">    evt_subcode : int, optional</span>
+<span class="sd">        Packet event subcode.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    evt_code : EventCode</span>
+<span class="sd">        Packet event code.</span>
+<span class="sd">    length : int</span>
+<span class="sd">        Packet data length.</span>
+<span class="sd">    status : StatusCode</span>
+<span class="sd">        Packet status code.</span>
+<span class="sd">    evt_subcode : EventSubcode, optional</span>
+<span class="sd">        Packet event subcode</span>
+<span class="sd">    evt_params : bytes</span>
+<span class="sd">        Packet return parameters.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">evt_code</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">status</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">evt_params</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span>
+        <span class="n">evt_subcode</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evt_code</span> <span class="o">=</span> <span class="n">EventCode</span><span class="p">(</span><span class="n">evt_code</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="n">length</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">StatusCode</span><span class="p">(</span><span class="n">status</span><span class="p">)</span> <span class="k">if</span> <span class="n">status</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evt_subcode</span> <span class="o">=</span> <span class="n">EventSubcode</span><span class="p">(</span><span class="n">evt_subcode</span><span class="p">)</span> <span class="k">if</span> <span class="n">evt_subcode</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">evt_params</span> <span class="o">=</span> <span class="n">evt_params</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+
+<div class="viewcode-block" id="EventPacket.from_bytes"><a class="viewcode-back" href="../../hci_packets.html#max_ble_hci.hci_packets.EventPacket.from_bytes">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_bytes</span><span class="p">(</span><span class="n">serialized_event</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventPacket</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Deserialize an HCI event packet.</span>
+
+<span class="sd">        Deserializes an HCI event packet from a bytes object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        serialized_event : bytes</span>
+<span class="sd">            Serialized event packet.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        EventPacket</span>
+<span class="sd">            The deserialized packet.</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">serialized_event</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">EventCode</span><span class="o">.</span><span class="n">COMMAND_COMPLETE</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+            <span class="n">pkt</span> <span class="o">=</span> <span class="n">EventPacket</span><span class="p">(</span>
+                <span class="n">evt_code</span><span class="o">=</span><span class="n">serialized_event</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">length</span><span class="o">=</span><span class="n">serialized_event</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">status</span><span class="o">=</span><span class="n">StatusCode</span><span class="p">(</span><span class="n">serialized_event</span><span class="p">[</span><span class="mi">5</span><span class="p">]),</span>
+                <span class="n">evt_params</span><span class="o">=</span><span class="n">serialized_event</span><span class="p">[</span><span class="mi">2</span><span class="p">:],</span>
+            <span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">serialized_event</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">EventCode</span><span class="o">.</span><span class="n">HARDWARE_ERROR</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+            <span class="n">pkt</span> <span class="o">=</span> <span class="n">EventPacket</span><span class="p">(</span>
+                <span class="n">evt_code</span><span class="o">=</span><span class="n">serialized_event</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">length</span><span class="o">=</span><span class="n">serialized_event</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">status</span><span class="o">=</span><span class="n">StatusCode</span><span class="o">.</span><span class="n">ERROR_CODE_HW_FAILURE</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                <span class="n">evt_params</span><span class="o">=</span><span class="n">serialized_event</span><span class="p">[</span><span class="mi">2</span><span class="p">:],</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">serialized_event</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">EventCode</span><span class="o">.</span><span class="n">NUM_COMPLETED_PACKETS</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+            <span class="n">pkt</span> <span class="o">=</span> <span class="n">EventPacket</span><span class="p">(</span>
+                <span class="n">evt_code</span><span class="o">=</span><span class="n">serialized_event</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">length</span><span class="o">=</span><span class="n">serialized_event</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">status</span><span class="o">=</span><span class="n">StatusCode</span><span class="o">.</span><span class="n">SUCCESS</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                <span class="n">evt_params</span><span class="o">=</span><span class="n">serialized_event</span><span class="p">[</span><span class="mi">2</span><span class="p">:],</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">serialized_event</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">EventCode</span><span class="o">.</span><span class="n">DATA_BUFF_OVERFLOW</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+            <span class="n">pkt</span> <span class="o">=</span> <span class="n">EventPacket</span><span class="p">(</span>
+                <span class="n">evt_code</span><span class="o">=</span><span class="n">serialized_event</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">length</span><span class="o">=</span><span class="n">serialized_event</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">status</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">evt_params</span><span class="o">=</span><span class="n">serialized_event</span><span class="p">[</span><span class="mi">2</span><span class="p">:],</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">serialized_event</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">EventCode</span><span class="o">.</span><span class="n">LE_META</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+            <span class="n">pkt</span> <span class="o">=</span> <span class="n">EventPacket</span><span class="p">(</span>
+                <span class="n">evt_code</span><span class="o">=</span><span class="n">serialized_event</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">length</span><span class="o">=</span><span class="n">serialized_event</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">status</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">evt_params</span><span class="o">=</span><span class="n">serialized_event</span><span class="p">[</span><span class="mi">3</span><span class="p">:],</span>
+                <span class="n">evt_subcode</span><span class="o">=</span><span class="n">serialized_event</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">serialized_event</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">EventCode</span><span class="o">.</span><span class="n">AUTH_PAYLOAD_TIMEOUT_EXPIRED</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+            <span class="n">pkt</span> <span class="o">=</span> <span class="n">EventPacket</span><span class="p">(</span>
+                <span class="n">evt_code</span><span class="o">=</span><span class="n">serialized_event</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">length</span><span class="o">=</span><span class="n">serialized_event</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">status</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">evt_params</span><span class="o">=</span><span class="n">serialized_event</span><span class="p">[</span><span class="mi">2</span><span class="p">:],</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">serialized_event</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">EventCode</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="p">:</span>
+            <span class="n">pkt</span> <span class="o">=</span> <span class="n">EventPacket</span><span class="p">(</span>
+                <span class="n">evt_code</span><span class="o">=</span><span class="n">serialized_event</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">length</span><span class="o">=</span><span class="n">serialized_event</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">status</span><span class="o">=</span><span class="n">serialized_event</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">evt_params</span><span class="o">=</span><span class="n">serialized_event</span><span class="p">[</span><span class="mi">3</span><span class="p">:],</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid event code (</span><span class="si">{</span><span class="n">serialized_event</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">) received.&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">pkt</span></div>
+
+<div class="viewcode-block" id="EventPacket.get_return_params"><a class="viewcode-back" href="../../hci_packets.html#max_ble_hci.hci_packets.EventPacket.get_return_params">[docs]</a>    <span class="k">def</span> <span class="nf">get_return_params</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">param_lens</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">endianness</span><span class="p">:</span> <span class="n">Endian</span> <span class="o">=</span> <span class="n">Endian</span><span class="o">.</span><span class="n">LITTLE</span><span class="p">,</span>
+        <span class="n">signed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve packet return parameters.</span>
+
+<span class="sd">        Parses the packet return parameters from the bytes stored</span>
+<span class="sd">        in the `evt_params` attribute in accordance with the given</span>
+<span class="sd">        lengths and deserialization parameters.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        param_lens : List[int], optional</span>
+<span class="sd">            The length values of each expected return parameter. If</span>
+<span class="sd">            only 1 return is expected, this value does not need to</span>
+<span class="sd">            be provided.</span>
+<span class="sd">        endianness : Endian</span>
+<span class="sd">            Endian byte order to apply during deserialization.</span>
+<span class="sd">        signed : bool</span>
+<span class="sd">            Are the return values signed integers?</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Union[List[int], int]</span>
+<span class="sd">            The parsed return parameter(s).</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">evt_code</span> <span class="o">==</span> <span class="n">EventCode</span><span class="o">.</span><span class="n">COMMAND_COMPLETE</span><span class="p">:</span>
+            <span class="n">param_bytes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evt_params</span><span class="p">[</span><span class="mi">4</span><span class="p">:]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">param_lens</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">param_bytes</span><span class="p">,</span> <span class="n">endianness</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">signed</span><span class="o">=</span><span class="n">signed</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="n">param_lens</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">param_bytes</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Expected and actual number of return bytes do not match. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Expected=</span><span class="si">{</span><span class="nb">sum</span><span class="p">(</span><span class="n">param_lens</span><span class="p">)</span><span class="si">}</span><span class="s2">, Actual=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">param_bytes</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">return_params</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">p_idx</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">p_len</span> <span class="ow">in</span> <span class="n">param_lens</span><span class="p">:</span>
+            <span class="n">return_params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="nb">int</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="n">param_bytes</span><span class="p">[</span><span class="n">p_idx</span> <span class="p">:</span> <span class="n">p_idx</span> <span class="o">+</span> <span class="n">p_len</span><span class="p">],</span> <span class="n">endianness</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">p_idx</span> <span class="o">+=</span> <span class="n">p_len</span>
+
+        <span class="k">return</span> <span class="n">return_params</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Analog Devices, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
