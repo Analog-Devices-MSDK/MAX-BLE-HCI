@@ -62,7 +62,10 @@ import logging
 import signal
 
 # pylint: disable=unused-import
-import readline
+try:
+    import readline
+except ImportError:
+    import gnureadline as readline
 
 # pylint: enable=unused-import
 import sys
