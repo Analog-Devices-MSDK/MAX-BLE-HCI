@@ -432,11 +432,7 @@ class SerialUartTransport:
         if timeout is None:
             timeout = self.timeout
 
-        def _wait_timeout():
-            time.sleep(timeout)
-            return 0
-
-        timeout_process = Process(target=_wait_timeout)
+        timeout_process = Process(target=time.sleep, args=(timeout,))
         timeout_process.start()
 
         while self._read_thread.is_alive():
