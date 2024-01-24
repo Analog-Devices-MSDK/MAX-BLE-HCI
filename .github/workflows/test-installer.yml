@@ -16,7 +16,7 @@ jobs:
   test_windows:
     if: false
     name: runner / windows
-    runs-on: windows
+    runs-on: windows-latest
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
