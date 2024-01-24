@@ -1,25 +1,35 @@
 name: black-format-run
 on: [workflow_dispatch]
+
 jobs:
   format_check:
-    name: runner / black formatter
+    name: runner / black formatter check
     runs-on: ubuntu-latest
+    outputs:
+      step_result: ${{ steps.check.outputs.result }}
     steps:
-      - uses: actions/checkout@v2
-      - uses: rickstaa/action-black@v1
-        with:
-          black_args: ". --check --exclude docs"
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Check code formatting using black
+        id: check
+        run: |
+          # Your existing black check steps
+          if black . --check --exclude docs; then
+            echo "::set-output name=result::success"
+          else
+            echo "::set-output name=result::failure"
+          fi
+
   format_run:
-    name: runner / black
+    name: runner / black formatter run
     runs-on: ubuntu-latest
-    if: jobs.format_check.result == 'failure'
+    needs: format_check
+    if: ${{ needs.format_check.outputs.step_result == 'failure' }}
     steps:
-      - uses: actions/checkout@v2
-      - name: Check files using the black formatter
-        uses: rickstaa/action-black@v1
-        id: action_black
-        with:
-          black_args: "."
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Format code using black
+        run: black .
       - name: Push reformatted files
         uses: EndBug/add-and-commit@v9.0.1
         with:
