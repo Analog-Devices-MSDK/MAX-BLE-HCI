@@ -12,7 +12,7 @@ jobs:
   format_run:
     name: runner / black
     runs-on: ubuntu-latest
-    if: format_check.result == 'failure'
+    if: jobs.format_check.result == 'failure'
     steps:
       - uses: actions/checkout@v2
       - name: Check files using the black formatter
