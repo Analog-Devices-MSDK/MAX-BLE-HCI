@@ -1,7 +1,7 @@
 name: black-format-check
 on: [push, workflow_dispatch]
 jobs:
-  linter_name:
+  format_check:
     name: runner / black formatter
     runs-on: ubuntu-latest
     steps:
