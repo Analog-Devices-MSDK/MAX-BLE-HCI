@@ -375,9 +375,9 @@ class SerialUartTransport:
                 dsrdtr=False,
                 timeout=2.0,
             )
-            #This gets an exclusive lock to the file. So multiple instances of the serial port cannot be used. 
+            # This gets an exclusive lock to the file. So multiple instances of the serial port cannot be used.
             fcntl.flock(self.port.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
-        
+
         except IOError:
             self.logger.error(
                 """Port could not obtain exclusive lock on serial port %s!\n"""
