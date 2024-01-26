@@ -4162,7 +4162,7 @@ Setting a bit to 1 enables the corresponding event.</p>
 </tbody>
 </table>
 <table class="docutils align-default" id="id282" style="width: 100%">
-<caption><span class="caption-text">, size =</span><a class="headerlink" href="#id282" title="Permalink to this table"></a></caption>
+<caption><span class="caption-text">Flags, size = 4 octets</span><a class="headerlink" href="#id282" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -5277,11 +5277,34 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
+<table class="docutils align-default" id="id310" style="width: 100%">
+<caption><span class="caption-text">Enable, size = 1 octet</span><a class="headerlink" href="#id310" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 80.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Value(s)</p></th>
+<th class="head"><p>Parameter Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00</p></td>
+<td><p>Disable indicated flags.</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x01</p></td>
+<td><p>Enable indicated flags.</p></td>
+</tr>
+<tr class="row-even"><td><p>All other values</p></td>
+<td><p>[Reserved for future use].</p></td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="id116">
 <h3>Return Parameters<a class="headerlink" href="#id116" title="Permalink to this heading"></a></h3>
-<table class="docutils align-default" id="id310" style="width: 100%">
-<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id310" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id311" style="width: 100%">
+<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id311" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -5361,8 +5384,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </section>
 <section id="id119">
 <h3>Return Parameters<a class="headerlink" href="#id119" title="Permalink to this heading"></a></h3>
-<table class="docutils align-default" id="id311" style="width: 100%">
-<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id311" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id312" style="width: 100%">
+<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id312" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -5381,8 +5404,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id312" style="width: 100%">
-<caption><span class="caption-text">Fail_PDU_Type_Filter_Count, size = 2 octets</span><a class="headerlink" href="#id312" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id313" style="width: 100%">
+<caption><span class="caption-text">Fail_PDU_Type_Filter_Count, size = 2 octets</span><a class="headerlink" href="#id313" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -5398,8 +5421,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id313" style="width: 100%">
-<caption><span class="caption-text">Pass_PDU_Type_Filter_Count, size = 2 octets</span><a class="headerlink" href="#id313" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id314" style="width: 100%">
+<caption><span class="caption-text">Pass_PDU_Type_Filter_Count, size = 2 octets</span><a class="headerlink" href="#id314" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -5415,8 +5438,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id314" style="width: 100%">
-<caption><span class="caption-text">Fail_Whitelist_Filter_Count, size = 2 octets</span><a class="headerlink" href="#id314" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id315" style="width: 100%">
+<caption><span class="caption-text">Fail_Whitelist_Filter_Count, size = 2 octets</span><a class="headerlink" href="#id315" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -5432,8 +5455,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id315" style="width: 100%">
-<caption><span class="caption-text">Pass_Whitelist_Filter_Count, size = 2 octets</span><a class="headerlink" href="#id315" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id316" style="width: 100%">
+<caption><span class="caption-text">Pass_Whitelist_Filter_Count, size = 2 octets</span><a class="headerlink" href="#id316" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -5449,8 +5472,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id316" style="width: 100%">
-<caption><span class="caption-text">Fail_Peer_Address_Match_Count, size = 2 octets</span><a class="headerlink" href="#id316" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id317" style="width: 100%">
+<caption><span class="caption-text">Fail_Peer_Address_Match_Count, size = 2 octets</span><a class="headerlink" href="#id317" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -5466,8 +5489,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id317" style="width: 100%">
-<caption><span class="caption-text">Pass_Peer_Address_Match_Count, size = 2 octets</span><a class="headerlink" href="#id317" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id318" style="width: 100%">
+<caption><span class="caption-text">Pass_Peer_Address_Match_Count, size = 2 octets</span><a class="headerlink" href="#id318" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -5483,8 +5506,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id318" style="width: 100%">
-<caption><span class="caption-text">Fail_Local_Address_Match_Count, size = 2 octets</span><a class="headerlink" href="#id318" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id319" style="width: 100%">
+<caption><span class="caption-text">Fail_Local_Address_Match_Count, size = 2 octets</span><a class="headerlink" href="#id319" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -5500,8 +5523,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id319" style="width: 100%">
-<caption><span class="caption-text">Pass_Local_Address_Match_Count, size = 2 octets</span><a class="headerlink" href="#id319" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id320" style="width: 100%">
+<caption><span class="caption-text">Pass_Local_Address_Match_Count, size = 2 octets</span><a class="headerlink" href="#id320" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -5517,8 +5540,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id320" style="width: 100%">
-<caption><span class="caption-text">Fail_Peer_RPA_Verify_Count, size = 2 octets</span><a class="headerlink" href="#id320" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id321" style="width: 100%">
+<caption><span class="caption-text">Fail_Peer_RPA_Verify_Count, size = 2 octets</span><a class="headerlink" href="#id321" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -5534,8 +5557,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id321" style="width: 100%">
-<caption><span class="caption-text">Pass_Peer_RPA_Verify_Count, size = 2 octets</span><a class="headerlink" href="#id321" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id322" style="width: 100%">
+<caption><span class="caption-text">Pass_Peer_RPA_Verify_Count, size = 2 octets</span><a class="headerlink" href="#id322" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -5551,8 +5574,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id322" style="width: 100%">
-<caption><span class="caption-text">Fail_Local_RPA_Verify_Count, size = 2 octets</span><a class="headerlink" href="#id322" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id323" style="width: 100%">
+<caption><span class="caption-text">Fail_Local_RPA_Verify_Count, size = 2 octets</span><a class="headerlink" href="#id323" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -5568,8 +5591,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id323" style="width: 100%">
-<caption><span class="caption-text">Pass_Local_RPA_Verify_Count, size = 2 octets</span><a class="headerlink" href="#id323" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id324" style="width: 100%">
+<caption><span class="caption-text">Pass_Local_RPA_Verify_Count, size = 2 octets</span><a class="headerlink" href="#id324" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -5585,8 +5608,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id324" style="width: 100%">
-<caption><span class="caption-text">Fail_Peer_Private_Addr_Req_Count, size = 2 octets</span><a class="headerlink" href="#id324" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id325" style="width: 100%">
+<caption><span class="caption-text">Fail_Peer_Private_Addr_Req_Count, size = 2 octets</span><a class="headerlink" href="#id325" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -5602,8 +5625,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id325" style="width: 100%">
-<caption><span class="caption-text">Fail_Local_Private_Addr_Req_Count, size = 2 octets</span><a class="headerlink" href="#id325" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id326" style="width: 100%">
+<caption><span class="caption-text">Fail_Local_Private_Addr_Req_Count, size = 2 octets</span><a class="headerlink" href="#id326" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -5619,8 +5642,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id326" style="width: 100%">
-<caption><span class="caption-text">Fail_Peer_Addr_Resolution_Req_Count, size = 2 octets</span><a class="headerlink" href="#id326" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id327" style="width: 100%">
+<caption><span class="caption-text">Fail_Peer_Addr_Resolution_Req_Count, size = 2 octets</span><a class="headerlink" href="#id327" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -5636,8 +5659,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id327" style="width: 100%">
-<caption><span class="caption-text">Pass_Peer_Addr_Resolution_Opt_Count, size = 2 octets</span><a class="headerlink" href="#id327" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id328" style="width: 100%">
+<caption><span class="caption-text">Pass_Peer_Addr_Resolution_Opt_Count, size = 2 octets</span><a class="headerlink" href="#id328" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -5653,8 +5676,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id328" style="width: 100%">
-<caption><span class="caption-text">Pass_Local_Addr_Resolution_Opt_Count, size = 2 octets</span><a class="headerlink" href="#id328" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id329" style="width: 100%">
+<caption><span class="caption-text">Pass_Local_Addr_Resolution_Opt_Count, size = 2 octets</span><a class="headerlink" href="#id329" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -5670,8 +5693,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id329" style="width: 100%">
-<caption><span class="caption-text">Peer_Addr_Resolutions_Pend_Count, size = 2 octets</span><a class="headerlink" href="#id329" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id330" style="width: 100%">
+<caption><span class="caption-text">Peer_Addr_Resolutions_Pend_Count, size = 2 octets</span><a class="headerlink" href="#id330" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -5687,8 +5710,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id330" style="width: 100%">
-<caption><span class="caption-text">Local_Addr_Resolutions_Pend_Count, size = 2 octets</span><a class="headerlink" href="#id330" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id331" style="width: 100%">
+<caption><span class="caption-text">Local_Addr_Resolutions_Pend_Count, size = 2 octets</span><a class="headerlink" href="#id331" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -5739,8 +5762,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </table>
 <section id="id121">
 <h3>Parameters<a class="headerlink" href="#id121" title="Permalink to this heading"></a></h3>
-<table class="docutils align-default" id="id331" style="width: 100%">
-<caption><span class="caption-text">TX_Power_Level, size = 1 octet</span><a class="headerlink" href="#id331" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id332" style="width: 100%">
+<caption><span class="caption-text">TX_Power_Level, size = 1 octet</span><a class="headerlink" href="#id332" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -5763,8 +5786,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </section>
 <section id="id122">
 <h3>Return Parameters<a class="headerlink" href="#id122" title="Permalink to this heading"></a></h3>
-<table class="docutils align-default" id="id332" style="width: 100%">
-<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id332" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id333" style="width: 100%">
+<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id333" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -5822,8 +5845,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </table>
 <section id="id124">
 <h3>Parameters<a class="headerlink" href="#id124" title="Permalink to this heading"></a></h3>
-<table class="docutils align-default" id="id333" style="width: 100%">
-<caption><span class="caption-text">Connection_Handle, size = 2 octets</span><a class="headerlink" href="#id333" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id334" style="width: 100%">
+<caption><span class="caption-text">Connection_Handle, size = 2 octets</span><a class="headerlink" href="#id334" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -5839,8 +5862,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id334" style="width: 100%">
-<caption><span class="caption-text">TX_Power_Level, size = 1 octet</span><a class="headerlink" href="#id334" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id335" style="width: 100%">
+<caption><span class="caption-text">TX_Power_Level, size = 1 octet</span><a class="headerlink" href="#id335" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -5863,8 +5886,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </section>
 <section id="id125">
 <h3>Return Parameters<a class="headerlink" href="#id125" title="Permalink to this heading"></a></h3>
-<table class="docutils align-default" id="id335" style="width: 100%">
-<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id335" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id336" style="width: 100%">
+<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id336" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -5923,8 +5946,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </table>
 <section id="id127">
 <h3>Parameters<a class="headerlink" href="#id127" title="Permalink to this heading"></a></h3>
-<table class="docutils align-default" id="id336" style="width: 100%">
-<caption><span class="caption-text">Connection_Handle, size = 2 octets</span><a class="headerlink" href="#id336" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id337" style="width: 100%">
+<caption><span class="caption-text">Connection_Handle, size = 2 octets</span><a class="headerlink" href="#id337" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -5940,8 +5963,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id337" style="width: 100%">
-<caption><span class="caption-text">Enable_Authentication, size = 1 octet</span><a class="headerlink" href="#id337" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id338" style="width: 100%">
+<caption><span class="caption-text">Enable_Authentication, size = 1 octet</span><a class="headerlink" href="#id338" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -5963,8 +5986,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id338" style="width: 100%">
-<caption><span class="caption-text">Nonce_Mode, size = 1 octet</span><a class="headerlink" href="#id338" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id339" style="width: 100%">
+<caption><span class="caption-text">Nonce_Mode, size = 1 octet</span><a class="headerlink" href="#id339" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -5989,8 +6012,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </section>
 <section id="id128">
 <h3>Return Parameters<a class="headerlink" href="#id128" title="Permalink to this heading"></a></h3>
-<table class="docutils align-default" id="id339" style="width: 100%">
-<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id339" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id340" style="width: 100%">
+<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id340" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6048,8 +6071,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </table>
 <section id="id130">
 <h3>Parameters<a class="headerlink" href="#id130" title="Permalink to this heading"></a></h3>
-<table class="docutils align-default" id="id340" style="width: 100%">
-<caption><span class="caption-text">Connection_Handle, size = 2 octets</span><a class="headerlink" href="#id340" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id341" style="width: 100%">
+<caption><span class="caption-text">Connection_Handle, size = 2 octets</span><a class="headerlink" href="#id341" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6065,8 +6088,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id341" style="width: 100%">
-<caption><span class="caption-text">, size = 5 octets</span><a class="headerlink" href="#id341" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id342" style="width: 100%">
+<caption><span class="caption-text">Channel_Map, size = 5 octets</span><a class="headerlink" href="#id342" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6090,8 +6113,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </section>
 <section id="id131">
 <h3>Return Parameters<a class="headerlink" href="#id131" title="Permalink to this heading"></a></h3>
-<table class="docutils align-default" id="id342" style="width: 100%">
-<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id342" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id343" style="width: 100%">
+<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id343" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6145,8 +6168,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </table>
 <section id="id133">
 <h3>Parameters<a class="headerlink" href="#id133" title="Permalink to this heading"></a></h3>
-<table class="docutils align-default" id="id343" style="width: 100%">
-<caption><span class="caption-text">Enable, size = 1 octet</span><a class="headerlink" href="#id343" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id344" style="width: 100%">
+<caption><span class="caption-text">Enable, size = 1 octet</span><a class="headerlink" href="#id344" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6171,8 +6194,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </section>
 <section id="id134">
 <h3>Return Parameters<a class="headerlink" href="#id134" title="Permalink to this heading"></a></h3>
-<table class="docutils align-default" id="id344" style="width: 100%">
-<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id344" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id345" style="width: 100%">
+<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id345" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6255,8 +6278,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </section>
 <section id="id137">
 <h3>Return Parameters<a class="headerlink" href="#id137" title="Permalink to this heading"></a></h3>
-<table class="docutils align-default" id="id345" style="width: 100%">
-<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id345" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id346" style="width: 100%">
+<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id346" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6275,8 +6298,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id346" style="width: 100%">
-<caption><span class="caption-text">Stack_Watermark, size = 2 octets</span><a class="headerlink" href="#id346" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id347" style="width: 100%">
+<caption><span class="caption-text">Stack_Watermark, size = 2 octets</span><a class="headerlink" href="#id347" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6292,8 +6315,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id347" style="width: 100%">
-<caption><span class="caption-text">System_Assert_Count, size = 2 octets</span><a class="headerlink" href="#id347" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id348" style="width: 100%">
+<caption><span class="caption-text">System_Assert_Count, size = 2 octets</span><a class="headerlink" href="#id348" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6309,8 +6332,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id348" style="width: 100%">
-<caption><span class="caption-text">Free_Memory, size = 4 octets</span><a class="headerlink" href="#id348" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id349" style="width: 100%">
+<caption><span class="caption-text">Free_Memory, size = 4 octets</span><a class="headerlink" href="#id349" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6326,8 +6349,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id349" style="width: 100%">
-<caption><span class="caption-text">Used_Memory, size = 4 octets</span><a class="headerlink" href="#id349" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id350" style="width: 100%">
+<caption><span class="caption-text">Used_Memory, size = 4 octets</span><a class="headerlink" href="#id350" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6343,8 +6366,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id350" style="width: 100%">
-<caption><span class="caption-text">Max_Connections, size = 2 octets</span><a class="headerlink" href="#id350" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id351" style="width: 100%">
+<caption><span class="caption-text">Max_Connections, size = 2 octets</span><a class="headerlink" href="#id351" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6360,8 +6383,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id351" style="width: 100%">
-<caption><span class="caption-text">Connection_Context_Size, size = 2 octets</span><a class="headerlink" href="#id351" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id352" style="width: 100%">
+<caption><span class="caption-text">Connection_Context_Size, size = 2 octets</span><a class="headerlink" href="#id352" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6377,8 +6400,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id352" style="width: 100%">
-<caption><span class="caption-text">CS_Watermark_Usec, size = 2 octets</span><a class="headerlink" href="#id352" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id353" style="width: 100%">
+<caption><span class="caption-text">CS_Watermark_Usec, size = 2 octets</span><a class="headerlink" href="#id353" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6394,8 +6417,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id353" style="width: 100%">
-<caption><span class="caption-text">LL_Handler_Watermark_Usec, size = 2 octets</span><a class="headerlink" href="#id353" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id354" style="width: 100%">
+<caption><span class="caption-text">LL_Handler_Watermark_Usec, size = 2 octets</span><a class="headerlink" href="#id354" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6411,8 +6434,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id354" style="width: 100%">
-<caption><span class="caption-text">Sch_Handler_Watermark_Usec, size = 2 octets</span><a class="headerlink" href="#id354" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id355" style="width: 100%">
+<caption><span class="caption-text">Sch_Handler_Watermark_Usec, size = 2 octets</span><a class="headerlink" href="#id355" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6428,8 +6451,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id355" style="width: 100%">
-<caption><span class="caption-text">LHCI_Handler_Watermark_Usec, size = 2 octets</span><a class="headerlink" href="#id355" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id356" style="width: 100%">
+<caption><span class="caption-text">LHCI_Handler_Watermark_Usec, size = 2 octets</span><a class="headerlink" href="#id356" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6445,8 +6468,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id356" style="width: 100%">
-<caption><span class="caption-text">Max_Advertising_Sets, size = 2 octets</span><a class="headerlink" href="#id356" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id357" style="width: 100%">
+<caption><span class="caption-text">Max_Advertising_Sets, size = 2 octets</span><a class="headerlink" href="#id357" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6462,8 +6485,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id357" style="width: 100%">
-<caption><span class="caption-text">Advertising_Set_Context_Size, size = 2 octets</span><a class="headerlink" href="#id357" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id358" style="width: 100%">
+<caption><span class="caption-text">Advertising_Set_Context_Size, size = 2 octets</span><a class="headerlink" href="#id358" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6479,8 +6502,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id358" style="width: 100%">
-<caption><span class="caption-text">Max_Extended_Scanners, size = 2 octets</span><a class="headerlink" href="#id358" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id359" style="width: 100%">
+<caption><span class="caption-text">Max_Extended_Scanners, size = 2 octets</span><a class="headerlink" href="#id359" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6496,8 +6519,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id359" style="width: 100%">
-<caption><span class="caption-text">Extended_Scanner_Context_Size, size = 2 octets</span><a class="headerlink" href="#id359" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id360" style="width: 100%">
+<caption><span class="caption-text">Extended_Scanner_Context_Size, size = 2 octets</span><a class="headerlink" href="#id360" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6513,8 +6536,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id360" style="width: 100%">
-<caption><span class="caption-text">Max_Extended_Initiators, size = 2 octets</span><a class="headerlink" href="#id360" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id361" style="width: 100%">
+<caption><span class="caption-text">Max_Extended_Initiators, size = 2 octets</span><a class="headerlink" href="#id361" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6530,8 +6553,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id361" style="width: 100%">
-<caption><span class="caption-text">Extended_Initiator_Context_Size, size = 2 octets</span><a class="headerlink" href="#id361" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id362" style="width: 100%">
+<caption><span class="caption-text">Extended_Initiator_Context_Size, size = 2 octets</span><a class="headerlink" href="#id362" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6547,8 +6570,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id362" style="width: 100%">
-<caption><span class="caption-text">Max_Periodic_Scanners, size = 2 octets</span><a class="headerlink" href="#id362" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id363" style="width: 100%">
+<caption><span class="caption-text">Max_Periodic_Scanners, size = 2 octets</span><a class="headerlink" href="#id363" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6564,8 +6587,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id363" style="width: 100%">
-<caption><span class="caption-text">Periodic_Scanner_Context_Size, size = 2 octets</span><a class="headerlink" href="#id363" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id364" style="width: 100%">
+<caption><span class="caption-text">Periodic_Scanner_Context_Size, size = 2 octets</span><a class="headerlink" href="#id364" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6581,8 +6604,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id364" style="width: 100%">
-<caption><span class="caption-text">Max_CIGs, size = 2 octets</span><a class="headerlink" href="#id364" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id365" style="width: 100%">
+<caption><span class="caption-text">Max_CIGs, size = 2 octets</span><a class="headerlink" href="#id365" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6598,8 +6621,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id365" style="width: 100%">
-<caption><span class="caption-text">CIG_Context_Size, size = 2 octets</span><a class="headerlink" href="#id365" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id366" style="width: 100%">
+<caption><span class="caption-text">CIG_Context_Size, size = 2 octets</span><a class="headerlink" href="#id366" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6615,8 +6638,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id366" style="width: 100%">
-<caption><span class="caption-text">Max_CISes, size = 2 octets</span><a class="headerlink" href="#id366" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id367" style="width: 100%">
+<caption><span class="caption-text">Max_CISes, size = 2 octets</span><a class="headerlink" href="#id367" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6632,8 +6655,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id367" style="width: 100%">
-<caption><span class="caption-text">CIS_Context_Size, size = 2 octets</span><a class="headerlink" href="#id367" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id368" style="width: 100%">
+<caption><span class="caption-text">CIS_Context_Size, size = 2 octets</span><a class="headerlink" href="#id368" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6701,8 +6724,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </section>
 <section id="id140">
 <h3>Return Parameters<a class="headerlink" href="#id140" title="Permalink to this heading"></a></h3>
-<table class="docutils align-default" id="id368" style="width: 100%">
-<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id368" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id369" style="width: 100%">
+<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id369" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6721,8 +6744,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id369" style="width: 100%">
-<caption><span class="caption-text">TX_Adv, size = 4 octets</span><a class="headerlink" href="#id369" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id370" style="width: 100%">
+<caption><span class="caption-text">TX_Adv, size = 4 octets</span><a class="headerlink" href="#id370" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6738,8 +6761,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id370" style="width: 100%">
-<caption><span class="caption-text">RX_Req, size = 4 octets</span><a class="headerlink" href="#id370" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id371" style="width: 100%">
+<caption><span class="caption-text">RX_Req, size = 4 octets</span><a class="headerlink" href="#id371" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6755,8 +6778,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id371" style="width: 100%">
-<caption><span class="caption-text">RX_Req_CRC, size = 4 octets</span><a class="headerlink" href="#id371" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id372" style="width: 100%">
+<caption><span class="caption-text">RX_Req_CRC, size = 4 octets</span><a class="headerlink" href="#id372" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6772,8 +6795,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id372" style="width: 100%">
-<caption><span class="caption-text">RX_Req_Timeout, size = 4 octets</span><a class="headerlink" href="#id372" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id373" style="width: 100%">
+<caption><span class="caption-text">RX_Req_Timeout, size = 4 octets</span><a class="headerlink" href="#id373" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6789,8 +6812,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id373" style="width: 100%">
-<caption><span class="caption-text">TX_Rsp, size = 4 octets</span><a class="headerlink" href="#id373" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id374" style="width: 100%">
+<caption><span class="caption-text">TX_Rsp, size = 4 octets</span><a class="headerlink" href="#id374" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6806,8 +6829,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id374" style="width: 100%">
-<caption><span class="caption-text">TX_Adv_Error, size = 4 octets</span><a class="headerlink" href="#id374" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id375" style="width: 100%">
+<caption><span class="caption-text">TX_Adv_Error, size = 4 octets</span><a class="headerlink" href="#id375" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6823,8 +6846,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id375" style="width: 100%">
-<caption><span class="caption-text">RX_Setup_Usec, size = 2 octets</span><a class="headerlink" href="#id375" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id376" style="width: 100%">
+<caption><span class="caption-text">RX_Setup_Usec, size = 2 octets</span><a class="headerlink" href="#id376" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6840,8 +6863,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id376" style="width: 100%">
-<caption><span class="caption-text">TX_Setup_Usec, size = 2 octets</span><a class="headerlink" href="#id376" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id377" style="width: 100%">
+<caption><span class="caption-text">TX_Setup_Usec, size = 2 octets</span><a class="headerlink" href="#id377" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6857,8 +6880,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id377" style="width: 100%">
-<caption><span class="caption-text">RX_ISR_Usec, size = 2 octets</span><a class="headerlink" href="#id377" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id378" style="width: 100%">
+<caption><span class="caption-text">RX_ISR_Usec, size = 2 octets</span><a class="headerlink" href="#id378" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6874,8 +6897,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id378" style="width: 100%">
-<caption><span class="caption-text">TX_ISR_Usec, size = 2 octets</span><a class="headerlink" href="#id378" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id379" style="width: 100%">
+<caption><span class="caption-text">TX_ISR_Usec, size = 2 octets</span><a class="headerlink" href="#id379" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6945,8 +6968,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </section>
 <section id="id143">
 <h3>Return Parameters<a class="headerlink" href="#id143" title="Permalink to this heading"></a></h3>
-<table class="docutils align-default" id="id379" style="width: 100%">
-<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id379" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id380" style="width: 100%">
+<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id380" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6965,8 +6988,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id380" style="width: 100%">
-<caption><span class="caption-text">RX_Adv, size = 4 octets</span><a class="headerlink" href="#id380" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id381" style="width: 100%">
+<caption><span class="caption-text">RX_Adv, size = 4 octets</span><a class="headerlink" href="#id381" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6982,8 +7005,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id381" style="width: 100%">
-<caption><span class="caption-text">RX_Adv_CRC, size = 4 octets</span><a class="headerlink" href="#id381" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id382" style="width: 100%">
+<caption><span class="caption-text">RX_Adv_CRC, size = 4 octets</span><a class="headerlink" href="#id382" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -6999,8 +7022,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id382" style="width: 100%">
-<caption><span class="caption-text">RX_Adv_Timeout, size = 4 octets</span><a class="headerlink" href="#id382" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id383" style="width: 100%">
+<caption><span class="caption-text">RX_Adv_Timeout, size = 4 octets</span><a class="headerlink" href="#id383" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7016,8 +7039,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id383" style="width: 100%">
-<caption><span class="caption-text">TX_Req, size = 4 octets</span><a class="headerlink" href="#id383" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id384" style="width: 100%">
+<caption><span class="caption-text">TX_Req, size = 4 octets</span><a class="headerlink" href="#id384" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7033,8 +7056,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id384" style="width: 100%">
-<caption><span class="caption-text">RX_Rsp, size = 4 octets</span><a class="headerlink" href="#id384" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id385" style="width: 100%">
+<caption><span class="caption-text">RX_Rsp, size = 4 octets</span><a class="headerlink" href="#id385" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7050,8 +7073,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id385" style="width: 100%">
-<caption><span class="caption-text">RX_Rsp_CRC, size = 4 octets</span><a class="headerlink" href="#id385" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id386" style="width: 100%">
+<caption><span class="caption-text">RX_Rsp_CRC, size = 4 octets</span><a class="headerlink" href="#id386" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7067,8 +7090,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id386" style="width: 100%">
-<caption><span class="caption-text">RX_Rsp_Timeout, size = 4 octets</span><a class="headerlink" href="#id386" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id387" style="width: 100%">
+<caption><span class="caption-text">RX_Rsp_Timeout, size = 4 octets</span><a class="headerlink" href="#id387" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7084,8 +7107,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id387" style="width: 100%">
-<caption><span class="caption-text">Scan_Error, size = 4 octets</span><a class="headerlink" href="#id387" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id388" style="width: 100%">
+<caption><span class="caption-text">Scan_Error, size = 4 octets</span><a class="headerlink" href="#id388" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7101,8 +7124,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id388" style="width: 100%">
-<caption><span class="caption-text">RX_Setup_Usec, size = 2 octets</span><a class="headerlink" href="#id388" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id389" style="width: 100%">
+<caption><span class="caption-text">RX_Setup_Usec, size = 2 octets</span><a class="headerlink" href="#id389" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7118,8 +7141,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id389" style="width: 100%">
-<caption><span class="caption-text">TX_Setup_Usec, size = 2 octets</span><a class="headerlink" href="#id389" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id390" style="width: 100%">
+<caption><span class="caption-text">TX_Setup_Usec, size = 2 octets</span><a class="headerlink" href="#id390" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7135,8 +7158,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id390" style="width: 100%">
-<caption><span class="caption-text">RX_ISR_Usec, size = 2 octets</span><a class="headerlink" href="#id390" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id391" style="width: 100%">
+<caption><span class="caption-text">RX_ISR_Usec, size = 2 octets</span><a class="headerlink" href="#id391" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7152,8 +7175,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id391" style="width: 100%">
-<caption><span class="caption-text">TX_ISR_Usec, size = 2 octets</span><a class="headerlink" href="#id391" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id392" style="width: 100%">
+<caption><span class="caption-text">TX_ISR_Usec, size = 2 octets</span><a class="headerlink" href="#id392" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7220,8 +7243,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </section>
 <section id="id146">
 <h3>Return Parameters<a class="headerlink" href="#id146" title="Permalink to this heading"></a></h3>
-<table class="docutils align-default" id="id392" style="width: 100%">
-<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id392" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id393" style="width: 100%">
+<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id393" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7240,8 +7263,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id393" style="width: 100%">
-<caption><span class="caption-text">RX_Data_OK, size = 4 octets</span><a class="headerlink" href="#id393" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id394" style="width: 100%">
+<caption><span class="caption-text">RX_Data_OK, size = 4 octets</span><a class="headerlink" href="#id394" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7257,8 +7280,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id394" style="width: 100%">
-<caption><span class="caption-text">RX_Data_CRC, size = 4 octets</span><a class="headerlink" href="#id394" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id395" style="width: 100%">
+<caption><span class="caption-text">RX_Data_CRC, size = 4 octets</span><a class="headerlink" href="#id395" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7274,8 +7297,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id395" style="width: 100%">
-<caption><span class="caption-text">RX_Data_Timeout, size = 4 octets</span><a class="headerlink" href="#id395" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id396" style="width: 100%">
+<caption><span class="caption-text">RX_Data_Timeout, size = 4 octets</span><a class="headerlink" href="#id396" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7291,8 +7314,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id396" style="width: 100%">
-<caption><span class="caption-text">TX_Data, size = 4 octets</span><a class="headerlink" href="#id396" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id397" style="width: 100%">
+<caption><span class="caption-text">TX_Data, size = 4 octets</span><a class="headerlink" href="#id397" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7308,8 +7331,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id397" style="width: 100%">
-<caption><span class="caption-text">TX_Data_Err, size = 4 octets</span><a class="headerlink" href="#id397" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id398" style="width: 100%">
+<caption><span class="caption-text">TX_Data_Err, size = 4 octets</span><a class="headerlink" href="#id398" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7325,8 +7348,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id398" style="width: 100%">
-<caption><span class="caption-text">RX_Setup_Usec, size = 2 octets</span><a class="headerlink" href="#id398" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id399" style="width: 100%">
+<caption><span class="caption-text">RX_Setup_Usec, size = 2 octets</span><a class="headerlink" href="#id399" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7342,8 +7365,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id399" style="width: 100%">
-<caption><span class="caption-text">TX_Setup_Usec, size = 2 octets</span><a class="headerlink" href="#id399" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id400" style="width: 100%">
+<caption><span class="caption-text">TX_Setup_Usec, size = 2 octets</span><a class="headerlink" href="#id400" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7359,8 +7382,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id400" style="width: 100%">
-<caption><span class="caption-text">RX_ISR_Usec, size = 2 octets</span><a class="headerlink" href="#id400" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id401" style="width: 100%">
+<caption><span class="caption-text">RX_ISR_Usec, size = 2 octets</span><a class="headerlink" href="#id401" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7376,8 +7399,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id401" style="width: 100%">
-<caption><span class="caption-text">TX_ISR_Usec, size = 2 octets</span><a class="headerlink" href="#id401" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id402" style="width: 100%">
+<caption><span class="caption-text">TX_ISR_Usec, size = 2 octets</span><a class="headerlink" href="#id402" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7444,8 +7467,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </section>
 <section id="id149">
 <h3>Return Parameters<a class="headerlink" href="#id149" title="Permalink to this heading"></a></h3>
-<table class="docutils align-default" id="id402" style="width: 100%">
-<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id402" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id403" style="width: 100%">
+<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id403" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7464,8 +7487,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id403" style="width: 100%">
-<caption><span class="caption-text">RX_Data_OK, size = 4 octets</span><a class="headerlink" href="#id403" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id404" style="width: 100%">
+<caption><span class="caption-text">RX_Data_OK, size = 4 octets</span><a class="headerlink" href="#id404" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7481,8 +7504,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id404" style="width: 100%">
-<caption><span class="caption-text">RX_Data_CRC, size = 4 octets</span><a class="headerlink" href="#id404" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id405" style="width: 100%">
+<caption><span class="caption-text">RX_Data_CRC, size = 4 octets</span><a class="headerlink" href="#id405" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7498,8 +7521,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id405" style="width: 100%">
-<caption><span class="caption-text">RX_Data_Timeout, size = 4 octets</span><a class="headerlink" href="#id405" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id406" style="width: 100%">
+<caption><span class="caption-text">RX_Data_Timeout, size = 4 octets</span><a class="headerlink" href="#id406" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7515,8 +7538,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id406" style="width: 100%">
-<caption><span class="caption-text">TX_Data, size = 4 octets</span><a class="headerlink" href="#id406" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id407" style="width: 100%">
+<caption><span class="caption-text">TX_Data, size = 4 octets</span><a class="headerlink" href="#id407" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7532,8 +7555,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id407" style="width: 100%">
-<caption><span class="caption-text">TX_Data_Err, size = 4 octets</span><a class="headerlink" href="#id407" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id408" style="width: 100%">
+<caption><span class="caption-text">TX_Data_Err, size = 4 octets</span><a class="headerlink" href="#id408" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7549,8 +7572,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id408" style="width: 100%">
-<caption><span class="caption-text">RX_Setup_Usec, size = 2 octets</span><a class="headerlink" href="#id408" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id409" style="width: 100%">
+<caption><span class="caption-text">RX_Setup_Usec, size = 2 octets</span><a class="headerlink" href="#id409" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7566,8 +7589,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id409" style="width: 100%">
-<caption><span class="caption-text">TX_Setup_Usec, size = 2 octets</span><a class="headerlink" href="#id409" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id410" style="width: 100%">
+<caption><span class="caption-text">TX_Setup_Usec, size = 2 octets</span><a class="headerlink" href="#id410" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7583,8 +7606,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id410" style="width: 100%">
-<caption><span class="caption-text">RX_ISR_Usec, size = 2 octets</span><a class="headerlink" href="#id410" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id411" style="width: 100%">
+<caption><span class="caption-text">RX_ISR_Usec, size = 2 octets</span><a class="headerlink" href="#id411" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7600,8 +7623,8 @@ pairs and Diffie-Hellman keys until cleared.</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id411" style="width: 100%">
-<caption><span class="caption-text">TX_ISR_Usec, size = 2 octets</span><a class="headerlink" href="#id411" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id412" style="width: 100%">
+<caption><span class="caption-text">TX_ISR_Usec, size = 2 octets</span><a class="headerlink" href="#id412" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7681,8 +7704,8 @@ such:</p>
 </section>
 <section id="id152">
 <h3>Return Parameters<a class="headerlink" href="#id152" title="Permalink to this heading"></a></h3>
-<table class="docutils align-default" id="id412" style="width: 100%">
-<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id412" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id413" style="width: 100%">
+<caption><span class="caption-text">Status, size = 1 octet</span><a class="headerlink" href="#id413" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7701,8 +7724,8 @@ such:</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id413" style="width: 100%">
-<caption><span class="caption-text">Num_Pools, size = 1 octet</span><a class="headerlink" href="#id413" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id414" style="width: 100%">
+<caption><span class="caption-text">Num_Pools, size = 1 octet</span><a class="headerlink" href="#id414" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7718,8 +7741,8 @@ such:</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id414" style="width: 100%">
-<caption><span class="caption-text">Buffer_Size, size = 2*Num_Pools octets</span><a class="headerlink" href="#id414" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id415" style="width: 100%">
+<caption><span class="caption-text">Buffer_Size, size = 2*Num_Pools octets</span><a class="headerlink" href="#id415" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7735,8 +7758,8 @@ such:</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id415" style="width: 100%">
-<caption><span class="caption-text">Num_Buffers, size = 1*Num_Pools octets</span><a class="headerlink" href="#id415" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id416" style="width: 100%">
+<caption><span class="caption-text">Num_Buffers, size = 1*Num_Pools octets</span><a class="headerlink" href="#id416" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7752,8 +7775,8 @@ such:</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id416" style="width: 100%">
-<caption><span class="caption-text">Num_Alloc, size = 1*Num_Pools octets</span><a class="headerlink" href="#id416" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id417" style="width: 100%">
+<caption><span class="caption-text">Num_Alloc, size = 1*Num_Pools octets</span><a class="headerlink" href="#id417" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7769,8 +7792,8 @@ such:</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id417" style="width: 100%">
-<caption><span class="caption-text">Max_Alloc, size = 1*Num_Buffers octets</span><a class="headerlink" href="#id417" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id418" style="width: 100%">
+<caption><span class="caption-text">Max_Alloc, size = 1*Num_Buffers octets</span><a class="headerlink" href="#id418" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
@@ -7786,8 +7809,8 @@ such:</p>
 </tr>
 </tbody>
 </table>
-<table class="docutils align-default" id="id418" style="width: 100%">
-<caption><span class="caption-text">Max_Req_Buffer_Size, size = 2*Num_Pools octets</span><a class="headerlink" href="#id418" title="Permalink to this table"></a></caption>
+<table class="docutils align-default" id="id419" style="width: 100%">
+<caption><span class="caption-text">Max_Req_Buffer_Size, size = 2*Num_Pools octets</span><a class="headerlink" href="#id419" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 20.0%" />
 <col style="width: 80.0%" />
