@@ -374,7 +374,7 @@ class SerialUartTransport:
                 rtscts=False,
                 dsrdtr=False,
                 timeout=2.0,
-                exclusive=True
+                exclusive=True,
             )
 
         except IOError:
