@@ -61,7 +61,7 @@ import datetime
 import time
 import weakref
 
-import serial, fcntl
+import serial
 
 from ._hci_logger import get_formatted_logger
 from .hci_packets import AsyncPacket, CommandPacket, EventPacket
@@ -374,19 +374,13 @@ class SerialUartTransport:
                 rtscts=False,
                 dsrdtr=False,
                 timeout=2.0,
-                exclusive=True
+                exclusive=True,
             )
 
-        except IOError:
-            self.logger.error(
-                """Port could not obtain exclusive lock on serial port %s!\n"""
-                """Port may be used by other process.""",
-                port_id,
-            )
-            sys.exit(1)
         except serial.SerialException as err:
             self.logger.error("%s: %s", type(err).__name__, err)
             sys.exit(1)
+
         except OverflowError as err:
             self.logger.error("Baud rate exception, %i is too large", baud)
             self.logger.error("%s: %s", type(err).__name__, err)
