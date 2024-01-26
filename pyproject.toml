@@ -6,7 +6,7 @@ packages = ["src/max_ble_hci", "src/max_ble_hci_cli.py"]
 
 [project]
 name = "max_ble_hci"
-version = "0.0.0"
+version = "1.0.0"
 dependencies = [
     "pyserial",
     "pyreadline3 ; platform_system == 'Windows'",
