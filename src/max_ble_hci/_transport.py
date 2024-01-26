@@ -61,7 +61,7 @@ import datetime
 import time
 import weakref
 
-import serial, fcntl
+import serial
 
 from ._hci_logger import get_formatted_logger
 from .hci_packets import AsyncPacket, CommandPacket, EventPacket
@@ -204,6 +204,7 @@ class SerialUartTransport:
         timeout: float = 1.0,
         async_callback: Optional[Callable[[AsyncPacket], Any]] = None,
         evt_callback: Optional[Callable[[EventPacket], Any]] = None,
+        exclusive_port: bool = True,
     ):
         self.port_id = port_id
         self.port = None
@@ -220,7 +221,7 @@ class SerialUartTransport:
         self._data_lock = None
         self._port_lock = None
 
-        self._init_port(port_id, baud)
+        self._init_port(port_id, baud, exclusive_port)
         self._init_read_thread()
 
     def __enter__(self):
@@ -358,7 +359,7 @@ class SerialUartTransport:
         self._port_lock = Lock()
         self.start()
 
-    def _init_port(self, port_id: str, baud: int) -> None:
+    def _init_port(self, port_id: str, baud: int, exclusive: bool) -> None:
         """Initializes serial port.
 
         PRIVATE
@@ -374,19 +375,13 @@ class SerialUartTransport:
                 rtscts=False,
                 dsrdtr=False,
                 timeout=2.0,
-                exclusive=True,
+                exclusive=exclusive,
             )
 
-        except IOError:
-            self.logger.error(
-                """Port could not obtain exclusive lock on serial port %s!\n"""
-                """Port may be used by other process.""",
-                port_id,
-            )
-            sys.exit(1)
         except serial.SerialException as err:
             self.logger.error("%s: %s", type(err).__name__, err)
             sys.exit(1)
+
         except OverflowError as err:
             self.logger.error("Baud rate exception, %i is too large", baud)
             self.logger.error("%s: %s", type(err).__name__, err)
