@@ -91,7 +91,7 @@ positional arguments:
     rx-test (rx)        Execute the receiver test
     rx-test-vs (rxvs)   Execute the vendor-specific receiver test
     end-test (end)      End the Tx/Rx test, print the number of correctly received packets
-    reset_ts (rsts)     Reset accumulated stats from DTM
+    reset-ts (rsts)     Reset accumulated stats from DTM
     tx-power (txp)      Set the Tx power
     discon (dc)         Send the command to disconnect
     set-chmap           Set the connection channel map to a given channel.
