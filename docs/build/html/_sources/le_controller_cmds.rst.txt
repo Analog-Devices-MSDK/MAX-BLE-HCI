@@ -1512,7 +1512,7 @@ Parameters
 
     * - Value(s)
       - Parameter Description
-    * - 0x000 to 0x01F3
+    * - 0x0000 to 0x01F3
       - Maximum peripheral latency for the connection given as a number of connection events.
 
 .. list-table:: Supervision_Timeout, 2 octets
@@ -3764,7 +3764,7 @@ the Controller before a new one must be generated.
 Parameters
 ``````````
 
-.. list-table:: RPA_Timeout
+.. list-table:: RPA_Timeout, size = 2 octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -10782,7 +10782,7 @@ Event(s) Generated
 Set Path Loss Reporting Parameters
 ----------------------------------
 
-Set the oath loass threshold reporting parameters for the indicated
+Set the path loss threshold reporting parameters for the indicated
 ACL connection.
 
 .. list-table::

@@ -129,10 +129,10 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">from</span> <span class="nn">._ble_standard_cmds</span> <span class="kn">import</span> <span class="n">BleStandardCmds</span>
+<span class="kn">from</span> <span class="nn">.ble_standard_cmds</span> <span class="kn">import</span> <span class="n">BleStandardCmds</span>
 <span class="kn">from</span> <span class="nn">._hci_logger</span> <span class="kn">import</span> <span class="n">get_formatted_logger</span>
 <span class="kn">from</span> <span class="nn">._transport</span> <span class="kn">import</span> <span class="n">SerialUartTransport</span>
-<span class="kn">from</span> <span class="nn">._vendor_spec_cmds</span> <span class="kn">import</span> <span class="n">VendorSpecificCmds</span>
+<span class="kn">from</span> <span class="nn">.vendor_spec_cmds</span> <span class="kn">import</span> <span class="n">VendorSpecificCmds</span>
 <span class="kn">from</span> <span class="nn">.data_params</span> <span class="kn">import</span> <span class="n">AdvParams</span><span class="p">,</span> <span class="n">ConnParams</span>
 <span class="kn">from</span> <span class="nn">.hci_packets</span> <span class="kn">import</span> <span class="n">AsyncPacket</span><span class="p">,</span> <span class="n">CommandPacket</span><span class="p">,</span> <span class="n">EventPacket</span>
 <span class="kn">from</span> <span class="nn">.packet_codes</span> <span class="kn">import</span> <span class="n">StatusCode</span>

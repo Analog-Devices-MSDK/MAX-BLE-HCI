@@ -8,17 +8,17 @@ be found in the :file:`examples` directory.
 Example 1: Hello HCI
 --------------------
 
-.. literalinclude:: /_static/hello_hci.py
+.. literalinclude:: /examples/hello_hci.py
     :language: python
 
 Example 2: Direct-Test Mode
 ---------------------------
 
-.. literalinclude:: /_static/dtm.py
+.. literalinclude:: /examples/dtm.py
     :language: python
 
 Example 3: Connection Mode
 --------------------------
 
-.. literalinclude:: /_static/connection.py
+.. literalinclude:: /examples/connection.py
     :language: python

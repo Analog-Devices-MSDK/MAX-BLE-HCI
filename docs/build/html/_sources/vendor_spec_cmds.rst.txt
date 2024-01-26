@@ -2505,7 +2505,7 @@ Parameters
     * - 0x0000 to 0x0EFF
       - Connection identifier.
 
-.. list-table:: , size = 
+.. list-table:: Flags, size = 4 octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
@@ -3254,6 +3254,20 @@ Parameters
     * - All other bits
       - [Reserved for future use].
 
+.. list-table:: Enable, size = 1 octet
+    :width: 100%
+    :widths: 20 80
+    :header-rows: 1
+
+    * - Value(s)
+      - Parameter Description
+    * - 0x00
+      - Disable indicated flags.
+    * - 0x01
+      - Enable indicated flags.
+    * - All other values
+      - [Reserved for future use].
+
 Return Parameters
 `````````````````
 
@@ -3765,7 +3779,7 @@ Parameters
     * - 0x0000 to 0x0EFF
       - Connection identifier.
 
-.. list-table:: , size = 5 octets
+.. list-table:: Channel_Map, size = 5 octets
     :width: 100%
     :widths: 20 80
     :header-rows: 1
