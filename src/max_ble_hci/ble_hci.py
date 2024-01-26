@@ -54,10 +54,10 @@
 import logging
 from typing import Any, Callable, Optional, Union
 
-from ._ble_standard_cmds import BleStandardCmds
+from .ble_standard_cmds import BleStandardCmds
 from ._hci_logger import get_formatted_logger
 from ._transport import SerialUartTransport
-from ._vendor_spec_cmds import VendorSpecificCmds
+from .vendor_spec_cmds import VendorSpecificCmds
 from .data_params import AdvParams, ConnParams
 from .hci_packets import AsyncPacket, CommandPacket, EventPacket
 from .packet_codes import StatusCode
