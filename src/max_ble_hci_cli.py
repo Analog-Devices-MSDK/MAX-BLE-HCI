@@ -718,7 +718,7 @@ def main():
 
     #### RESET TEST STATS PARSER ####
     reset_test_stats_parser = subparsers.add_parser(
-        "reset_ts",
+        "reset-ts",
         aliases=["rsts"],
         help="Reset accumulated stats from DTM",
         formatter_class=RawTextHelpFormatter,
