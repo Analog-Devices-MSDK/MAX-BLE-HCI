@@ -30,6 +30,7 @@ max_ble_hci = "max_ble_hci_cli:main"
 [project.urls]
 Homepage = "https://github.com/Analog-Devices-MSDK/BLE-HCI"
 Repository = "https://github.com/Analog-Devices-MSDK/BLE-HCI"
+Documentation = "https://analog-devices-msdk.github.io/MAX-BLE-HCI/"
 "Bug Tracker" = "https://github.com/Analog-Devices-MSDK/BLE-HCI/issues"
 
 
