@@ -105,6 +105,7 @@ def get_serial_ports() -> List[str]:
 
     return result
 
+
 def to_le_nbyte_list(value: int, n_bytes: int) -> List[int]:
     """Create a list of little-endian bytes.
 

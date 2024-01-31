@@ -69,6 +69,7 @@ from .packet_codes import EventCode
 from .packet_defs import PacketType
 from .constants import ADI_PORT_BAUD_RATE
 
+
 class SerialUartTransport:
     """HCI UART serial port transportation object.
 
