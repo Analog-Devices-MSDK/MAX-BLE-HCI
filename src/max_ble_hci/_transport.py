@@ -53,7 +53,7 @@
 Contains serial port functionality for the HCI implementation.
 """
 # pylint: disable=too-many-instance-attributes, too-many-arguments
-from typing import Optional, List, Callable, Any
+from typing import Optional, Callable, Any
 from multiprocessing import Process
 from threading import Event, Lock, Thread
 import sys
