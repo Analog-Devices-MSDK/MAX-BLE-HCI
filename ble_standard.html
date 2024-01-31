@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>max_ble_hci.ble_standard_cmds &mdash; MAX BLE HCI 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=2389946f"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="max_ble_hci.constants" href="constants.html" />
+    <link rel="prev" title="max_ble_hci.ble_hci" href="ble_hci.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            MAX BLE HCI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ble_hci.html">max_ble_hci.ble_hci</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">max_ble_hci.ble_standard_cmds</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.port"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.port</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.logger"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.logger</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.create_connection"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.create_connection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.disconnect"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.disconnect()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.enable_adv"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.enable_adv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.enable_scanning"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.enable_scanning()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.end_test"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.end_test()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.reset"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.reset()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.rx_test"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.rx_test()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.send_controller_command"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.send_controller_command()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.send_le_controller_command"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.send_le_controller_command()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.send_link_control_command"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.send_link_control_command()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_adv_params"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.set_adv_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_data_len"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.set_data_len()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_default_phy"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.set_default_phy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_event_mask"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.set_event_mask()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_event_mask_le"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.set_event_mask_le()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_phy"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.set_phy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_scan_params"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.set_scan_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.tx_test"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.tx_test()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="constants.html">max_ble_hci.constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_params.html">max_ble_hci.data_params</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hci_packets.html">max_ble_hci.hci_packets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packet_codes.html">max_ble_hci.packet_codes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packet_defs.html">max_ble_hci.packet_defs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">max_ble_hci.utils</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vendor_spec.html">max_ble_hci.vendor_spec_cmds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html#module-max_ble_hci">Package Contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hci_reference.html">HCI Command Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">MAX BLE HCI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">API Reference</a></li>
+      <li class="breadcrumb-item active">max_ble_hci.ble_standard_cmds</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/ble_standard.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-max_ble_hci.ble_standard_cmds">
+<span id="max-ble-hci-ble-standard-cmds"></span><h1>max_ble_hci.ble_standard_cmds<a class="headerlink" href="#module-max_ble_hci.ble_standard_cmds" title="Permalink to this heading"></a></h1>
+<p>Module contains definitions for BLE standard HCI commands.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BleStandardCmds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SerialUartTransport</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Definitions for BLE standard HCI commands.</p>
+<p>Class contains functions used to implement BLE standard HCI
+commands. Used as a parent for the full Analog Devices BLE
+HCI class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>port</strong> (<em>SerialUartTransport</em>) – Serial port interfacing object.</p></li>
+<li><p><strong>logger_name</strong> (<em>str</em>) – Name used to reference the HCI logger.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.port">
+<span class="sig-name descname"><span class="pre">port</span></span><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.port" title="Permalink to this definition"></a></dt>
+<dd><p>Serial port interfacing object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>SerialUartTransport</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.logger">
+<span class="sig-name descname"><span class="pre">logger</span></span><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.logger" title="Permalink to this definition"></a></dt>
+<dd><p>HCI logging object referenced by the <cite>name</cite> argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>logging.Logger</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.create_connection">
+<span class="sig-name descname"><span class="pre">create_connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn_params:</span> <span class="pre">~max_ble_hci.data_params.ConnParams</span> <span class="pre">=</span> <span class="pre">peer_addr:</span>&#160; <span class="pre">0</span> <span class="pre">scan_interval:</span>&#160; <span class="pre">256</span> <span class="pre">scan_window:</span>&#160; <span class="pre">256</span> <span class="pre">init_filter_policy:</span>&#160; <span class="pre">0</span> <span class="pre">peer_addr_type:</span>&#160; <span class="pre">AddrType.PUBLIC</span> <span class="pre">own_addr_type:</span>&#160; <span class="pre">AddrType.PUBLIC</span> <span class="pre">conn_interval_min:</span>&#160; <span class="pre">6</span> <span class="pre">conn_interval_max:</span>&#160; <span class="pre">6</span> <span class="pre">max_latency:</span>&#160; <span class="pre">0</span> <span class="pre">sup_timeout:</span>&#160; <span class="pre">100</span> <span class="pre">min_ce_length:</span>&#160; <span class="pre">3856</span> <span class="pre">max_ce_length:</span>&#160; <span class="pre">3856</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.create_connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.create_connection" title="Permalink to this definition"></a></dt>
+<dd><p>Command board to connect with a peer device.</p>
+<p>Sends a command to the DUT, telling it to create a connection
+to a peer device based on the given connection parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>conn_params</strong> (<a class="reference internal" href="data_params.html#max_ble_hci.data_params.ConnParams" title="max_ble_hci.data_params.ConnParams"><em>ConnParams</em></a><em>, </em><em>optional</em>) – Dataclass object containing the desired connection parameters.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The return packet status code.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.disconnect">
+<span class="sig-name descname"><span class="pre">disconnect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reason</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">22</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.disconnect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.disconnect" title="Permalink to this definition"></a></dt>
+<dd><p>Disconnect from an existing connection.</p>
+<p>Sends a command to the DUT, telling it to disconnect from
+the indicated connection for the given reason.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> (<em>int</em><em>, </em><em>optional</em>) – The handle to the desired connection.</p></li>
+<li><p><strong>reason</strong> (<em>int</em><em>, </em><em>optional</em>) – The reason for the disconnection.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The return packet status code.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.enable_adv">
+<span class="sig-name descname"><span class="pre">enable_adv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">enable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.enable_adv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.enable_adv" title="Permalink to this definition"></a></dt>
+<dd><p>Command board to start/stop advertising.</p>
+<p>Sends a command to the DUT, telling it to either start or
+stop advertising based on the the <cite>enable</cite> argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>enable</strong> (<em>bool</em>) – Enable advertising?</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The return packet status code.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.enable_scanning">
+<span class="sig-name descname"><span class="pre">enable_scanning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">enable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_duplicates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.enable_scanning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.enable_scanning" title="Permalink to this definition"></a></dt>
+<dd><p>Command board to start/stop scanning.</p>
+<p>Sends a command to the DUT, telling it to either start or
+stop scanning based on the <cite>enable</cite> argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>enable</strong> (<em>bool</em>) – Enable scanning?</p></li>
+<li><p><strong>filter_duplicates</strong> (<em>bool</em><em>, </em><em>optional</em>) – Filter duplicates?</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The return packet status code.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.end_test">
+<span class="sig-name descname"><span class="pre">end_test</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.end_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.end_test" title="Permalink to this definition"></a></dt>
+<dd><p>End the current test.</p>
+<p>Sends a command to the DUT, telling it to end the current
+DTM test.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><em>StatusCode</em> – The return packet status code.</p></li>
+<li><p><em>int</em> – The number of packets received correctly during the test. If
+ending a TX test, this value will be 0.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.reset" title="Permalink to this definition"></a></dt>
+<dd><p>Reset board controller/link layer.</p>
+<p>Sends a command to the DUT, telling it that the controller
+and the link layer should be reset. On-board implementation
+may vary, meaning this command does not necessarily perform
+a full hardware reset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The return packet status code.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.rx_test">
+<span class="sig-name descname"><span class="pre">rx_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="constants.html#max_ble_hci.constants.PhyOption" title="max_ble_hci.constants.PhyOption"><span class="pre">PhyOption</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PhyOption.PHY_1M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modulation_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.rx_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.rx_test" title="Permalink to this definition"></a></dt>
+<dd><p>Start a receiver test.</p>
+<p>Sends a command to the DUT, telling it to start a DTM receiver
+test in accordance with the given parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel</strong> (<em>int</em><em>, </em><em>optional</em>) – The channel on which the receiver should listen for packets.</p></li>
+<li><p><strong>phy</strong> (<em>Union</em><em>[</em><a class="reference internal" href="constants.html#max_ble_hci.constants.PhyOption" title="max_ble_hci.constants.PhyOption"><em>PhyOption</em></a><em>,</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – The PHY that should be used by the receiver.</p></li>
+<li><p><strong>modulation_idx</strong> (<em>float</em><em>, </em><em>optional</em>) – The expected modulation index of the transmitter. Indicates
+whether the modulation index is standard (0) or stable (1).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The return packet status code.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.send_controller_command">
+<span class="sig-name descname"><span class="pre">send_controller_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ocf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.OCF" title="max_ble_hci.packet_defs.OCF"><span class="pre">OCF</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_evt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="hci_packets.html#max_ble_hci.hci_packets.EventPacket" title="max_ble_hci.hci_packets.EventPacket"><span class="pre">EventPacket</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.send_controller_command"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.send_controller_command" title="Permalink to this definition"></a></dt>
+<dd><p>Send a Controller command to the test board.</p>
+<p>Sends a command from the OGF Controller subgroup to the DUT.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ocf</strong> (<a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.OCF" title="max_ble_hci.packet_defs.OCF"><em>OCF</em></a>) – Opcode command field value for the desired HCI command.</p></li>
+<li><p><strong>params</strong> (<em>List</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – Command parameters as single-byte values.</p></li>
+<li><p><strong>return_evt</strong> (<em>bool</em><em>, </em><em>optional</em>) – If true, function returns full <cite>EventPacket</cite> object. If
+false, function returns only the status code.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If <cite>return_evt</cite> argument is true, the full return packet
+from the DUT. If <cite>return_evt</cite> argument is false, the return
+packet status code.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Union[<a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a>, <a class="reference internal" href="hci_packets.html#max_ble_hci.hci_packets.EventPacket" title="max_ble_hci.hci_packets.EventPacket">EventPacket</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.send_le_controller_command">
+<span class="sig-name descname"><span class="pre">send_le_controller_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ocf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.OCF" title="max_ble_hci.packet_defs.OCF"><span class="pre">OCF</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_evt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="hci_packets.html#max_ble_hci.hci_packets.EventPacket" title="max_ble_hci.hci_packets.EventPacket"><span class="pre">EventPacket</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.send_le_controller_command"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.send_le_controller_command" title="Permalink to this definition"></a></dt>
+<dd><p>Send an LE Controller command to the test board.</p>
+<p>Sends a command from the OGF LE Controller subgroup to the DUT.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ocf</strong> (<a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.OCF" title="max_ble_hci.packet_defs.OCF"><em>OCF</em></a>) – Opcode command field value for the desired HCI command.</p></li>
+<li><p><strong>params</strong> (<em>List</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – Command parameters as single-byte values.</p></li>
+<li><p><strong>return_evt</strong> (<em>bool</em><em>, </em><em>optional</em>) – If true, function returns full <cite>EventPacket</cite> object. If
+false, function returns only the status code.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If <cite>return_evt</cite> argument is true, the full return packet
+from the DUT. If <cite>return_evt</cite> argument is false, the return
+packet status code.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Union[<a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a>, <a class="reference internal" href="hci_packets.html#max_ble_hci.hci_packets.EventPacket" title="max_ble_hci.hci_packets.EventPacket">EventPacket</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.send_link_control_command">
+<span class="sig-name descname"><span class="pre">send_link_control_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ocf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.OCF" title="max_ble_hci.packet_defs.OCF"><span class="pre">OCF</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_evt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="hci_packets.html#max_ble_hci.hci_packets.EventPacket" title="max_ble_hci.hci_packets.EventPacket"><span class="pre">EventPacket</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.send_link_control_command"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.send_link_control_command" title="Permalink to this definition"></a></dt>
+<dd><p>Send a Link Control command to the test board.</p>
+<p>Sends a command from the OGF Link Control subgroup to the DUT.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ocf</strong> (<a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.OCF" title="max_ble_hci.packet_defs.OCF"><em>OCF</em></a>) – Opcode command field value for the desired HCI command.</p></li>
+<li><p><strong>params</strong> (<em>List</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – Command parameters as single-byte values.</p></li>
+<li><p><strong>return_evt</strong> (<em>bool</em><em>, </em><em>optional</em>) – If true, function returns full <cite>EventPacket</cite> object. If
+false, function returns only the status code.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If <cite>return_evt</cite> argument is true, the full return packet
+from the DUT. If <cite>return_evt</cite> argument is false, the return
+packet status code.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Union[<a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a>, <a class="reference internal" href="hci_packets.html#max_ble_hci.hci_packets.EventPacket" title="max_ble_hci.hci_packets.EventPacket">EventPacket</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.set_adv_params">
+<span class="sig-name descname"><span class="pre">set_adv_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adv_params:</span> <span class="pre">~max_ble_hci.data_params.AdvParams</span> <span class="pre">=</span> <span class="pre">interval_min:</span>&#160; <span class="pre">96</span> <span class="pre">interval_max:</span>&#160; <span class="pre">96</span> <span class="pre">adv_type:</span>&#160; <span class="pre">3</span> <span class="pre">own_addr_type:</span>&#160; <span class="pre">AddrType.PUBLIC</span> <span class="pre">peer_addr_type:</span>&#160; <span class="pre">AddrType.PUBLIC</span> <span class="pre">peer_addr:</span>&#160; <span class="pre">0</span> <span class="pre">channel_map:</span>&#160; <span class="pre">7</span> <span class="pre">filter_policy:</span>&#160; <span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.set_adv_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_adv_params" title="Permalink to this definition"></a></dt>
+<dd><p>Set test board advertising parameters.</p>
+<p>Sends a command to the DUT, telling it to set the advertising
+parameters to the given values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>adv_params</strong> (<a class="reference internal" href="data_params.html#max_ble_hci.data_params.AdvParams" title="max_ble_hci.data_params.AdvParams"><em>AdvParams</em></a><em>, </em><em>optional</em>) – Dataclass object containing the desired advertising
+parameters.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The return packet status code.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.set_data_len">
+<span class="sig-name descname"><span class="pre">set_data_len</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tx_octets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">64256</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tx_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">36930</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.set_data_len"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_data_len" title="Permalink to this definition"></a></dt>
+<dd><p>Set the maximum TX payload size and transmit time.</p>
+<p>Sends a command to the DUT, telling it to set the maximum TX
+payload size and transmit time to the given values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> (<em>int</em><em>, </em><em>optional</em>) – Connection handle.</p></li>
+<li><p><strong>tx_octets</strong> (<em>int</em><em>, </em><em>optional</em>) – Desired maximum number of payload octets.</p></li>
+<li><p><strong>tx_time</strong> (<em>int</em><em>, </em><em>optional</em>) – Desired maximum TX time.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The return packet status code.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.set_default_phy">
+<span class="sig-name descname"><span class="pre">set_default_phy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_phys</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tx_phys</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx_phys</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">7</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.set_default_phy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_default_phy" title="Permalink to this definition"></a></dt>
+<dd><p>Set defaults for ALL, TX, and RX PHYs.</p>
+<p>Sends a command to the DUT, telling it to set the default behavior
+for ALL, TX, and RX PHYs in accordance with the given values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>all_phys</strong> (<em>int</em><em>, </em><em>optional</em>) – Value describing desired behavior of all PHYs.</p></li>
+<li><p><strong>tx_phys</strong> (<em>int</em><em>, </em><em>optional</em>) – Value describing desired behavior of TX PHYs.</p></li>
+<li><p><strong>rx_phys</strong> (<em>int</em><em>, </em><em>optional</em>) – Value describing desired behavior of RX PHYs.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The return packet status code.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.set_event_mask">
+<span class="sig-name descname"><span class="pre">set_event_mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask_pg2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.set_event_mask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_event_mask" title="Permalink to this definition"></a></dt>
+<dd><p>Enable/disable events the board can generate.</p>
+<p>Sends a command to the DUT, telling it to enable/disable
+events that can be generated and returned to the host in
+accordance with the given mask. If a page2 mask if provided,
+then the command which sets the page2 masks will also be sent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mask</strong> (<em>int</em>) – Mask indicating the desired events. Setting a bit to <cite>1</cite>
+enables the corresponding event. Setting the bit to <cite>0</cite>
+disables it.</p></li>
+<li><p><strong>mask_pg2</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – Mask indicating the desired events for the second event
+mask page. Setting a bit to <cite>1</cite> enables the corresponding
+event. Setting the bit to <cite>0</cite> disables it.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The return packet status codes(s). If both page1 and page2
+were set, the first return is the status code for the page1
+command and the second is the status code for the page2
+command.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Union[<a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a>, Tuple[<a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a>, <a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.set_event_mask_le">
+<span class="sig-name descname"><span class="pre">set_event_mask_le</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.set_event_mask_le"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_event_mask_le" title="Permalink to this definition"></a></dt>
+<dd><p>Enable/disable LE events the board can generate.</p>
+<p>Sends a command to the DUT, telling it to enable/disable
+LE events that can be generated and returned to the host
+in accordance with the given mask.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mask</strong> (<em>int</em>) – Mask indicating the desired LE events. Setting a bit
+to <cite>1</cite> enables the corresponding event. Setting the
+bit to <cite>0</cite> disables it.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The return packet status code.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.set_phy">
+<span class="sig-name descname"><span class="pre">set_phy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_phys</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tx_phys</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx_phys</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phy_opts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.set_phy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_phy" title="Permalink to this definition"></a></dt>
+<dd><p>Set the PHY preferences for a connection.</p>
+<p>Sends a command to the DUT, telling it to set the PHY preferences
+for the indicated connection in accordance with the given values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> (<em>int</em><em>, </em><em>optional</em>) – The handle to the desired connection.</p></li>
+<li><p><strong>all_phys</strong> (<em>int</em><em>, </em><em>optional</em>) – Behavior settings for all PHYs. Indicates if a PHY preference
+exists for both RX and TX PHYs.</p></li>
+<li><p><strong>tx_phys</strong> (<a class="reference internal" href="constants.html#max_ble_hci.constants.PhyOption" title="max_ble_hci.constants.PhyOption"><em>PhyOption</em></a><em>, </em><em>optional</em>) – PHY preference for TX PHYs.</p></li>
+<li><p><strong>rx_phys</strong> (<a class="reference internal" href="constants.html#max_ble_hci.constants.PhyOption" title="max_ble_hci.constants.PhyOption"><em>PhyOption</em></a><em>, </em><em>optional</em>) – PHY preference for RX PHYs.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The return packet status code.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.set_scan_params">
+<span class="sig-name descname"><span class="pre">set_scan_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scan_params:</span> <span class="pre">~max_ble_hci.data_params.ScanParams</span> <span class="pre">=</span> <span class="pre">scan_type:</span>&#160; <span class="pre">1</span> <span class="pre">scan_interval:</span>&#160; <span class="pre">256</span> <span class="pre">scan_window:</span>&#160; <span class="pre">256</span> <span class="pre">addr_type:</span>&#160; <span class="pre">AddrType.PUBLIC</span> <span class="pre">filter_policy:</span>&#160; <span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.set_scan_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_scan_params" title="Permalink to this definition"></a></dt>
+<dd><p>Set test board scanning parameters.</p>
+<p>Sends a command to the DUT, telling it to set the scanning
+parameters to the given values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>scan_params</strong> (<a class="reference internal" href="data_params.html#max_ble_hci.data_params.ScanParams" title="max_ble_hci.data_params.ScanParams"><em>ScanParams</em></a><em>, </em><em>optional</em>) – Dataclass object containing the desired scanning parameters.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The return packet status code.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.tx_test">
+<span class="sig-name descname"><span class="pre">tx_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="constants.html#max_ble_hci.constants.PhyOption" title="max_ble_hci.constants.PhyOption"><span class="pre">PhyOption</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PhyOption.PHY_1M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="constants.html#max_ble_hci.constants.PayloadOption" title="max_ble_hci.constants.PayloadOption"><span class="pre">PayloadOption</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PayloadOption.PLD_PRBS9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">packet_len</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.tx_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.tx_test" title="Permalink to this definition"></a></dt>
+<dd><p>Start a transmitter test.</p>
+<p>Sends a command to the DUT, telling it to start a DTM transmitter
+test in accordance with the given parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel</strong> (<em>int</em><em>, </em><em>optional</em>) – The channel on which transmission should take place.</p></li>
+<li><p><strong>phy</strong> (<em>Union</em><em>[</em><a class="reference internal" href="constants.html#max_ble_hci.constants.PhyOption" title="max_ble_hci.constants.PhyOption"><em>PhyOption</em></a><em>,</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – The PHY that should be used by the transmitter.</p></li>
+<li><p><strong>payload</strong> (<a class="reference internal" href="constants.html#max_ble_hci.constants.PayloadOption" title="max_ble_hci.constants.PayloadOption"><em>PayloadOption</em></a><em>, </em><em>optional</em>) – The packet payload type that should be used.</p></li>
+<li><p><strong>packet_len</strong> (<em>int</em><em>, </em><em>optional</em>) – The desired length of the transmitted packets.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The return packet status code.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ble_hci.html" class="btn btn-neutral float-left" title="max_ble_hci.ble_hci" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="constants.html" class="btn btn-neutral float-right" title="max_ble_hci.constants" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Analog Devices, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

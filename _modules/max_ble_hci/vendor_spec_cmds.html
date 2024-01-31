@@ -1,0 +1,1890 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>max_ble_hci.vendor_spec_cmds &mdash; MAX BLE HCI 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=2389946f"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MAX BLE HCI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hci_reference.html">HCI Command Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MAX BLE HCI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">max_ble_hci.vendor_spec_cmds</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for max_ble_hci.vendor_spec_cmds</h1><div class="highlight"><pre>
+<span></span><span class="ch">#! /usr/bin/env python3</span>
+<span class="c1">###############################################################################</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (C) 2023 Maxim Integrated Products, Inc., All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a</span>
+<span class="c1"># copy of this software and associated documentation files (the &quot;Software&quot;),</span>
+<span class="c1"># to deal in the Software without restriction, including without limitation</span>
+<span class="c1"># the rights to use, copy, modify, merge, publish, distribute, sublicense,</span>
+<span class="c1"># and/or sell copies of the Software, and to permit persons to whom the</span>
+<span class="c1"># Software is furnished to do so, subject to the following conditions:</span>
+<span class="c1">#</span>
+<span class="c1"># The above copyright notice and this permission notice shall be included</span>
+<span class="c1"># in all copies or substantial portions of the Software.</span>
+<span class="c1">#</span>
+<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS</span>
+<span class="c1"># OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF</span>
+<span class="c1"># MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.</span>
+<span class="c1"># IN NO EVENT SHALL MAXIM INTEGRATED BE LIABLE FOR ANY CLAIM, DAMAGES</span>
+<span class="c1"># OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,</span>
+<span class="c1"># ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR</span>
+<span class="c1"># OTHER DEALINGS IN THE SOFTWARE.</span>
+<span class="c1">#</span>
+<span class="c1"># Except as contained in this notice, the name of Maxim Integrated</span>
+<span class="c1"># Products, Inc. shall not be used except as stated in the Maxim Integrated</span>
+<span class="c1"># Products, Inc. Branding Policy.</span>
+<span class="c1">#</span>
+<span class="c1"># The mere transfer of this software does not imply any licenses</span>
+<span class="c1"># of trade secrets, proprietary technology, copyrights, patents,</span>
+<span class="c1"># trademarks, maskwork rights, or any other form of intellectual</span>
+<span class="c1"># property whatsoever. Maxim Integrated Products, Inc. retains all</span>
+<span class="c1"># ownership rights.</span>
+<span class="c1">#</span>
+<span class="c1">##############################################################################</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright 2023 Analog Devices, Inc.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+<span class="c1">#</span>
+<span class="c1">##############################################################################</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module contains definitions for ADI vendor-specific HCI commands.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># pylint: disable=too-many-lines, too-many-arguments, too-many-public-methods</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">from</span> <span class="nn">._hci_logger</span> <span class="kn">import</span> <span class="n">get_formatted_logger</span>
+<span class="kn">from</span> <span class="nn">._transport</span> <span class="kn">import</span> <span class="n">SerialUartTransport</span>
+<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">PhyOption</span><span class="p">,</span> <span class="n">PayloadOption</span><span class="p">,</span> <span class="n">PubKeyValidateMode</span><span class="p">,</span> <span class="n">MAX_U32</span><span class="p">,</span> <span class="n">MAX_U64</span>
+<span class="kn">from</span> <span class="nn">.data_params</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AdvPktStats</span><span class="p">,</span>
+    <span class="n">DataPktStats</span><span class="p">,</span>
+    <span class="n">MemPktStats</span><span class="p">,</span>
+    <span class="n">PduPktStats</span><span class="p">,</span>
+    <span class="n">PoolStats</span><span class="p">,</span>
+    <span class="n">ScanPktStats</span><span class="p">,</span>
+    <span class="n">TestReport</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.hci_packets</span> <span class="kn">import</span> <span class="n">CommandPacket</span><span class="p">,</span> <span class="n">EventPacket</span><span class="p">,</span> <span class="n">byte_length</span>
+<span class="kn">from</span> <span class="nn">.packet_codes</span> <span class="kn">import</span> <span class="n">StatusCode</span>
+<span class="kn">from</span> <span class="nn">.packet_defs</span> <span class="kn">import</span> <span class="n">OCF</span><span class="p">,</span> <span class="n">OGF</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">to_le_nbyte_list</span>
+
+
+<div class="viewcode-block" id="VendorSpecificCmds"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds">[docs]</a><span class="k">class</span> <span class="nc">VendorSpecificCmds</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Definitions for ADI vendor-specific HCI commands.</span>
+
+<span class="sd">    Class contains functions used to implement Analog Devices</span>
+<span class="sd">    vendor-specific HCI commands. Used as a parent for the full</span>
+<span class="sd">    Analog Devices BLE HCI class.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+<span class="sd">    port : SerialUartTransport</span>
+<span class="sd">        Serial port interfacing object.</span>
+<span class="sd">    logger_name: str</span>
+<span class="sd">        Name used to reference the HCI logger.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    port : SerialUartTransport</span>
+<span class="sd">        Serial port interfacing object.</span>
+<span class="sd">    logger : logging.Logger</span>
+<span class="sd">        HCI logging object referenced by the `name` argument.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="n">SerialUartTransport</span><span class="p">,</span> <span class="n">logger_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">port</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">get_formatted_logger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">logger_name</span><span class="p">)</span>
+
+<div class="viewcode-block" id="VendorSpecificCmds.send_vs_command"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.send_vs_command">[docs]</a>    <span class="k">def</span> <span class="nf">send_vs_command</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">ocf</span><span class="p">:</span> <span class="n">OCF</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">return_evt</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">EventPacket</span><span class="p">,</span> <span class="n">StatusCode</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Send a vendor-specific command to the test board.</span>
+
+<span class="sd">        Sends a command from the OGF Vendor Specific subgroup to the DUT.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ocf : OCF</span>
+<span class="sd">            Opcode command field value for the desired HCI command.</span>
+<span class="sd">        params : List[int], optional</span>
+<span class="sd">            Command parameters as single-byte values.</span>
+<span class="sd">        return_evt : bool, optional</span>
+<span class="sd">            If true, function returns full `EventPacket` object. If</span>
+<span class="sd">            false, function returns only the status code.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Union[StatusCode, EventPacket]</span>
+<span class="sd">            If `return_evt` argument is true, the full return packet</span>
+<span class="sd">            from the DUT. If `return_evt` argument is false, the return</span>
+<span class="sd">            packet status code.</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="n">CommandPacket</span><span class="p">(</span><span class="n">OGF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="p">,</span> <span class="n">ocf</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">return_evt</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span><span class="o">.</span><span class="n">status</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.set_address"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.set_address">[docs]</a>    <span class="k">def</span> <span class="nf">set_address</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sets the BD address.</span>
+
+<span class="sd">        Function sets the chip BD address. Address can be given</span>
+<span class="sd">        as either a bytearray or as a list of integer values.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        addr : List[int]</span>
+<span class="sd">            Desired BD address.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">SET_BD_ADDR</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.reset_connection_stats"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.reset_connection_stats">[docs]</a>    <span class="k">def</span> <span class="nf">reset_connection_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset accumulated connection stats.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        reset all accumulated connection statisitics.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">RESET_CONN_STATS</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.enable_autogenerate_acl"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.enable_autogenerate_acl">[docs]</a>    <span class="k">def</span> <span class="nf">enable_autogenerate_acl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enable</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enable/disable automatic generation of ACL packets.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        enable or disable automatic generation of asynchronous</span>
+<span class="sd">        connection-less packets.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        enable: bool</span>
+<span class="sd">            Enable automatic ACL packet generation?</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span>
+            <span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">ENA_AUTO_GEN_ACL</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">enable</span><span class="p">)</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.generate_acl"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.generate_acl">[docs]</a>    <span class="k">def</span> <span class="nf">generate_acl</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">packet_len</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">num_packets</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Command board to generate ACL data.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT telling it</span>
+<span class="sd">        to generate/send ACL data in accordance with the provided</span>
+<span class="sd">        packet length and number of packets. A test end function</span>
+<span class="sd">        must be called to end this process on the board.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        handle : int</span>
+<span class="sd">            Connection handle.</span>
+<span class="sd">        packet_len : int</span>
+<span class="sd">            Desired packet length.</span>
+<span class="sd">        num_packets : int</span>
+<span class="sd">            Desired number of packets to send.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `handle` is larger than 2 bytes.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `packet_len` is greater than 65535.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `num_packets` is greater than 255.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">byte_length</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Handle (</span><span class="si">{</span><span class="n">handle</span><span class="si">}</span><span class="s2">) is too large, must be 2 bytes or less.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">num_packets</span> <span class="o">&gt;</span> <span class="mh">0xFFFF</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Num packets too large (</span><span class="si">{</span><span class="n">num_packets</span><span class="si">}</span><span class="s2">), must be 65535 or less.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">packet_len</span> <span class="o">&gt;</span> <span class="mh">0xFF</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Packet length too large (</span><span class="si">{</span><span class="n">packet_len</span><span class="si">}</span><span class="s2">), must be 255 or less.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">packet_len</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">num_packets</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">GENERATE_ACL</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.enable_acl_sink"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.enable_acl_sink">[docs]</a>    <span class="k">def</span> <span class="nf">enable_acl_sink</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enable</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enable/disable ACL sink.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        enable or disable asynchronous connection-less packet sink.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        enable : bool</span>
+<span class="sd">            Enable ACL sink?</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">enable</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">ENA_ACL_SINK</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.tx_test_vs"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.tx_test_vs">[docs]</a>    <span class="k">def</span> <span class="nf">tx_test_vs</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">channel</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">phy</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PhyOption</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">PhyOption</span><span class="o">.</span><span class="n">PHY_1M</span><span class="p">,</span>
+        <span class="n">payload</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PayloadOption</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">PayloadOption</span><span class="o">.</span><span class="n">PLD_PRBS15</span><span class="p">,</span>
+        <span class="n">packet_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">num_packets</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Start a vendor-specific transmitter test.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        start a DTM transmitter test in accordance with the given</span>
+<span class="sd">        parameters.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        channel : int</span>
+<span class="sd">            The channel on which transmission should take place.</span>
+<span class="sd">        phy : Union[PhyOption, int]</span>
+<span class="sd">            The PHY that should be used by the transmitter.</span>
+<span class="sd">        payload : Union[PayloadOption, int]</span>
+<span class="sd">            The packet payload type that should be transmitted.</span>
+<span class="sd">        packet_len : int</span>
+<span class="sd">            The desired length of the transmitted packets.</span>
+<span class="sd">        num_packets : int</span>
+<span class="sd">            The number of packets to transmit. Set to `0` to</span>
+<span class="sd">            enable continuous transmission.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `channel` is greater than 39 or less than 0.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `packet_len` is greater than 255.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `num_packets` is greater than 65535.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">channel</span> <span class="o">&lt;</span> <span class="mi">40</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Channel out of bandwidth (</span><span class="si">{</span><span class="n">channel</span><span class="si">}</span><span class="s2">), must be in range [0, 40).&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">packet_len</span> <span class="o">&gt;</span> <span class="mh">0xFF</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Packet length too large (</span><span class="si">{</span><span class="n">packet_len</span><span class="si">}</span><span class="s2">), must be 255 or less.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">num_packets</span> <span class="o">&gt;</span> <span class="mh">0xFFFF</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Num packets too large (</span><span class="si">{</span><span class="n">num_packets</span><span class="si">}</span><span class="s2">), must be 65535 or less.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">PayloadOption</span><span class="p">):</span>
+            <span class="n">payload</span> <span class="o">=</span> <span class="n">payload</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">phy</span><span class="p">,</span> <span class="n">PhyOption</span><span class="p">):</span>
+            <span class="n">phy</span> <span class="o">=</span> <span class="n">phy</span><span class="o">.</span><span class="n">value</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="n">channel</span><span class="p">,</span> <span class="n">packet_len</span><span class="p">,</span> <span class="n">payload</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">phy</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">num_packets</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">TX_TEST</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.rx_test_vs"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.rx_test_vs">[docs]</a>    <span class="k">def</span> <span class="nf">rx_test_vs</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">channel</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">phy</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PhyOption</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">PhyOption</span><span class="o">.</span><span class="n">PHY_1M</span><span class="p">,</span>
+        <span class="n">num_packets</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">modulation_idx</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Start a vendor-specific receiver test.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        start a DTM receiver test in accordance with the given</span>
+<span class="sd">        parameters.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        channel : int</span>
+<span class="sd">            The channel on which the receiver should listen for packets.</span>
+<span class="sd">        phy : Union[PhyOption, int]</span>
+<span class="sd">            The PHY that should be used by the receiver.</span>
+<span class="sd">        num_packets : int</span>
+<span class="sd">            The number of packets that the receiver is expected to receive,</span>
+<span class="sd">            i.e. the number of packets the transmitter is sending.</span>
+<span class="sd">        modulation_idx : int</span>
+<span class="sd">            The expected modulation index of the transmitter. Indicates</span>
+<span class="sd">            whether the modulation index is standard (0) or stable (1).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `channel` is greater than 39 or less than 0.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            if `num_packets` is greater than 65535.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">channel</span> <span class="o">&lt;</span> <span class="mi">40</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Channel out of bandwidth (</span><span class="si">{</span><span class="n">channel</span><span class="si">}</span><span class="s2">), must be in range [0, 40).&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">num_packets</span> <span class="o">&gt;</span> <span class="mh">0xFFFF</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Num packets too large (</span><span class="si">{</span><span class="n">num_packets</span><span class="si">}</span><span class="s2">), must be 65535 or less.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">phy</span><span class="p">,</span> <span class="n">PhyOption</span><span class="p">):</span>
+            <span class="n">phy</span> <span class="o">=</span> <span class="n">phy</span><span class="o">.</span><span class="n">value</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="n">channel</span><span class="p">,</span> <span class="n">phy</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">modulation_idx</span><span class="p">]</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">num_packets</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">RX_TEST</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.reset_test_stats"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.reset_test_stats">[docs]</a>    <span class="k">def</span> <span class="nf">reset_test_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset accumulated test stats.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        reset all accumulated test statistics.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">RESET_TEST_STATS</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.set_adv_tx_power"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.set_adv_tx_power">[docs]</a>    <span class="k">def</span> <span class="nf">set_adv_tx_power</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tx_power</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the advertising TX power.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        set the advertising TX power in accordance with the given</span>
+<span class="sd">        value.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tx_power : int</span>
+<span class="sd">            Desired advertising TX power.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `tx_power` is greater than 127 or less than -127.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="o">-</span><span class="mi">127</span> <span class="o">&lt;</span> <span class="n">tx_power</span> <span class="o">&lt;</span> <span class="mi">127</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;TX power (</span><span class="si">{</span><span class="n">tx_power</span><span class="si">}</span><span class="s2">) out of range, must be in range [-127, 127].&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">SET_ADV_TX_PWR</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">tx_power</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.set_conn_tx_power"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.set_conn_tx_power">[docs]</a>    <span class="k">def</span> <span class="nf">set_conn_tx_power</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tx_power</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">handle</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x0000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the connection TX power.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        set the TX power on the indicated connection in accordance</span>
+<span class="sd">        with the given value.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tx_power : int</span>
+<span class="sd">            Desired connection TX power.</span>
+<span class="sd">        handle : int, optional</span>
+<span class="sd">            The handle to the desired connection.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `handle` is more than 2 bytes in size.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `tx_power` is greater than 127 or less than -127.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">byte_length</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Handle (</span><span class="si">{</span><span class="n">handle</span><span class="si">}</span><span class="s2">) is too large, must be 2 bytes or less.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="o">-</span><span class="mi">127</span> <span class="o">&lt;</span> <span class="n">tx_power</span> <span class="o">&lt;</span> <span class="mi">127</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;TX power (</span><span class="si">{</span><span class="n">tx_power</span><span class="si">}</span><span class="s2">) out of range, must be in range [-127, 127].&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tx_power</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">SET_CONN_TX_PWR</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.set_channel_map"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.set_channel_map">[docs]</a>    <span class="k">def</span> <span class="nf">set_channel_map</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">channels</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">handle</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x0000</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the channel map for an existing connection.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        set the channel map for the indicated connection in</span>
+<span class="sd">        accordance with the mask generated from the given channel</span>
+<span class="sd">        values.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        channels : Union[List[int], int], optional</span>
+<span class="sd">            The channel(s) that should be included in the connection</span>
+<span class="sd">            channel map.</span>
+<span class="sd">        handle : int, optional</span>
+<span class="sd">            The handle to the desired connection.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `handle` is more than 2 bytes in size.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">byte_length</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Handle (</span><span class="si">{</span><span class="n">handle</span><span class="si">}</span><span class="s2">) is too large, must be 2 bytes or less.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">channels</span><span class="p">:</span>
+            <span class="n">channels</span> <span class="o">=</span> <span class="n">channels</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">channels</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="n">channels</span><span class="p">]</span>
+            <span class="n">channel_mask</span> <span class="o">=</span> <span class="mh">0x0000000000</span>
+            <span class="k">for</span> <span class="n">chan</span> <span class="ow">in</span> <span class="n">channels</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">chan</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">37</span><span class="p">,</span> <span class="mi">38</span><span class="p">,</span> <span class="mi">39</span><span class="p">]:</span>
+                    <span class="k">continue</span>
+                <span class="n">channel_mask</span> <span class="o">=</span> <span class="n">channel_mask</span> <span class="o">|</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">chan</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">channel_mask</span> <span class="o">=</span> <span class="mh">0x1FFFFFFFFF</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">channel_mask</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">SET_CHAN_MAP</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.read_register"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.read_register">[docs]</a>    <span class="k">def</span> <span class="nf">read_register</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">length</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">print_data</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">StatusCode</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read a number of bytes from a register.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        read bytes from a register in accordance with the given</span>
+<span class="sd">        length and register address values.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        addr : int</span>
+<span class="sd">            The address at which the read should begin.</span>
+<span class="sd">        length : int</span>
+<span class="sd">            The number of bytes to read.</span>
+<span class="sd">        print_data : bool, optional</span>
+<span class="sd">            Print read data to the console?</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[int]</span>
+<span class="sd">            The read data.</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="n">length</span><span class="p">]</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+        <span class="n">evt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span>
+            <span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">REG_READ</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">return_evt</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+
+        <span class="n">param_lens</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">length</span> <span class="o">//</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">length</span> <span class="o">%</span> <span class="mi">4</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">param_lens</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">length</span> <span class="o">%</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">read_data</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">get_return_params</span><span class="p">(</span><span class="n">param_lens</span><span class="o">=</span><span class="n">param_lens</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">print_data</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">plen</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">param_lens</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">plen</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;0x</span><span class="si">%08X</span><span class="s2">: 0x______</span><span class="si">%02X</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">read_data</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">plen</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;0x</span><span class="si">%08X</span><span class="s2">: 0x____</span><span class="si">%04X</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">read_data</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">plen</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;0x</span><span class="si">%08X</span><span class="s2">: 0x__</span><span class="si">%06X</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">read_data</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;0x</span><span class="si">%08X</span><span class="s2">: 0x</span><span class="si">%08X</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">read_data</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+
+                <span class="n">addr</span> <span class="o">+=</span> <span class="mi">4</span>
+
+        <span class="k">return</span> <span class="n">read_data</span><span class="p">,</span> <span class="n">evt</span><span class="o">.</span><span class="n">status</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.set_scan_channel_map"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.set_scan_channel_map">[docs]</a>    <span class="k">def</span> <span class="nf">set_scan_channel_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel_map</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the channel map used for scanning.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        set the channel map used for scanning in accordance with the</span>
+<span class="sd">        given value.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        channel_map : int</span>
+<span class="sd">            Desired channel map to use for scanning.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">SET_SCAN_CH_MAP</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">channel_map</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.set_event_mask_vs"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.set_event_mask_vs">[docs]</a>    <span class="k">def</span> <span class="nf">set_event_mask_vs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mask</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">enable</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enable/disable vendor specific events the board can generate.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        enable/disable vendor-specific events that can be generated</span>
+<span class="sd">        and returned to the host in accordance with the given mask.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mask : int</span>
+<span class="sd">            Mask indicating the vendor-specific events that should</span>
+<span class="sd">            be enabled/disabled. Events are indicated when their</span>
+<span class="sd">            corresponding bit is set to `1`.</span>
+<span class="sd">        enable : bool</span>
+<span class="sd">            If true, enables the indicated events. If false, disables</span>
+<span class="sd">            them.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">enable</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">SET_EVENT_MASK</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.set_tx_test_err_pattern"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.set_tx_test_err_pattern">[docs]</a>    <span class="k">def</span> <span class="nf">set_tx_test_err_pattern</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pattern</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the TX test mode error pattern.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        set the pattern of errors for the TX test mode in accordance</span>
+<span class="sd">        with the given value.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pattern : int</span>
+<span class="sd">            Desired error pattern.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `pattern` is larger than 32 bits (4 bytes) in size.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">pattern</span> <span class="o">&gt;</span> <span class="n">MAX_U32</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pattern (</span><span class="si">{</span><span class="n">pattern</span><span class="si">}</span><span class="s2">) too large, must be 32 bits or less.&quot;</span><span class="p">)</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">SET_TX_TEST_ERR_PATT</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.set_connection_op_flags"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.set_connection_op_flags">[docs]</a>    <span class="k">def</span> <span class="nf">set_connection_op_flags</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">flags</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">enable</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set connection operational flags.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        enable/disable the connection operational flags for the</span>
+<span class="sd">        indicated connection in accordance with the values provided.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        handle : int</span>
+<span class="sd">            The handle to the desired connection.</span>
+<span class="sd">        flags : int</span>
+<span class="sd">            Mask indicating the desired connection operational flags</span>
+<span class="sd">            that should be enabled/disabled. Flags are indicated when</span>
+<span class="sd">            their corresponding bit is set to `1`.</span>
+<span class="sd">        enable : bool</span>
+<span class="sd">            If true, enables the indicated flags. If false, disables</span>
+<span class="sd">            them.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `handle` is larger than 2 bytes in size.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `flags` is larger than 4 bytes in size.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">byte_length</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Handle (</span><span class="si">{</span><span class="n">handle</span><span class="si">}</span><span class="s2">) is too large, must be 2 bytes or less.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">byte_length</span><span class="p">(</span><span class="n">flags</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Flags (</span><span class="si">{</span><span class="n">flags</span><span class="si">}</span><span class="s2">) is too large, must be 4 bytes or less.&quot;</span><span class="p">)</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">flags</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">enable</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">SET_CONN_OP_FLAGS</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.set_256_priv_key"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.set_256_priv_key">[docs]</a>    <span class="k">def</span> <span class="nf">set_256_priv_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">priv_key</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set/clear the P-256 private key.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        set or clear the P-256 private key used to generate key</span>
+<span class="sd">        pairs and Diffie-hellman keys in accordance with the given</span>
+<span class="sd">        value.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        priv_key : list</span>
+<span class="sd">            Desired P-256 private key. Setting to `0` will clear</span>
+<span class="sd">            the key.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `priv_key` is larger than 32 bytes in size.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">priv_key</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">32</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Private key (</span><span class="si">{</span><span class="n">priv_key</span><span class="si">}</span><span class="s2">) too large, must be 32 bytes or less.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span>
+            <span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">SET_P256_PRIV_KEY</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">priv_key</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.get_channel_map_periodic_scan_adv"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.get_channel_map_periodic_scan_adv">[docs]</a>    <span class="k">def</span> <span class="nf">get_channel_map_periodic_scan_adv</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">is_advertising</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">StatusCode</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the channel map used for periodic scanning/advertising.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        retrieve the channel map used for either periodic scanning</span>
+<span class="sd">        or periodic advertising in accordance with the given values.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        handle : int</span>
+<span class="sd">            The handle to the desired periodic scanner/advertiser.</span>
+<span class="sd">        is_advertising : bool</span>
+<span class="sd">            Does the handle point to a periodic advertiser?</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The channel map returned by the DUT.</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `handle` is larger than 2 bytes in size.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">byte_length</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Handle (</span><span class="si">{</span><span class="n">handle</span><span class="si">}</span><span class="s2">) is too large, must be 2 bytes or less.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">is_advertising</span><span class="p">))</span>
+        <span class="n">evt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span>
+            <span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">GET_PER_CHAN_MAP</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">return_evt</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">evt</span><span class="o">.</span><span class="n">get_return_params</span><span class="p">(),</span> <span class="n">evt</span><span class="o">.</span><span class="n">status</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.get_acl_test_report"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.get_acl_test_report">[docs]</a>    <span class="k">def</span> <span class="nf">get_acl_test_report</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">TestReport</span><span class="p">,</span> <span class="n">StatusCode</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get ACL test report.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        retrieve the current ACL test report.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        TestReport</span>
+<span class="sd">            The ACL test report returned by the DUT.</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">evt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">GET_ACL_TEST_REPORT</span><span class="p">,</span> <span class="n">return_evt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">get_return_params</span><span class="p">(</span><span class="n">param_lens</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+
+        <span class="n">stats</span> <span class="o">=</span> <span class="n">TestReport</span><span class="p">(</span>
+            <span class="n">rx_pkt_count</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">rx_oct_count</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">gen_pkt_count</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">gen_oct_count</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">stats</span><span class="p">,</span> <span class="n">evt</span><span class="o">.</span><span class="n">status</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.set_local_num_min_used_channels"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.set_local_num_min_used_channels">[docs]</a>    <span class="k">def</span> <span class="nf">set_local_num_min_used_channels</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">phy</span><span class="p">:</span> <span class="n">PhyOption</span><span class="p">,</span> <span class="n">pwr_thresh</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">min_used</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set local minimum number of used channels.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        set the local minimum number of used channels in accordance</span>
+<span class="sd">        with the given PHY, power threshold, and minimum values.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        phy : PhyOption</span>
+<span class="sd">            PHY on which the process should take place.</span>
+<span class="sd">        pwr_thresh : int</span>
+<span class="sd">            Power threshold for the selected PHY.</span>
+<span class="sd">        min_used : int</span>
+<span class="sd">            Minimum number of used channels.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `pwr_thresh` is greater than 127 or less than -127.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            if `min_used` is greater than 37 or less than 1.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="o">-</span><span class="mi">127</span> <span class="o">&lt;</span> <span class="n">pwr_thresh</span> <span class="o">&lt;</span> <span class="mi">127</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Thresh (</span><span class="si">{</span><span class="n">pwr_thresh</span><span class="si">}</span><span class="s2">) out of range, must be in range [-127, 127].&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">min_used</span> <span class="o">&lt;=</span> <span class="mi">37</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Min used (</span><span class="si">{</span><span class="n">min_used</span><span class="si">}</span><span class="s2">) out of range, must be in range [1, 37].&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">phy</span> <span class="o">==</span> <span class="n">PhyOption</span><span class="o">.</span><span class="n">PHY_CODED_S2</span><span class="p">:</span>
+            <span class="n">phy</span> <span class="o">=</span> <span class="n">PhyOption</span><span class="o">.</span><span class="n">PHY_CODED</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="n">phy</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">pwr_thresh</span><span class="p">,</span> <span class="n">min_used</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span>
+            <span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">SET_LOCAL_MIN_USED_CHAN</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.get_peer_min_num_channels_used"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.get_peer_min_num_channels_used">[docs]</a>    <span class="k">def</span> <span class="nf">get_peer_min_num_channels_used</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">PhyOption</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="n">StatusCode</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the minimum number of channels used by a peer.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        retrieve the minimum number of channels used by a peer</span>
+<span class="sd">        device as indicated by the given value.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        handle : int</span>
+<span class="sd">            Handle to the desired peer connection.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dict[PhyOption, int]</span>
+<span class="sd">            Peer minimum number of used channels by PHY type.</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `handle` is larger than 2 bytes in size.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">byte_length</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Handle (</span><span class="si">{</span><span class="n">handle</span><span class="si">}</span><span class="s2">) is too large, must be 2 bytes or less.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">evt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span>
+            <span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">GET_PEER_MIN_USED_CHAN</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">return_evt</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">get_return_params</span><span class="p">(</span><span class="n">param_lens</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+        <span class="n">min_used_map</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">PhyOption</span><span class="o">.</span><span class="n">PHY_1M</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">PhyOption</span><span class="o">.</span><span class="n">PHY_2M</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">PhyOption</span><span class="o">.</span><span class="n">PHY_CODED</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">min_used_map</span><span class="p">,</span> <span class="n">evt</span><span class="o">.</span><span class="n">status</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.set_validate_pub_key_mode"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.set_validate_pub_key_mode">[docs]</a>    <span class="k">def</span> <span class="nf">set_validate_pub_key_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">PubKeyValidateMode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the mode used to validate the public key.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        set the mode used to validate the public key in accordance</span>
+<span class="sd">        with the given value.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mode : PubKeyValidateMode</span>
+<span class="sd">            Desired public key validation mode.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span>
+            <span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">VALIDATE_PUB_KEY_MODE</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">[</span><span class="n">mode</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.get_rand_address"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.get_rand_address">[docs]</a>    <span class="k">def</span> <span class="nf">get_rand_address</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">StatusCode</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a random device address.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        retrieve a random device address.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Random device address retrieved by the DUT.</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">evt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">GET_RAND_ADDR</span><span class="p">,</span> <span class="n">return_evt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">evt</span><span class="o">.</span><span class="n">get_return_params</span><span class="p">(),</span> <span class="n">evt</span><span class="o">.</span><span class="n">status</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.set_local_feature"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.set_local_feature">[docs]</a>    <span class="k">def</span> <span class="nf">set_local_feature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set local supported features.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        set the local supported features in accordance with the</span>
+<span class="sd">        given value.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        features : int</span>
+<span class="sd">            Mask indicating the local supported features. Setting</span>
+<span class="sd">            a bit to `1` will enable the indicated feature. Setting</span>
+<span class="sd">            a bit to `0` will disable it.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `features` is larger than 64 bits (8 bytes) in size.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">features</span> <span class="o">&gt;</span> <span class="n">MAX_U64</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Feature mask (</span><span class="si">{</span><span class="n">features</span><span class="si">}</span><span class="s2">) is too large, must be 64 bits or less.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">SET_LOCAL_FEAT</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.set_operational_flags"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.set_operational_flags">[docs]</a>    <span class="k">def</span> <span class="nf">set_operational_flags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flags</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">enable</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enable/disable operational flags.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        enable or disable operational flags in accordance with the</span>
+<span class="sd">        values provided.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        flags : int</span>
+<span class="sd">            Mask indicating the desired operational flags that should</span>
+<span class="sd">            be enabled/disabled. Flags are indicated when their</span>
+<span class="sd">            corresponding bit is set to `1`.</span>
+<span class="sd">        enable : bool</span>
+<span class="sd">            If true, enables the indicated flags. If false, disabled</span>
+<span class="sd">            them.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `flags` is larger than 32 bits (4 bytes) in size.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">flags</span> <span class="o">&gt;</span> <span class="n">MAX_U32</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Flags (</span><span class="si">{</span><span class="n">flags</span><span class="si">}</span><span class="s2">) is too large, must be 32 bits or less.&quot;</span><span class="p">)</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">flags</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">enable</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">SET_OP_FLAGS</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.get_pdu_filter_stats"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.get_pdu_filter_stats">[docs]</a>    <span class="k">def</span> <span class="nf">get_pdu_filter_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">PduPktStats</span><span class="p">,</span> <span class="n">StatusCode</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the accumulated PDU filter stats.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        retrieves the current accumulated PDU filter statistics.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PduPktStats</span>
+<span class="sd">            PDU filter statistics report returned by the DUT.</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">evt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">GET_PDU_FILT_STATS</span><span class="p">,</span> <span class="n">return_evt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">get_return_params</span><span class="p">(</span><span class="n">param_lens</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mi">19</span><span class="p">)</span>
+
+        <span class="n">stats</span> <span class="o">=</span> <span class="n">PduPktStats</span><span class="p">(</span>
+            <span class="n">fail_pdu</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">pass_pdu</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">fail_whitelist</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">pass_whitelist</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+            <span class="n">fail_peer_addr_match</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+            <span class="n">pass_peer_addr_match</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+            <span class="n">fail_local_addr_match</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+            <span class="n">pass_local_addr_match</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span>
+            <span class="n">fail_peer_rpa_verify</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span>
+            <span class="n">pass_peer_rpa_verify</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span>
+            <span class="n">fail_local_rpa_verify</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span>
+            <span class="n">pass_local_rpa_verify</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span>
+            <span class="n">fail_peer_priv_addr</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span>
+            <span class="n">fail_local_priv_addr</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span>
+            <span class="n">fail_peer_addr_res_req</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span>
+            <span class="n">pass_peer_addr_res_req</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">15</span><span class="p">],</span>
+            <span class="n">pass_local_addr_res_opt</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">16</span><span class="p">],</span>
+            <span class="n">peer_res_addr_pend</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">17</span><span class="p">],</span>
+            <span class="n">local_res_addr_pend</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">18</span><span class="p">],</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">stats</span><span class="p">,</span> <span class="n">evt</span><span class="o">.</span><span class="n">status</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.set_encryption_mode"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.set_encryption_mode">[docs]</a>    <span class="k">def</span> <span class="nf">set_encryption_mode</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">enable</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">nonce_mode</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the encryption mode of an existing connection.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        set the encryption mode of the indicated connection in</span>
+<span class="sd">        accordance with the values provided.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        handle : int</span>
+<span class="sd">            Handle to the desired connection.</span>
+<span class="sd">        enable : bool</span>
+<span class="sd">            Enable authentication?</span>
+<span class="sd">        nonce_mode : bool</span>
+<span class="sd">            Enable nonce mode?</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `handle` is larger than 2 bytes in size.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">byte_length</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Handle (</span><span class="si">{</span><span class="n">handle</span><span class="si">}</span><span class="s2">) is too large, must be 2 bytes or less.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">enable</span><span class="p">)]</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">nonce_mode</span><span class="p">))</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">SET_ENC_MODE</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.set_diagnostic_mode"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.set_diagnostic_mode">[docs]</a>    <span class="k">def</span> <span class="nf">set_diagnostic_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enable</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enable/disable diagnostic mode.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        enable or disable the PAL system assert trap in accordance</span>
+<span class="sd">        with the provided value.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        enable : bool</span>
+<span class="sd">            Enable diagnostic mode?</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">SET_DIAG_MODE</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">enable</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.enable_sniffer_packet_forwarding"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.enable_sniffer_packet_forwarding">[docs]</a>    <span class="k">def</span> <span class="nf">enable_sniffer_packet_forwarding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enable</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enable/disable sniffer packet forwarding.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        enable or disable sniffer packet forwarding in accordance</span>
+<span class="sd">        with the value provided.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        enable : bool</span>
+<span class="sd">            Enable sniffer packet forwarding?</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">out_method</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># HCI through tokens, only available option</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="n">out_method</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">enable</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">SET_SNIFFER_ENABLE</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.get_memory_stats"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.get_memory_stats">[docs]</a>    <span class="k">def</span> <span class="nf">get_memory_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">MemPktStats</span><span class="p">,</span> <span class="n">StatusCode</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get memory and system stats.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        retrieve the current memory and system statistics.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        MemPktStats</span>
+<span class="sd">            Memory and system statistics report retrieved by the DUT.</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">evt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">GET_SYS_STATS</span><span class="p">,</span> <span class="n">return_evt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">get_return_params</span><span class="p">(</span>
+            <span class="n">param_lens</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="n">stats</span> <span class="o">=</span> <span class="n">MemPktStats</span><span class="p">(</span>
+            <span class="n">stack</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">sys_assert_cnt</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">free_mem</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">used_mem</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+            <span class="n">max_connections</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+            <span class="n">conn_ctx_size</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+            <span class="n">cs_watermark_lvl</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+            <span class="n">ll_watermark_lvl</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span>
+            <span class="n">sch_watermark_lvl</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span>
+            <span class="n">lhci_watermark_lvl</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span>
+            <span class="n">max_adv_sets</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span>
+            <span class="n">adv_set_ctx_size</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span>
+            <span class="n">ext_scan_max</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span>
+            <span class="n">ext_scan_ctx_size</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span>
+            <span class="n">max_num_ext_init</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span>
+            <span class="n">ext_init_ctx_size</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">15</span><span class="p">],</span>
+            <span class="n">max_per_scanners</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">16</span><span class="p">],</span>
+            <span class="n">per_scan_ctx_size</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">17</span><span class="p">],</span>
+            <span class="n">max_cig</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">18</span><span class="p">],</span>
+            <span class="n">cig_ctx_size</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">19</span><span class="p">],</span>
+            <span class="n">cis_ctx_size</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">20</span><span class="p">],</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">stats</span><span class="p">,</span> <span class="n">evt</span><span class="o">.</span><span class="n">status</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.get_adv_stats"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.get_adv_stats">[docs]</a>    <span class="k">def</span> <span class="nf">get_adv_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">AdvPktStats</span><span class="p">,</span> <span class="n">StatusCode</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the accumulated advertising stats.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        retrieve the current accumulated advertising statistics.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        AdvPktStats</span>
+<span class="sd">            Advertising statistics report retrieved by the DUT.</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">evt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">GET_ADV_STATS</span><span class="p">,</span> <span class="n">return_evt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">get_return_params</span><span class="p">(</span><span class="n">param_lens</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+
+        <span class="n">stats</span> <span class="o">=</span> <span class="n">AdvPktStats</span><span class="p">(</span>
+            <span class="n">tx_adv</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">rx_req</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">rx_req_crc</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">rx_req_timeout</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+            <span class="n">tx_resp</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+            <span class="n">err_adv</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+            <span class="n">rx_setup</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+            <span class="n">tx_setup</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span>
+            <span class="n">rx_isr</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span>
+            <span class="n">tx_isr</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">stats</span><span class="p">,</span> <span class="n">evt</span><span class="o">.</span><span class="n">status</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.get_scan_stats"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.get_scan_stats">[docs]</a>    <span class="k">def</span> <span class="nf">get_scan_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ScanPktStats</span><span class="p">,</span> <span class="n">StatusCode</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get Scan stats</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Tuple[ScanPktStats, StatusCode]</span>
+<span class="sd">            Accumulated scanning stats and status code</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">evt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">GET_SCAN_STATS</span><span class="p">,</span> <span class="n">return_evt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">get_return_params</span><span class="p">(</span><span class="n">param_lens</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+
+        <span class="n">stats</span> <span class="o">=</span> <span class="n">ScanPktStats</span><span class="p">(</span>
+            <span class="n">rx_adv</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">rx_adv_crc</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">rx_adv_timeout</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">tx_req</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+            <span class="n">rx_rsp</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+            <span class="n">rx_rsp_crc</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+            <span class="n">rx_rsp_timeout</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+            <span class="n">err_scan</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span>
+            <span class="n">rx_setup</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span>
+            <span class="n">tx_setup</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span>
+            <span class="n">rx_isr</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span>
+            <span class="n">tx_isr</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">stats</span><span class="p">,</span> <span class="n">evt</span><span class="o">.</span><span class="n">status</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.get_conn_stats"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.get_conn_stats">[docs]</a>    <span class="k">def</span> <span class="nf">get_conn_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">DataPktStats</span><span class="p">,</span> <span class="n">StatusCode</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the stats captured during a connection.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        retrieve the statistics captured during a connection.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        DataPktStats</span>
+<span class="sd">            Connection statistics report retrieved by the DUT.</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">evt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">GET_CONN_STATS</span><span class="p">,</span> <span class="n">return_evt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">get_return_params</span><span class="p">(</span><span class="n">param_lens</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+
+        <span class="n">stats</span> <span class="o">=</span> <span class="n">DataPktStats</span><span class="p">(</span>
+            <span class="n">rx_data</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">rx_data_crc</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">rx_data_timeout</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">tx_data</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+            <span class="n">err_data</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+            <span class="n">rx_setup</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+            <span class="n">tx_setup</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+            <span class="n">rx_isr</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span>
+            <span class="n">tx_isr</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">stats</span><span class="p">,</span> <span class="n">evt</span><span class="o">.</span><span class="n">status</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.get_test_stats"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.get_test_stats">[docs]</a>    <span class="k">def</span> <span class="nf">get_test_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">DataPktStats</span><span class="p">,</span> <span class="n">StatusCode</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the stats captured during test mode.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        retrieve the statistics captured during DTM.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        DataPktStats</span>
+<span class="sd">            Test mode statistics report retrieved by the DUT.</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">evt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">GET_TEST_STATS</span><span class="p">,</span> <span class="n">return_evt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">get_return_params</span><span class="p">(</span><span class="n">param_lens</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+
+        <span class="n">stats</span> <span class="o">=</span> <span class="n">DataPktStats</span><span class="p">(</span>
+            <span class="n">rx_data</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">rx_data_crc</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">rx_data_timeout</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">tx_data</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+            <span class="n">err_data</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+            <span class="n">rx_setup</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+            <span class="n">tx_setup</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+            <span class="n">rx_isr</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span>
+            <span class="n">tx_isr</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">stats</span><span class="p">,</span> <span class="n">evt</span><span class="o">.</span><span class="n">status</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.get_pool_stats"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.get_pool_stats">[docs]</a>    <span class="k">def</span> <span class="nf">get_pool_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">PoolStats</span><span class="p">],</span> <span class="n">StatusCode</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the memory pool stats captured during runtime.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        retrieve the memory pool statistics captured during runtime.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[PoolStats]</span>
+<span class="sd">            Memory pool statistics reports retrieved by the DUT.</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">evt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">GET_POOL_STATS</span><span class="p">,</span> <span class="n">return_evt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">num_pools</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">evt_params</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">param_lens</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">param_lens</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_pools</span><span class="p">)</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">get_return_params</span><span class="p">(</span><span class="n">param_lens</span><span class="o">=</span><span class="n">param_lens</span><span class="p">,</span> <span class="n">use_raw</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">stats</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">num_pools</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_pools</span><span class="p">):</span>
+            <span class="n">stats</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">PoolStats</span><span class="p">(</span>
+                    <span class="n">buf_size</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+                    <span class="n">num_buf</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+                    <span class="n">num_alloc</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+                    <span class="n">max_alloc</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+                    <span class="n">max_req_len</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">stats</span><span class="p">,</span> <span class="n">evt</span><span class="o">.</span><span class="n">status</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.set_additional_aux_ptr_offset"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.set_additional_aux_ptr_offset">[docs]</a>    <span class="k">def</span> <span class="nf">set_additional_aux_ptr_offset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delay</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">handle</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set auxiliary packet offset delay.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        set the auxiliary packet offset delay in accordance with</span>
+<span class="sd">        the given values.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        delay : int</span>
+<span class="sd">            Desired delay. Set to 0 to disable.</span>
+<span class="sd">        handle : int</span>
+<span class="sd">            Handle to the desired connection.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `delay` is larger than 4 bytes in size.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">byte_length</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Delay (</span><span class="si">{</span><span class="n">delay</span><span class="si">}</span><span class="s2">) is too large, must be 4 bytes or less.&quot;</span><span class="p">)</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">delay</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">SET_AUX_DELAY</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.set_ext_adv_data_fragmentation"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.set_ext_adv_data_fragmentation">[docs]</a>    <span class="k">def</span> <span class="nf">set_ext_adv_data_fragmentation</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">frag_length</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the extended advertising fragmentation length.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        set the extended advertising fragmentation length in</span>
+<span class="sd">        accordance with the values provided.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        handle : int</span>
+<span class="sd">            Desired advertising handle.</span>
+<span class="sd">        frag_length : int</span>
+<span class="sd">            Desired fragmentation length.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="n">handle</span><span class="p">,</span> <span class="n">frag_length</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">SET_EXT_ADV_FRAG_LEN</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.set_extended_advertising_phy_opts"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.set_extended_advertising_phy_opts">[docs]</a>    <span class="k">def</span> <span class="nf">set_extended_advertising_phy_opts</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">primary</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">secondary</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set extended advertising PHY options.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        set the extended advertising PHY options in accordance with</span>
+<span class="sd">        the values provided.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        handle : int</span>
+<span class="sd">            Desired advertising handle.</span>
+<span class="sd">        primary : int</span>
+<span class="sd">            Desired primary advertising channel PHY options.</span>
+<span class="sd">        secondary : int</span>
+<span class="sd">            Desired secondary advertising channel PHY options.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="n">handle</span><span class="p">,</span> <span class="n">primary</span><span class="p">,</span> <span class="n">secondary</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">SET_EXT_ADV_PHY_OPTS</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.set_extended_advertising_default_phy_opts"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.set_extended_advertising_default_phy_opts">[docs]</a>    <span class="k">def</span> <span class="nf">set_extended_advertising_default_phy_opts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phy_opts</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the extended advertising default TX PHY options.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        set the default TX PHY options for the extended advertising</span>
+<span class="sd">        slave primary and secondary channels in accordance with the</span>
+<span class="sd">        value provided.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        phy_opts : int</span>
+<span class="sd">            Desired PHY options.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span>
+            <span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">SET_EXT_ADV_DEF_PHY_OPTS</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">phy_opts</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.generate_iso_packets"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.generate_iso_packets">[docs]</a>    <span class="k">def</span> <span class="nf">generate_iso_packets</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">packet_len</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">num_packets</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate ISO packets.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        generate ISO packets on the indicated connection in accordance</span>
+<span class="sd">        with the parameters provided.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        handle : int</span>
+<span class="sd">            Handle to the desired connection.</span>
+<span class="sd">        packet_len : int</span>
+<span class="sd">            Desired packet length.</span>
+<span class="sd">        num_packets : int</span>
+<span class="sd">            Number of ISO packets to send.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `handle` is larger than 2 bytes in size.</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `packet_len` is larger than 2 bytes in size.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">byte_length</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Handle (</span><span class="si">{</span><span class="n">handle</span><span class="si">}</span><span class="s2">) is too large, must be 2 bytes or less.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">byte_length</span><span class="p">(</span><span class="n">packet_len</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Packet length (</span><span class="si">{</span><span class="n">packet_len</span><span class="si">}</span><span class="s2">) is too large, must be 2 bytes or less.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">packet_len</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num_packets</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">GENERATE_ISO</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.get_iso_test_report"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.get_iso_test_report">[docs]</a>    <span class="k">def</span> <span class="nf">get_iso_test_report</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">TestReport</span><span class="p">,</span> <span class="n">StatusCode</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the stats collected during an ISO test.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        retrieves the statistics collected during an ISO test.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        TestReport</span>
+<span class="sd">            The ISO test statistics report retrieved by the DUT.</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">evt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">GET_ISO_TEST_REPORT</span><span class="p">,</span> <span class="n">return_evt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">get_return_params</span><span class="p">(</span><span class="n">param_lens</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
+
+        <span class="n">stats</span> <span class="o">=</span> <span class="n">TestReport</span><span class="p">(</span>
+            <span class="n">rx_pkt_count</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">rx_oct_count</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">gen_pkt_count</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">gen_oct_count</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">stats</span><span class="p">,</span> <span class="n">evt</span><span class="o">.</span><span class="n">status</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.enable_iso_packet_sink"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.enable_iso_packet_sink">[docs]</a>    <span class="k">def</span> <span class="nf">enable_iso_packet_sink</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enable</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enable/disable ISO packet sink.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        enable or disable ISO packet sink in accordance with the</span>
+<span class="sd">        value provided.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        enable : bool</span>
+<span class="sd">            Enable ISO packet sink?</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">ENA_ISO_SINK</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">enable</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.enable_autogen_iso_packets"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.enable_autogen_iso_packets">[docs]</a>    <span class="k">def</span> <span class="nf">enable_autogen_iso_packets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packet_len</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enable/disable automatic generation of ISO packets.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        enable or disable the automatic generation of ISO packets</span>
+<span class="sd">        in accordance with the values provided.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        packet_len : int</span>
+<span class="sd">            Desired ISO packet length. Set to 0 to disable automatic</span>
+<span class="sd">            generation.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `packet_len` is larger than 32 bits (4 bytes) in size.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">packet_len</span> <span class="o">&gt;</span> <span class="n">MAX_U32</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Packet length (</span><span class="si">{</span><span class="n">packet_len</span><span class="si">}</span><span class="s2">) is too large, must be 4 bytes or less.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">packet_len</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">ENA_AUTO_GEN_ISO</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.get_iso_connection_stats"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.get_iso_connection_stats">[docs]</a>    <span class="k">def</span> <span class="nf">get_iso_connection_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">DataPktStats</span><span class="p">,</span> <span class="n">StatusCode</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the stats captured during an ISO connection.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        retrieve the statistics captured during an ISO connection.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        DataPktStats</span>
+<span class="sd">            The ISO connection statistics report retrieved by the DUT.</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">evt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">GET_ISO_TEST_REPORT</span><span class="p">,</span> <span class="n">return_evt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">get_return_params</span><span class="p">(</span><span class="n">param_lens</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+
+        <span class="n">stats</span> <span class="o">=</span> <span class="n">DataPktStats</span><span class="p">(</span>
+            <span class="n">rx_data</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">rx_data_crc</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">rx_data_timeout</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">tx_data</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+            <span class="n">err_data</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+            <span class="n">rx_setup</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+            <span class="n">tx_setup</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+            <span class="n">rx_isr</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span>
+            <span class="n">tx_isr</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">stats</span><span class="p">,</span> <span class="n">evt</span><span class="o">.</span><span class="n">status</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.get_aux_adv_stats"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.get_aux_adv_stats">[docs]</a>    <span class="k">def</span> <span class="nf">get_aux_adv_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">AdvPktStats</span><span class="p">,</span> <span class="n">StatusCode</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the accumulated auxiliary advertising stats.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        retrieve the current accumulated auxiliary advertising</span>
+<span class="sd">        statistics.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        AdvPktStats</span>
+<span class="sd">            The auxiliary advertising statistics report retrieved</span>
+<span class="sd">            by the DUT.</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">evt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">GET_AUX_ADV_STATS</span><span class="p">,</span> <span class="n">return_evt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">get_return_params</span><span class="p">(</span><span class="n">param_lens</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+
+        <span class="n">stats</span> <span class="o">=</span> <span class="n">AdvPktStats</span><span class="p">(</span>
+            <span class="n">tx_adv</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">rx_req</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">rx_req_crc</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">rx_req_timeout</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+            <span class="n">tx_resp</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+            <span class="n">tx_chain</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+            <span class="n">err_adv</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+            <span class="n">rx_setup</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span>
+            <span class="n">tx_setup</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span>
+            <span class="n">rx_isr</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span>
+            <span class="n">tx_isr</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">stats</span><span class="p">,</span> <span class="n">evt</span><span class="o">.</span><span class="n">status</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.get_aux_scan_stats"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.get_aux_scan_stats">[docs]</a>    <span class="k">def</span> <span class="nf">get_aux_scan_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ScanPktStats</span><span class="p">,</span> <span class="n">StatusCode</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the accumulated auxiliary scan stats.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        retrieve the current accumulated auxiliary scan statistics.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ScanPktStats</span>
+<span class="sd">            The auxiliary scan statistics report retrieved by the DUT.</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">evt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">GET_AUX_SCAN_STATS</span><span class="p">,</span> <span class="n">return_evt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">get_return_params</span><span class="p">(</span>
+            <span class="n">param_lens</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="n">stats</span> <span class="o">=</span> <span class="n">ScanPktStats</span><span class="p">(</span>
+            <span class="n">rx_adv</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">rx_adv_crc</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">rx_adv_timeout</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">tx_req</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+            <span class="n">rx_rsp</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+            <span class="n">rx_rsp_crc</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+            <span class="n">rx_rsp_timeout</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+            <span class="n">rx_chain</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span>
+            <span class="n">rx_chain_crc</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span>
+            <span class="n">rx_chain_timeout</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span>
+            <span class="n">err_scan</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span>
+            <span class="n">rx_setup</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span>
+            <span class="n">tx_setup</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span>
+            <span class="n">rx_isr</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span>
+            <span class="n">tx_isr</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">stats</span><span class="p">,</span> <span class="n">evt</span><span class="o">.</span><span class="n">status</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.get_periodic_scanning_stats"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.get_periodic_scanning_stats">[docs]</a>    <span class="k">def</span> <span class="nf">get_periodic_scanning_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ScanPktStats</span><span class="p">,</span> <span class="n">StatusCode</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the accumulated periodic scanning stats.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        retrieve the current accumulated periodic scanning statistics.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ScanPktStats</span>
+<span class="sd">            The periodic scanning statistics report retrieved by the DUT.</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">evt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">GET_PER_SCAN_STATS</span><span class="p">,</span> <span class="n">return_evt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">get_return_params</span><span class="p">(</span><span class="n">param_lens</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+
+        <span class="n">stats</span> <span class="o">=</span> <span class="n">ScanPktStats</span><span class="p">(</span>
+            <span class="n">rx_adv</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">rx_adv_crc</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">rx_adv_timeout</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">rx_chain</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+            <span class="n">rx_chain_crc</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+            <span class="n">rx_chain_timeout</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+            <span class="n">err_scan</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+            <span class="n">rx_setup</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span>
+            <span class="n">tx_setup</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span>
+            <span class="n">rx_isr</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span>
+            <span class="n">tx_isr</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">stats</span><span class="p">,</span> <span class="n">evt</span><span class="o">.</span><span class="n">status</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.set_connection_phy_tx_power"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.set_connection_phy_tx_power">[docs]</a>    <span class="k">def</span> <span class="nf">set_connection_phy_tx_power</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">power</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">phy</span><span class="p">:</span> <span class="n">PhyOption</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the connection TX power level for a specific PHY.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        set the connection TX power level for the indicated connection</span>
+<span class="sd">        and PHY in accordance with the value provided.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        handle : int</span>
+<span class="sd">            Handle to the desired connection.</span>
+<span class="sd">        power : int</span>
+<span class="sd">            Desired TX power.</span>
+<span class="sd">        phy : PhyOption</span>
+<span class="sd">            PHY on which the TX power should be set.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If `handle` is larger than 2 bytes in size.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">byte_length</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Handle (</span><span class="si">{</span><span class="n">handle</span><span class="si">}</span><span class="s2">) is too large, must be 2 bytes or less.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">phy</span> <span class="o">==</span> <span class="n">PhyOption</span><span class="o">.</span><span class="n">PHY_CODED_S2</span><span class="p">:</span>
+            <span class="n">phy</span> <span class="o">=</span> <span class="n">PhyOption</span><span class="o">.</span><span class="n">PHY_CODED</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">power</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">phy</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">SET_CONN_PHY_TX_PWR</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.get_rssi_vs"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.get_rssi_vs">[docs]</a>    <span class="k">def</span> <span class="nf">get_rssi_vs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">StatusCode</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the RSSI values.</span>
+
+<span class="sd">        Sends a vendor-specific command to the DUT, telling it to</span>
+<span class="sd">        retrieve the RSSI value for the indicated channel.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        channel : int, optional</span>
+<span class="sd">            Channel for which value should be retrieved.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            RSSI value for the indicated channel.</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If channel is greater than 39 or less than 0.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">channel</span> <span class="o">&lt;</span> <span class="mi">40</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Channel out of bandwidth (</span><span class="si">{</span><span class="n">channel</span><span class="si">}</span><span class="s2">), must be in range [0, 40).&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">evt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span>
+            <span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">GET_RSSI</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">channel</span><span class="p">,</span> <span class="n">return_evt</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="n">rssi</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">get_return_params</span><span class="p">(</span><span class="n">signed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">rssi</span><span class="p">,</span> <span class="n">evt</span><span class="o">.</span><span class="n">status</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.bb_enable"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.bb_enable">[docs]</a>    <span class="k">def</span> <span class="nf">bb_enable</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enable the baseband radio</span>
+<span class="sd">        NOTE: Must be done before using RSSI</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">BB_EN</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.bb_disable"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.bb_disable">[docs]</a>    <span class="k">def</span> <span class="nf">bb_disable</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Disable the baseband radio</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">BB_DIS</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Analog Devices, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

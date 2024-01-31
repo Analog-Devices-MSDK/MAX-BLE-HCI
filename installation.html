@@ -47,7 +47,11 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#install-from-pypi">Install from PyPi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation-from-source">Installation from Source</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hci_reference.html">HCI Command Reference</a></li>
@@ -79,7 +83,32 @@
              
   <section id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h1>
-<p>instructions coming soon</p>
+<section id="install-from-pypi">
+<h2>Install from PyPi<a class="headerlink" href="#install-from-pypi" title="Permalink to this heading"></a></h2>
+<p>MAX-BLE-HCI is hosted via PyPi and can be installed with the following command
+.. code-block:: bash</p>
+<blockquote>
+<div><p>pip install max-ble-hci</p>
+</div></blockquote>
+</section>
+<section id="installation-from-source">
+<h2>Installation from Source<a class="headerlink" href="#installation-from-source" title="Permalink to this heading"></a></h2>
+<p>If you prefer to use the most up to date version, you can also install from source.</p>
+<p>The intsall.sh or .bat are used to install the library into your Python site packages and be done as such.</p>
+<div class="line-block">
+<div class="line">On Linux or MacOS</div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>chmod<span class="w"> </span>+x<span class="w"> </span>install.sh
+./install.sh
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line">On Windows</div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>install.bat
+</pre></div>
+</div>
+</section>
 </section>
 
 

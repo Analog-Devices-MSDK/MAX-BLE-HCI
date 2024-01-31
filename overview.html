@@ -47,7 +47,7 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Overview</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#host-controller-interfaces">Host-Controller Interfaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#host-controller-interface">Host-Controller Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#max-ble-hci-library-structure">MAX BLE HCI Library Structure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#support-information">Support Information</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#supported-os">Supported OS</a></li>
@@ -101,10 +101,13 @@ contains:</p>
 <li><p>Support for the creation/use of custom vendor-specific commands.</p></li>
 </ul>
 </div></blockquote>
-<p>Documentation for the library can be viewed in full in the <cite>API Reference</cite> tab.</p>
-<section id="host-controller-interfaces">
-<h2>Host-Controller Interfaces<a class="headerlink" href="#host-controller-interfaces" title="Permalink to this heading"></a></h2>
-<p><strong>Fill later</strong></p>
+<p>Documentation for the library can be viewed in full in the <a class="reference internal" href="modules.html"><span class="doc">API Reference</span></a> tab.</p>
+<section id="host-controller-interface">
+<h2>Host-Controller Interface<a class="headerlink" href="#host-controller-interface" title="Permalink to this heading"></a></h2>
+<p>A host controller interface is a thin layer used in BT and BLE which transports
+packets from the host to the controller (commands) and vice versa (events). HCI
+interface is standardized by the <a class="reference external" href="https://www.bluetooth.com/specifications/specs/core-specification-5-3/" rel="noopener noreferrer" target="_blank">Bluetooth SIG Spec</a>.</p>
+<a class="reference internal image-reference" href="_images/ble_stack_diagram.jpeg"><img alt="_images/ble_stack_diagram.jpeg" src="_images/ble_stack_diagram.jpeg" style="width: 100%;" /></a>
 </section>
 <section id="max-ble-hci-library-structure">
 <h2>MAX BLE HCI Library Structure<a class="headerlink" href="#max-ble-hci-library-structure" title="Permalink to this heading"></a></h2>
@@ -166,7 +169,7 @@ contains:</p>
 </div></blockquote>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Not all members of a module are necessarily displayed here. See the <cite>API Reference</cite> tab
+<p>Not all members of a module are necessarily displayed here. See the <a class="reference internal" href="modules.html"><span class="doc">API Reference</span></a> tab
 to view all members of each library module.</p>
 </div>
 </section>
@@ -177,6 +180,7 @@ to view all members of each library module.</p>
 <ul class="simple">
 <li><p>Windows</p></li>
 <li><p>Linux</p></li>
+<li><p>MacOS</p></li>
 </ul>
 </section>
 <section id="supported-parts">

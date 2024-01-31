@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>max_ble_hci.ble_standard_cmds &mdash; MAX BLE HCI 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=2389946f"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            MAX BLE HCI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hci_reference.html">HCI Command Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">MAX BLE HCI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">max_ble_hci.ble_standard_cmds</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for max_ble_hci.ble_standard_cmds</h1><div class="highlight"><pre>
+<span></span><span class="ch">#! /usr/bin/env python3</span>
+<span class="c1">###############################################################################</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (C) 2023 Maxim Integrated Products, Inc., All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># Permission is hereby granted, free of charge, to any person obtaining a</span>
+<span class="c1"># copy of this software and associated documentation files (the &quot;Software&quot;),</span>
+<span class="c1"># to deal in the Software without restriction, including without limitation</span>
+<span class="c1"># the rights to use, copy, modify, merge, publish, distribute, sublicense,</span>
+<span class="c1"># and/or sell copies of the Software, and to permit persons to whom the</span>
+<span class="c1"># Software is furnished to do so, subject to the following conditions:</span>
+<span class="c1">#</span>
+<span class="c1"># The above copyright notice and this permission notice shall be included</span>
+<span class="c1"># in all copies or substantial portions of the Software.</span>
+<span class="c1">#</span>
+<span class="c1"># THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS</span>
+<span class="c1"># OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF</span>
+<span class="c1"># MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.</span>
+<span class="c1"># IN NO EVENT SHALL MAXIM INTEGRATED BE LIABLE FOR ANY CLAIM, DAMAGES</span>
+<span class="c1"># OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,</span>
+<span class="c1"># ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR</span>
+<span class="c1"># OTHER DEALINGS IN THE SOFTWARE.</span>
+<span class="c1">#</span>
+<span class="c1"># Except as contained in this notice, the name of Maxim Integrated</span>
+<span class="c1"># Products, Inc. shall not be used except as stated in the Maxim Integrated</span>
+<span class="c1"># Products, Inc. Branding Policy.</span>
+<span class="c1">#</span>
+<span class="c1"># The mere transfer of this software does not imply any licenses</span>
+<span class="c1"># of trade secrets, proprietary technology, copyrights, patents,</span>
+<span class="c1"># trademarks, maskwork rights, or any other form of intellectual</span>
+<span class="c1"># property whatsoever. Maxim Integrated Products, Inc. retains all</span>
+<span class="c1"># ownership rights.</span>
+<span class="c1">#</span>
+<span class="c1">##############################################################################</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright 2023 Analog Devices, Inc.</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+<span class="c1">#</span>
+<span class="c1">##############################################################################</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module contains definitions for BLE standard HCI commands.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># pylint: disable=too-many-arguments</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">from</span> <span class="nn">._hci_logger</span> <span class="kn">import</span> <span class="n">get_formatted_logger</span>
+<span class="kn">from</span> <span class="nn">._transport</span> <span class="kn">import</span> <span class="n">SerialUartTransport</span>
+<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">PhyOption</span><span class="p">,</span> <span class="n">PayloadOption</span>
+<span class="kn">from</span> <span class="nn">.data_params</span> <span class="kn">import</span> <span class="n">AdvParams</span><span class="p">,</span> <span class="n">ConnParams</span><span class="p">,</span> <span class="n">ScanParams</span>
+<span class="kn">from</span> <span class="nn">.hci_packets</span> <span class="kn">import</span> <span class="n">CommandPacket</span><span class="p">,</span> <span class="n">EventPacket</span>
+<span class="kn">from</span> <span class="nn">.packet_codes</span> <span class="kn">import</span> <span class="n">StatusCode</span>
+<span class="kn">from</span> <span class="nn">.packet_defs</span> <span class="kn">import</span> <span class="n">OCF</span><span class="p">,</span> <span class="n">OGF</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">to_le_nbyte_list</span>
+
+
+<div class="viewcode-block" id="BleStandardCmds"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds">[docs]</a><span class="k">class</span> <span class="nc">BleStandardCmds</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Definitions for BLE standard HCI commands.</span>
+
+<span class="sd">    Class contains functions used to implement BLE standard HCI</span>
+<span class="sd">    commands. Used as a parent for the full Analog Devices BLE</span>
+<span class="sd">    HCI class.</span>
+
+<span class="sd">    Arguments</span>
+<span class="sd">    ---------</span>
+<span class="sd">    port : SerialUartTransport</span>
+<span class="sd">        Serial port interfacing object.</span>
+<span class="sd">    logger_name: str</span>
+<span class="sd">        Name used to reference the HCI logger.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    port : SerialUartTransport</span>
+<span class="sd">        Serial port interfacing object.</span>
+<span class="sd">    logger : logging.Logger</span>
+<span class="sd">        HCI logging object referenced by the `name` argument.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="n">SerialUartTransport</span><span class="p">,</span> <span class="n">logger_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">port</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">get_formatted_logger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">logger_name</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BleStandardCmds.send_le_controller_command"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.send_le_controller_command">[docs]</a>    <span class="k">def</span> <span class="nf">send_le_controller_command</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">ocf</span><span class="p">:</span> <span class="n">OCF</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">return_evt</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">StatusCode</span><span class="p">,</span> <span class="n">EventPacket</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Send an LE Controller command to the test board.</span>
+
+<span class="sd">        Sends a command from the OGF LE Controller subgroup to the DUT.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ocf : OCF</span>
+<span class="sd">            Opcode command field value for the desired HCI command.</span>
+<span class="sd">        params : List[int], optional</span>
+<span class="sd">            Command parameters as single-byte values.</span>
+<span class="sd">        return_evt : bool, optional</span>
+<span class="sd">            If true, function returns full `EventPacket` object. If</span>
+<span class="sd">            false, function returns only the status code.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Union[StatusCode, EventPacket]</span>
+<span class="sd">            If `return_evt` argument is true, the full return packet</span>
+<span class="sd">            from the DUT. If `return_evt` argument is false, the return</span>
+<span class="sd">            packet status code.</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="n">CommandPacket</span><span class="p">(</span><span class="n">OGF</span><span class="o">.</span><span class="n">LE_CONTROLLER</span><span class="p">,</span> <span class="n">ocf</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">return_evt</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span><span class="o">.</span><span class="n">status</span></div>
+
+<div class="viewcode-block" id="BleStandardCmds.send_link_control_command"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.send_link_control_command">[docs]</a>    <span class="k">def</span> <span class="nf">send_link_control_command</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">ocf</span><span class="p">:</span> <span class="n">OCF</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">return_evt</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">StatusCode</span><span class="p">,</span> <span class="n">EventPacket</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Send a Link Control command to the test board.</span>
+
+<span class="sd">        Sends a command from the OGF Link Control subgroup to the DUT.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ocf : OCF</span>
+<span class="sd">            Opcode command field value for the desired HCI command.</span>
+<span class="sd">        params : List[int], optional</span>
+<span class="sd">            Command parameters as single-byte values.</span>
+<span class="sd">        return_evt : bool, optional</span>
+<span class="sd">            If true, function returns full `EventPacket` object. If</span>
+<span class="sd">            false, function returns only the status code.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Union[StatusCode, EventPacket]</span>
+<span class="sd">            If `return_evt` argument is true, the full return packet</span>
+<span class="sd">            from the DUT. If `return_evt` argument is false, the return</span>
+<span class="sd">            packet status code.</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="n">CommandPacket</span><span class="p">(</span><span class="n">OGF</span><span class="o">.</span><span class="n">LINK_CONTROL</span><span class="p">,</span> <span class="n">ocf</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">return_evt</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span><span class="o">.</span><span class="n">status</span></div>
+
+<div class="viewcode-block" id="BleStandardCmds.send_controller_command"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.send_controller_command">[docs]</a>    <span class="k">def</span> <span class="nf">send_controller_command</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">ocf</span><span class="p">:</span> <span class="n">OCF</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">return_evt</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">StatusCode</span><span class="p">,</span> <span class="n">EventPacket</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Send a Controller command to the test board.</span>
+
+<span class="sd">        Sends a command from the OGF Controller subgroup to the DUT.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ocf : OCF</span>
+<span class="sd">            Opcode command field value for the desired HCI command.</span>
+<span class="sd">        params : List[int], optional</span>
+<span class="sd">            Command parameters as single-byte values.</span>
+<span class="sd">        return_evt : bool, optional</span>
+<span class="sd">            If true, function returns full `EventPacket` object. If</span>
+<span class="sd">            false, function returns only the status code.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Union[StatusCode, EventPacket]</span>
+<span class="sd">            If `return_evt` argument is true, the full return packet</span>
+<span class="sd">            from the DUT. If `return_evt` argument is false, the return</span>
+<span class="sd">            packet status code.</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="n">CommandPacket</span><span class="p">(</span><span class="n">OGF</span><span class="o">.</span><span class="n">CONTROLLER</span><span class="p">,</span> <span class="n">ocf</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">return_evt</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span><span class="o">.</span><span class="n">status</span></div>
+
+<div class="viewcode-block" id="BleStandardCmds.set_adv_params"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_adv_params">[docs]</a>    <span class="k">def</span> <span class="nf">set_adv_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">adv_params</span><span class="p">:</span> <span class="n">AdvParams</span> <span class="o">=</span> <span class="n">AdvParams</span><span class="p">())</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set test board advertising parameters.</span>
+
+<span class="sd">        Sends a command to the DUT, telling it to set the advertising</span>
+<span class="sd">        parameters to the given values.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        adv_params : AdvParams, optional</span>
+<span class="sd">            Dataclass object containing the desired advertising</span>
+<span class="sd">            parameters.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">adv_params</span><span class="o">.</span><span class="n">interval_min</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">adv_params</span><span class="o">.</span><span class="n">interval_max</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">adv_params</span><span class="o">.</span><span class="n">adv_type</span><span class="p">,</span>
+                <span class="n">adv_params</span><span class="o">.</span><span class="n">own_addr_type</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                <span class="n">adv_params</span><span class="o">.</span><span class="n">peer_addr_type</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">adv_params</span><span class="o">.</span><span class="n">peer_addr</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">adv_params</span><span class="o">.</span><span class="n">channel_map</span><span class="p">,</span> <span class="n">adv_params</span><span class="o">.</span><span class="n">filter_policy</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_le_controller_command</span><span class="p">(</span>
+            <span class="n">OCF</span><span class="o">.</span><span class="n">LE_CONTROLLER</span><span class="o">.</span><span class="n">SET_ADV_PARAM</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BleStandardCmds.enable_adv"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.enable_adv">[docs]</a>    <span class="k">def</span> <span class="nf">enable_adv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enable</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Command board to start/stop advertising.</span>
+
+<span class="sd">        Sends a command to the DUT, telling it to either start or</span>
+<span class="sd">        stop advertising based on the the `enable` argument.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        enable : bool</span>
+<span class="sd">            Enable advertising?</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_le_controller_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">LE_CONTROLLER</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">enable</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="BleStandardCmds.set_scan_params"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_scan_params">[docs]</a>    <span class="k">def</span> <span class="nf">set_scan_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scan_params</span><span class="p">:</span> <span class="n">ScanParams</span> <span class="o">=</span> <span class="n">ScanParams</span><span class="p">())</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set test board scanning parameters.</span>
+
+<span class="sd">        Sends a command to the DUT, telling it to set the scanning</span>
+<span class="sd">        parameters to the given values.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        scan_params : ScanParams, optional</span>
+<span class="sd">            Dataclass object containing the desired scanning parameters.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="n">scan_params</span><span class="o">.</span><span class="n">scan_type</span><span class="p">]</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">scan_params</span><span class="o">.</span><span class="n">scan_interval</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">scan_params</span><span class="o">.</span><span class="n">scan_window</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">scan_params</span><span class="o">.</span><span class="n">addr_type</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">scan_params</span><span class="o">.</span><span class="n">filter_policy</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_le_controller_command</span><span class="p">(</span>
+            <span class="n">OCF</span><span class="o">.</span><span class="n">LE_CONTROLLER</span><span class="o">.</span><span class="n">SET_SCAN_PARAM</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BleStandardCmds.enable_scanning"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.enable_scanning">[docs]</a>    <span class="k">def</span> <span class="nf">enable_scanning</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">enable</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">filter_duplicates</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Command board to start/stop scanning.</span>
+
+<span class="sd">        Sends a command to the DUT, telling it to either start or</span>
+<span class="sd">        stop scanning based on the `enable` argument.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        enable : bool</span>
+<span class="sd">            Enable scanning?</span>
+<span class="sd">        filter_duplicates : bool, optional</span>
+<span class="sd">            Filter duplicates?</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">enable</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">filter_duplicates</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_le_controller_command</span><span class="p">(</span>
+            <span class="n">OCF</span><span class="o">.</span><span class="n">LE_CONTROLLER</span><span class="o">.</span><span class="n">SET_SCAN_ENABLE</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BleStandardCmds.create_connection"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.create_connection">[docs]</a>    <span class="k">def</span> <span class="nf">create_connection</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">conn_params</span><span class="p">:</span> <span class="n">ConnParams</span> <span class="o">=</span> <span class="n">ConnParams</span><span class="p">(</span><span class="mh">0x0</span><span class="p">)</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Command board to connect with a peer device.</span>
+
+<span class="sd">        Sends a command to the DUT, telling it to create a connection</span>
+<span class="sd">        to a peer device based on the given connection parameters.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        conn_params : ConnParams, optional</span>
+<span class="sd">            Dataclass object containing the desired connection parameters.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">conn_params</span><span class="o">.</span><span class="n">scan_interval</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">conn_params</span><span class="o">.</span><span class="n">scan_window</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conn_params</span><span class="o">.</span><span class="n">init_filter_policy</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conn_params</span><span class="o">.</span><span class="n">peer_addr_type</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">conn_params</span><span class="o">.</span><span class="n">peer_addr</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conn_params</span><span class="o">.</span><span class="n">own_addr_type</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">conn_params</span><span class="o">.</span><span class="n">conn_interval_min</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">conn_params</span><span class="o">.</span><span class="n">conn_interval_max</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">conn_params</span><span class="o">.</span><span class="n">max_latency</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">conn_params</span><span class="o">.</span><span class="n">sup_timeout</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">conn_params</span><span class="o">.</span><span class="n">min_ce_length</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">conn_params</span><span class="o">.</span><span class="n">max_ce_length</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_le_controller_command</span><span class="p">(</span>
+            <span class="n">OCF</span><span class="o">.</span><span class="n">LE_CONTROLLER</span><span class="o">.</span><span class="n">CREATE_CONN</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BleStandardCmds.set_default_phy"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_default_phy">[docs]</a>    <span class="k">def</span> <span class="nf">set_default_phy</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">all_phys</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">,</span> <span class="n">tx_phys</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x7</span><span class="p">,</span> <span class="n">rx_phys</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x7</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set defaults for ALL, TX, and RX PHYs.</span>
+
+<span class="sd">        Sends a command to the DUT, telling it to set the default behavior</span>
+<span class="sd">        for ALL, TX, and RX PHYs in accordance with the given values.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        all_phys : int, optional</span>
+<span class="sd">            Value describing desired behavior of all PHYs.</span>
+<span class="sd">        tx_phys : int, optional</span>
+<span class="sd">            Value describing desired behavior of TX PHYs.</span>
+<span class="sd">        rx_phys : int, optional</span>
+<span class="sd">            Value describing desired behavior of RX PHYs.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="n">all_phys</span><span class="p">,</span> <span class="n">tx_phys</span><span class="p">,</span> <span class="n">rx_phys</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_le_controller_command</span><span class="p">(</span>
+            <span class="n">OCF</span><span class="o">.</span><span class="n">LE_CONTROLLER</span><span class="o">.</span><span class="n">SET_DEF_PHY</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BleStandardCmds.set_data_len"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_data_len">[docs]</a>    <span class="k">def</span> <span class="nf">set_data_len</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x0000</span><span class="p">,</span> <span class="n">tx_octets</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0xFB00</span><span class="p">,</span> <span class="n">tx_time</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x9042</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the maximum TX payload size and transmit time.</span>
+
+<span class="sd">        Sends a command to the DUT, telling it to set the maximum TX</span>
+<span class="sd">        payload size and transmit time to the given values.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        handle : int, optional</span>
+<span class="sd">            Connection handle.</span>
+<span class="sd">        tx_octets : int, optional</span>
+<span class="sd">            Desired maximum number of payload octets.</span>
+<span class="sd">        tx_time : int, optional</span>
+<span class="sd">            Desired maximum TX time.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">tx_octets</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">tx_time</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_le_controller_command</span><span class="p">(</span>
+            <span class="n">OCF</span><span class="o">.</span><span class="n">LE_CONTROLLER</span><span class="o">.</span><span class="n">SET_DATA_LEN</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BleStandardCmds.set_phy"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_phy">[docs]</a>    <span class="k">def</span> <span class="nf">set_phy</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">handle</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x0000</span><span class="p">,</span>
+        <span class="n">all_phys</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">,</span>
+        <span class="n">tx_phys</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x7</span><span class="p">,</span>
+        <span class="n">rx_phys</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x7</span><span class="p">,</span>
+        <span class="n">phy_opts</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the PHY preferences for a connection.</span>
+
+<span class="sd">        Sends a command to the DUT, telling it to set the PHY preferences</span>
+<span class="sd">        for the indicated connection in accordance with the given values.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        handle : int, optional</span>
+<span class="sd">            The handle to the desired connection.</span>
+<span class="sd">        all_phys : int, optional</span>
+<span class="sd">            Behavior settings for all PHYs. Indicates if a PHY preference</span>
+<span class="sd">            exists for both RX and TX PHYs.</span>
+<span class="sd">        tx_phys : PhyOption, optional</span>
+<span class="sd">            PHY preference for TX PHYs.</span>
+<span class="sd">        rx_phys : PhyOption, optional</span>
+<span class="sd">            PHY preference for RX PHYs.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">all_phys</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;Invalid all PHYs option (</span><span class="si">%i</span><span class="s2">), must be between 0x0 and 0x3. Defaulting to 0x0.&quot;</span><span class="p">,</span>
+                <span class="n">all_phys</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">all_phys</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">tx_phys</span> <span class="o">&lt;=</span> <span class="mi">7</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;Invalid TX PHY option (</span><span class="si">%i</span><span class="s2">), must be between 0x1 and 0x7. Defaulting to 0x7.&quot;</span><span class="p">,</span>
+                <span class="n">tx_phys</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">tx_phys</span> <span class="o">=</span> <span class="mh">0x7</span>
+        <span class="k">if</span> <span class="n">all_phys</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">rx_phys</span> <span class="o">&lt;=</span> <span class="mi">7</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;Invalid RX PHY option (</span><span class="si">%i</span><span class="s2">), must be between 0x1 and 0x7. Defaulting to 0x7.&quot;</span><span class="p">,</span>
+                <span class="n">rx_phys</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">rx_phys</span> <span class="o">=</span> <span class="mh">0x7</span>
+        <span class="k">if</span> <span class="n">phy_opts</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;Invalid PHY options (</span><span class="si">%i</span><span class="s2">), must be 0x0, 0x1, 0x2, or 0x4. Defaulting to 0x0.&quot;</span><span class="p">,</span>
+                <span class="n">phy_opts</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">phy_opts</span> <span class="o">=</span> <span class="mh">0x0</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">all_phys</span><span class="p">,</span> <span class="n">tx_phys</span><span class="p">,</span> <span class="n">rx_phys</span><span class="p">])</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">phy_opts</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_le_controller_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">LE_CONTROLLER</span><span class="o">.</span><span class="n">SET_PHY</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BleStandardCmds.tx_test"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.tx_test">[docs]</a>    <span class="k">def</span> <span class="nf">tx_test</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">channel</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">phy</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PhyOption</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">PhyOption</span><span class="o">.</span><span class="n">PHY_1M</span><span class="p">,</span>
+        <span class="n">payload</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PayloadOption</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">PayloadOption</span><span class="o">.</span><span class="n">PLD_PRBS9</span><span class="p">,</span>
+        <span class="n">packet_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Start a transmitter test.</span>
+
+<span class="sd">        Sends a command to the DUT, telling it to start a DTM transmitter</span>
+<span class="sd">        test in accordance with the given parameters.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        channel : int, optional</span>
+<span class="sd">            The channel on which transmission should take place.</span>
+<span class="sd">        phy : Union[PhyOption,int], optional</span>
+<span class="sd">            The PHY that should be used by the transmitter.</span>
+<span class="sd">        payload : PayloadOption, optional</span>
+<span class="sd">            The packet payload type that should be used.</span>
+<span class="sd">        packet_len : int, optional</span>
+<span class="sd">            The desired length of the transmitted packets.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">PayloadOption</span><span class="p">):</span>
+            <span class="n">payload</span> <span class="o">=</span> <span class="n">payload</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">phy</span><span class="p">,</span> <span class="n">PhyOption</span><span class="p">):</span>
+            <span class="n">phy</span> <span class="o">=</span> <span class="n">phy</span><span class="o">.</span><span class="n">value</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="n">channel</span><span class="p">,</span> <span class="n">packet_len</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="n">phy</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_le_controller_command</span><span class="p">(</span>
+            <span class="n">OCF</span><span class="o">.</span><span class="n">LE_CONTROLLER</span><span class="o">.</span><span class="n">ENHANCED_TRANSMITTER_TEST</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BleStandardCmds.rx_test"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.rx_test">[docs]</a>    <span class="k">def</span> <span class="nf">rx_test</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">channel</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">phy</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PhyOption</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">PhyOption</span><span class="o">.</span><span class="n">PHY_1M</span><span class="p">,</span>
+        <span class="n">modulation_idx</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Start a receiver test.</span>
+
+<span class="sd">        Sends a command to the DUT, telling it to start a DTM receiver</span>
+<span class="sd">        test in accordance with the given parameters.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        channel : int, optional</span>
+<span class="sd">            The channel on which the receiver should listen for packets.</span>
+<span class="sd">        phy : Union[PhyOption,int], optional</span>
+<span class="sd">            The PHY that should be used by the receiver.</span>
+<span class="sd">        modulation_idx : float, optional</span>
+<span class="sd">            The expected modulation index of the transmitter. Indicates</span>
+<span class="sd">            whether the modulation index is standard (0) or stable (1).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">phy</span> <span class="o">==</span> <span class="n">PhyOption</span><span class="o">.</span><span class="n">PHY_CODED_S2</span><span class="p">:</span>
+            <span class="n">phy</span> <span class="o">=</span> <span class="n">PhyOption</span><span class="o">.</span><span class="n">PHY_CODED_S8</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">phy</span><span class="p">,</span> <span class="n">PhyOption</span><span class="p">):</span>
+            <span class="n">phy</span> <span class="o">=</span> <span class="n">phy</span><span class="o">.</span><span class="n">value</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="n">channel</span><span class="p">,</span> <span class="n">phy</span><span class="p">,</span> <span class="n">modulation_idx</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_le_controller_command</span><span class="p">(</span>
+            <span class="n">OCF</span><span class="o">.</span><span class="n">LE_CONTROLLER</span><span class="o">.</span><span class="n">ENHANCED_RECEIVER_TEST</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BleStandardCmds.end_test"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.end_test">[docs]</a>    <span class="k">def</span> <span class="nf">end_test</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">StatusCode</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;End the current test.</span>
+
+<span class="sd">        Sends a command to the DUT, telling it to end the current</span>
+<span class="sd">        DTM test.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+<span class="sd">        int</span>
+<span class="sd">            The number of packets received correctly during the test. If</span>
+<span class="sd">            ending a TX test, this value will be 0.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">evt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_le_controller_command</span><span class="p">(</span>
+            <span class="n">OCF</span><span class="o">.</span><span class="n">LE_CONTROLLER</span><span class="o">.</span><span class="n">TEST_END</span><span class="p">,</span> <span class="n">return_evt</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="n">rx_ok</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">get_return_params</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">rx_ok</span><span class="p">,</span> <span class="n">evt</span><span class="o">.</span><span class="n">status</span></div>
+
+<div class="viewcode-block" id="BleStandardCmds.disconnect"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.disconnect">[docs]</a>    <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x0000</span><span class="p">,</span> <span class="n">reason</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x16</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Disconnect from an existing connection.</span>
+
+<span class="sd">        Sends a command to the DUT, telling it to disconnect from</span>
+<span class="sd">        the indicated connection for the given reason.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        handle : int, optional</span>
+<span class="sd">            The handle to the desired connection.</span>
+<span class="sd">        reason : int, optional</span>
+<span class="sd">            The reason for the disconnection.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reason</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_link_control_command</span><span class="p">(</span>
+            <span class="n">OCF</span><span class="o">.</span><span class="n">LINK_CONTROL</span><span class="o">.</span><span class="n">DISCONNECT</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BleStandardCmds.reset"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset board controller/link layer.</span>
+
+<span class="sd">        Sends a command to the DUT, telling it that the controller</span>
+<span class="sd">        and the link layer should be reset. On-board implementation</span>
+<span class="sd">        may vary, meaning this command does not necessarily perform</span>
+<span class="sd">        a full hardware reset.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_controller_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">CONTROLLER</span><span class="o">.</span><span class="n">RESET</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BleStandardCmds.set_event_mask"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_event_mask">[docs]</a>    <span class="k">def</span> <span class="nf">set_event_mask</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">mask</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">mask_pg2</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">StatusCode</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">StatusCode</span><span class="p">,</span> <span class="n">StatusCode</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enable/disable events the board can generate.</span>
+
+<span class="sd">        Sends a command to the DUT, telling it to enable/disable</span>
+<span class="sd">        events that can be generated and returned to the host in</span>
+<span class="sd">        accordance with the given mask. If a page2 mask if provided,</span>
+<span class="sd">        then the command which sets the page2 masks will also be sent.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mask : int</span>
+<span class="sd">            Mask indicating the desired events. Setting a bit to `1`</span>
+<span class="sd">            enables the corresponding event. Setting the bit to `0`</span>
+<span class="sd">            disables it.</span>
+<span class="sd">        mask_pg2 : Optional[int], optional</span>
+<span class="sd">            Mask indicating the desired events for the second event</span>
+<span class="sd">            mask page. Setting a bit to `1` enables the corresponding</span>
+<span class="sd">            event. Setting the bit to `0` disables it.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Union[StatusCode, Tuple[StatusCode, StatusCode]]</span>
+<span class="sd">            The return packet status codes(s). If both page1 and page2</span>
+<span class="sd">            were set, the first return is the status code for the page1</span>
+<span class="sd">            command and the second is the status code for the page2</span>
+<span class="sd">            command.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_controller_command</span><span class="p">(</span>
+            <span class="n">OCF</span><span class="o">.</span><span class="n">CONTROLLER</span><span class="o">.</span><span class="n">SET_EVENT_MASK</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">mask_pg2</span><span class="p">:</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">mask_pg2</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="n">status</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">send_controller_command</span><span class="p">(</span>
+                    <span class="n">OCF</span><span class="o">.</span><span class="n">CONTROLLER</span><span class="o">.</span><span class="n">SET_EVENT_MASK_PAGE2</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span>
+                <span class="p">),</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">status</span></div>
+
+<div class="viewcode-block" id="BleStandardCmds.set_event_mask_le"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_event_mask_le">[docs]</a>    <span class="k">def</span> <span class="nf">set_event_mask_le</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mask</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enable/disable LE events the board can generate.</span>
+
+<span class="sd">        Sends a command to the DUT, telling it to enable/disable</span>
+<span class="sd">        LE events that can be generated and returned to the host</span>
+<span class="sd">        in accordance with the given mask.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mask : int</span>
+<span class="sd">            Mask indicating the desired LE events. Setting a bit</span>
+<span class="sd">            to `1` enables the corresponding event. Setting the</span>
+<span class="sd">            bit to `0` disables it.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_le_controller_command</span><span class="p">(</span>
+            <span class="n">OCF</span><span class="o">.</span><span class="n">LE_CONTROLLER</span><span class="o">.</span><span class="n">SET_EVENT_MASK</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span>
+        <span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Analog Devices, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
