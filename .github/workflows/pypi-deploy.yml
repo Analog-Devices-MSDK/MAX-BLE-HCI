@@ -1,7 +1,7 @@
 name: deploy-pypi
 on: [workflow_dispatch]
 jobs:
-  test_linux:
+  deploy:
     name: runner / linux
     runs-on: ubuntu-latest
     steps:
