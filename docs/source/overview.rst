@@ -12,12 +12,17 @@ contains:
     - Convenience functions for many common HCI commands
     - Support for the creation/use of custom vendor-specific commands.
 
-Documentation for the library can be viewed in full in the `API Reference` tab.
+Documentation for the library can be viewed in full in the :doc:`API Reference <modules>` tab.
 
-Host-Controller Interfaces
---------------------------
+Host-Controller Interface
+-------------------------
 
-**Fill later**
+A host controller interface is a thin layer used in BT and BLE which transports
+packets from the host to the controller (commands) and vice versa (events). HCI
+interface is standardized by the `Bluetooth SIG Spec`_.
+
+.. image:: /images/ble_stack_diagram.jpeg
+    :width: 100%
 
 MAX BLE HCI Library Structure
 -----------------------------
@@ -47,7 +52,7 @@ The MAX BLE HCI library is organized into modules as follows:
 
 .. note::
 
-    Not all members of a module are necessarily displayed here. See the `API Reference` tab
+    Not all members of a module are necessarily displayed here. See the :doc:`API Reference <modules>` tab
     to view all members of each library module.
 
 Support Information
@@ -56,6 +61,7 @@ Supported OS
 ````````````
 - Windows
 - Linux
+- MacOS
 
 Supported Parts
 ```````````````
@@ -65,3 +71,5 @@ Supported Parts
     - MAX32690
 - BLE standard commands:
     - Any BLE-enabled chip
+
+.. _`Bluetooth SIG Spec`: https://www.bluetooth.com/specifications/specs/core-specification-5-3/

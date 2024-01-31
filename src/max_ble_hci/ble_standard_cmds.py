@@ -56,13 +56,13 @@ Module contains definitions for BLE standard HCI commands.
 from typing import Optional, Tuple, Union, List
 
 from ._hci_logger import get_formatted_logger
-from ._transport import SerialUartTransport, to_le_nbyte_list
+from ._transport import SerialUartTransport
 from .constants import PhyOption, PayloadOption
 from .data_params import AdvParams, ConnParams, ScanParams
 from .hci_packets import CommandPacket, EventPacket
 from .packet_codes import StatusCode
 from .packet_defs import OCF, OGF
-
+from .utils import to_le_nbyte_list
 
 class BleStandardCmds:
     """Definitions for BLE standard HCI commands.
