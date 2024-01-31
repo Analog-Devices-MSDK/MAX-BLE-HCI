@@ -104,3 +104,55 @@ def get_serial_ports() -> List[str]:
             result.extend(dir_list)
 
     return result
+
+
+def to_le_nbyte_list(value: int, n_bytes: int) -> List[int]:
+    """Create a list of little-endian bytes.
+
+    Converts a multi-byte number into a list of single-byte
+    values. The list is little endian.
+
+    Parameters
+    ----------
+    value : int
+        The multi-byte value that should be converted.
+    n_bytes : int
+        The expected byte length of the given value
+
+    Returns
+    -------
+    List[int]
+        The given value represented as a little endian
+        list of single-byte values. The length is
+        equivalent to the `n_bytes` parameter.
+
+    """
+    little_endian = []
+    for i in range(n_bytes):
+        num_masked = (value & (0xFF << 8 * i)) >> (8 * i)
+        little_endian.append(num_masked)
+    return little_endian
+
+
+def le_list_to_int(nums: List[int]) -> int:
+    """Create an integer from a little-endian list.
+
+    Converts a little-endian list of single byte values
+    to a single multi-byte integer.
+
+    Parameters
+    ----------
+    nums : List[int]
+        List containing single-byte values in little endian
+        byte order.
+
+    Returns
+    -------
+    int
+        The multi-byte value created from the given list.
+
+    """
+    full_num = 0
+    for i, num in enumerate(nums):
+        full_num |= num << 8 * i
+    return full_num

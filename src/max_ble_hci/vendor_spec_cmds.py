@@ -56,7 +56,7 @@ Module contains definitions for ADI vendor-specific HCI commands.
 from typing import Optional, Tuple, Union, Dict, List
 
 from ._hci_logger import get_formatted_logger
-from ._transport import SerialUartTransport, to_le_nbyte_list
+from ._transport import SerialUartTransport
 from .constants import PhyOption, PayloadOption, PubKeyValidateMode, MAX_U32, MAX_U64
 from .data_params import (
     AdvPktStats,
@@ -70,6 +70,7 @@ from .data_params import (
 from .hci_packets import CommandPacket, EventPacket, byte_length
 from .packet_codes import StatusCode
 from .packet_defs import OCF, OGF
+from .utils import to_le_nbyte_list
 
 
 class VendorSpecificCmds:

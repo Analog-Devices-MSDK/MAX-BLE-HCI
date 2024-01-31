@@ -1,3 +1,5 @@
+.. _`API Reference`:
+
 API Reference
 =============
 
@@ -5,11 +7,14 @@ API Reference
    :maxdepth: 1
 
    ble_hci
+   ble_standard
    constants
    data_params
    hci_packets
    packet_codes
    packet_defs
+   utils
+   vendor_spec
 
 Package Contents
 ----------------
