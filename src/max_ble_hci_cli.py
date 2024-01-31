@@ -175,6 +175,9 @@ def main():
     parser = argparse.ArgumentParser(
         description=cli_description, formatter_class=RawTextHelpFormatter
     )
+
+    parser.add_argument("--version", action="version", version="%(prog)s 1.0.0")
+
     parser.add_argument("serial_port", help="Serial port path or COM#")
     parser.add_argument(
         "-b",
@@ -715,7 +718,7 @@ def main():
 
     #### RESET TEST STATS PARSER ####
     reset_test_stats_parser = subparsers.add_parser(
-        "reset_ts",
+        "reset-ts",
         aliases=["rsts"],
         help="Reset accumulated stats from DTM",
         formatter_class=RawTextHelpFormatter,
