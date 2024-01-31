@@ -64,6 +64,7 @@ from .packet_codes import StatusCode
 from .packet_defs import OCF, OGF
 from .utils import to_le_nbyte_list
 
+
 class BleStandardCmds:
     """Definitions for BLE standard HCI commands.
 
