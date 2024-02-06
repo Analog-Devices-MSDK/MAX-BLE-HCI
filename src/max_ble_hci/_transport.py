@@ -368,6 +368,9 @@ class SerialUartTransport:
                     else:
                         pkt = EventPacket.from_bytes(read_data)
                         if pkt.evt_code == EventCode.COMMAND_COMPLETE:
+                            # only need one command event at a time
+                            if self._event_packets:
+                                self._event_packets.pop(0)
                             self._event_packets.append(pkt)
                         elif self.evt_callback:
                             self.evt_callback(pkt)

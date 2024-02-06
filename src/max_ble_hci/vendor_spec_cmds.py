@@ -1762,6 +1762,9 @@ class VendorSpecificCmds:
         )
         rssi = evt.get_return_params(signed=True)
 
+        if rssi == -128:
+            self.logger.warn("RSSI= -128, possible timeout occured")
+
         return rssi, evt.status
 
     def bb_enable(self) -> StatusCode:
