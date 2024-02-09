@@ -68,6 +68,7 @@ SLAVE_HCI_PORT = "/dev/serial/by-id/usb-FTDI_FT231X_USB_UART_D30AKVUY-if00-port0
 def evt_callback(data):
     print(data)
 
+
 def main():
     """MAIN"""
     master = BleHci(MASTER_HCI_PORT, evt_callback=evt_callback)

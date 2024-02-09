@@ -62,7 +62,6 @@ from .packet_codes import EventCode, EventSubcode, StatusCode
 from .packet_defs import OCF, OGF, PacketType
 
 
-
 def byte_length(num: int):
     """Calculate the length of an integer in bytes.
 
