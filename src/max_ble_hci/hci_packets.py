@@ -60,6 +60,7 @@ from .packet_defs import OCF, OGF, PacketType
 from .constants import Endian
 import warnings
 
+
 def byte_length(num: int):
     """Calculate the length of an integer in bytes.
 
@@ -580,7 +581,7 @@ class EventPacket:
                 evt_code=serialized_event[0],
                 length=serialized_event[1],
                 status=serialized_event[2],
-                evt_params=serialized_event[3:]
+                evt_params=serialized_event[3:],
             )
 
         return pkt
