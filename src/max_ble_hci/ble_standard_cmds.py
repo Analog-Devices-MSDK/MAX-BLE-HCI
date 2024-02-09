@@ -239,7 +239,7 @@ class BleStandardCmds:
             The return packet status code.
 
         """
-        return self.send_le_controller_command(OCF.LE_CONTROLLER, params=int(enable))
+        return self.send_le_controller_command(OCF.LE_CONTROLLER.SET_ADV_ENABLE, params=int(enable))
 
     def set_scan_params(self, scan_params: ScanParams = ScanParams()) -> StatusCode:
         """Set test board scanning parameters.

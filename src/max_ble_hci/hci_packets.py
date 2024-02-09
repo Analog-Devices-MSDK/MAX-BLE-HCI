@@ -58,7 +58,7 @@ from typing import List, Optional, Union
 from .packet_codes import EventCode, EventSubcode, StatusCode
 from .packet_defs import OCF, OGF, PacketType
 from .constants import Endian
-
+import warnings
 
 def byte_length(num: int):
     """Calculate the length of an integer in bytes.
@@ -494,9 +494,12 @@ class EventPacket:
         evt_params: bytes,
         evt_subcode: Optional[int] = None,
     ):
-        self.evt_code = EventCode(evt_code)
+        try:
+            self.evt_code = EventCode(evt_code)
+        except ValueError:
+            warnings.warn("unsupported event code", RuntimeWarning)
         self.length = length
-        self.status = StatusCode(status) if status else None
+        self.status = StatusCode(status) if status is not None else None
         self.evt_subcode = EventSubcode(evt_subcode) if evt_subcode else None
         self.evt_params = evt_params
 
@@ -573,7 +576,12 @@ class EventPacket:
                 evt_params=serialized_event[3:],
             )
         else:
-            raise ValueError(f"Invalid event code ({serialized_event[0]}) received.")
+            pkt = EventPacket(
+                evt_code=serialized_event[0],
+                length=serialized_event[1],
+                status=serialized_event[2],
+                evt_params=serialized_event[3:]
+            )
 
         return pkt
 
