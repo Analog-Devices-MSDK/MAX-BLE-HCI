@@ -53,11 +53,11 @@
 Module contains definitions for BLE standard HCI commands.
 """
 # pylint: disable=too-many-arguments
-from typing import Optional, Tuple, Union, List
+from typing import List, Optional, Tuple, Union
 
 from ._hci_logger import get_formatted_logger
 from ._transport import SerialUartTransport
-from .constants import PhyOption, PayloadOption
+from .constants import PayloadOption, PhyOption
 from .data_params import AdvParams, ConnParams, ScanParams
 from .hci_packets import CommandPacket, EventPacket
 from .packet_codes import StatusCode

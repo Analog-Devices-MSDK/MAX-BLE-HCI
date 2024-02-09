@@ -52,13 +52,15 @@
 """Contains objects used for the creation of HCI packets."""
 # pylint: disable=too-many-arguments
 from __future__ import annotations
+
+import warnings
 from enum import Enum
 from typing import List, Optional, Union
 
+from .constants import Endian
 from .packet_codes import EventCode, EventSubcode, StatusCode
 from .packet_defs import OCF, OGF, PacketType
-from .constants import Endian
-import warnings
+
 
 
 def byte_length(num: int):

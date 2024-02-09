@@ -61,14 +61,17 @@ import time
 from ble_hci import BleHci
 
 # Switch out for serial port used to connect over HCI
-MASTER_HCI_PORT = ""
-SLAVE_HCI_PORT = ""
+MASTER_HCI_PORT = "/dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_D3073IDU-if00-port0"
+SLAVE_HCI_PORT = "/dev/serial/by-id/usb-FTDI_FT231X_USB_UART_D30AKVUY-if00-port0"
 
+
+def evt_callback(data):
+    print(data)
 
 def main():
     """MAIN"""
-    master = BleHci(MASTER_HCI_PORT)
-    slave = BleHci(SLAVE_HCI_PORT)
+    master = BleHci(MASTER_HCI_PORT, evt_callback=evt_callback)
+    slave = BleHci(SLAVE_HCI_PORT, evt_callback=evt_callback)
 
     master.reset()
     slave.reset()
@@ -101,3 +104,7 @@ def main():
 
     master.reset()
     slave.reset()
+
+
+if __name__ == "__main__":
+    main()

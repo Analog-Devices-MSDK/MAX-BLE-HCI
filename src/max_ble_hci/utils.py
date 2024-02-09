@@ -56,12 +56,12 @@ Description: Basic utilities to help withe BLE-HCI
 
 """
 
-import sys
-from typing import List
 import glob
 import os
-import serial
+import sys
+from typing import List
 
+import serial
 
 DEFAULT_BAUDRATE = 115200
 

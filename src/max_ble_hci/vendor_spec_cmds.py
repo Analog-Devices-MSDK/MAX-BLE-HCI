@@ -53,11 +53,11 @@
 Module contains definitions for ADI vendor-specific HCI commands.
 """
 # pylint: disable=too-many-lines, too-many-arguments, too-many-public-methods
-from typing import Optional, Tuple, Union, Dict, List
+from typing import Dict, List, Optional, Tuple, Union
 
 from ._hci_logger import get_formatted_logger
 from ._transport import SerialUartTransport
-from .constants import PhyOption, PayloadOption, PubKeyValidateMode, MAX_U32, MAX_U64
+from .constants import MAX_U32, MAX_U64, PayloadOption, PhyOption, PubKeyValidateMode
 from .data_params import (
     AdvPktStats,
     DataPktStats,
@@ -1763,7 +1763,7 @@ class VendorSpecificCmds:
         rssi = evt.get_return_params(signed=True)
 
         if rssi == -128:
-            self.logger.warn("RSSI= -128, possible timeout occured")
+            self.logger.warning("RSSI= -128, possible timeout occured")
 
         return rssi, evt.status
 
