@@ -499,7 +499,11 @@ class EventPacket:
         try:
             self.evt_code = EventCode(evt_code)
         except ValueError:
-            warnings.warn("unsupported event code", RuntimeWarning)
+            warnings.warn(
+                f"Unknown event code {evt_code}. Storing as byte object.",
+                RuntimeWarning,
+            )
+            self.evt_code = evt_code
         self.length = length
         self.status = StatusCode(status) if status is not None else None
         self.evt_subcode = EventSubcode(evt_subcode) if evt_subcode else None
@@ -584,7 +588,6 @@ class EventPacket:
                 status=serialized_event[2],
                 evt_params=serialized_event[3:],
             )
-
         return pkt
 
     def get_return_params(

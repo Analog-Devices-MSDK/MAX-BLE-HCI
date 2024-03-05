@@ -137,7 +137,6 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         self.logger = get_formatted_logger(log_level=log_level, name=logger_name)
         self.retries = retries
         self.timeout = timeout
-
         self._init_ports(port_id, baud, logger_name, async_callback, evt_callback)
         super().__init__(self.port, logger_name)
 
