@@ -56,7 +56,6 @@ from __future__ import annotations
 import warnings
 from enum import Enum
 from typing import List, Optional, Union
-import warnings
 
 from .constants import Endian
 from .packet_codes import EventCode, EventSubcode, StatusCode
