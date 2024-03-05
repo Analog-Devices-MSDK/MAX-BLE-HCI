@@ -50,9 +50,10 @@
 #
 ##############################################################################
 """Contains data classes used for HCI function parameters/returns."""
+from dataclasses import dataclass
+
 # pylint: disable=too-many-arguments,too-many-locals,too-many-instance-attributes
 from typing import Optional
-from dataclasses import dataclass
 
 from .constants import AddrType
 

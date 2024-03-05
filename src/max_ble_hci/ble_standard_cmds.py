@@ -53,11 +53,11 @@
 Module contains definitions for BLE standard HCI commands.
 """
 # pylint: disable=too-many-arguments
-from typing import Optional, Tuple, Union, List
+from typing import List, Optional, Tuple, Union
 
 from ._hci_logger import get_formatted_logger
 from ._transport import SerialUartTransport
-from .constants import PhyOption, PayloadOption
+from .constants import PayloadOption, PhyOption
 from .data_params import AdvParams, ConnParams, ScanParams
 from .hci_packets import CommandPacket, EventPacket
 from .packet_codes import StatusCode
@@ -239,7 +239,9 @@ class BleStandardCmds:
             The return packet status code.
 
         """
-        return self.send_le_controller_command(OCF.LE_CONTROLLER, params=int(enable))
+        return self.send_le_controller_command(
+            OCF.LE_CONTROLLER.SET_ADV_ENABLE, params=int(enable)
+        )
 
     def set_scan_params(self, scan_params: ScanParams = ScanParams()) -> StatusCode:
         """Set test board scanning parameters.

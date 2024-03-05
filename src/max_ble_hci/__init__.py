@@ -111,9 +111,5 @@ Create an HCI, set log level to `'ERROR'`:
     hci = BleHci(port, log_level='ERROR')
 
 """
+from . import constants, data_params, hci_packets, packet_codes, packet_defs
 from .ble_hci import BleHci
-from . import constants
-from . import data_params
-from . import hci_packets
-from . import packet_codes
-from . import packet_defs

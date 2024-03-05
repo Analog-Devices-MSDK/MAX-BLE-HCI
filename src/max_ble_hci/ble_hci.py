@@ -54,14 +54,14 @@
 import logging
 from typing import Any, Callable, Optional, Union
 
-from .ble_standard_cmds import BleStandardCmds
 from ._hci_logger import get_formatted_logger
 from ._transport import SerialUartTransport
-from .vendor_spec_cmds import VendorSpecificCmds
+from .ble_standard_cmds import BleStandardCmds
+from .constants import ADI_PORT_BAUD_RATE
 from .data_params import AdvParams, ConnParams
 from .hci_packets import AsyncPacket, CommandPacket, EventPacket
 from .packet_codes import StatusCode
-from .constants import ADI_PORT_BAUD_RATE
+from .vendor_spec_cmds import VendorSpecificCmds
 
 
 class BleHci(BleStandardCmds, VendorSpecificCmds):

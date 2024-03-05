@@ -52,13 +52,15 @@
 """Contains objects used for the creation of HCI packets."""
 # pylint: disable=too-many-arguments
 from __future__ import annotations
+
+import warnings
 from enum import Enum
 from typing import List, Optional, Union
 import warnings
 
+from .constants import Endian
 from .packet_codes import EventCode, EventSubcode, StatusCode
 from .packet_defs import OCF, OGF, PacketType
-from .constants import Endian
 
 
 def byte_length(num: int):
@@ -501,7 +503,7 @@ class EventPacket:
             warnings.warn(f"Unknown event code {evt_code}. Storing as byte object.", RuntimeWarning)
             self.evt_code = evt_code
         self.length = length
-        self.status = StatusCode(status) if status else None
+        self.status = StatusCode(status) if status is not None else None
         self.evt_subcode = EventSubcode(evt_subcode) if evt_subcode else None
         self.evt_params = evt_params
 

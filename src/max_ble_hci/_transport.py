@@ -52,22 +52,23 @@
 """
 Contains serial port functionality for the HCI implementation.
 """
-# pylint: disable=too-many-instance-attributes, too-many-arguments
-from typing import Optional, Callable, Any
-from multiprocessing import Process
-from threading import Event, Lock, Thread
-import sys
 import datetime
+import sys
 import time
 import weakref
+from multiprocessing import Process
+from threading import Event, Lock, Thread
+
+# pylint: disable=too-many-instance-attributes, too-many-arguments
+from typing import Any, Callable, Optional
 
 import serial
 
 from ._hci_logger import get_formatted_logger
+from .constants import ADI_PORT_BAUD_RATE
 from .hci_packets import AsyncPacket, CommandPacket, EventPacket
 from .packet_codes import EventCode
 from .packet_defs import PacketType
-from .constants import ADI_PORT_BAUD_RATE
 
 
 class SerialUartTransport:
@@ -367,7 +368,13 @@ class SerialUartTransport:
                         self.async_callback(AsyncPacket.from_bytes(read_data))
                     else:
                         pkt = EventPacket.from_bytes(read_data)
-                        if pkt.evt_code == EventCode.COMMAND_COMPLETE:
+                        if pkt.evt_code in {
+                            EventCode.COMMAND_COMPLETE,
+                            EventCode.COMMAND_STATUS,
+                        }:
+                            # only need one command event at a time
+                            if self._event_packets:
+                                self._event_packets.pop(0)
                             self._event_packets.append(pkt)
                         elif self.evt_callback:
                             self.evt_callback(pkt)
