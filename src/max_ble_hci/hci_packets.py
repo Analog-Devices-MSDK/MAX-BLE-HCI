@@ -54,6 +54,7 @@
 from __future__ import annotations
 from enum import Enum
 from typing import List, Optional, Union
+import warnings
 
 from .packet_codes import EventCode, EventSubcode, StatusCode
 from .packet_defs import OCF, OGF, PacketType
@@ -494,7 +495,11 @@ class EventPacket:
         evt_params: bytes,
         evt_subcode: Optional[int] = None,
     ):
-        self.evt_code = EventCode(evt_code)
+        try:
+            self.evt_code = EventCode(evt_code)
+        except ValueError:
+            warnings.warn(f"Unknown event code {evt_code}. Storing as byte object.", RuntimeWarning)
+            self.evt_code = evt_code
         self.length = length
         self.status = StatusCode(status) if status else None
         self.evt_subcode = EventSubcode(evt_subcode) if evt_subcode else None
@@ -573,8 +578,12 @@ class EventPacket:
                 evt_params=serialized_event[3:],
             )
         else:
-            raise ValueError(f"Invalid event code ({serialized_event[0]}) received.")
-
+            pkt = EventPacket(
+                evt_code=serialized_event[0],
+                length=serialized_event[1],
+                status=serialized_event[2],
+                evt_params=serialized_event[3:]
+            )
         return pkt
 
     def get_return_params(
