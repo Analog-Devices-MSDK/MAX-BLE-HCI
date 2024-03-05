@@ -181,14 +181,14 @@ class SerialUartTransport:
         with self._port_lock:
             self.stop()
             self.port.close()
-            getattr(SerialUartTransport, 'instances').pop(self.port_id)
+            getattr(SerialUartTransport, "instances").pop(self.port_id)
 
     def __del__(self):
         if self._read_thread and self._read_thread.is_alive():
             self.stop()
         if self.port and self.port.isOpen():
             self.port.close()
-            getattr(SerialUartTransport, 'instances').pop(self.port_id)
+            getattr(SerialUartTransport, "instances").pop(self.port_id)
 
     def start(self):
         """Start the port read thread.
@@ -222,7 +222,7 @@ class SerialUartTransport:
         if self.port.is_open:
             self.port.flush()
             self.port.close()
-            getattr(SerialUartTransport, 'instances').pop(self.port_id)
+            getattr(SerialUartTransport, "instances").pop(self.port_id)
 
     def send_command(
         self, pkt: CommandPacket, timeout: Optional[float] = None
