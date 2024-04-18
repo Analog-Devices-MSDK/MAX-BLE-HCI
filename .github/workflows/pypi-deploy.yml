@@ -12,6 +12,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - run: |
           set -e
+          python3 -m pip install --upgrade twine
           sudo chmod +x install.sh
           ./install.sh
           python3 -m twine upload --repository testpypi dist/*
