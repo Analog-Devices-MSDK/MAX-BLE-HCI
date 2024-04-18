@@ -321,7 +321,7 @@ class VendorSpecificCmds:
         if isinstance(phy, PhyOption):
             phy = phy.value
 
-        params = [channel, packet_len, payload.value, phy.value]
+        params = [channel, packet_len, payload, phy]
         params.extend(to_le_nbyte_list(num_packets, 2))
         return self.send_vs_command(OCF.VENDOR_SPEC.TX_TEST, params=params)
 
@@ -376,7 +376,7 @@ class VendorSpecificCmds:
         if isinstance(phy, PhyOption):
             phy = phy.value
 
-        params = [channel, phy.value, modulation_idx]
+        params = [channel, phy, modulation_idx]
         params.extend(to_le_nbyte_list(num_packets, 2))
         return self.send_vs_command(OCF.VENDOR_SPEC.RX_TEST, params=params)
 
