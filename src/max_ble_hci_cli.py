@@ -71,7 +71,10 @@ except ImportError:
 import sys
 from argparse import RawTextHelpFormatter
 
+# pylint: disable=import-error
 from colorlog import ColoredFormatter
+
+# pylint: enable=import-error
 
 from max_ble_hci import BleHci
 from max_ble_hci.constants import PhyOption, PayloadOption
@@ -187,6 +190,14 @@ def main():
         default=DEFAULT_BAUD,
         help="Serial port baud rate. Default: " + str(DEFAULT_BAUD),
     )
+
+    parser.add_argument(
+        "-efc",
+        "--enable-flow-control",
+        action="store_false",
+        default=False,
+        help="Serial port baud rate. Default: " + str(DEFAULT_BAUD),
+    )
     parser.add_argument(
         "-m",
         "--monitor-trace-port",
@@ -233,6 +244,7 @@ def main():
         id_tag=args.idtag,
         async_callback=print,
         evt_callback=print,
+        flowcontrol=args.enable_flow_control,
     )
     hci.logger.setLevel(args.trace_level)
 

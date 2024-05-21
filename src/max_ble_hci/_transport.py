@@ -154,6 +154,7 @@ class SerialUartTransport:
         async_callback: Optional[Callable[[AsyncPacket], Any]] = None,
         evt_callback: Optional[Callable[[EventPacket], Any]] = None,
         exclusive_port: bool = True,
+        flowcontrol: bool = False,
     ):
         self.port_id = port_id
         self.port = None
@@ -170,7 +171,7 @@ class SerialUartTransport:
         self._data_lock = None
         self._port_lock = None
 
-        self._init_port(port_id, baud, exclusive_port)
+        self._init_port(port_id, baud, exclusive_port, flowcontrol)
         self._init_read_thread()
 
     def __enter__(self):
@@ -311,7 +312,9 @@ class SerialUartTransport:
         self._port_lock = Lock()
         self.start()
 
-    def _init_port(self, port_id: str, baud: int, exclusive: bool) -> None:
+    def _init_port(
+        self, port_id: str, baud: int, exclusive: bool, flowcontrol=False
+    ) -> None:
         """Initializes serial port.
 
         PRIVATE
@@ -324,7 +327,7 @@ class SerialUartTransport:
                 parity=serial.PARITY_NONE,
                 stopbits=serial.STOPBITS_ONE,
                 bytesize=serial.EIGHTBITS,
-                rtscts=False,
+                rtscts=flowcontrol,
                 dsrdtr=False,
                 timeout=2.0,
                 exclusive=exclusive,
