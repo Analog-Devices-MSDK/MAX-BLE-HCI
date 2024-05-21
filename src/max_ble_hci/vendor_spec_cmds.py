@@ -316,12 +316,10 @@ class VendorSpecificCmds:
                 f"Num packets too large ({num_packets}), must be 65535 or less."
             )
 
-        if isinstance(payload, PayloadOption):
-            payload = payload.value
-        if isinstance(phy, PhyOption):
-            phy = phy.value
-
+        payload = payload.value if isinstance(payload, PayloadOption) else payload
+        phy = phy.value if isinstance(phy, PhyOption) else phy
         params = [channel, packet_len, payload, phy]
+
         params.extend(to_le_nbyte_list(num_packets, 2))
         return self.send_vs_command(OCF.VENDOR_SPEC.TX_TEST, params=params)
 
