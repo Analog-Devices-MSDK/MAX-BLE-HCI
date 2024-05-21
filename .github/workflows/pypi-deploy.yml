@@ -5,6 +5,10 @@ jobs:
     name: runner / linux
     runs-on: ubuntu-latest
     steps:
+    - name: build
+      run: |
+        sudo chmod +x install.sh
+        ./install.sh
     - name: Publish package to TestPyPI
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
