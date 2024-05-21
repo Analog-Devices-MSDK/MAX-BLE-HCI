@@ -135,8 +135,8 @@ class SerialUartTransport:
 
         serial_port = kwargs.get("port_id", args[0])
         if serial_port in cls.instances:
-            cls.instances[serial_port].stop()
             cls.instances[serial_port].port.flush()
+            cls.instances[serial_port].stop()
 
         cls.instance = super(SerialUartTransport, cls).__new__(cls)
         cls.instances[serial_port] = cls.instance
