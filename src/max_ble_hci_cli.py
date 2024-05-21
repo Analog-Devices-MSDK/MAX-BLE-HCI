@@ -241,7 +241,7 @@ def main():
         id_tag=args.idtag,
         async_callback=print,
         evt_callback=print,
-        flowcontrol=args.enable_flow_control
+        flowcontrol=args.enable_flow_control,
     )
     hci.logger.setLevel(args.trace_level)
 

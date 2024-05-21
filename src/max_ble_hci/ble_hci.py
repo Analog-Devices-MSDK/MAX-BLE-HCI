@@ -130,7 +130,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         timeout: float = 1.0,
         async_callback: Optional[Callable[[AsyncPacket], Any]] = None,
         evt_callback: Optional[Callable[[EventPacket], Any]] = None,
-        flowcontrol = False
+        flowcontrol=False,
     ):
         self.port_id = port_id
         self.port = None
@@ -138,7 +138,9 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         self.logger = get_formatted_logger(log_level=log_level, name=logger_name)
         self.retries = retries
         self.timeout = timeout
-        self._init_ports(port_id, baud, logger_name, async_callback, evt_callback, flowcontrol)
+        self._init_ports(
+            port_id, baud, logger_name, async_callback, evt_callback, flowcontrol
+        )
         super().__init__(self.port, logger_name)
 
     def get_log_level(self) -> str:
@@ -420,7 +422,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         logger_name: str,
         async_callback: Optional[Callable[[AsyncPacket], Any]],
         evt_callback: Optional[Callable[[EventPacket], Any]],
-        flowcontrol = False
+        flowcontrol=False,
     ) -> None:
         """Initializes serial ports.
 
@@ -436,5 +438,5 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
             timeout=self.timeout,
             async_callback=async_callback,
             evt_callback=evt_callback,
-            flowcontrol=flowcontrol
+            flowcontrol=flowcontrol,
         )
