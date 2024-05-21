@@ -187,6 +187,14 @@ def main():
         default=DEFAULT_BAUD,
         help="Serial port baud rate. Default: " + str(DEFAULT_BAUD),
     )
+
+    parser.add_argument(
+        "-efc",
+        "--enable-flow-control",
+        action="store_false",
+        default=False,
+        help="Serial port baud rate. Default: " + str(DEFAULT_BAUD),
+    )
     parser.add_argument(
         "-m",
         "--monitor-trace-port",
@@ -233,6 +241,7 @@ def main():
         id_tag=args.idtag,
         async_callback=print,
         evt_callback=print,
+        flowcontrol=args.enable_flow_control
     )
     hci.logger.setLevel(args.trace_level)
 
