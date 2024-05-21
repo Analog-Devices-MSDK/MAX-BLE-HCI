@@ -71,9 +71,10 @@ except ImportError:
 import sys
 from argparse import RawTextHelpFormatter
 
-#pylint: disable=import-error
+# pylint: disable=import-error
 from colorlog import ColoredFormatter
-#pylint: enable=import-error
+
+# pylint: enable=import-error
 
 from max_ble_hci import BleHci
 from max_ble_hci.constants import PhyOption, PayloadOption
