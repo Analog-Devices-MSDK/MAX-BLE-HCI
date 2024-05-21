@@ -5,25 +5,28 @@ jobs:
     name: runner / linux
     runs-on: ubuntu-latest
     steps:
-    - name: build
-      run: |
-        sudo chmod +x install.sh
-        ./install.sh
+    # - name: build
+    #   run: |
+    #     pip3 install --upgrade build 
+    #     python3 -m build
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - run: |
+        pip3 install --upgrade build 
+        python3 -m build
+
+        # set -e
+        # python3 -m pip install --upgrade twine
+        # sudo chmod +x install.sh
+        # ./install.sh
+        # python3 -m twine upload --repository testpypi dist/*
+        # python3 -m twine upload --repository pypi dist/*
+        # set +e
     - name: Publish package to TestPyPI
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         password: ${{ secrets.TEST_PYPI_API_TOKEN }}
         repository-url: https://test.pypi.org/legacy/
-    # - uses: actions/checkout@v3
-    # - name: Set up Python ${{ matrix.python-version }}
-    #   uses: actions/setup-python@v3
-    #   with:
-    #     python-version: ${{ matrix.python-version }}
-    # - run: |
-    #       set -e
-    #       python3 -m pip install --upgrade twine
-    #       sudo chmod +x install.sh
-    #       ./install.sh
-    #       python3 -m twine upload --repository testpypi dist/*
-    #       python3 -m twine upload --repository pypi dist/*
-    #       set +e
