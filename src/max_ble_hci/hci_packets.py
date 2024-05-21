@@ -619,6 +619,7 @@ class EventPacket:
             The parsed return parameter(s).
 
         """
+        #pylint: disable=possibly-used-before-assignment
         if self.evt_code == EventCode.COMMAND_COMPLETE:
             param_bytes = self.evt_params[4:]
 
@@ -638,5 +639,7 @@ class EventPacket:
                 int.from_bytes(param_bytes[p_idx : p_idx + p_len], endianness.value)
             )
             p_idx += p_len
+        #pylint: enable=possibly-used-before-assignment
 
         return return_params
+    
