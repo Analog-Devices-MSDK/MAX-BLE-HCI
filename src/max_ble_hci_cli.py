@@ -321,14 +321,13 @@ def main():
         action="store_false",
         help="Disable advertising as a connectable device.",
     )
-    
 
     adv_parser.set_defaults(
         func=lambda args: print(
             hci.start_advertising(
                 connect=args.connect,
                 adv_params=AdvParams(
-                    adv_type= 0 if args.connect else 0x3,
+                    adv_type=0 if args.connect else 0x3,
                     interval_min=args.adv_interval,
                     interval_max=args.adv_interval,
                 ),
@@ -341,9 +340,7 @@ def main():
         help="Stop advertising",
         formatter_class=RawTextHelpFormatter,
     )
-    adv_stop_parser.set_defaults(
-        func=lambda _: print(hci.enable_adv(False))
-    )
+    adv_stop_parser.set_defaults(func=lambda _: print(hci.enable_adv(False)))
 
     #### SCAN PARSER ####
     scan_parser = subparsers.add_parser(
@@ -400,11 +397,11 @@ def main():
     init_parser.set_defaults(
         func=lambda args: print(
             hci.init_connection(
-                #just toggle some bit to get a different address
-                addr= int(args.addr.replace(":", "") ,16) ^ 0xA, 
+                # just toggle some bit to get a different address
+                addr=int(args.addr.replace(":", ""), 16) ^ 0xA,
                 interval=args.conn_interval,
                 sup_timeout=args.sup_timeout,
-                conn_params=ConnParams(peer_addr= int(args.addr.replace(":", "") ,16)),
+                conn_params=ConnParams(peer_addr=int(args.addr.replace(":", ""), 16)),
             )
         )
     )
