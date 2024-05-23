@@ -352,7 +352,6 @@ class SerialUartTransport:
         while not kill_evt.is_set():
             # pylint: disable=consider-using-with
             try:
-        
                 if self.port.in_waiting and self._port_lock.acquire(blocking=False):
                     log_exception = True
                     pkt_type = self.port.read(1)
@@ -374,7 +373,10 @@ class SerialUartTransport:
                     )
 
                     with self._data_lock:
-                        if pkt_type[0] == PacketType.ASYNC.value and self.async_callback:
+                        if (
+                            pkt_type[0] == PacketType.ASYNC.value
+                            and self.async_callback
+                        ):
                             self.async_callback(AsyncPacket.from_bytes(read_data))
                         else:
                             pkt = EventPacket.from_bytes(read_data)
@@ -389,11 +391,9 @@ class SerialUartTransport:
                             elif self.evt_callback:
                                 self.evt_callback(pkt)
             except OSError:
-                
                 if log_exception:
                     self.logger.error("OSError")
                 log_exception = False
-                
 
     def _retrieve(
         self,
