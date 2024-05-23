@@ -2,8 +2,8 @@ name: deploy-pypi
 on: [workflow_dispatch]
 jobs:
   deploy:
-    name: runner / linux
-    runs-on: ubuntu-latest
+    # name: runner / linux
+    runs-on: [self-hosted]
     steps:
     # - name: build
     #   run: |
