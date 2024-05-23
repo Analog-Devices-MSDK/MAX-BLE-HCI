@@ -179,7 +179,7 @@ def main():
         description=cli_description, formatter_class=RawTextHelpFormatter
     )
 
-    parser.add_argument("--version", action="version", version="%(prog)s 1.0.0")
+    parser.add_argument("--version", action="version", version="%(prog)s 1.1.0")
 
     parser.add_argument("serial_port", help="Serial port path or COM#")
     parser.add_argument(
