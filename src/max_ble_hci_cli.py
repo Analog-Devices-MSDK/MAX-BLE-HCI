@@ -179,7 +179,7 @@ def main():
         description=cli_description, formatter_class=RawTextHelpFormatter
     )
 
-    parser.add_argument("--version", action="version", version="%(prog)s 1.0.0")
+    parser.add_argument("--version", action="version", version="%(prog)s 1.1.0")
 
     parser.add_argument("serial_port", help="Serial port path or COM#")
     parser.add_argument(
@@ -302,8 +302,8 @@ def main():
 
     #### ADV PARSER ####
     adv_parser = subparsers.add_parser(
-        "adv",
-        help="Send the advertising commands",
+        "adv-start",
+        help="Start advertising",
         formatter_class=RawTextHelpFormatter,
     )
     adv_parser.add_argument(
@@ -321,18 +321,26 @@ def main():
         action="store_false",
         help="Disable advertising as a connectable device.",
     )
+
     adv_parser.set_defaults(
         func=lambda args: print(
             hci.start_advertising(
                 connect=args.connect,
                 adv_params=AdvParams(
+                    adv_type=0 if args.connect else 0x3,
                     interval_min=args.adv_interval,
                     interval_max=args.adv_interval,
                 ),
-            ),
+            )
         ),
         which="adv",
     )
+    adv_stop_parser = subparsers.add_parser(
+        "adv-stop",
+        help="Stop advertising",
+        formatter_class=RawTextHelpFormatter,
+    )
+    adv_stop_parser.set_defaults(func=lambda _: print(hci.enable_adv(False)))
 
     #### SCAN PARSER ####
     scan_parser = subparsers.add_parser(
@@ -389,10 +397,11 @@ def main():
     init_parser.set_defaults(
         func=lambda args: print(
             hci.init_connection(
-                args.addr,
+                # just toggle some bit to get a different address
+                addr=int(args.addr.replace(":", ""), 16) ^ 0xA,
                 interval=args.conn_interval,
                 sup_timeout=args.sup_timeout,
-                conn_params=ConnParams(peer_addr=args.addr),
+                conn_params=ConnParams(peer_addr=int(args.addr.replace(":", ""), 16)),
             )
         )
     )

@@ -241,6 +241,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         if adv_params is None:
             adv_type = 0 if connect else 3
             adv_params = AdvParams(adv_type=adv_type)
+
         self.set_adv_params(adv_params)
 
         status = self.enable_adv(True)
@@ -288,6 +289,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
             If `addr` is more than 6 bytes in size.
 
         """
+        print(addr)
         if conn_params is None:
             if addr is None:
                 raise ValueError(

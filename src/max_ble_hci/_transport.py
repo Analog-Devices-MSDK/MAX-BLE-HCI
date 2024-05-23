@@ -348,42 +348,52 @@ class SerialUartTransport:
         PRIVATE
 
         """
+        log_exception = True
         while not kill_evt.is_set():
             # pylint: disable=consider-using-with
-            if self.port.in_waiting and self._port_lock.acquire(blocking=False):
-                pkt_type = self.port.read(1)
-                if pkt_type[0] == PacketType.ASYNC.value:
-                    read_data = self.port.read(4)
-                    data_len = read_data[2] | (read_data[3] << 8)
-                else:
-                    read_data = self.port.read(2)
-                    data_len = read_data[1]
-
-                read_data += self.port.read(data_len)
-                self._port_lock.release()
-                self.logger.info(
-                    "%s  %s<%02X%s",
-                    datetime.datetime.now(),
-                    self.id_tag,
-                    pkt_type[0],
-                    read_data.hex(),
-                )
-
-                with self._data_lock:
-                    if pkt_type[0] == PacketType.ASYNC.value and self.async_callback:
-                        self.async_callback(AsyncPacket.from_bytes(read_data))
+            try:
+                if self.port.in_waiting and self._port_lock.acquire(blocking=False):
+                    log_exception = True
+                    pkt_type = self.port.read(1)
+                    if pkt_type[0] == PacketType.ASYNC.value:
+                        read_data = self.port.read(4)
+                        data_len = read_data[2] | (read_data[3] << 8)
                     else:
-                        pkt = EventPacket.from_bytes(read_data)
-                        if pkt.evt_code in {
-                            EventCode.COMMAND_COMPLETE,
-                            EventCode.COMMAND_STATUS,
-                        }:
-                            # only need one command event at a time
-                            if self._event_packets:
-                                self._event_packets.pop(0)
-                            self._event_packets.append(pkt)
-                        elif self.evt_callback:
-                            self.evt_callback(pkt)
+                        read_data = self.port.read(2)
+                        data_len = read_data[1]
+
+                    read_data += self.port.read(data_len)
+                    self._port_lock.release()
+                    self.logger.info(
+                        "%s  %s<%02X%s",
+                        datetime.datetime.now(),
+                        self.id_tag,
+                        pkt_type[0],
+                        read_data.hex(),
+                    )
+
+                    with self._data_lock:
+                        if (
+                            pkt_type[0] == PacketType.ASYNC.value
+                            and self.async_callback
+                        ):
+                            self.async_callback(AsyncPacket.from_bytes(read_data))
+                        else:
+                            pkt = EventPacket.from_bytes(read_data)
+                            if pkt.evt_code in {
+                                EventCode.COMMAND_COMPLETE,
+                                EventCode.COMMAND_STATUS,
+                            }:
+                                # only need one command event at a time
+                                if self._event_packets:
+                                    self._event_packets.pop(0)
+                                self._event_packets.append(pkt)
+                            elif self.evt_callback:
+                                self.evt_callback(pkt)
+            except OSError:
+                if log_exception:
+                    self.logger.error("OSError")
+                log_exception = False
 
     def _retrieve(
         self,

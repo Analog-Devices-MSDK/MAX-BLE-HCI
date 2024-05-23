@@ -68,7 +68,7 @@ class AdvParams:
     interval_max: int = 0x60
     """Maximum advertising interval."""
 
-    adv_type: int = 0x3
+    adv_type: int = 0x0
     """Advertising type."""
 
     own_addr_type: AddrType = AddrType.PUBLIC

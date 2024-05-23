@@ -114,6 +114,8 @@ class _CustomFormatter(logging.Formatter):
         logging.CRITICAL: bold_red + format_str + reset,
     }
 
+    precise_time = False
+
     def format(self, record: logging.LogRecord) -> str:
         """Creates and returns formatted log message.
 
@@ -129,11 +131,18 @@ class _CustomFormatter(logging.Formatter):
 
         """
         log_fmt = self.FORMATS.get(record.levelno)
-        formatter = logging.Formatter(log_fmt)
+
+        if not self.precise_time:
+            formatter = logging.Formatter(fmt=log_fmt, datefmt="%Y-%m-%d %H:%M:%S")
+        else:
+            formatter = logging.Formatter(fmt=log_fmt)
+
         return formatter.format(record)
 
 
-def get_formatted_logger(log_level=logging.INFO, name="BLE-HCI") -> logging.Logger:
+def get_formatted_logger(
+    log_level=logging.INFO, name="BLE-HCI", precise_time=False
+) -> logging.Logger:
     """Retrieves logger with basic custom format.
 
     The custom formatted logger applies basic coloring
@@ -155,7 +164,11 @@ def get_formatted_logger(log_level=logging.INFO, name="BLE-HCI") -> logging.Logg
 
     custom_handler = logging.StreamHandler()
     custom_handler.setLevel(log_level)
-    custom_handler.setFormatter(_CustomFormatter())
+
+    formatter = _CustomFormatter()
+    formatter.precise_time = precise_time
+
+    custom_handler.setFormatter(formatter)
 
     if not logger.handlers:
         logger.addHandler(custom_handler)
