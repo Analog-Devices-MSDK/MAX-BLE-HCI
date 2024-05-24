@@ -179,7 +179,7 @@ def main():
         description=cli_description, formatter_class=RawTextHelpFormatter
     )
 
-    parser.add_argument("--version", action="version", version="%(prog)s 1.1.0")
+    parser.add_argument("--version", action="version", version="%(prog)s 1.1.1")
 
     parser.add_argument("serial_port", help="Serial port path or COM#")
     parser.add_argument(
@@ -245,6 +245,7 @@ def main():
         async_callback=print,
         evt_callback=print,
         flowcontrol=args.enable_flow_control,
+        recover_on_power_loss=True,
     )
     hci.logger.setLevel(args.trace_level)
 
@@ -316,6 +317,9 @@ def main():
         Default: 0x{DEFAULT_ADV_INTERVAL}""",
     )
     adv_parser.add_argument(
+        "-n", "--name", type=str, default="", help="Advertising name"
+    )
+    adv_parser.add_argument(
         "--no-connect",
         dest="connect",
         action="store_false",
@@ -331,6 +335,7 @@ def main():
                     interval_min=args.adv_interval,
                     interval_max=args.adv_interval,
                 ),
+                adv_name=args.name,
             )
         ),
         which="adv",
@@ -398,7 +403,7 @@ def main():
         func=lambda args: print(
             hci.init_connection(
                 # just toggle some bit to get a different address
-                addr=int(args.addr.replace(":", ""), 16) ^ 0xA,
+                addr=int(args.addr[::-1].replace(":", ""), 16),
                 interval=args.conn_interval,
                 sup_timeout=args.sup_timeout,
                 conn_params=ConnParams(peer_addr=int(args.addr.replace(":", ""), 16)),

@@ -62,6 +62,7 @@ from .data_params import AdvParams, ConnParams
 from .hci_packets import AsyncPacket, CommandPacket, EventPacket
 from .packet_codes import StatusCode
 from .vendor_spec_cmds import VendorSpecificCmds
+from .ad_types import ADTypes
 
 
 class BleHci(BleStandardCmds, VendorSpecificCmds):
@@ -131,6 +132,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         async_callback: Optional[Callable[[AsyncPacket], Any]] = None,
         evt_callback: Optional[Callable[[EventPacket], Any]] = None,
         flowcontrol=False,
+        recover_on_power_loss=False,
     ):
         self.port_id = port_id
         self.port = None
@@ -139,7 +141,13 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         self.retries = retries
         self.timeout = timeout
         self._init_ports(
-            port_id, baud, logger_name, async_callback, evt_callback, flowcontrol
+            port_id,
+            baud,
+            logger_name,
+            async_callback,
+            evt_callback,
+            flowcontrol,
+            recover_on_power_loss,
         )
         super().__init__(self.port, logger_name)
 
@@ -204,8 +212,45 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
                 "Invalid log level string: %s, level set to 'logging.NOTSET'", ll_str
             )
 
+    def set_local_adv_name(self, adv_name: str, complete=True) -> StatusCode:
+        """_summary_
+
+        Parameters
+        ----------
+        adv_name : str
+            Namem of device to advertise
+        complete : bool, optional
+            Use complete local name or shortened local name as defined by the BLE Spec,
+            by default True
+
+        Returns
+        -------
+        StatusCode
+            Status
+
+        Raises
+        ------
+        ValueError
+            If advertising name is empty
+        """
+        if adv_name == "":
+            raise ValueError("Name cannot be an empty string")
+
+        ad_type = (
+            ADTypes.LOCAL_NAME_COMPLETE.value
+            if complete
+            else ADTypes.LOCAL_NAME_SHORT.value
+        )
+
+        data = [len(adv_name) + 1, ad_type]
+
+        for char in adv_name:
+            data.append(ord(char))
+
+        return self.set_adv_data(data)
+
     def start_advertising(
-        self, connect: bool = True, adv_params: Optional[AdvParams] = None
+        self, connect: bool = True, adv_params: Optional[AdvParams] = None, adv_name=""
     ) -> StatusCode:
         """Start advertising.
 
@@ -235,14 +280,28 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
 
         """
 
-        self.reset_connection_stats()
-        self.set_default_phy(all_phys=0, tx_phys=7, rx_phys=7)
+        status = self.reset_connection_stats()
+
+        if status != StatusCode.SUCCESS:
+            self.logger.warning("Failed to reset connection stats")
+
+        status = self.set_default_phy(all_phys=0, tx_phys=7, rx_phys=7)
+        if status != StatusCode.SUCCESS:
+            self.logger.warning("Failed to set default PHY")
 
         if adv_params is None:
             adv_type = 0 if connect else 3
             adv_params = AdvParams(adv_type=adv_type)
 
-        self.set_adv_params(adv_params)
+        status = self.set_adv_params(adv_params)
+
+        if status != StatusCode.SUCCESS:
+            self.logger.warning("Failed to set advertising parameters")
+
+        if adv_name != "":
+            status = self.set_local_adv_name(adv_name)
+            if status != StatusCode.SUCCESS:
+                self.logger.warning("Failed to set advertising name")
 
         status = self.enable_adv(True)
 
@@ -425,6 +484,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         async_callback: Optional[Callable[[AsyncPacket], Any]],
         evt_callback: Optional[Callable[[EventPacket], Any]],
         flowcontrol=False,
+        recover_on_power_loss=False,
     ) -> None:
         """Initializes serial ports.
 
@@ -441,4 +501,5 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
             async_callback=async_callback,
             evt_callback=evt_callback,
             flowcontrol=flowcontrol,
+            recover_on_power_loss=recover_on_power_loss,
         )

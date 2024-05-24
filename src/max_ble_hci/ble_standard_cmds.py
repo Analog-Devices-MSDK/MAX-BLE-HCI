@@ -62,7 +62,7 @@ from .data_params import AdvParams, ConnParams, ScanParams
 from .hci_packets import CommandPacket, EventPacket
 from .packet_codes import StatusCode
 from .packet_defs import OCF, OGF
-from .utils import to_le_nbyte_list
+from .utils import to_le_nbyte_list, can_represent_as_bytes
 
 
 class BleStandardCmds:
@@ -187,6 +187,58 @@ class BleStandardCmds:
             return self.port.send_command(cmd)
 
         return self.port.send_command(cmd).status
+
+    def set_adv_data(self, data: list) -> StatusCode:
+        """Set advertising data
+
+        Parameters
+        ----------
+        data : list
+            data to advertise
+
+        Returns
+        -------
+        StatusCode
+            Status
+
+        Raises
+        ------
+        ValueError
+            If advertising data cannot be represented in 31 octets or less
+        """
+        if not can_represent_as_bytes(data) or len(data) > 31:
+            raise ValueError("Advertising data length can be up to 31 octets")
+
+        params = [len(data)] + data
+        return self.send_le_controller_command(
+            OCF.LE_CONTROLLER.SET_ADV_DATA, params=params
+        )
+
+    def set_scan_resp_data(self, data: list) -> StatusCode:
+        """Set advertising data
+
+        Parameters
+        ----------
+        data : list
+            data to respond with on scan requests
+
+        Returns
+        -------
+        StatusCode
+            Status
+
+        Raises
+        ------
+        ValueError
+            If scan request data cannot be represented in 31 octets or less
+        """
+        if not can_represent_as_bytes(data) or len(data) > 31:
+            raise ValueError("Advertising data length can be up to 31 octets")
+
+        params = [len(data)] + data
+        return self.send_le_controller_command(
+            OCF.LE_CONTROLLER.SET_SCAN_RESP_DATA, params=params
+        )
 
     def set_adv_params(self, adv_params: AdvParams = AdvParams()) -> StatusCode:
         """Set test board advertising parameters.

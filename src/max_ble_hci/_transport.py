@@ -155,6 +155,7 @@ class SerialUartTransport:
         evt_callback: Optional[Callable[[EventPacket], Any]] = None,
         exclusive_port: bool = True,
         flowcontrol: bool = False,
+        recover_on_power_loss=False,
     ):
         self.port_id = port_id
         self.port = None
@@ -164,12 +165,17 @@ class SerialUartTransport:
         self.timeout = timeout
         self.async_callback = async_callback
         self.evt_callback = evt_callback
+        self.recover_on_power_loss = recover_on_power_loss
 
         self._event_packets = []
         self._read_thread = None
         self._kill_evt = None
         self._data_lock = None
         self._port_lock = None
+
+        self.baud = baud
+        self.exclusive_port = exclusive_port
+        self.flowcontrol = flowcontrol
 
         self._init_port(port_id, baud, exclusive_port, flowcontrol)
         self._init_read_thread()
@@ -342,18 +348,40 @@ class SerialUartTransport:
             self.logger.error("%s: %s", type(err).__name__, err)
             sys.exit(1)
 
+    def _recover_power_loss(self):
+        self.port = None
+
+        while True:
+            try:
+                self.port = serial.Serial(
+                    port=self.port_id,
+                    baudrate=self.baud,
+                    parity=serial.PARITY_NONE,
+                    stopbits=serial.STOPBITS_ONE,
+                    bytesize=serial.EIGHTBITS,
+                    rtscts=self.flowcontrol,
+                    dsrdtr=False,
+                    timeout=2.0,
+                    exclusive=self.exclusive_port,
+                )
+
+                break
+            except serial.SerialException:
+                pass
+
+        self.logger.info("Device reconnected")
+
     def _read(self, kill_evt: Event) -> None:
         """Process executed by the port read thread.
 
         PRIVATE
 
         """
-        log_exception = True
+
         while not kill_evt.is_set():
             # pylint: disable=consider-using-with
             try:
                 if self.port.in_waiting and self._port_lock.acquire(blocking=False):
-                    log_exception = True
                     pkt_type = self.port.read(1)
                     if pkt_type[0] == PacketType.ASYNC.value:
                         read_data = self.port.read(4)
@@ -390,10 +418,12 @@ class SerialUartTransport:
                                 self._event_packets.append(pkt)
                             elif self.evt_callback:
                                 self.evt_callback(pkt)
-            except OSError:
-                if log_exception:
-                    self.logger.error("OSError")
-                log_exception = False
+            except OSError as err:
+                if not self.recover_on_power_loss:
+                    raise err
+
+                self.logger.error("Device lost! Waiting for reconnection.")
+                self._recover_power_loss()
 
     def _retrieve(
         self,
@@ -435,11 +465,12 @@ class SerialUartTransport:
         """
 
         tries = self.retries
-        self.logger.info("%s  %s>%s", datetime.datetime.now(), self.id_tag, pkt.hex())
         timeout_err = None
 
         self.port.flush()
         self.port.write(pkt)
+
+        self.logger.info("%s  %s>%s", datetime.datetime.now(), self.id_tag, pkt.hex())
 
         while tries >= 0 and self._read_thread.is_alive():
             try:
