@@ -131,6 +131,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         async_callback: Optional[Callable[[AsyncPacket], Any]] = None,
         evt_callback: Optional[Callable[[EventPacket], Any]] = None,
         flowcontrol=False,
+        recover_on_power_loss = False
     ):
         self.port_id = port_id
         self.port = None
@@ -139,7 +140,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         self.retries = retries
         self.timeout = timeout
         self._init_ports(
-            port_id, baud, logger_name, async_callback, evt_callback, flowcontrol
+            port_id, baud, logger_name, async_callback, evt_callback, flowcontrol, recover_on_power_loss
         )
         super().__init__(self.port, logger_name)
 
@@ -425,6 +426,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         async_callback: Optional[Callable[[AsyncPacket], Any]],
         evt_callback: Optional[Callable[[EventPacket], Any]],
         flowcontrol=False,
+        recover_on_power_loss=False
     ) -> None:
         """Initializes serial ports.
 
@@ -441,4 +443,5 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
             async_callback=async_callback,
             evt_callback=evt_callback,
             flowcontrol=flowcontrol,
+            recover_on_power_loss=recover_on_power_loss
         )
