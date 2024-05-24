@@ -130,16 +130,16 @@
 <span class="sd">Module contains definitions for BLE standard HCI commands.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1"># pylint: disable=too-many-arguments</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">._hci_logger</span> <span class="kn">import</span> <span class="n">get_formatted_logger</span>
 <span class="kn">from</span> <span class="nn">._transport</span> <span class="kn">import</span> <span class="n">SerialUartTransport</span>
-<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">PhyOption</span><span class="p">,</span> <span class="n">PayloadOption</span>
+<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">PayloadOption</span><span class="p">,</span> <span class="n">PhyOption</span>
 <span class="kn">from</span> <span class="nn">.data_params</span> <span class="kn">import</span> <span class="n">AdvParams</span><span class="p">,</span> <span class="n">ConnParams</span><span class="p">,</span> <span class="n">ScanParams</span>
 <span class="kn">from</span> <span class="nn">.hci_packets</span> <span class="kn">import</span> <span class="n">CommandPacket</span><span class="p">,</span> <span class="n">EventPacket</span>
 <span class="kn">from</span> <span class="nn">.packet_codes</span> <span class="kn">import</span> <span class="n">StatusCode</span>
 <span class="kn">from</span> <span class="nn">.packet_defs</span> <span class="kn">import</span> <span class="n">OCF</span><span class="p">,</span> <span class="n">OGF</span>
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">to_le_nbyte_list</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">to_le_nbyte_list</span><span class="p">,</span> <span class="n">can_represent_as_bytes</span>
 
 
 <div class="viewcode-block" id="BleStandardCmds"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds">[docs]</a><span class="k">class</span> <span class="nc">BleStandardCmds</span><span class="p">:</span>
@@ -265,6 +265,58 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span><span class="o">.</span><span class="n">status</span></div>
 
+<div class="viewcode-block" id="BleStandardCmds.set_adv_data"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_adv_data">[docs]</a>    <span class="k">def</span> <span class="nf">set_adv_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set advertising data</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : list</span>
+<span class="sd">            data to advertise</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            Status</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If advertising data cannot be represented in 31 octets or less</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">can_represent_as_bytes</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">31</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Advertising data length can be up to 31 octets&quot;</span><span class="p">)</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)]</span> <span class="o">+</span> <span class="n">data</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_le_controller_command</span><span class="p">(</span>
+            <span class="n">OCF</span><span class="o">.</span><span class="n">LE_CONTROLLER</span><span class="o">.</span><span class="n">SET_ADV_DATA</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BleStandardCmds.set_scan_resp_data"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_scan_resp_data">[docs]</a>    <span class="k">def</span> <span class="nf">set_scan_resp_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set advertising data</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : list</span>
+<span class="sd">            data to respond with on scan requests</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            Status</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If scan request data cannot be represented in 31 octets or less</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">can_represent_as_bytes</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">31</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Advertising data length can be up to 31 octets&quot;</span><span class="p">)</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)]</span> <span class="o">+</span> <span class="n">data</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_le_controller_command</span><span class="p">(</span>
+            <span class="n">OCF</span><span class="o">.</span><span class="n">LE_CONTROLLER</span><span class="o">.</span><span class="n">SET_SCAN_RESP_DATA</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span>
+        <span class="p">)</span></div>
+
 <div class="viewcode-block" id="BleStandardCmds.set_adv_params"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_adv_params">[docs]</a>    <span class="k">def</span> <span class="nf">set_adv_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">adv_params</span><span class="p">:</span> <span class="n">AdvParams</span> <span class="o">=</span> <span class="n">AdvParams</span><span class="p">())</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set test board advertising parameters.</span>
 
@@ -316,7 +368,9 @@
 <span class="sd">            The return packet status code.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_le_controller_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">LE_CONTROLLER</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">enable</span><span class="p">))</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_le_controller_command</span><span class="p">(</span>
+            <span class="n">OCF</span><span class="o">.</span><span class="n">LE_CONTROLLER</span><span class="o">.</span><span class="n">SET_ADV_ENABLE</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">enable</span><span class="p">)</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="BleStandardCmds.set_scan_params"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_scan_params">[docs]</a>    <span class="k">def</span> <span class="nf">set_scan_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scan_params</span><span class="p">:</span> <span class="n">ScanParams</span> <span class="o">=</span> <span class="n">ScanParams</span><span class="p">())</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set test board scanning parameters.</span>

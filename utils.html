@@ -58,6 +58,7 @@
 <li class="toctree-l2"><a class="reference internal" href="packet_codes.html">max_ble_hci.packet_codes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="packet_defs.html">max_ble_hci.packet_defs</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">max_ble_hci.utils</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.utils.can_represent_as_bytes"><code class="docutils literal notranslate"><span class="pre">can_represent_as_bytes()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.utils.get_serial_ports"><code class="docutils literal notranslate"><span class="pre">get_serial_ports()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.utils.le_list_to_int"><code class="docutils literal notranslate"><span class="pre">le_list_to_int()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.utils.to_le_nbyte_list"><code class="docutils literal notranslate"><span class="pre">to_le_nbyte_list()</span></code></a></li>
@@ -99,6 +100,23 @@
 <span id="max-ble-hci-utils"></span><h1>max_ble_hci.utils<a class="headerlink" href="#module-max_ble_hci.utils" title="Permalink to this heading"></a></h1>
 <p>utils.py</p>
 <p>Description: Basic utilities to help withe BLE-HCI</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="max_ble_hci.utils.can_represent_as_bytes">
+<span class="sig-name descname"><span class="pre">can_represent_as_bytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/max_ble_hci/utils.html#can_represent_as_bytes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.utils.can_represent_as_bytes" title="Permalink to this definition"></a></dt>
+<dd><p>Check whether all data can be represented by 1 byte</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>list</em>) – data to check</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if all data is 1 byte or less</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="max_ble_hci.utils.get_serial_ports">
 <span class="sig-name descname"><span class="pre">get_serial_ports</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/max_ble_hci/utils.html#get_serial_ports"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.utils.get_serial_ports" title="Permalink to this definition"></a></dt>

@@ -130,11 +130,11 @@
 <span class="sd">Module contains definitions for ADI vendor-specific HCI commands.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1"># pylint: disable=too-many-lines, too-many-arguments, too-many-public-methods</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">._hci_logger</span> <span class="kn">import</span> <span class="n">get_formatted_logger</span>
 <span class="kn">from</span> <span class="nn">._transport</span> <span class="kn">import</span> <span class="n">SerialUartTransport</span>
-<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">PhyOption</span><span class="p">,</span> <span class="n">PayloadOption</span><span class="p">,</span> <span class="n">PubKeyValidateMode</span><span class="p">,</span> <span class="n">MAX_U32</span><span class="p">,</span> <span class="n">MAX_U64</span>
+<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">MAX_U32</span><span class="p">,</span> <span class="n">MAX_U64</span><span class="p">,</span> <span class="n">PayloadOption</span><span class="p">,</span> <span class="n">PhyOption</span><span class="p">,</span> <span class="n">PubKeyValidateMode</span>
 <span class="kn">from</span> <span class="nn">.data_params</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">AdvPktStats</span><span class="p">,</span>
     <span class="n">DataPktStats</span><span class="p">,</span>
@@ -393,12 +393,10 @@
                 <span class="sa">f</span><span class="s2">&quot;Num packets too large (</span><span class="si">{</span><span class="n">num_packets</span><span class="si">}</span><span class="s2">), must be 65535 or less.&quot;</span>
             <span class="p">)</span>
 
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">PayloadOption</span><span class="p">):</span>
-            <span class="n">payload</span> <span class="o">=</span> <span class="n">payload</span><span class="o">.</span><span class="n">value</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">phy</span><span class="p">,</span> <span class="n">PhyOption</span><span class="p">):</span>
-            <span class="n">phy</span> <span class="o">=</span> <span class="n">phy</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="n">payload</span><span class="o">.</span><span class="n">value</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">PayloadOption</span><span class="p">)</span> <span class="k">else</span> <span class="n">payload</span>
+        <span class="n">phy</span> <span class="o">=</span> <span class="n">phy</span><span class="o">.</span><span class="n">value</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">phy</span><span class="p">,</span> <span class="n">PhyOption</span><span class="p">)</span> <span class="k">else</span> <span class="n">phy</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="n">channel</span><span class="p">,</span> <span class="n">packet_len</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="n">phy</span><span class="p">]</span>
 
-        <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="n">channel</span><span class="p">,</span> <span class="n">packet_len</span><span class="p">,</span> <span class="n">payload</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">phy</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
         <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">num_packets</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">TX_TEST</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
 
@@ -453,7 +451,7 @@
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">phy</span><span class="p">,</span> <span class="n">PhyOption</span><span class="p">):</span>
             <span class="n">phy</span> <span class="o">=</span> <span class="n">phy</span><span class="o">.</span><span class="n">value</span>
 
-        <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="n">channel</span><span class="p">,</span> <span class="n">phy</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">modulation_idx</span><span class="p">]</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="n">channel</span><span class="p">,</span> <span class="n">phy</span><span class="p">,</span> <span class="n">modulation_idx</span><span class="p">]</span>
         <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">num_packets</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">RX_TEST</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
 
@@ -1838,6 +1836,9 @@
             <span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">GET_RSSI</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">channel</span><span class="p">,</span> <span class="n">return_evt</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">)</span>
         <span class="n">rssi</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">get_return_params</span><span class="p">(</span><span class="n">signed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">rssi</span> <span class="o">==</span> <span class="o">-</span><span class="mi">128</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;RSSI= -128, possible timeout occured&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">rssi</span><span class="p">,</span> <span class="n">evt</span><span class="o">.</span><span class="n">status</span></div>
 

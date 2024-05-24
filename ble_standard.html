@@ -65,6 +65,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.send_controller_command"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.send_controller_command()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.send_le_controller_command"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.send_le_controller_command()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.send_link_control_command"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.send_link_control_command()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_adv_data"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.set_adv_data()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_adv_params"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.set_adv_params()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_data_len"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.set_data_len()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_default_phy"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.set_default_phy()</span></code></a></li>
@@ -72,6 +73,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_event_mask_le"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.set_event_mask_le()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_phy"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.set_phy()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_scan_params"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.set_scan_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_scan_resp_data"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.set_scan_resp_data()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.tx_test"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.tx_test()</span></code></a></li>
 </ul>
 </li>
@@ -374,8 +376,28 @@ packet status code.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.set_adv_data">
+<span class="sig-name descname"><span class="pre">set_adv_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.set_adv_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_adv_data" title="Permalink to this definition"></a></dt>
+<dd><p>Set advertising data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>list</em>) – data to advertise</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Status</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If advertising data cannot be represented in 31 octets or less</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.set_adv_params">
-<span class="sig-name descname"><span class="pre">set_adv_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adv_params:</span> <span class="pre">~max_ble_hci.data_params.AdvParams</span> <span class="pre">=</span> <span class="pre">interval_min:</span>&#160; <span class="pre">96</span> <span class="pre">interval_max:</span>&#160; <span class="pre">96</span> <span class="pre">adv_type:</span>&#160; <span class="pre">3</span> <span class="pre">own_addr_type:</span>&#160; <span class="pre">AddrType.PUBLIC</span> <span class="pre">peer_addr_type:</span>&#160; <span class="pre">AddrType.PUBLIC</span> <span class="pre">peer_addr:</span>&#160; <span class="pre">0</span> <span class="pre">channel_map:</span>&#160; <span class="pre">7</span> <span class="pre">filter_policy:</span>&#160; <span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.set_adv_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_adv_params" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">set_adv_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adv_params:</span> <span class="pre">~max_ble_hci.data_params.AdvParams</span> <span class="pre">=</span> <span class="pre">interval_min:</span>&#160; <span class="pre">96</span> <span class="pre">interval_max:</span>&#160; <span class="pre">96</span> <span class="pre">adv_type:</span>&#160; <span class="pre">0</span> <span class="pre">own_addr_type:</span>&#160; <span class="pre">AddrType.PUBLIC</span> <span class="pre">peer_addr_type:</span>&#160; <span class="pre">AddrType.PUBLIC</span> <span class="pre">peer_addr:</span>&#160; <span class="pre">0</span> <span class="pre">channel_map:</span>&#160; <span class="pre">7</span> <span class="pre">filter_policy:</span>&#160; <span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.set_adv_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_adv_params" title="Permalink to this definition"></a></dt>
 <dd><p>Set test board advertising parameters.</p>
 <p>Sends a command to the DUT, telling it to set the advertising
 parameters to the given values.</p>
@@ -532,6 +554,26 @@ parameters to the given values.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.set_scan_resp_data">
+<span class="sig-name descname"><span class="pre">set_scan_resp_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.set_scan_resp_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_scan_resp_data" title="Permalink to this definition"></a></dt>
+<dd><p>Set advertising data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>list</em>) – data to respond with on scan requests</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Status</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If scan request data cannot be represented in 31 octets or less</p>
 </dd>
 </dl>
 </dd></dl>

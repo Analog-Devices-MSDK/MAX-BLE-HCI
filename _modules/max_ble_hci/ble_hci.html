@@ -131,14 +131,15 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">from</span> <span class="nn">.ble_standard_cmds</span> <span class="kn">import</span> <span class="n">BleStandardCmds</span>
 <span class="kn">from</span> <span class="nn">._hci_logger</span> <span class="kn">import</span> <span class="n">get_formatted_logger</span>
 <span class="kn">from</span> <span class="nn">._transport</span> <span class="kn">import</span> <span class="n">SerialUartTransport</span>
-<span class="kn">from</span> <span class="nn">.vendor_spec_cmds</span> <span class="kn">import</span> <span class="n">VendorSpecificCmds</span>
+<span class="kn">from</span> <span class="nn">.ble_standard_cmds</span> <span class="kn">import</span> <span class="n">BleStandardCmds</span>
+<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">ADI_PORT_BAUD_RATE</span>
 <span class="kn">from</span> <span class="nn">.data_params</span> <span class="kn">import</span> <span class="n">AdvParams</span><span class="p">,</span> <span class="n">ConnParams</span>
 <span class="kn">from</span> <span class="nn">.hci_packets</span> <span class="kn">import</span> <span class="n">AsyncPacket</span><span class="p">,</span> <span class="n">CommandPacket</span><span class="p">,</span> <span class="n">EventPacket</span>
 <span class="kn">from</span> <span class="nn">.packet_codes</span> <span class="kn">import</span> <span class="n">StatusCode</span>
-<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">ADI_PORT_BAUD_RATE</span>
+<span class="kn">from</span> <span class="nn">.vendor_spec_cmds</span> <span class="kn">import</span> <span class="n">VendorSpecificCmds</span>
+<span class="kn">from</span> <span class="nn">.ad_types</span> <span class="kn">import</span> <span class="n">ADTypes</span>
 
 
 <div class="viewcode-block" id="BleHci"><a class="viewcode-back" href="../../ble_hci.html#max_ble_hci.ble_hci.BleHci">[docs]</a><span class="k">class</span> <span class="nc">BleHci</span><span class="p">(</span><span class="n">BleStandardCmds</span><span class="p">,</span> <span class="n">VendorSpecificCmds</span><span class="p">):</span>
@@ -207,6 +208,8 @@
         <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
         <span class="n">async_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">AsyncPacket</span><span class="p">],</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">evt_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">EventPacket</span><span class="p">],</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">flowcontrol</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">recover_on_power_loss</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">port_id</span> <span class="o">=</span> <span class="n">port_id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="kc">None</span>
@@ -214,8 +217,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">get_formatted_logger</span><span class="p">(</span><span class="n">log_level</span><span class="o">=</span><span class="n">log_level</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">logger_name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">retries</span> <span class="o">=</span> <span class="n">retries</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_init_ports</span><span class="p">(</span><span class="n">port_id</span><span class="p">,</span> <span class="n">baud</span><span class="p">,</span> <span class="n">logger_name</span><span class="p">,</span> <span class="n">async_callback</span><span class="p">,</span> <span class="n">evt_callback</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_ports</span><span class="p">(</span>
+            <span class="n">port_id</span><span class="p">,</span>
+            <span class="n">baud</span><span class="p">,</span>
+            <span class="n">logger_name</span><span class="p">,</span>
+            <span class="n">async_callback</span><span class="p">,</span>
+            <span class="n">evt_callback</span><span class="p">,</span>
+            <span class="n">flowcontrol</span><span class="p">,</span>
+            <span class="n">recover_on_power_loss</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">,</span> <span class="n">logger_name</span><span class="p">)</span>
 
 <div class="viewcode-block" id="BleHci.get_log_level"><a class="viewcode-back" href="../../ble_hci.html#max_ble_hci.ble_hci.BleHci.get_log_level">[docs]</a>    <span class="k">def</span> <span class="nf">get_log_level</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -279,8 +289,45 @@
                 <span class="s2">&quot;Invalid log level string: </span><span class="si">%s</span><span class="s2">, level set to &#39;logging.NOTSET&#39;&quot;</span><span class="p">,</span> <span class="n">ll_str</span>
             <span class="p">)</span></div>
 
+<div class="viewcode-block" id="BleHci.set_local_adv_name"><a class="viewcode-back" href="../../ble_hci.html#max_ble_hci.ble_hci.BleHci.set_local_adv_name">[docs]</a>    <span class="k">def</span> <span class="nf">set_local_adv_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">adv_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">complete</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;_summary_</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        adv_name : str</span>
+<span class="sd">            Namem of device to advertise</span>
+<span class="sd">        complete : bool, optional</span>
+<span class="sd">            Use complete local name or shortened local name as defined by the BLE Spec,</span>
+<span class="sd">            by default True</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            Status</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If advertising name is empty</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">adv_name</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Name cannot be an empty string&quot;</span><span class="p">)</span>
+
+        <span class="n">ad_type</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">ADTypes</span><span class="o">.</span><span class="n">LOCAL_NAME_COMPLETE</span><span class="o">.</span><span class="n">value</span>
+            <span class="k">if</span> <span class="n">complete</span>
+            <span class="k">else</span> <span class="n">ADTypes</span><span class="o">.</span><span class="n">LOCAL_NAME_SHORT</span><span class="o">.</span><span class="n">value</span>
+        <span class="p">)</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">adv_name</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ad_type</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">adv_name</span><span class="p">:</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">char</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_adv_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="BleHci.start_advertising"><a class="viewcode-back" href="../../ble_hci.html#max_ble_hci.ble_hci.BleHci.start_advertising">[docs]</a>    <span class="k">def</span> <span class="nf">start_advertising</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">connect</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">adv_params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">AdvParams</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">connect</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">adv_params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">AdvParams</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">adv_name</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Start advertising.</span>
 
@@ -310,13 +357,28 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">reset_connection_stats</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_default_phy</span><span class="p">(</span><span class="n">all_phys</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tx_phys</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">rx_phys</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_connection_stats</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">status</span> <span class="o">!=</span> <span class="n">StatusCode</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Failed to reset connection stats&quot;</span><span class="p">)</span>
+
+        <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_default_phy</span><span class="p">(</span><span class="n">all_phys</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tx_phys</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">rx_phys</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">status</span> <span class="o">!=</span> <span class="n">StatusCode</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Failed to set default PHY&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">adv_params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">adv_type</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">connect</span> <span class="k">else</span> <span class="mi">3</span>
             <span class="n">adv_params</span> <span class="o">=</span> <span class="n">AdvParams</span><span class="p">(</span><span class="n">adv_type</span><span class="o">=</span><span class="n">adv_type</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_adv_params</span><span class="p">(</span><span class="n">adv_params</span><span class="p">)</span>
+
+        <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_adv_params</span><span class="p">(</span><span class="n">adv_params</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">status</span> <span class="o">!=</span> <span class="n">StatusCode</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Failed to set advertising parameters&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">adv_name</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_local_adv_name</span><span class="p">(</span><span class="n">adv_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">status</span> <span class="o">!=</span> <span class="n">StatusCode</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Failed to set advertising name&quot;</span><span class="p">)</span>
 
         <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enable_adv</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 
@@ -363,6 +425,7 @@
 <span class="sd">            If `addr` is more than 6 bytes in size.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">conn_params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">addr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
@@ -497,6 +560,8 @@
         <span class="n">logger_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">async_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">AsyncPacket</span><span class="p">],</span> <span class="n">Any</span><span class="p">]],</span>
         <span class="n">evt_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">EventPacket</span><span class="p">],</span> <span class="n">Any</span><span class="p">]],</span>
+        <span class="n">flowcontrol</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">recover_on_power_loss</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes serial ports.</span>
 
@@ -512,6 +577,8 @@
             <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">,</span>
             <span class="n">async_callback</span><span class="o">=</span><span class="n">async_callback</span><span class="p">,</span>
             <span class="n">evt_callback</span><span class="o">=</span><span class="n">evt_callback</span><span class="p">,</span>
+            <span class="n">flowcontrol</span><span class="o">=</span><span class="n">flowcontrol</span><span class="p">,</span>
+            <span class="n">recover_on_power_loss</span><span class="o">=</span><span class="n">recover_on_power_loss</span><span class="p">,</span>
         <span class="p">)</span></div>
 </pre></div>
 
