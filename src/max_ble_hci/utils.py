@@ -158,7 +158,7 @@ def le_list_to_int(nums: List[int]) -> int:
     return full_num
 
 
-def can_represent_as_bytes(data: list[int]) -> bool:
+def can_represent_as_bytes(data: List[int]) -> bool:
     """Check whether all data can be represented by 1 byte
 
     Parameters
