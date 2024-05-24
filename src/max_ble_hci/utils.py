@@ -156,3 +156,23 @@ def le_list_to_int(nums: List[int]) -> int:
     for i, num in enumerate(nums):
         full_num |= num << 8 * i
     return full_num
+
+
+def can_represent_as_bytes(data: list[int]) -> bool:
+    """Check whether all data can be represented by 1 byte
+
+    Parameters
+    ----------
+    data : list
+        data to check
+
+    Returns
+    -------
+    bool
+        True if all data is 1 byte or less
+    """
+    for item in data:
+        if int(item) > 255:
+            return False
+
+    return True
