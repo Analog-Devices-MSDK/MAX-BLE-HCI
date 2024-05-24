@@ -155,7 +155,7 @@ class SerialUartTransport:
         evt_callback: Optional[Callable[[EventPacket], Any]] = None,
         exclusive_port: bool = True,
         flowcontrol: bool = False,
-        recover_on_power_loss = False
+        recover_on_power_loss=False,
     ):
         self.port_id = port_id
         self.port = None
@@ -165,7 +165,7 @@ class SerialUartTransport:
         self.timeout = timeout
         self.async_callback = async_callback
         self.evt_callback = evt_callback
-        self.recover_on_power_loss  = recover_on_power_loss
+        self.recover_on_power_loss = recover_on_power_loss
 
         self._event_packets = []
         self._read_thread = None
@@ -174,7 +174,7 @@ class SerialUartTransport:
         self._port_lock = None
 
         self.baud = baud
-        self.exclusive_port = exclusive_port 
+        self.exclusive_port = exclusive_port
         self.flowcontrol = flowcontrol
 
         self._init_port(port_id, baud, exclusive_port, flowcontrol)
@@ -347,9 +347,8 @@ class SerialUartTransport:
             self.logger.error("Baud rate exception, %i is too large", baud)
             self.logger.error("%s: %s", type(err).__name__, err)
             sys.exit(1)
-    
-    def _recover_power_loss(self):
 
+    def _recover_power_loss(self):
         self.port = None
 
         while True:
@@ -369,10 +368,8 @@ class SerialUartTransport:
                 break
             except serial.SerialException:
                 pass
-                
-        self.logger.info("Device reconnected")
 
-    
+        self.logger.info("Device reconnected")
 
     def _read(self, kill_evt: Event) -> None:
         """Process executed by the port read thread.
@@ -380,12 +377,11 @@ class SerialUartTransport:
         PRIVATE
 
         """
-        
+
         while not kill_evt.is_set():
             # pylint: disable=consider-using-with
             try:
                 if self.port.in_waiting and self._port_lock.acquire(blocking=False):
-        
                     pkt_type = self.port.read(1)
                     if pkt_type[0] == PacketType.ASYNC.value:
                         read_data = self.port.read(4)
@@ -425,11 +421,9 @@ class SerialUartTransport:
             except OSError as err:
                 if not self.recover_on_power_loss:
                     raise err
-                
+
                 self.logger.error("Device lost! Waiting for reconnection.")
                 self._recover_power_loss()
-                
-                
 
     def _retrieve(
         self,
@@ -475,7 +469,7 @@ class SerialUartTransport:
 
         self.port.flush()
         self.port.write(pkt)
-        
+
         self.logger.info("%s  %s>%s", datetime.datetime.now(), self.id_tag, pkt.hex())
 
         while tries >= 0 and self._read_thread.is_alive():

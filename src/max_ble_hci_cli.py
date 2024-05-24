@@ -245,7 +245,7 @@ def main():
         async_callback=print,
         evt_callback=print,
         flowcontrol=args.enable_flow_control,
-        recover_on_power_loss=True
+        recover_on_power_loss=True,
     )
     hci.logger.setLevel(args.trace_level)
 
