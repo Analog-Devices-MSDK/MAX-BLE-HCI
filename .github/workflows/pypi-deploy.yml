@@ -5,6 +5,8 @@ jobs:
     # name: runner / linux
     runs-on: [self-hosted]
     steps:
+    - name: explore
+      run: ls
     - name: Deploy
       run: |
         set -e
