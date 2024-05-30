@@ -473,6 +473,7 @@ def main():
 
     test_stats_parser.set_defaults(func=lambda _: print(hci.get_test_stats()))
 
+
     phy_enable = subparsers.add_parser(
         "bben",
         help="Enable the Baseband Radio (Required for RSSI capture)",
