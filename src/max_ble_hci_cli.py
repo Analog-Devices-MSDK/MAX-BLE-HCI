@@ -514,8 +514,8 @@ def main():
         help="run command via os",
         formatter_class=RawTextHelpFormatter,
     )
-    run_parser.add_argument("run")
-    run_parser.set_defaults(func=lambda args: print(args.ls) and os.system(args.run))
+    run_parser.add_argument("run", nargs="+")
+    run_parser.set_defaults(func=lambda args: os.system(" ".join(args.run)))
 
     def _print_rssi(_args):
         rssi, status = hci.get_rssi_vs(_args.channel)
