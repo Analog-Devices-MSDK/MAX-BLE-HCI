@@ -179,7 +179,7 @@ def main():
         description=cli_description, formatter_class=RawTextHelpFormatter
     )
 
-    parser.add_argument("--version", action="version", version="%(prog)s 1.1.1")
+    parser.add_argument("--version", action="version", version="%(prog)s 1.1.2")
 
     parser.add_argument("serial_port", help="Serial port path or COM#")
     parser.add_argument(
@@ -473,7 +473,6 @@ def main():
 
     test_stats_parser.set_defaults(func=lambda _: print(hci.get_test_stats()))
 
-
     phy_enable = subparsers.add_parser(
         "bben",
         help="Enable the Baseband Radio (Required for RSSI capture)",
@@ -494,6 +493,29 @@ def main():
         formatter_class=RawTextHelpFormatter,
     )
     rssi_parser.add_argument("-c", "--channel", default=0)
+
+    ls_parser = subparsers.add_parser(
+        "ls",
+        help="List directory",
+        formatter_class=RawTextHelpFormatter,
+    )
+    ls_parser.add_argument("ls", default=".")
+    ls_parser.set_defaults(func=lambda args: [print(x) for x in os.listdir(args.ls)])
+
+    pwd_parser = subparsers.add_parser(
+        "pwd",
+        help="print working directory",
+        formatter_class=RawTextHelpFormatter,
+    )
+    pwd_parser.set_defaults(func=lambda args: print(os.getcwd()))
+
+    run_parser = subparsers.add_parser(
+        "run",
+        help="run command via os",
+        formatter_class=RawTextHelpFormatter,
+    )
+    run_parser.add_argument("run")
+    run_parser.set_defaults(func=lambda args: print(args.ls) and os.system(args.run))
 
     def _print_rssi(_args):
         rssi, status = hci.get_rssi_vs(_args.channel)

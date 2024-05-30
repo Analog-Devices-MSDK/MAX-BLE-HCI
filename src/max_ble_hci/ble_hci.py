@@ -348,7 +348,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
             If `addr` is more than 6 bytes in size.
 
         """
-        
+
         if conn_params is None:
             if addr is None:
                 raise ValueError(
