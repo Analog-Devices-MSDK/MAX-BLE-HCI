@@ -310,7 +310,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
 
     def init_connection(
         self,
-        addr: Optional[Union[str,int]] = None,
+        addr: Optional[Union[str, int]] = None,
         interval: int = 0x6,
         sup_timeout: int = 0x64,
         conn_params: Optional[ConnParams] = None,
@@ -357,7 +357,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
                 )
             if isinstance(addr, str):
                 addr = convert_str_address(addr)
-                
+
             if max((addr.bit_length() + 7) // 8, 1) > 6:
                 raise ValueError(
                     f"Address ({addr}) is too large, must be 6 bytes or less."
