@@ -133,8 +133,6 @@ class VendorSpecificCmds:
         return self.port.send_command(cmd).status
 
     def set_address(self, addr: Union[int, str]) -> StatusCode:
-        
-
         """Sets the BD address.
 
         Function sets the chip BD address. Address can be given
