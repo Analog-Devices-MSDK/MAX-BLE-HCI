@@ -70,7 +70,7 @@ from .data_params import (
 from .hci_packets import CommandPacket, EventPacket, byte_length
 from .packet_codes import StatusCode
 from .packet_defs import OCF, OGF
-from .utils import to_le_nbyte_list
+from .utils import to_le_nbyte_list, convert_str_address
 
 
 class VendorSpecificCmds:
@@ -132,7 +132,7 @@ class VendorSpecificCmds:
 
         return self.port.send_command(cmd).status
 
-    def set_address(self, addr: int) -> StatusCode:
+    def set_address(self, addr: Union[int, str]) -> StatusCode:
         """Sets the BD address.
 
         Function sets the chip BD address. Address can be given
@@ -140,8 +140,9 @@ class VendorSpecificCmds:
 
         Parameters
         ----------
-        addr : List[int]
+        addr : Union[int, str]
             Desired BD address.
+            If str, format expected xx:xx:xx:xx:xx
 
         Returns
         -------
@@ -149,6 +150,10 @@ class VendorSpecificCmds:
             The return packet status code.
 
         """
+
+        if isinstance(addr, str):
+            addr = convert_str_address(addr)
+
         params = to_le_nbyte_list(addr, 6)
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_BD_ADDR, params=params)
 

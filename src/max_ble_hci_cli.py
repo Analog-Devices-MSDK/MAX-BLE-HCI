@@ -79,7 +79,7 @@ from colorlog import ColoredFormatter
 from max_ble_hci import BleHci
 from max_ble_hci.constants import PhyOption, PayloadOption
 from max_ble_hci.data_params import ConnParams, AdvParams, ScanParams
-
+from max_ble_hci.utils import convert_str_address
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -179,7 +179,7 @@ def main():
         description=cli_description, formatter_class=RawTextHelpFormatter
     )
 
-    parser.add_argument("--version", action="version", version="%(prog)s 1.1.2")
+    parser.add_argument("--version", action="version", version="%(prog)s 1.1.3")
 
     parser.add_argument("serial_port", help="Serial port path or COM#")
     parser.add_argument(
@@ -289,7 +289,7 @@ def main():
     )
     addr_parser.add_argument("addr", help="Device address, ex: 00:11:22:33:44:55")
     addr_parser.set_defaults(
-        func=lambda args: print(hci.set_address(int(args.addr.replace(":", ""), 16))),
+        func=lambda args: print(hci.set_address(args.addr)),
         which="addr",
     )
 
@@ -402,11 +402,10 @@ def main():
     init_parser.set_defaults(
         func=lambda args: print(
             hci.init_connection(
-                # just toggle some bit to get a different address
-                addr=int(args.addr[::-1].replace(":", ""), 16),
+                addr=convert_str_address(args.addr[::-1]),
                 interval=args.conn_interval,
                 sup_timeout=args.sup_timeout,
-                conn_params=ConnParams(peer_addr=int(args.addr.replace(":", ""), 16)),
+                conn_params=ConnParams(peer_addr=convert_str_address(args.addr)),
             )
         )
     )
