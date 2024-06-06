@@ -176,3 +176,18 @@ def can_represent_as_bytes(data: List[int]) -> bool:
             return False
 
     return True
+
+def convert_str_address(addr:str) -> int:
+    """Convert address as string to integer usable by HCI
+
+    Parameters
+    ----------
+    addr : str
+        Address. Ex: 00:11:22:33:44:55
+
+    Returns
+    -------
+    int
+        Address converted to integer value
+    """
+    return int(addr.replace(":", ""), 16)
