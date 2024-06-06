@@ -289,7 +289,7 @@ def main():
     )
     addr_parser.add_argument("addr", help="Device address, ex: 00:11:22:33:44:55")
     addr_parser.set_defaults(
-        func=lambda args: print(hci.set_address(int(args.addr.replace(":", ""), 16))),
+        func=lambda args: print(hci.set_address(args.addr)),
         which="addr",
     )
 

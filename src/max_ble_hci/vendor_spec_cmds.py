@@ -132,7 +132,9 @@ class VendorSpecificCmds:
 
         return self.port.send_command(cmd).status
 
-    def set_address(self, addr: int) -> StatusCode:
+    def set_address(self, addr: Union[int, str]) -> StatusCode:
+        
+
         """Sets the BD address.
 
         Function sets the chip BD address. Address can be given
@@ -140,8 +142,9 @@ class VendorSpecificCmds:
 
         Parameters
         ----------
-        addr : List[int]
+        addr : Union[int, str]
             Desired BD address.
+            If str, format expected xx:xx:xx:xx:xx
 
         Returns
         -------
@@ -149,6 +152,10 @@ class VendorSpecificCmds:
             The return packet status code.
 
         """
+
+        if isinstance(addr, str):
+            addr = int(addr.replace(":", ""), 16)
+
         params = to_le_nbyte_list(addr, 6)
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_BD_ADDR, params=params)
 
