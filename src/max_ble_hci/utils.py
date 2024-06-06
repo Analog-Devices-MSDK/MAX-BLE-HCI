@@ -177,7 +177,8 @@ def can_represent_as_bytes(data: List[int]) -> bool:
 
     return True
 
-def convert_str_address(addr:str) -> int:
+
+def convert_str_address(addr: str) -> int:
     """Convert address as string to integer usable by HCI
 
     Parameters
