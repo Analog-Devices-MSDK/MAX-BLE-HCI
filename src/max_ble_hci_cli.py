@@ -109,7 +109,7 @@ logger.addHandler(console_handler)
 EXIT_FUNC_MAGIC = 999
 DEFAULT_BAUD = 115200
 DEFAULT_ADV_INTERVAL = 0x60
-DEFAULT_SCAN_INTERVAL = 0x100
+DEFAULT_SCAN_INTERVAL = 0x10
 DEFAULT_CONN_INTERVAL = 0x6  # 7.5 ms
 DEFAULT_SUP_TIMEOUT = 0x64  # 1 s
 
@@ -359,7 +359,7 @@ def main():
         dest="scan_interval",
         type=_hex_int,
         default=DEFAULT_SCAN_INTERVAL,
-        help=f"""Scanning interval in units of 0.625 ms, 16-bit hex number 0x0020 - 0x4000.
+        help=f"""Scanning interval in units of 0.625 ms, 16-bit hex number 0x0004 - 0x4000.
         Default: 0x{DEFAULT_SCAN_INTERVAL}""",
     )
     scan_parser.set_defaults(
