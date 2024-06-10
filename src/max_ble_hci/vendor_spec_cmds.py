@@ -1253,7 +1253,8 @@ class VendorSpecificCmds:
             tx_isr=data[8],
         )
 
-        return stats, evt.status
+        per="PER: "+str(round(1-data[0]/(data[0]+data[1]+data[2]),3))+"%"
+        return stats, evt.status, per
 
     def get_test_stats(self) -> Tuple[DataPktStats, StatusCode]:
         """Get the stats captured during test mode.
