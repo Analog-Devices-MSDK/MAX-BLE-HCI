@@ -783,7 +783,8 @@ def main():
         formatter_class=RawTextHelpFormatter,
     )
     reset_connection_stats_parser.set_defaults(
-        func=lambda _: print(hci.reset_connection_stats()), which="reset-connection-stats"
+        func=lambda _: print(hci.reset_connection_stats()),
+        which="reset-connection-stats",
     )
 
     #### SET PHY PARSER ####
@@ -826,7 +827,15 @@ def main():
         Default: S2""",
     )
     set_phy_parser.set_defaults(
-        func=lambda _: print(hci.set_phy(handle=args.handle,tx_phys=(0x1 << (args.phy-1)), rx_phys=(0x1 << (args.phy-1)),phy_opts=args.phyOption)), which="set-phy"
+        func=lambda _: print(
+            hci.set_phy(
+                handle=args.handle,
+                tx_phys=(0x1 << (args.phy - 1)),
+                rx_phys=(0x1 << (args.phy - 1)),
+                phy_opts=args.phyOption,
+            )
+        ),
+        which="set-phy",
     )
 
     #### TXPOWER PARSER ####
