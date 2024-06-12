@@ -257,8 +257,8 @@ class DataPktStats:
             per = self.per()
             print_lns.append(f"PER: {per:.2f}%")
         except ZeroDivisionError:
-            print_lns.append(f"PER: NaN")
-            pass
+            print_lns.append("PER: NaN")
+            
 
         return "\n".join(print_lns)
 
