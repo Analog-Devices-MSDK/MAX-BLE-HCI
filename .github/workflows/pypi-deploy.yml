@@ -4,7 +4,7 @@ on:
     inputs:
       choice:
         type: choice
-        description: Make a choice
+        description: Version Field
         options:
         - major
         - minor
@@ -18,9 +18,10 @@ jobs:
     - uses: actions/checkout@v3
     - name: Bump Version
       run: |
-        pip install pytoml
-        python3 .github/workflows/scripts/version_update.py pyproject.toml --${{github.event.inputs.choice}}
-        cat pytproject.toml | grep version
+        SCRIPTS=github/workflows/scripts/
+        # pip3 install -r $SCRIPTS/requirements.txt
+        python3 $SCRIPTS/version_update.py pyproject.toml --${{github.event.inputs.choice}}
+        cat pyproject.toml | grep version
     # - name: Deploy
     #   run: |
     #     set +e
