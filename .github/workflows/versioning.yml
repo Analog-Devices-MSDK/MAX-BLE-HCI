@@ -1,0 +1,27 @@
+name: Bump Version
+on: 
+  workflow_dispatch:
+    inputs:
+      choice:
+        type: choice
+        description: Version Field
+        options:
+        - patch
+        - minor
+        - major
+
+jobs:
+  deploy:
+    # name: runner / linux
+    runs-on: [self-hosted]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Bump Version
+      run: |
+        SCRIPTS=.github/workflows/scripts/
+        python3 $SCRIPTS/version_update.py pyproject.toml --${{github.event.inputs.choice}}
+        cat pyproject.toml | grep version
+
+        git add pyproject.toml
+        git commit -m "version bump"
+        git push

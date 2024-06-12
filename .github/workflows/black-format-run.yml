@@ -39,12 +39,10 @@ jobs:
         uses: rickstaa/action-black@v1
         id: action_black
         with:
-          black_args: "."
+          black_args: ". --exclude .github"
       - name: Push reformatted files
         uses: EndBug/add-and-commit@v9.0.1
         with:
           add: '*'
           message: 'black-format bot reformatting.'
           push: true
-
-
