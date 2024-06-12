@@ -1,28 +1,19 @@
 [build-system]
-requires = ["hatchling"]
+requires = [ "hatchling",]
 build-backend = "hatchling.build"
-[tool.hatch.build.targets.wheel]
-packages = ["src/max_ble_hci", "src/max_ble_hci_cli.py"]
 
 [project]
 name = "max_ble_hci"
-version = "1.2.4"
-dependencies = [
-    "pyserial",
-    "pyreadline3 ; platform_system == 'Windows'",
-    "gnureadline ; platform_system == 'Darwin'",
-    "colorlog"
-]
+version = "1.2.5"
+dependencies = [ "pyserial", "pyreadline3 ; platform_system == 'Windows'", "gnureadline ; platform_system == 'Darwin'", "colorlog",]
 requires-python = ">=3.8"
-
 description = "BLE HCI Test interface for controllers capable of the UART transport"
 readme = "README.md"
-license = {file = "LICENSE"}
-keywords = ["serial", "ble-hci", "hci",]
-classifiers = [
-  "Development Status :: 4 - Beta",
-  "Programming Language :: Python"
-]
+keywords = [ "serial", "ble-hci", "hci",]
+classifiers = [ "Development Status :: 4 - Beta", "Programming Language :: Python",]
+
+[project.license]
+file = "LICENSE"
 
 [project.scripts]
 max_ble_hci = "max_ble_hci_cli:main"
@@ -32,3 +23,6 @@ Homepage = "https://github.com/Analog-Devices-MSDK/BLE-HCI"
 Repository = "https://github.com/Analog-Devices-MSDK/BLE-HCI"
 Documentation = "https://analog-devices-msdk.github.io/MAX-BLE-HCI/"
 "Bug Tracker" = "https://github.com/Analog-Devices-MSDK/BLE-HCI/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = [ "src/max_ble_hci", "src/max_ble_hci_cli.py",]
