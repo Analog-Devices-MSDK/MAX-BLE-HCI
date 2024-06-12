@@ -1253,7 +1253,6 @@ class VendorSpecificCmds:
             tx_isr=data[8],
         )
 
-        
         return stats, evt.status
 
     def get_test_stats(self) -> Tuple[DataPktStats, StatusCode]:
