@@ -944,8 +944,11 @@ def main():
             command_run = _run_input_cmds(commands, terminal)
 
         astr = input(f"{command_state}>>> ")
+
+        # just an empty command
         if astr in ("", os.linesep):
             continue
+
         try:
             args = terminal.parse_args(astr.split())
             try:
