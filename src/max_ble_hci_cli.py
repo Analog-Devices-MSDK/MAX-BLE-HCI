@@ -498,9 +498,11 @@ def main():
         help="List directory",
         formatter_class=RawTextHelpFormatter,
     )
-        
-    ls_parser.add_argument("ls_dir", nargs="?",default=".")
-    ls_parser.set_defaults(func=lambda args: [print(x) for x in os.listdir(args.ls_dir)])
+
+    ls_parser.add_argument("ls_dir", nargs="?", default=".")
+    ls_parser.set_defaults(
+        func=lambda args: [print(x) for x in os.listdir(args.ls_dir)]
+    )
 
     pwd_parser = subparsers.add_parser(
         "pwd",
