@@ -255,7 +255,7 @@ class DataPktStats:
 
         try:
             per = self.per()
-            print_lns.append(f"PER: {per} %")
+            print_lns.append(f"PER: {per:.2f}%")
         except ZeroDivisionError:
             pass
 
