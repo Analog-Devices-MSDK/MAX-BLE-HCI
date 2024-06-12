@@ -179,7 +179,7 @@ def main():
         description=cli_description, formatter_class=RawTextHelpFormatter
     )
 
-    parser.add_argument("--version", action="version", version="%(prog)s 1.1.4")
+    parser.add_argument("--version", action="version", version="%(prog)s 1.1.5")
 
     parser.add_argument("serial_port", help="Serial port path or COM#")
     parser.add_argument(
@@ -944,6 +944,8 @@ def main():
             command_run = _run_input_cmds(commands, terminal)
 
         astr = input(f"{command_state}>>> ")
+        if astr in ("", os.linesep):
+            continue
         try:
             args = terminal.parse_args(astr.split())
             try:
