@@ -10,10 +10,6 @@ on:
         - minor
         - major
 
-  push:
-    branches:
-      - master
-
 
 jobs:
   deploy:

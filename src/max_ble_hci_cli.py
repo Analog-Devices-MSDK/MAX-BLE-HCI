@@ -196,7 +196,7 @@ def main():
         "--enable-flow-control",
         action="store_false",
         default=False,
-        help="Serial port baud rate. Default: " + str(DEFAULT_BAUD),
+        help="Enable flow control Default: False",
     )
     parser.add_argument(
         "-m",
