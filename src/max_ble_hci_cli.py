@@ -775,6 +775,69 @@ def main():
         func=lambda _: print(hci.reset_test_stats()), which="reset-test-stats"
     )
 
+    #### RESET CONNECTION STATS PARSER ####
+    reset_connection_stats_parser = subparsers.add_parser(
+        "reset-cs",
+        aliases=["rscs"],
+        help="Reset accumulated stats from connection mode",
+        formatter_class=RawTextHelpFormatter,
+    )
+    reset_connection_stats_parser.set_defaults(
+        func=lambda _: print(hci.reset_connection_stats()),
+        which="reset-connection-stats",
+    )
+
+    #### SET PHY PARSER ####
+    set_phy_parser = subparsers.add_parser(
+        "set-phy",
+        aliases=["sp"],
+        help="Set the PHY.",
+        formatter_class=RawTextHelpFormatter,
+    )
+    set_phy_parser.add_argument(
+        "-c",
+        "--conn-handle",
+        type=int,
+        dest="handle",
+        default=0,
+        help="Connection handle. Default: 0",
+    )
+    set_phy_parser.add_argument(
+        "-p",
+        "--phy",
+        dest="phy",
+        type=int,
+        default=1,
+        help="""Desired PHY
+        1: 1M
+        2: 2M
+        3: Coded
+        Default: 1M""",
+    )
+    set_phy_parser.add_argument(
+        "-o",
+        "--phyOption",
+        dest="phyOption",
+        type=int,
+        default=1,
+        help="""PHY Option
+        0: No preference
+        1: S2
+        2: S8
+        Default: S2""",
+    )
+    set_phy_parser.set_defaults(
+        func=lambda _: print(
+            hci.set_phy(
+                handle=args.handle,
+                tx_phys=(0x1 << (args.phy - 1)),
+                rx_phys=(0x1 << (args.phy - 1)),
+                phy_opts=args.phyOption,
+            )
+        ),
+        which="set-phy",
+    )
+
     #### TXPOWER PARSER ####
     txpower_parser = subparsers.add_parser(
         "tx-power",
