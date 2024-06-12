@@ -252,6 +252,12 @@ class DataPktStats:
             if val is None:
                 continue
             print_lns.append(f"{key}:  {val}")
+        
+        try:
+            per = self.per()
+            print_lns.append(f"PER: {per} %")
+        except ZeroDivisionError:
+            pass
 
         return "\n".join(print_lns)
 
