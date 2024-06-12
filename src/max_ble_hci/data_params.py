@@ -103,10 +103,10 @@ class ScanParams:
     scan_type: int = 0x1
     """Scan type."""
 
-    scan_interval: int = 0x100
+    scan_interval: int = 0x10
     """Scan interval."""
 
-    scan_window: int = 0x100
+    scan_window: int = 0x10
     """Scan duration."""
 
     addr_type: AddrType = AddrType.PUBLIC
@@ -132,10 +132,10 @@ class ConnParams:
     peer_addr: int
     """Connectable peer device address."""
 
-    scan_interval: int = 0x100
+    scan_interval: int = 0x10
     """Scan interval."""
 
-    scan_window: int = 0x100
+    scan_window: int = 0x10
     """Scan duration."""
 
     init_filter_policy: int = 0x0
