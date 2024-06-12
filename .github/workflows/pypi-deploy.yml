@@ -1,18 +1,32 @@
 name: deploy-pypi
-on: [workflow_dispatch]
+on: 
+  workflow_dispatch:
+    inputs:
+      choice:
+        type: choice
+        description: Make a choice
+        options:
+        - major
+        - minor
+        - patch
+
 jobs:
   deploy:
     # name: runner / linux
     runs-on: [self-hosted]
     steps:
     - uses: actions/checkout@v3
-    - name: Deploy
+    - name: Bump Version
       run: |
-        set +e
-        rm -rf dist
-        set -e
-        pip3 install --upgrade build 
-        python3 -m build
-        python3 -m pip install --upgrade twine
-        python3 -m twine upload --repository pypi dist/*
-        set +e
+        python3 .github/workflows/scripts/version_update.py pyproject.toml --${{github.event.inputs.choice}}
+        cat pytproject.toml | version
+    # - name: Deploy
+    #   run: |
+    #     set +e
+    #     rm -rf dist
+    #     set -e
+    #     pip3 install --upgrade build 
+    #     python3 -m build
+    #     python3 -m pip install --upgrade twine
+    #     python3 -m twine upload --repository pypi dist/*
+    #     set +e
