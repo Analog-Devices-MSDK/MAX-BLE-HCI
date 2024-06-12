@@ -20,7 +20,7 @@ jobs:
       run: |
         pip install pytoml
         python3 .github/workflows/scripts/version_update.py pyproject.toml --${{github.event.inputs.choice}}
-        cat pytproject.toml | version
+        cat pytproject.toml | grep version
     # - name: Deploy
     #   run: |
     #     set +e
