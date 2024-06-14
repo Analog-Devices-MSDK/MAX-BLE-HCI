@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 ##############################################################################
-name: PER
+name: Integration
 
 concurrency:
   group: ${{ github.workflow }}-&{{ github.ref }}
