@@ -37,7 +37,6 @@ jobs:
     runs-on: [self-hosted, btm-ci]
     if: github.event.pull_request.draft == false
     steps:
-
       - uses: actions/checkout@v4
       # - uses: actions/checkout@v4
       #   with:
@@ -59,9 +58,9 @@ jobs:
         run: |
           ocdflash $TEST_BOARD .github/workflows/bin/max32655.elf $GITHUB_REF
           sleep 1
+
       - name: Test
         run: |
-
           export HCI=$(resource_manager -g $TEST_BOARD.hci_port)
           perl -i -pe 's/PORT = ".*"/PORT = "$ENV{HCI}"/' tests/test.py
           (cd tests && python3 test.py)
