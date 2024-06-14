@@ -39,13 +39,13 @@ jobs:
     steps:
 
       - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
-        with:
-          submodules: false
-          repository: analogdevicesinc/msdk
-          ref: fix/me18_gcr
-          fetch-depth: 0
-          path: msdk
+      # - uses: actions/checkout@v4
+      #   with:
+      #     submodules: false
+      #     repository: analogdevicesinc/msdk
+      #     ref: fix/me18_gcr
+      #     fetch-depth: 0
+      #     path: msdk
 
       - name: Lock Resources
         id: lock
@@ -57,9 +57,11 @@ jobs:
           lock: true
       - name: DEBUG
         run: |
-          EXAMPLE=msdk/Examples/MAX32655/Bluetooth/BLE5_ctr
-          make -C $EXAMPLE
-          ocdflash $TEST_BOARD $EXAMPLE/build/max32655.elf $GITHUB_REF
+          # EXAMPLE=msdk/Examples/MAX32655/Bluetooth/BLE5_ctr
+          # make -C $EXAMPLE
+          # ocdflash $TEST_BOARD $EXAMPLE/build/max32655.elf $GITHUB_REF
+
+          ocdflash $TEST_BOARD .github/workflows/bin/max32655.elf $GITHUB_REF
 
       # - name: Flash DUTs
       #   id: flash
