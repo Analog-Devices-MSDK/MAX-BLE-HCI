@@ -1,6 +1,11 @@
 import secrets
 import time
 import unittest
+import sys
+import os
+
+if os.path.exists("../src"):
+    sys.path.append("../src")
 
 from max_ble_hci import BleHci
 from max_ble_hci import packet_codes as pc
