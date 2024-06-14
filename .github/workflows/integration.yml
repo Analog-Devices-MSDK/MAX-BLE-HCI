@@ -68,7 +68,7 @@ jobs:
           EXAMPLE=msdk/Examples/MAX32655/Bluetooth/BLE5_ctr
 
           make -C $EXAMPLE
-          # ocdflash $BOARD $EXAMPLE/build/max32655.elf $GITHUB_REF
+          
       # - name: Flash DUTs
       #   id: flash
       #   uses: Analog-Devices-MSDK/btm-ci-scripts/actions/ocdflash@v1.1
