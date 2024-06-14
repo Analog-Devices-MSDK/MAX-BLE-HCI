@@ -66,6 +66,8 @@ jobs:
       - name: DEBUG
         run: |
           ls
+          ls msdk
+          lsd msdk/Examples
       - name: Flash DUTs
         id: flash
         uses: Analog-Devices-MSDK/btm-ci-scripts/actions/ocdflash@v1.1
