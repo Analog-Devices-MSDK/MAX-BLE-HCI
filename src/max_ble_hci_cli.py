@@ -946,14 +946,14 @@ def main():
             logger.info("Port set, running input commands.")
             command_run = _run_input_cmds(commands, terminal)
 
-        astr = input(f"{command_state}>>> ")
+        command_str = input(f"{command_state}>>> ")
 
         # just an empty command
-        if astr in ("", os.linesep):
+        if command_str in ("", os.linesep):
             continue
 
         try:
-            args = terminal.parse_args(astr.split())
+            args = terminal.parse_args(command_str.split())
             try:
                 args.func(args)
             except AttributeError as err:
