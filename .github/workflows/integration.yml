@@ -46,12 +46,13 @@ jobs:
           mkdir -p $FULL_RESULTS_DIR
 
       - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
-        with:
-          submodules: false
-          repository: analogdevicesinc/msdk
-          ref: fix/me18_gcr
-          fetch-depth: 0
+
+      # - uses: actions/checkout@v4
+      #   with:
+      #     submodules: false
+      #     repository: analogdevicesinc/msdk
+      #     ref: fix/me18_gcr
+      #     fetch-depth: 0
 
       - name: Lock Resources
         id: lock
