@@ -66,10 +66,9 @@ jobs:
       - name: DEBUG
         run: |
           EXAMPLE=msdk/Examples/MAX32655/Bluetooth/BLE5_ctr
-
           make -C $EXAMPLE
-          
           ocdflash $TEST_BOARD $EXAMPLE/build/max32655.elf $GITHUB_REF
+
       # - name: Flash DUTs
       #   id: flash
       #   uses: Analog-Devices-MSDK/btm-ci-scripts/actions/ocdflash@v1.1
@@ -83,7 +82,7 @@ jobs:
       - name: Test
         run: |
 
-          HCI=$(resource_manager -g $BOARD.hci_port)
+          HCI=$(resource_manager -g $TEST_BOARD.hci_port)
           ./install.sh
           # sed -i 's/PORT = ".*"/PORT = "$HCI"/' tests/test.py 
           # (cd tests && python3 test.py)
