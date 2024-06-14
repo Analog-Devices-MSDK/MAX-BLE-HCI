@@ -63,7 +63,9 @@ jobs:
             ${{env.BOARD}}
 
           lock: true
-
+      - name: DEBUG
+        run: |
+          ls
       - name: Flash DUTs
         id: flash
         uses: Analog-Devices-MSDK/btm-ci-scripts/actions/ocdflash@v1.1
