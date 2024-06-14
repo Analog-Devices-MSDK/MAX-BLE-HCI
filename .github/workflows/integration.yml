@@ -30,7 +30,7 @@ on:
     branches: ["main"]
   workflow_dispatch:
 env:
-  BOARD: max32655_board_3
+  TEST_BOARD: max32655_board_3
 
 jobs:
   run_integration:
@@ -60,7 +60,7 @@ jobs:
         uses: Analog-Devices-MSDK/btm-ci-scripts/actions/lock-board@v1.1
         with:
           boards: |
-            ${{env.BOARD}}
+            ${{env.TEST_BOARD}}
 
           lock: true
       - name: DEBUG
@@ -69,6 +69,7 @@ jobs:
 
           make -C $EXAMPLE
           
+          ocdflash $TEST_BOARD $EXAMPLE/build/max32655.elf
       # - name: Flash DUTs
       #   id: flash
       #   uses: Analog-Devices-MSDK/btm-ci-scripts/actions/ocdflash@v1.1
