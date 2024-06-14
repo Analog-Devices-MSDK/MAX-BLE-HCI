@@ -64,8 +64,11 @@ jobs:
           lock: true
       - name: Test
         run: |
+        
           HCI=$(resource_manager -g $BOARD.hci_port)
           ls
+          ls tests
+          ./install.sh
           sed -i 's/PORT = ".*"/PORT = "$HCI"/' tests/test.py 
           (cd tests && python3 tests/test.py)
 
