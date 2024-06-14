@@ -33,7 +33,7 @@ env:
   BOARD: max32655_board_3
 
 jobs:
-  run_per_tests:
+  run_integration:
     runs-on: [self-hosted, btm-ci]
     if: github.event.pull_request.draft == false
     steps:
@@ -64,6 +64,7 @@ jobs:
       - name: Test
         run: |
           HCI=$(resource_manager -g $BOARD.hci_port)
+          ls
           sed -i 's/PORT = ".*"/PORT = "$HCI"/' tests/test.py 
           (cd tests && python3 tests/test.py)
 
