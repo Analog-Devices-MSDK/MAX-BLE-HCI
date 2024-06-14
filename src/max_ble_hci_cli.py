@@ -179,7 +179,7 @@ def main():
         description=cli_description, formatter_class=RawTextHelpFormatter
     )
 
-    parser.add_argument("--version", action="version", version="%(prog)s 1.1.4")
+    parser.add_argument("--version", action="version", version="%(prog)s 1.1.5")
 
     parser.add_argument("serial_port", help="Serial port path or COM#")
     parser.add_argument(
@@ -196,7 +196,7 @@ def main():
         "--enable-flow-control",
         action="store_false",
         default=False,
-        help="Serial port baud rate. Default: " + str(DEFAULT_BAUD),
+        help="Enable flow control Default: False",
     )
     parser.add_argument(
         "-m",
@@ -498,8 +498,11 @@ def main():
         help="List directory",
         formatter_class=RawTextHelpFormatter,
     )
-    ls_parser.add_argument("ls", default=".")
-    ls_parser.set_defaults(func=lambda args: [print(x) for x in os.listdir(args.ls)])
+
+    ls_parser.add_argument("ls_dir", nargs="?", default=".")
+    ls_parser.set_defaults(
+        func=lambda args: [print(x) for x in os.listdir(args.ls_dir)]
+    )
 
     pwd_parser = subparsers.add_parser(
         "pwd",
@@ -943,9 +946,14 @@ def main():
             logger.info("Port set, running input commands.")
             command_run = _run_input_cmds(commands, terminal)
 
-        astr = input(f"{command_state}>>> ")
+        command_str = input(f"{command_state}>>> ")
+
+        # just an empty command
+        if command_str in ("", os.linesep):
+            continue
+
         try:
-            args = terminal.parse_args(astr.split())
+            args = terminal.parse_args(command_str.split())
             try:
                 args.func(args)
             except AttributeError as err:

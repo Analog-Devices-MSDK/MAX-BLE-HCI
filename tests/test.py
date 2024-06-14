@@ -1,6 +1,10 @@
 import secrets
-import time
 import unittest
+import sys
+import os
+
+if os.path.exists("../src"):
+    sys.path.append("../src")
 
 from max_ble_hci import BleHci
 from max_ble_hci import packet_codes as pc
@@ -9,7 +13,7 @@ from max_ble_hci.constants import PhyOption, PubKeyValidateMode
 
 PORT = ""
 
-hci1 = BleHci(PORT, id_tag="hci1")
+hci1 = BleHci(PORT, id_tag="hci1", timeout=5)
 
 MAX_U32 = 0xFFFFFFFF
 A32 = 0xAAAAAAAA
