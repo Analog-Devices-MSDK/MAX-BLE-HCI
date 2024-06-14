@@ -37,16 +37,8 @@ jobs:
     runs-on: [self-hosted, btm-ci]
     if: github.event.pull_request.draft == false
     steps:
-      - name: envsetup
-        run: |
-          resource_manager -v
-          printenv
-          FULL_RESULTS_DIR=${GITHUB_WORKSPACE}/$RESULTS_DIR
-          echo "FULL_RESULTS_DIR=${GITHUB_WORKSPACE}/${RESULTS_DIR}" >> $GITHUB_ENV
-          mkdir -p $FULL_RESULTS_DIR
 
       - uses: actions/checkout@v4
-
       - uses: actions/checkout@v4
         with:
           submodules: false
@@ -83,9 +75,10 @@ jobs:
         run: |
 
           HCI=$(resource_manager -g $TEST_BOARD.hci_port)
+          sudo chmod +x install.sh
           ./install.sh
-          # sed -i 's/PORT = ".*"/PORT = "$HCI"/' tests/test.py 
-          # (cd tests && python3 test.py)
+          sed -i 's/PORT = ".*"/PORT = "$HCI"/' tests/test.py 
+          (cd tests && python3 test.py)
 
       - name: Unlock Resources
         if: always()
