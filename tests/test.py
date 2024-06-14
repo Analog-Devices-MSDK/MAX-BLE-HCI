@@ -13,7 +13,7 @@ from max_ble_hci.constants import PhyOption, PubKeyValidateMode
 
 PORT = ""
 
-hci1 = BleHci(PORT, id_tag="hci1")
+hci1 = BleHci(PORT, id_tag="hci1", timeout=5)
 
 MAX_U32 = 0xFFFFFFFF
 A32 = 0xAAAAAAAA
