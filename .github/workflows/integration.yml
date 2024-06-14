@@ -76,8 +76,8 @@ jobs:
 
           HCI=$(resource_manager -g $TEST_BOARD.hci_port)
           chmod +x install.sh
-          # ./install.sh
-          sed -i 's/PORT = ".*"/PORT = "$HCI"/' tests/test.py 
+          sed -i "s/PORT = \".*\"/PORT = \"$HCI\"/" tests/test.py          
+          
           (cd tests && python3 test.py)
 
       - name: Unlock Resources
