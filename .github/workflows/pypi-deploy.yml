@@ -1,7 +1,16 @@
 name: deploy-pypi
 on: 
   workflow_dispatch:
-
+    inputs:
+      ch:
+        description: 'Version field'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
 jobs:
   deploy:
     # name: runner / linux
