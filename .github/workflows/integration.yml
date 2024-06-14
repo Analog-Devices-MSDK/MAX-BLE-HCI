@@ -65,18 +65,19 @@ jobs:
           lock: true
       - name: DEBUG
         run: |
-          ls
-          ls msdk
-          lsd msdk/Examples
-      - name: Flash DUTs
-        id: flash
-        uses: Analog-Devices-MSDK/btm-ci-scripts/actions/ocdflash@v1.1
-        with:
-          board: |
-            ${{env.BOARD}}
-          msdk_path: msdk
-          project: BLE5_ctr
-          build_flags: DEBUG=1
+          EXAMPLE=msdk/Examples/MAX32655/Bluetooth/BLE5_ctr
+
+          make -C $EXAMPLE
+          ocdflash $BOARD $EXAMPLE/build/max32655.elf $GITHUB_REF
+      # - name: Flash DUTs
+      #   id: flash
+      #   uses: Analog-Devices-MSDK/btm-ci-scripts/actions/ocdflash@v1.1
+      #   with:
+      #     board: |
+      #       ${{env.BOARD}}
+      #     msdk_path: msdk
+      #     project: BLE5_ctr
+      #     build_flags: DEBUG=1
 
       - name: Test
         run: |
