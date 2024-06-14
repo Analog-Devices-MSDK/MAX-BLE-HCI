@@ -38,13 +38,6 @@ jobs:
     if: github.event.pull_request.draft == false
     steps:
       - uses: actions/checkout@v4
-      # - uses: actions/checkout@v4
-      #   with:
-      #     submodules: false
-      #     repository: analogdevicesinc/msdk
-      #     ref: fix/me18_gcr
-      #     fetch-depth: 0
-      #     path: msdk
 
       - name: Lock Resources
         id: lock
