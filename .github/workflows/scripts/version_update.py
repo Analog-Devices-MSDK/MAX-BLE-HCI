@@ -29,10 +29,13 @@ if __name__ == "__main__":
     if args.major:
         print("Updating major")
         major = int(major) + 1
+        patch = 0
+        minor = 0
 
     if args.minor:
         print("Updating minor")
         minor = int(minor) + 1
+        patch = 0
 
     if do_patch:
         print("Updating patch")
