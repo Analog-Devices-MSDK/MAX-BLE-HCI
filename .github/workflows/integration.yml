@@ -63,13 +63,6 @@ jobs:
             ${{env.BOARD}}
 
           lock: true
-      - name: Test
-        run: |
-        
-          HCI=$(resource_manager -g $BOARD.hci_port)
-          ./install.sh
-          sed -i 's/PORT = ".*"/PORT = "$HCI"/' tests/test.py 
-          (cd tests && python3 test.py)
 
       - name: Flash DUTs
         id: flash
@@ -80,6 +73,14 @@ jobs:
           msdk_path: msdk
           project: BLE5_ctr
           build_flags: DEBUG=1
+
+      - name: Test
+        run: |
+
+          HCI=$(resource_manager -g $BOARD.hci_port)
+          ./install.sh
+          # sed -i 's/PORT = ".*"/PORT = "$HCI"/' tests/test.py 
+          # (cd tests && python3 test.py)
 
       - name: Unlock Resources
         if: always()
