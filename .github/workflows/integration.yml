@@ -72,6 +72,7 @@ jobs:
         uses: Analog-Devices-MSDK/btm-ci-scripts/actions/ocdflash@v1.1
         with:
           board: |
+            ${{env.BOARD}}
 
           project: BLE5_ctr
           build_flags: DEBUG=1
