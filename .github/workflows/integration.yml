@@ -47,12 +47,13 @@ jobs:
 
       - uses: actions/checkout@v4
 
-      # - uses: actions/checkout@v4
-      #   with:
-      #     submodules: false
-      #     repository: analogdevicesinc/msdk
-      #     ref: fix/me18_gcr
-      #     fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          submodules: false
+          repository: analogdevicesinc/msdk
+          ref: fix/me18_gcr
+          fetch-depth: 0
+          path: msdk
 
       - name: Lock Resources
         id: lock
@@ -66,11 +67,9 @@ jobs:
         run: |
         
           HCI=$(resource_manager -g $BOARD.hci_port)
-          ls
-          ls tests
           ./install.sh
           sed -i 's/PORT = ".*"/PORT = "$HCI"/' tests/test.py 
-          (cd tests && python3 tests/test.py)
+          (cd tests && python3 test.py)
 
       - name: Flash DUTs
         id: flash
@@ -78,7 +77,7 @@ jobs:
         with:
           board: |
             ${{env.BOARD}}
-
+          msdk_path: msdk
           project: BLE5_ctr
           build_flags: DEBUG=1
 
