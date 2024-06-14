@@ -69,7 +69,7 @@ jobs:
 
           make -C $EXAMPLE
           
-          ocdflash $TEST_BOARD $EXAMPLE/build/max32655.elf
+          ocdflash $TEST_BOARD $EXAMPLE/build/max32655.elf $GITHUB_REF
       # - name: Flash DUTs
       #   id: flash
       #   uses: Analog-Devices-MSDK/btm-ci-scripts/actions/ocdflash@v1.1
