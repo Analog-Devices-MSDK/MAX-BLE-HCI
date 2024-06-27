@@ -454,7 +454,7 @@ def main():
     adv_stats_parser = subparsers.add_parser(
         "adv-stats",
         aliases=["as"],
-        help="Get the connection stats",
+        help="Get the advertising stats",
         formatter_class=RawTextHelpFormatter,
     )
 
@@ -463,7 +463,7 @@ def main():
     scan_stats_parser = subparsers.add_parser(
         "scan-stats",
         aliases=["ss"],
-        help="Get the connection stats",
+        help="Get the scan stats",
         formatter_class=RawTextHelpFormatter,
     )
 
