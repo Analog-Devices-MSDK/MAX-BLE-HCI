@@ -179,7 +179,7 @@ def main():
         description=cli_description, formatter_class=RawTextHelpFormatter
     )
 
-    parser.add_argument("--version", action="version", version="%(prog)s 1.1.5")
+    parser.add_argument("--version", action="version", version="%(prog)s 1.2.0")
 
     parser.add_argument("serial_port", help="Serial port path or COM#")
     parser.add_argument(
@@ -275,7 +275,7 @@ def main():
     clear_parser = subparsers.add_parser(
         "clear",
         aliases=["cls"],
-        help="Clear the scrren",
+        help="Clear the screen",
         formatter_class=RawTextHelpFormatter,
     )
 
@@ -451,6 +451,23 @@ def main():
     sinl_acl_parser.set_defaults(
         func=lambda _: print(hci.enable_acl_sink(bool(args.enable))),
     )
+    adv_stats_parser = subparsers.add_parser(
+        "adv-stats",
+        aliases=["as"],
+        help="Get the connection stats",
+        formatter_class=RawTextHelpFormatter,
+    )
+
+    adv_stats_parser.set_defaults(func=lambda _: print(hci.get_adv_stats()))
+
+    scan_stats_parser = subparsers.add_parser(
+        "scan-stats",
+        aliases=["ss"],
+        help="Get the connection stats",
+        formatter_class=RawTextHelpFormatter,
+    )
+
+    scan_stats_parser.set_defaults(func=lambda _: print(hci.get_scan_stats()))
 
     conn_stats_parser = subparsers.add_parser(
         "conn-stats",
@@ -471,20 +488,6 @@ def main():
     )
 
     test_stats_parser.set_defaults(func=lambda _: print(hci.get_test_stats()))
-
-    phy_enable = subparsers.add_parser(
-        "bben",
-        help="Enable the Baseband Radio (Required for RSSI capture)",
-        formatter_class=RawTextHelpFormatter,
-    )
-    phy_enable.set_defaults(func=lambda args: print(hci.bb_enable()))
-
-    phy_disable = subparsers.add_parser(
-        "bbdis",
-        help="Disable the Baseband Radio",
-        formatter_class=RawTextHelpFormatter,
-    )
-    phy_disable.set_defaults(func=lambda args: print(hci.bb_disable()))
 
     rssi_parser = subparsers.add_parser(
         "rssi",
@@ -788,6 +791,26 @@ def main():
     reset_connection_stats_parser.set_defaults(
         func=lambda _: print(hci.reset_connection_stats()),
         which="reset-connection-stats",
+    )
+    #### RESET Adv STATS PARSER ####
+    reset_adv_stats_parser = subparsers.add_parser(
+        "reset-adv-stats",
+        aliases=["rsas"],
+        help="Reset accumulated stats from connection mode",
+        formatter_class=RawTextHelpFormatter,
+    )
+    reset_adv_stats_parser.set_defaults(
+        func=lambda _: print(hci.reset_adv_stats()),
+    )
+
+    reset_scan_stats_parser = subparsers.add_parser(
+        "reset-scan-stats",
+        aliases=["rsss"],
+        help="Reset accumulated stats from connection mode",
+        formatter_class=RawTextHelpFormatter,
+    )
+    reset_scan_stats_parser.set_defaults(
+        func=lambda _: print(hci.reset_scan_stats()),
     )
 
     #### SET PHY PARSER ####

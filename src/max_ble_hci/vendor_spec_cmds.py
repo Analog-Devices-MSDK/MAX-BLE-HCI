@@ -1179,7 +1179,7 @@ class VendorSpecificCmds:
 
         """
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_ADV_STATS, return_evt=True)
-        data = evt.get_return_params(param_lens=[4, 4, 4, 2, 4, 4, 2, 2, 2, 2])
+        data = evt.get_return_params(param_lens=[4, 4, 4, 4, 4, 4, 2, 2, 2, 2])
 
         stats = AdvPktStats(
             tx_adv=data[0],
@@ -1770,20 +1770,23 @@ class VendorSpecificCmds:
 
         return rssi, evt.status
 
-    def bb_enable(self) -> StatusCode:
-        """Enable the baseband radio
-        NOTE: Must be done before using RSSI
-        Returns
-        -------
-        StatusCode
-        """
-        return self.send_vs_command(OCF.VENDOR_SPEC.BB_EN)
-
-    def bb_disable(self) -> StatusCode:
-        """Disable the baseband radio
+    def reset_adv_stats(self) -> StatusCode:
+        """Reset accumulated advertising stats
 
         Returns
         -------
         StatusCode
+            The return packet status code.
+
         """
-        return self.send_vs_command(OCF.VENDOR_SPEC.BB_DIS)
+        return self.send_vs_command(OCF.VENDOR_SPEC.RESET_ADV_STATS)
+
+    def reset_scan_stats(self) -> StatusCode:
+        """Reset accumulated scanning stats
+
+        Returns
+        -------
+        StatusCode
+            The return packet status code.
+        """
+        return self.send_vs_command(OCF.VENDOR_SPEC.RESET_SCAN_STATS)
