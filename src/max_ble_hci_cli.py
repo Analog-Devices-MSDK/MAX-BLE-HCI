@@ -458,9 +458,16 @@ def main():
         formatter_class=RawTextHelpFormatter,
     )
 
-    adv_stats_parser.set_defaults(
-        func=lambda _: print(hci.get_adv_stats()), which="connstats"
+    adv_stats_parser.set_defaults(func=lambda _: print(hci.get_adv_stats()))
+
+    scan_stats_parser = subparsers.add_parser(
+        "scan-stats",
+        aliases=["ss"],
+        help="Get the connection stats",
+        formatter_class=RawTextHelpFormatter,
     )
+
+    scan_stats_parser.set_defaults(func=lambda _: print(hci.get_scan_stats()))
 
     conn_stats_parser = subparsers.add_parser(
         "conn-stats",
@@ -801,14 +808,23 @@ def main():
     )
     #### RESET Adv STATS PARSER ####
     reset_adv_stats_parser = subparsers.add_parser(
-        "reset-as",
+        "reset-adv-stats",
         aliases=["rsas"],
         help="Reset accumulated stats from connection mode",
         formatter_class=RawTextHelpFormatter,
     )
     reset_adv_stats_parser.set_defaults(
         func=lambda _: print(hci.reset_adv_stats()),
-        which="reset-connection-stats",
+    )
+
+    reset_scan_stats_parser = subparsers.add_parser(
+        "reset-scan-stats",
+        aliases=["rsss"],
+        help="Reset accumulated stats from connection mode",
+        formatter_class=RawTextHelpFormatter,
+    )
+    reset_scan_stats_parser.set_defaults(
+        func=lambda _: print(hci.reset_scan_stats()),
     )
 
     #### SET PHY PARSER ####
