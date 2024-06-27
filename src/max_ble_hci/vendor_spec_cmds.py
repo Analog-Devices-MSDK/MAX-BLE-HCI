@@ -1179,7 +1179,7 @@ class VendorSpecificCmds:
 
         """
         evt = self.send_vs_command(OCF.VENDOR_SPEC.GET_ADV_STATS, return_evt=True)
-        data = evt.get_return_params(param_lens=[4, 4, 4, 2, 4, 4, 2, 2, 2, 2])
+        data = evt.get_return_params(param_lens=[4, 4, 4, 4, 4, 4, 2, 2, 2, 2])
 
         stats = AdvPktStats(
             tx_adv=data[0],

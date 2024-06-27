@@ -339,14 +339,18 @@ class AdvPktStats:
             print_lns.append(f"{key}:  {val}")
 
         if self.tx_adv != 0:
-            print_lns.append(f"Response Rate: {self.response_rate()}")
-            print_lns.append(f"Obscurity: {self.obscurity()}")
+            print_lns.append(f"Response Rate: {self.response_rate():.2f}")
+            print_lns.append(
+                f"Response Timeout Rate: {self.response_timeout_rate():.2f}"
+            )
+            print_lns.append(f"Response CRC Rate: {self.response_crc_rate():.2f}")
+            print_lns.append(
+                f"Scan Req Fulfilment Rate: {self.scan_req_fulfillment():.2f}"
+            )
 
-        else:
-            pass
         return "\n".join(print_lns)
 
-    def response_rate(self, dirty=True) -> float:
+    def response_rate(self, dirty=False) -> float:
         """Get the response rate to the advertiser
         Measure of how often advertisments get responses
 
@@ -365,32 +369,35 @@ class AdvPktStats:
 
         return 100 * (self.rx_req / self.tx_adv)
 
-    def obscurity(self) -> float:
-        """Get Obscurity of advertiser
+    def response_timeout_rate(self) -> float:
+        """Get rate of scan request timeouts
 
         Returns
         -------
         float
-            Obscurity of advertiser - (lower the better)
+            timeout rate
         """
         return 100 * (self.rx_req_timeout / self.tx_adv)
 
-    def per(self) -> float:
-        """Calculate PER.
-
-        Calculates the Packet Error Rate of the current set of
-        statistics.
+    def response_crc_rate(self) -> float:
+        """Get rate of scan request CRCs
 
         Returns
         -------
         float
-            Calculated PER value.
-
+            crc rate
         """
+        return 100 * (self.rx_req_crc / self.tx_adv)
 
-        return 100 * (
-            1 - self.rx_req / (self.rx_req + self.rx_req_crc + self.rx_req_timeout)
-        )
+    def scan_req_fulfillment(self) -> float:
+        """Get rate of scan request fulfillments
+        (i.e how often the dut responds to scan requests)
+        Returns
+        -------
+        float
+            scan request fulfillment
+        """
+        return 100 * (self.tx_resp / self.rx_req)
 
 
 @dataclass
