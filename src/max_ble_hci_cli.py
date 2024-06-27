@@ -275,7 +275,7 @@ def main():
     clear_parser = subparsers.add_parser(
         "clear",
         aliases=["cls"],
-        help="Clear the scrren",
+        help="Clear the screen",
         formatter_class=RawTextHelpFormatter,
     )
 
@@ -450,6 +450,16 @@ def main():
     sinl_acl_parser.add_argument("-e", "--enable", default=1)
     sinl_acl_parser.set_defaults(
         func=lambda _: print(hci.enable_acl_sink(bool(args.enable))),
+    )
+    adv_stats_parser = subparsers.add_parser(
+        "adv-stats",
+        aliases=["as"],
+        help="Get the connection stats",
+        formatter_class=RawTextHelpFormatter,
+    )
+
+    adv_stats_parser.set_defaults(
+        func=lambda _: print(hci.get_adv_stats()), which="connstats"
     )
 
     conn_stats_parser = subparsers.add_parser(
@@ -787,6 +797,17 @@ def main():
     )
     reset_connection_stats_parser.set_defaults(
         func=lambda _: print(hci.reset_connection_stats()),
+        which="reset-connection-stats",
+    )
+    #### RESET Adv STATS PARSER ####
+    reset_adv_stats_parser = subparsers.add_parser(
+        "reset-as",
+        aliases=["rsas"],
+        help="Reset accumulated stats from connection mode",
+        formatter_class=RawTextHelpFormatter,
+    )
+    reset_adv_stats_parser.set_defaults(
+        func=lambda _: print(hci.reset_adv_stats()),
         which="reset-connection-stats",
     )
 

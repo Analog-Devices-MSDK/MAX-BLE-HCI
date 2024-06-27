@@ -1769,21 +1769,24 @@ class VendorSpecificCmds:
             self.logger.warning("RSSI= -128, possible timeout occured")
 
         return rssi, evt.status
-
-    def bb_enable(self) -> StatusCode:
-        """Enable the baseband radio
-        NOTE: Must be done before using RSSI
-        Returns
-        -------
-        StatusCode
-        """
-        return self.send_vs_command(OCF.VENDOR_SPEC.BB_EN)
-
-    def bb_disable(self) -> StatusCode:
-        """Disable the baseband radio
+    
+    def reset_adv_stats(self) -> StatusCode:
+        """Reset accumulated advertising stats
 
         Returns
         -------
         StatusCode
+            The return packet status code.
+
         """
-        return self.send_vs_command(OCF.VENDOR_SPEC.BB_DIS)
+        return self.send_vs_command(OCF.VENDOR_SPEC.RESET_ADV_STATS)
+    
+    def reset_scan_stats(self) -> StatusCode:
+        """Reset accumulated scanning stats
+
+        Returns
+        -------
+        StatusCode
+            The return packet status code.
+        """
+        return self.send_vs_command(OCF.VENDOR_SPEC.RESET_SCAN_STATS)

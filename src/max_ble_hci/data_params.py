@@ -337,10 +337,62 @@ class AdvPktStats:
             if val is None:
                 continue
             print_lns.append(f"{key}:  {val}")
+        
+        if self.tx_adv != 0:
+            print_lns.append(f"Response Rate: {self.response_rate()}")
+            print_lns.append(f"Obscurity: {self.obscurity()}")
 
+        else:
+            pass
         return "\n".join(print_lns)
+    
+    def response_rate(self, dirty=True) -> float:
+        """Get the response rate to the advertiser
+        Measure of how often advertisments get responses
 
+        Parameters
+        ----------
+        dirty : bool, optional
+            response rate should include responses with crc errors, by default True
 
+        Returns
+        -------
+        float
+            response rate
+        """
+        if dirty:
+            return  100 * ((self.rx_req + self.rx_req_crc)/ self.tx_adv)
+        
+        return  100 * (self.rx_req / self.tx_adv)
+
+    
+    def obscurity(self) -> float:
+        """Get Obscurity of advertiser
+
+        Returns
+        -------
+        float
+            Obscurity of advertiser - (lower the better)
+        """
+        return 100 * (self.rx_req_timeout / self.tx_adv)
+    
+    def per(self) -> float:
+        """Calculate PER.
+
+        Calculates the Packet Error Rate of the current set of
+        statistics.
+
+        Returns
+        -------
+        float
+            Calculated PER value.
+
+        """
+        
+        return 100 * (
+            1 - self.rx_req / (self.rx_req + self.rx_req_crc + self.rx_req_timeout)
+        )
+    
 @dataclass
 class ScanPktStats:
     """Scanning statistics data container."""
@@ -410,6 +462,24 @@ class ScanPktStats:
             print_lns.append(f"{key}:  {val}")
 
         return "\n".join(print_lns)
+    
+    def per(self) -> float:
+        """Calculate PER.
+
+        Calculates the Packet Error Rate of the current set of
+        statistics.
+
+        Returns
+        -------
+        float
+            Calculated PER value.
+
+        """
+        
+        return 100 * (
+            1 - self.rx_adv / (self.rx_adv + self.rx_adv_crc + self.rx_adv_timeout)
+        )
+        
 
 
 @dataclass
