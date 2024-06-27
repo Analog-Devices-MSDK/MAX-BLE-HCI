@@ -17,7 +17,7 @@ pip install max-ble-hci
  If you prefer to use the most up to date version, you can also install from source.
 
  The intsall.sh or .bat are used to install the library into your Python site packages and be done as such.
- <br>
+
 On Linux or MacOS
 
 ```bash
@@ -36,14 +36,13 @@ install.bat
 The BLE-HCI is a mostly generic library, which is capable of driving any BLE devices which can communicate using the UART transport.
 
 To use with Analog Devices, Inc. BLE capable MAX32 microcontrollers, please flash one of the following examples to the chip you are using
-<br>
 
 - [MAX32655](https://github.com/Analog-Devices-MSDK/msdk/tree/main/Examples/MAX32655/Bluetooth/BLE5_ctr)
 - [MAX32665](https://github.com/Analog-Devices-MSDK/msdk/tree/main/Examples/MAX32665/Bluetooth/BLE5_ctr)
 - [MAX32690](https://github.com/Analog-Devices-MSDK/msdk/tree/main/Examples/MAX32690/Bluetooth/BLE5_ctr)
 
 If you have not yet set up an installation of the Analog-Devices-MSDK, please follow the instructions found here <https://github.com/Analog-Devices-MSDK/msdk/tree/main>
-<br>
+
 Once the board is flashed refer to the README in the example to configure your board.
 
 Locate the serial port to which the HCI is connected to. If for example, your serial port is COM5, the following code would be used to reset the device.
@@ -70,7 +69,6 @@ The cli requires a serial port to connect the HCI to and is passed in through th
 Once connected, you can type the help command as such, and begin to explore the CLI.
 
 ```bash
->>> help
 usage:  [-h]
         {clear,cls,addr,memstats,adv-start,adv-stop,scan,init,data-len,send-acl,sink-acl,adv-stats,as,scan-stats,ss,conn-stats,cs,test-stats,ts,rssi,ls,pwd,run,reset,tx-test,tx,txtestvs,txvs,rx-test,rx,rx-test-vs,rxvs,end-test,end,reset-ts,rsts,reset-cs,rscs,reset-adv-stats,rsas,reset-scan-stats,rsss,set-phy,sp,tx-power,txp,discon,dc,set-chmap,cmd,exit,quit,q,help,h}
         ...
@@ -87,8 +85,8 @@ positional arguments:
     data-len            Set the max data length
     send-acl            Send ACL packets
     sink-acl            Sink ACL packets, do not send events to host
-    adv-stats (as)      Get the connection stats
-    scan-stats (ss)     Get the connection stats
+    adv-stats (as)      Get the advertising stats
+    scan-stats (ss)     Get the scan stats
     conn-stats (cs)     Get the connection stats
     test-stats (ts)     Get the test stats
     rssi                Get an RSSI sample using CCA
@@ -114,6 +112,9 @@ positional arguments:
     cmd                 Send raw HCI command
     exit (quit, q)      Exit the program
     help (h)            Show help message
+
+options:
+  -h, --help            show this help message and exit
 ```
 
 ## Contributing
