@@ -61,7 +61,7 @@ import logging
 
 import signal
 
-# pylint: disable=unused-import
+# pylint: disable=unused-import,too-many-lines
 try:
     import readline
 except ImportError:
@@ -496,32 +496,6 @@ def main():
     )
     rssi_parser.add_argument("-c", "--channel", default=0)
 
-    ls_parser = subparsers.add_parser(
-        "ls",
-        help="List directory",
-        formatter_class=RawTextHelpFormatter,
-    )
-
-    ls_parser.add_argument("ls_dir", nargs="?", default=".")
-    ls_parser.set_defaults(
-        func=lambda args: [print(x) for x in os.listdir(args.ls_dir)]
-    )
-
-    pwd_parser = subparsers.add_parser(
-        "pwd",
-        help="print working directory",
-        formatter_class=RawTextHelpFormatter,
-    )
-    pwd_parser.set_defaults(func=lambda args: print(os.getcwd()))
-
-    run_parser = subparsers.add_parser(
-        "run",
-        help="run command via os",
-        formatter_class=RawTextHelpFormatter,
-    )
-    run_parser.add_argument("run", nargs="+")
-    run_parser.set_defaults(func=lambda args: os.system(" ".join(args.run)))
-
     def _print_rssi(_args):
         rssi, status = hci.get_rssi_vs(_args.channel)
         print(f"RSSI (dBm): {rssi}")
@@ -946,6 +920,39 @@ def main():
         formatter_class=RawTextHelpFormatter,
     )
     exit_parser.set_defaults(func=lambda _: sys.exit(EXIT_FUNC_MAGIC), which="exit")
+
+    ls_parser = subparsers.add_parser(
+        "ls",
+        help="List directory",
+        formatter_class=RawTextHelpFormatter,
+    )
+
+    ls_parser.add_argument("ls_dir", nargs="?", default=".")
+    ls_parser.set_defaults(
+        func=lambda args: [print(x) for x in os.listdir(args.ls_dir)]
+    )
+    cd_parser = subparsers.add_parser(
+        "cd",
+        help="change working directory",
+        formatter_class=RawTextHelpFormatter,
+    )
+    cd_parser.add_argument("dir")
+    cd_parser.set_defaults(func=lambda args: os.chdir(args.dir))
+
+    pwd_parser = subparsers.add_parser(
+        "pwd",
+        help="print working directory",
+        formatter_class=RawTextHelpFormatter,
+    )
+    pwd_parser.set_defaults(func=lambda args: print(os.getcwd()))
+
+    run_parser = subparsers.add_parser(
+        "run",
+        help="run command via os",
+        formatter_class=RawTextHelpFormatter,
+    )
+    run_parser.add_argument("run", nargs="+")
+    run_parser.set_defaults(func=lambda args: os.system(" ".join(args.run)))
 
     #### HELP PARSER ####
     help_parser = subparsers.add_parser("help", aliases=["h"], help="Show help message")
