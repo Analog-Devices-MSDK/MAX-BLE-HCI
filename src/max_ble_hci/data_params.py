@@ -339,18 +339,18 @@ class AdvPktStats:
             print_lns.append(f"{key}:  {val}")
 
         if self.tx_adv != 0:
-            print_lns.append(f"Response Rate: {self.response_rate():.2f}")
+            print_lns.append(f"Response Rate: {self.scan_request_rate():.2f}%")
             print_lns.append(
-                f"Response Timeout Rate: {self.response_timeout_rate():.2f}"
+                f"Response Timeout Rate: {self.scan_request_timeout_rate():.2f}%"
             )
-            print_lns.append(f"Response CRC Rate: {self.response_crc_rate():.2f}")
+            print_lns.append(f"Response CRC Rate: {self.scan_request_crc_rate():.2f}%")
             print_lns.append(
-                f"Scan Req Fulfilment Rate: {self.scan_req_fulfillment():.2f}"
+                f"Scan Req Fulfilment Rate: {self.scan_req_fulfillment():.2f}%"
             )
 
         return "\n".join(print_lns)
 
-    def response_rate(self, dirty=False) -> float:
+    def scan_request_rate(self, dirty=False) -> float:
         """Get the response rate to the advertiser
         Measure of how often advertisments get responses
 
@@ -369,7 +369,7 @@ class AdvPktStats:
 
         return 100 * (self.rx_req / self.tx_adv)
 
-    def response_timeout_rate(self) -> float:
+    def scan_request_timeout_rate(self) -> float:
         """Get rate of scan request timeouts
 
         Returns
@@ -379,7 +379,7 @@ class AdvPktStats:
         """
         return 100 * (self.rx_req_timeout / self.tx_adv)
 
-    def response_crc_rate(self) -> float:
+    def scan_request_crc_rate(self) -> float:
         """Get rate of scan request CRCs
 
         Returns
@@ -468,6 +468,15 @@ class ScanPktStats:
                 continue
             print_lns.append(f"{key}:  {val}")
 
+        if self.tx_req:
+            print_lns.append(f"Scan response rate:  {self.scan_response_rate():.2f}%")
+            print_lns.append(
+                f"Scan response CRC rate:  {self.scan_response_crc_rate():.2f}%"
+            )
+            print_lns.append(
+                f"Scan response timeout rate:  {self.scan_response_timeout_rate():.2f}%"
+            )
+
         return "\n".join(print_lns)
 
     def per(self) -> float:
@@ -486,6 +495,36 @@ class ScanPktStats:
         return 100 * (
             1 - self.rx_adv / (self.rx_adv + self.rx_adv_crc + self.rx_adv_timeout)
         )
+
+    def scan_response_rate(self) -> float:
+        """Get scan response rate
+
+        Returns
+        -------
+        float
+            scan response rate
+        """
+        return 100 * self.rx_rsp / self.tx_req
+
+    def scan_response_timeout_rate(self) -> float:
+        """Get scan response timeout rate
+
+        Returns
+        -------
+        float
+            scan response timeout rate
+        """
+        return 100 * self.rx_rsp_timeout / self.tx_req
+
+    def scan_response_crc_rate(self) -> float:
+        """Get scan response crc rate
+
+        Returns
+        -------
+        float
+            scan response crc rate
+        """
+        return 100 * self.rx_rsp_crc / self.tx_req
 
 
 @dataclass
