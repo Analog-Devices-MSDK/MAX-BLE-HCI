@@ -1769,7 +1769,7 @@ class VendorSpecificCmds:
             self.logger.warning("RSSI= -128, possible timeout occured")
 
         return rssi, evt.status
-    
+
     def reset_adv_stats(self) -> StatusCode:
         """Reset accumulated advertising stats
 
@@ -1780,7 +1780,7 @@ class VendorSpecificCmds:
 
         """
         return self.send_vs_command(OCF.VENDOR_SPEC.RESET_ADV_STATS)
-    
+
     def reset_scan_stats(self) -> StatusCode:
         """Reset accumulated scanning stats
 
