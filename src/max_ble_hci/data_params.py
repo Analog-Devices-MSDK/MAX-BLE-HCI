@@ -53,10 +53,11 @@
 from dataclasses import dataclass
 
 # pylint: disable=too-many-arguments,too-many-locals,too-many-instance-attributes
-from typing import Optional
+from typing import Optional, List
+
 
 from .constants import AddrType
-
+from .utils import to_le_nbyte_list
 
 @dataclass
 class AdvParams:
@@ -126,8 +127,8 @@ class ScanParams:
 
 
 @dataclass
-class ConnParams:
-    """Connection parameters data container."""
+class EstablishConnParams:
+    """Connection parameters data container used when establishing a connection."""
 
     peer_addr: int
     """Connectable peer device address."""
@@ -167,9 +168,9 @@ class ConnParams:
 
     def __post_init__(self):
         if not 0x4 <= self.scan_interval <= 0x4000:
-            raise ValueError("Scane interval must be between 0x4 - 0x4000")
+            raise ValueError("Scan interval must be between 0x4 - 0x4000")
         if not 0x4 <= self.scan_window <= 0x4000:
-            raise ValueError("Scane window must be between 0x4 - 0x4000")
+            raise ValueError("Scan window must be between 0x4 - 0x4000")
 
         if not self.init_filter_policy in [0, 1]:
             raise ValueError(
@@ -202,6 +203,82 @@ class ConnParams:
             print_lns.append(f"{key}:  {val}")
 
         return "\n".join(print_lns)
+
+    def to_payload(self) -> List[int]:
+        """Convert struct to payload
+
+        Returns
+        -------
+        List[int]
+            Formatted BLE payload
+        """
+        params = to_le_nbyte_list(self.scan_interval, 2)
+        params.extend(to_le_nbyte_list(self.scan_window, 2))
+        params.append(self.init_filter_policy)
+        params.append(self.peer_addr_type.value)
+        params.extend(to_le_nbyte_list(self.peer_addr, 6))
+        params.append(self.own_addr_type.value)
+        params.extend(to_le_nbyte_list(self.conn_interval_min, 2))
+        params.extend(to_le_nbyte_list(self.conn_interval_max, 2))
+        params.extend(to_le_nbyte_list(self.max_latency, 2))
+        params.extend(to_le_nbyte_list(self.sup_timeout, 2))
+        params.extend(to_le_nbyte_list(self.min_ce_length, 2))
+        params.extend(to_le_nbyte_list(self.max_ce_length, 2))
+
+        return params
+
+
+@dataclass
+class ConnParams:
+    """Connection parameters data container used when establishing a connection."""
+
+    conn_interval_min: int = 0x6
+    """Connection interval minimum."""
+
+    conn_interval_max: int = 0x6
+    """Connection interval maximum."""
+
+    max_latency: int = 0x0000
+    """Maximum peripheral latency."""
+
+    sup_timeout: int = 0x64
+    """Supervision timeout."""
+
+    min_ce_length: int = 0x0F10
+    """Minimum connection event length."""
+
+    max_ce_length: int = 0x0F10
+    """Maximum connection event length."""
+
+    def __post_init__(self):
+        if not 0x6 <= self.conn_interval_max <= 0xC80:
+            raise ValueError("Connection interval min must be between 0x6 - 0xC80")
+
+    def __repr__(self) -> str:
+        print_lns = []
+        for key, val in self.__dict__.items():
+            if val is None:
+                continue
+            print_lns.append(f"{key}:  {val}")
+
+        return "\n".join(print_lns)
+
+    def to_payload(self) -> List[str]:
+        """To formatted payload
+
+        Returns
+        -------
+        List[str]
+            Struct as BLE payload
+        """
+        params = to_le_nbyte_list(self.conn_interval_min, 2)
+        params.extend(to_le_nbyte_list(self.conn_interval_max, 2))
+        params.extend(to_le_nbyte_list(self.max_latency, 2))
+        params.extend(to_le_nbyte_list(self.sup_timeout, 2))
+        params.extend(to_le_nbyte_list(self.min_ce_length, 2))
+        params.extend(to_le_nbyte_list(self.max_ce_length, 2))
+
+        return params
 
 
 class DataPktStats:

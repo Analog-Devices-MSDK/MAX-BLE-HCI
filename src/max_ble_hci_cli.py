@@ -78,7 +78,7 @@ from colorlog import ColoredFormatter
 
 from max_ble_hci import BleHci
 from max_ble_hci.constants import PhyOption, PayloadOption
-from max_ble_hci.data_params import ConnParams, AdvParams, ScanParams
+from max_ble_hci.data_params import EstablishConnParams, AdvParams, ScanParams
 from max_ble_hci.utils import convert_str_address
 
 logger = logging.getLogger(__name__)
@@ -405,7 +405,9 @@ def main():
                 addr=convert_str_address(args.addr[::-1]),
                 interval=args.conn_interval,
                 sup_timeout=args.sup_timeout,
-                conn_params=ConnParams(peer_addr=convert_str_address(args.addr)),
+                conn_params=EstablishConnParams(
+                    peer_addr=convert_str_address(args.addr)
+                ),
             )
         )
     )

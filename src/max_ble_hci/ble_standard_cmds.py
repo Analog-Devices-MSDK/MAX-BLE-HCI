@@ -58,7 +58,7 @@ from typing import List, Optional, Tuple, Union
 from ._hci_logger import get_formatted_logger
 from ._transport import SerialUartTransport
 from .constants import PayloadOption, PhyOption
-from .data_params import AdvParams, ConnParams, ScanParams
+from .data_params import AdvParams, EstablishConnParams, ScanParams, ConnParams
 from .hci_packets import CommandPacket, EventPacket
 from .packet_codes import StatusCode
 from .packet_defs import OCF, OGF
@@ -348,8 +348,29 @@ class BleStandardCmds:
             OCF.LE_CONTROLLER.SET_SCAN_ENABLE, params=params
         )
 
+    def update_connection_params(
+        self, handle: int, conn_params: ConnParams = ConnParams(0x0)
+    ) -> StatusCode:
+        """Update connection parameters
+
+        Parameters
+        ----------
+        handle : str
+            Connection Handle
+        conn_params : ConnParams, optional
+            Connection paramters by default ConnParams(0x0)
+
+        Returns
+        -------
+        StatusCode
+            The return packet status code.
+        """
+        params = to_le_nbyte_list(handle, 2) + conn_params.to_payload()
+
+        return self.send_le_controller_command(OCF.LE_CONTROLLER, params=params)
+
     def create_connection(
-        self, conn_params: ConnParams = ConnParams(0x0)
+        self, conn_params: EstablishConnParams = EstablishConnParams(0x0)
     ) -> StatusCode:
         """Command board to connect with a peer device.
 
@@ -367,21 +388,9 @@ class BleStandardCmds:
             The return packet status code.
 
         """
-        params = to_le_nbyte_list(conn_params.scan_interval, 2)
-        params.extend(to_le_nbyte_list(conn_params.scan_window, 2))
-        params.append(conn_params.init_filter_policy)
-        params.append(conn_params.peer_addr_type.value)
-        params.extend(to_le_nbyte_list(conn_params.peer_addr, 6))
-        params.append(conn_params.own_addr_type.value)
-        params.extend(to_le_nbyte_list(conn_params.conn_interval_min, 2))
-        params.extend(to_le_nbyte_list(conn_params.conn_interval_max, 2))
-        params.extend(to_le_nbyte_list(conn_params.max_latency, 2))
-        params.extend(to_le_nbyte_list(conn_params.sup_timeout, 2))
-        params.extend(to_le_nbyte_list(conn_params.min_ce_length, 2))
-        params.extend(to_le_nbyte_list(conn_params.max_ce_length, 2))
 
         return self.send_le_controller_command(
-            OCF.LE_CONTROLLER.CREATE_CONN, params=params
+            OCF.LE_CONTROLLER.CREATE_CONN, params=conn_params.to_payload()
         )
 
     def set_default_phy(
