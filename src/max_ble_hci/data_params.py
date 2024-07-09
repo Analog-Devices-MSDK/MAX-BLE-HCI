@@ -59,6 +59,7 @@ from typing import Optional, List
 from .constants import AddrType
 from .utils import to_le_nbyte_list
 
+
 @dataclass
 class AdvParams:
     """Advertising parameters data container."""
