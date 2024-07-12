@@ -287,15 +287,15 @@ class DataPktStats:
 
     def __init__(
         self,
-        rx_data: int,
-        rx_data_crc: int,
-        rx_data_timeout: int,
-        tx_data: int,
-        err_data: int,
-        rx_setup: int,
-        tx_setup: int,
-        rx_isr: int,
-        tx_isr: int,
+        rx_data: int = 0,
+        rx_data_crc: int = 0,
+        rx_data_timeout: int = 0,
+        tx_data: int = 0,
+        err_data: int = 0,
+        rx_setup: int = 0,
+        tx_setup: int = 0,
+        rx_isr: int = 0,
+        tx_isr: int = 0,
     ) -> None:
         self.rx_data = rx_data
         """Number of packets received correctly."""
