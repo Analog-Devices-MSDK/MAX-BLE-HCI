@@ -359,11 +359,16 @@ class DataPktStats:
             Calculated PER value.
 
         """
-        if peer_tx_data:
-            return 100 - 100 * (self.rx_data / peer_tx_data)
-        return 100 * (
-            1 - self.rx_data / (self.rx_data + self.rx_data_crc + self.rx_data_timeout)
-        )
+        try:
+            if peer_tx_data:
+                return 100 - 100 * (self.rx_data / peer_tx_data)
+            return 100 * (
+                1
+                - self.rx_data
+                / (self.rx_data + self.rx_data_crc + self.rx_data_timeout)
+            )
+        except ZeroDivisionError:
+            return float("NaN")
 
 
 @dataclass
@@ -442,10 +447,13 @@ class AdvPktStats:
         float
             response rate
         """
-        if dirty:
-            return 100 * ((self.rx_req + self.rx_req_crc) / self.tx_adv)
 
-        return 100 * (self.rx_req / self.tx_adv)
+        if self.tx_adv:
+            if dirty:
+                return 100 * ((self.rx_req + self.rx_req_crc) / self.tx_adv)
+
+            return 100 * (self.rx_req / self.tx_adv)
+        return float("NaN")
 
     def scan_request_timeout_rate(self) -> float:
         """Get rate of scan request timeouts
@@ -455,7 +463,10 @@ class AdvPktStats:
         float
             timeout rate
         """
-        return 100 * (self.rx_req_timeout / self.tx_adv)
+        if self.tx_adv:
+            return 100 * (self.rx_req_timeout / self.tx_adv)
+
+        return float("NaN")
 
     def scan_request_crc_rate(self) -> float:
         """Get rate of scan request CRCs
@@ -465,7 +476,10 @@ class AdvPktStats:
         float
             crc rate
         """
-        return 100 * (self.rx_req_crc / self.tx_adv)
+        if self.tx_adv:
+            return 100 * (self.rx_req_crc / self.tx_adv)
+
+        return float("NaN")
 
     def scan_req_fulfillment(self) -> float:
         """Get rate of scan request fulfillments
@@ -475,7 +489,11 @@ class AdvPktStats:
         float
             scan request fulfillment
         """
-        return 100 * (self.tx_resp / self.rx_req)
+
+        if self.rx_req:
+            return 100 * (self.tx_resp / self.rx_req)
+
+        return float("NaN")
 
 
 @dataclass
@@ -569,10 +587,12 @@ class ScanPktStats:
             Calculated PER value.
 
         """
-
-        return 100 * (
-            1 - self.rx_adv / (self.rx_adv + self.rx_adv_crc + self.rx_adv_timeout)
-        )
+        try:
+            return 100 * (
+                1 - self.rx_adv / (self.rx_adv + self.rx_adv_crc + self.rx_adv_timeout)
+            )
+        except ZeroDivisionError:
+            return float("NaN")
 
     def scan_response_rate(self) -> float:
         """Get scan response rate
@@ -582,7 +602,10 @@ class ScanPktStats:
         float
             scan response rate
         """
-        return 100 * self.rx_rsp / self.tx_req
+        if self.tx_req:
+            return 100 * self.rx_rsp / self.tx_req
+
+        return float("NaN")
 
     def scan_response_timeout_rate(self) -> float:
         """Get scan response timeout rate
@@ -592,7 +615,11 @@ class ScanPktStats:
         float
             scan response timeout rate
         """
-        return 100 * self.rx_rsp_timeout / self.tx_req
+
+        if self.tx_req:
+            return 100 * self.rx_rsp_timeout / self.tx_req
+
+        return float("NaN")
 
     def scan_response_crc_rate(self) -> float:
         """Get scan response crc rate
@@ -602,7 +629,9 @@ class ScanPktStats:
         float
             scan response crc rate
         """
-        return 100 * self.rx_rsp_crc / self.tx_req
+        if self.tx_req:
+            return 100 * self.rx_rsp_crc / self.tx_req
+        return float("NaN")
 
 
 @dataclass

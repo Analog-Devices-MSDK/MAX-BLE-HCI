@@ -64,8 +64,8 @@ from .packet_codes import StatusCode
 from .packet_defs import OCF, OGF
 from .utils import to_le_nbyte_list, can_represent_as_bytes
 
-
 class BleStandardCmds:
+    #pylint: disable=too-many-public-methods
     """Definitions for BLE standard HCI commands.
 
     Class contains functions used to implement BLE standard HCI
