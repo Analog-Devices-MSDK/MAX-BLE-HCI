@@ -481,14 +481,24 @@ class AdvPktStats:
 
         return float("NaN")
 
-    def scan_req_fulfillment(self) -> float:
+    def scan_req_fulfillment(self, tx_packets: Optional[int] = None) -> float:
         """Get rate of scan request fulfillments
         (i.e how often the dut responds to scan requests)
+
+        Parameters
+        ----------
+        tx_packets : int, optional
+            number of scan requests sent to device.
+            If not known calculated based off of how many request device received as counted by it
+
         Returns
         -------
         float
             scan request fulfillment
         """
+
+        if tx_packets is not None:
+            return 100 * (self.tx_resp / tx_packets)
 
         if self.rx_req:
             return 100 * (self.tx_resp / self.rx_req)
@@ -631,6 +641,19 @@ class ScanPktStats:
         """
         if self.tx_req:
             return 100 * self.rx_rsp_crc / self.tx_req
+        return float("NaN")
+
+    def scan_request_rate(self) -> float:
+        """Get how often scan requests occur
+
+        Returns
+        -------
+        float
+            scan request rate
+        """
+        if self.rx_adv:
+            return 100 * self.tx_req / self.rx_adv
+
         return float("NaN")
 
 
