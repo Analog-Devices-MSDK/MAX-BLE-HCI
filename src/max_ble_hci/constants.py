@@ -50,6 +50,8 @@
 #
 ##############################################################################
 """Contains HCI constants definitions."""
+from __future__ import annotations
+from typing import Tuple
 from enum import Enum
 
 ADI_PORT_BAUD_RATE = 115200
@@ -89,6 +91,66 @@ class PhyOption(Enum):
 
     PHY_CODED_S2 = 0x4
     """Coded S2 PHY option."""
+
+    @staticmethod
+    def to_mask(phy: PhyOption) -> Tuple[int, int]:
+        """Convert list of phy options to PHY preference mask and PHY option mask
+
+        Parameters
+        ----------
+        phy : PhyOption
+            PhyOption Enum
+
+        Returns
+        -------
+        Tuple[int, int]
+            PHY preference mask as defined by BLE spec
+            PHY option mask as defined by BLE spec
+        """
+
+        if phy == PhyOption.PHY_1M:
+            return (1 << 0, 0)
+
+        if phy == PhyOption.PHY_2M:
+            return (1 << 1, 0)
+
+        if phy in (PhyOption.PHY_CODED, PhyOption.PHY_CODED_S8):
+            return (1 << 2, 2)
+
+        return (1 << 2, 1)
+
+    @staticmethod
+    def str_to_enum(phy: str) -> PhyOption:
+        """Convert phy as string to enum
+
+        Parameters
+        ----------
+        phy : str
+            PHY (1M, 2M, S8, S2)
+
+        Returns
+        -------
+        PhyOption
+            PHY option as enum
+
+        Raises
+        ------
+        ValueError
+            If PHY option does not exist
+        """
+        if phy.upper() not in ("1M", "2M", "S8", "S2"):
+            raise ValueError("PHY string must be in (1M, 2M, S8, S2)")
+
+        if phy == "1M":
+            return PhyOption.PHY_1M
+        if phy == "2M":
+            return PhyOption.PHY_2M
+        if phy == "S2":
+            return PhyOption.PHY_CODED_S2
+        if phy == "S8":
+            return PhyOption.PHY_CODED_S8
+
+        return PhyOption.PHY_1M
 
 
 class PayloadOption(Enum):

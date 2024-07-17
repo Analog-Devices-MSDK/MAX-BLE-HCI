@@ -455,10 +455,8 @@ class BleStandardCmds:
     def set_phy(
         self,
         handle: int = 0x0000,
-        all_phys: int = 0x0,
-        tx_phys: int = 0x7,
-        rx_phys: int = 0x7,
-        phy_opts: int = 0x0,
+        tx_phys: Union[PhyOption, List[PhyOption]] = None,
+        rx_phys: Union[PhyOption, List[PhyOption]] = None,
     ) -> StatusCode:
         """Set the PHY preferences for a connection.
 
@@ -483,29 +481,33 @@ class BleStandardCmds:
             The return packet status code.
 
         """
-        if not 0 <= all_phys <= 3:
-            self.logger.warning(
-                "Invalid all PHYs option (%i), must be between 0x0 and 0x3. Defaulting to 0x0.",
-                all_phys,
-            )
-        if all_phys in (1, 3) and not 0 < tx_phys <= 7:
-            self.logger.warning(
-                "Invalid TX PHY option (%i), must be between 0x1 and 0x7. Defaulting to 0x7.",
-                tx_phys,
-            )
-            tx_phys = 0x7
-        if all_phys in (2, 3) and not 0 < rx_phys <= 7:
-            self.logger.warning(
-                "Invalid RX PHY option (%i), must be between 0x1 and 0x7. Defaulting to 0x7.",
-                rx_phys,
-            )
-            rx_phys = 0x7
-        if phy_opts not in (0, 1, 2, 4):
-            self.logger.warning(
-                "Invalid PHY options (%i), must be 0x0, 0x1, 0x2, or 0x4. Defaulting to 0x0.",
-                phy_opts,
-            )
-            phy_opts = 0x0
+
+        if not isinstance(tx_phys, list):
+            tx_phys = [tx_phys]
+
+        if not isinstance(rx_phys, list):
+            rx_phys = [rx_phys]
+
+        all_phys = 0
+        if tx_phys is None:
+            all_phys |= 1
+            tx_phys = []
+        elif rx_phys is None:
+            all_phys |= 2
+            rx_phys = []
+
+        phy_opts = 0
+        tx_phy_mask = 0
+        for phy in tx_phys:
+            tx_mask, coded_opt = PhyOption.to_mask(phy)
+            phy_opts |= coded_opt
+            tx_phy_mask |= tx_mask
+
+        rx_phy_mask = 0
+        for phy in rx_phys:
+            rx_mask, coded_opt = PhyOption.to_mask(phy)
+            rx_phy_mask |= rx_mask
+            phy_opts |= coded_opt
 
         params = to_le_nbyte_list(handle, 2)
         params.extend([all_phys, tx_phys, rx_phys])

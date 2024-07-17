@@ -813,28 +813,20 @@ def main():
         help="""Desired PHY
         1: 1M
         2: 2M
-        3: Coded
+        3: S2
+        4: S8
         Default: 1M""",
     )
-    set_phy_parser.add_argument(
-        "-o",
-        "--phyOption",
-        dest="phyOption",
-        type=int,
-        default=1,
-        help="""PHY Option
-        0: No preference
-        1: S2
-        2: S8
-        Default: S2""",
-    )
+    phy_lut = {
+        1: PhyOption.PHY_1M,
+        2: PhyOption.PHY_2M,
+        3: PhyOption.PHY_CODED_S2,
+        4: PhyOption.PHY_CODED_S8,
+    }
     set_phy_parser.set_defaults(
         func=lambda _: print(
             hci.set_phy(
-                handle=args.handle,
-                tx_phys=(0x1 << (args.phy - 1)),
-                rx_phys=(0x1 << (args.phy - 1)),
-                phy_opts=args.phyOption,
+                handle=args.handle, tx_phys=phy_lut[args.phy], rx_phys=phy_lut[args.phy]
             )
         ),
         which="set-phy",
