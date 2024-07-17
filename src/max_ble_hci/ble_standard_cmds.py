@@ -60,7 +60,7 @@ from ._transport import SerialUartTransport
 from .constants import PayloadOption, PhyOption
 from .data_params import AdvParams, EstablishConnParams, ScanParams, ConnParams
 from .hci_packets import CommandPacket, EventPacket
-from .packet_codes import StatusCode
+from .packet_codes import StatusCode, LEEventMask
 from .packet_defs import OCF, OGF
 from .utils import to_le_nbyte_list, can_represent_as_bytes
 
@@ -658,7 +658,7 @@ class BleStandardCmds:
         return self.send_controller_command(OCF.CONTROLLER.RESET)
 
     def set_event_mask(
-        self, mask: int, mask_pg2: Optional[int] = None
+        self, mask: Union[int, LEEventMask], mask_pg2: Optional[int] = None
     ) -> Union[StatusCode, Tuple[StatusCode, StatusCode]]:
         """Enable/disable events the board can generate.
 
@@ -687,6 +687,10 @@ class BleStandardCmds:
             command.
 
         """
+
+        if isinstance(mask, LEEventMask):
+            mask = mask.value
+
         params = to_le_nbyte_list(mask, 8)
         status = self.send_controller_command(
             OCF.CONTROLLER.SET_EVENT_MASK, params=params
