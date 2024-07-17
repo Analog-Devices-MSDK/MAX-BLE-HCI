@@ -510,7 +510,7 @@ class BleStandardCmds:
             phy_opts |= coded_opt
 
         params = to_le_nbyte_list(handle, 2)
-        params.extend([all_phys, tx_phys, rx_phys])
+        params.extend([all_phys, tx_phy_mask, rx_phy_mask])
         params.extend(to_le_nbyte_list(phy_opts, 2))
 
         return self.send_le_controller_command(OCF.LE_CONTROLLER.SET_PHY, params=params)
