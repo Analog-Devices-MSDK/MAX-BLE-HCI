@@ -702,7 +702,12 @@ class EventPacket:
         if self.evt_code == EventCode.COMMAND_COMPLETE:
             param_bytes = self.evt_params[4:]
         elif self.evt_subcode in (
+<<<<<<< HEAD
             EventSubcode.CONNECTION_CMPLT or EventSubcode.PHY_UPDATE_CMPLT,
+=======
+            EventSubcode.CONNECTION_CMPLT,
+            EventSubcode.PHY_UPDATE_CMPLT,
+>>>>>>> 64dde09 (fixed decode bug)
             EventSubcode.CONNECTION_UPDATE,
         ):
             param_bytes = self.evt_params
