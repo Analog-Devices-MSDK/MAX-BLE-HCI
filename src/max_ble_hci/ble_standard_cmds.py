@@ -395,7 +395,7 @@ class BleStandardCmds:
         )
 
     def set_default_phy(
-        self, 
+        self,
         tx_phys: Union[PhyOption, List[PhyOption]] = None,
         rx_phys: Union[PhyOption, List[PhyOption]] = None,
     ) -> StatusCode:
