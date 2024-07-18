@@ -701,6 +701,8 @@ class EventPacket:
         # pylint: disable=unknown-option-value,possibly-used-before-assignment
         if self.evt_code == EventCode.COMMAND_COMPLETE:
             param_bytes = self.evt_params[4:]
+        elif self.evt_subcode == EventSubcode.CONNECTION_CMPLT:
+            param_bytes = self.evt_params
 
         if not param_lens:
             return int.from_bytes(param_bytes, endianness.value, signed=signed)
@@ -721,3 +723,25 @@ class EventPacket:
         # pylint: enable=unknown-option-value,possibly-used-before-assignment
 
         return return_params
+
+    def _decode_le_meta(self):
+        if self.evt_subcode == EventSubcode.CONNECTION_CMPLT:
+            ret = self.get_return_params(param_lens=[1, 2, 1, 1, 6, 2, 2, 2, 1])
+
+            return {
+                "status": StatusCode(ret[0]),
+                "handle": ret[1],
+                "role": ret[2],
+                "peer_addr_type": ret[3],
+                "peer_addr": ret[4],
+                "conn_interval": ret[5],
+                "conn_latency": ret[6],
+                "supervision_timeout": ret[7],
+                "master_clock_accuracy": ret[8],
+            }
+
+        return None
+
+    def decode(self):
+        if self.evt_code == EventCode.LE_META:
+            return self._decode_le_meta()

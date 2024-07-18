@@ -93,7 +93,7 @@ class PhyOption(Enum):
     PHY_CODED_S2 = 0x4
     """Coded S2 PHY option."""
 
-    def __repr__(self) -> str:
+    def __str__(self) -> str:
         if self == PhyOption.PHY_1M:
             return "1M"
 
