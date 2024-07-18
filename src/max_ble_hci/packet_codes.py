@@ -50,7 +50,7 @@
 #
 ##############################################################################
 """Contains definitions for BLE standard codes utilized in HCI packet creation/parsing."""
-from enum import Enum
+from enum import Enum, Flag
 
 
 class EventCode(Enum):
@@ -93,7 +93,7 @@ class EventCode(Enum):
     """Vendor specific event."""
 
 
-class EventMask(Enum):
+class EventMask(Flag):
     INQUIRY_COMPLETE = 1 << 0
     INQUIRY_RESULT = 1 << 1
     CONNECTION_COMPLETE = 1 << 2
@@ -145,7 +145,7 @@ class EventMask(Enum):
     LE_META = 1 << 61
 
 
-class EventMaskLE(Enum):
+class EventMaskLE(Flag):
     CONNECTION_COMPLETE = 1 << 0
     ADV_REPORT = 1 << 1
     CONN_UPDATE_COMPLETE = 1 << 2
