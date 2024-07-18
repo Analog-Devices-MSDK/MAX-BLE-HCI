@@ -91,6 +91,8 @@ class EventCode(Enum):
 
     VENDOR_SPEC = 0xFF
     """Vendor specific event."""
+
+
 class EventMask(Enum):
     INQUIRY_COMPLETE = 1 << 0
     INQUIRY_RESULT = 1 << 1
