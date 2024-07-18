@@ -53,8 +53,7 @@
 from dataclasses import dataclass
 
 # pylint: disable=too-many-arguments,too-many-locals,too-many-instance-attributes
-from typing import Optional, List
-
+from typing import List, Optional
 
 from .constants import AddrType
 from .utils import to_le_nbyte_list

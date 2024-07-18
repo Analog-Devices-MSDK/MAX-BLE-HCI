@@ -59,15 +59,17 @@ from typing import List, Optional, Union
 
 from .constants import Endian
 from .packet_codes import EventCode, EventSubcode, StatusCode
-from .packet_defs import OCF, OGF, PacketType
 from .packet_defs import (
-    NOpOCF,
-    VendorSpecificOCF,
-    LinkControlOCF,
+    OCF,
+    OGF,
     ControllerOCF,
     InformationalOCF,
-    StatusOCF,
     LEControllerOCF,
+    LinkControlOCF,
+    NOpOCF,
+    PacketType,
+    StatusOCF,
+    VendorSpecificOCF,
 )
 
 
@@ -696,7 +698,7 @@ class EventPacket:
             The parsed return parameter(s).
 
         """
-        # pylint: disable=possibly-used-before-assignment
+        # pylint: disable=unknown-option-value,possibly-used-before-assignment
         if self.evt_code == EventCode.COMMAND_COMPLETE:
             param_bytes = self.evt_params[4:]
 
@@ -716,6 +718,6 @@ class EventPacket:
                 int.from_bytes(param_bytes[p_idx : p_idx + p_len], endianness.value)
             )
             p_idx += p_len
-        # pylint: enable=possibly-used-before-assignment
+        # pylint: enable=unknown-option-value,possibly-used-before-assignment
 
         return return_params

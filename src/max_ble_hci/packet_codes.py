@@ -94,6 +94,8 @@ class EventCode(Enum):
 
 
 class EventMask(Flag):
+    """Controller Event Mask"""
+
     INQUIRY_COMPLETE = 1 << 0
     INQUIRY_RESULT = 1 << 1
     CONNECTION_COMPLETE = 1 << 2
@@ -146,6 +148,8 @@ class EventMask(Flag):
 
 
 class EventMaskLE(Flag):
+    """LE Event Mask"""
+
     CONNECTION_COMPLETE = 1 << 0
     ADV_REPORT = 1 << 1
     CONN_UPDATE_COMPLETE = 1 << 2
@@ -157,7 +161,7 @@ class EventMaskLE(Flag):
     GEN_DHKEY_CMPLT = 1 << 8
     ENHANCED_CONNECTION_COMPLETE = 1 << 9
     DIRECTED_ADV_REPORT = 1 << 10
-    PHY_UPDATE_COMPLETE = 1 < 11
+    PHY_UPDATE_COMPLETE = 1 << 11
     EXTENDED_ADVERTISING_REPORT = 1 << 12
     PERIODIC_ADV_SYNC_EST = 1 << 13
     PERIODIC_ADV_REPORT = 1 << 14

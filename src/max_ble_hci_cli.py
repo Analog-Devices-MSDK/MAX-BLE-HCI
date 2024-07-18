@@ -55,10 +55,9 @@ max_ble_hci_cli.py
 Description: CLI Client to use MAX-BLE-HCI
 
 """
-import os
 import argparse
 import logging
-
+import os
 import signal
 
 # pylint: disable=unused-import,too-many-lines
@@ -74,12 +73,13 @@ from argparse import RawTextHelpFormatter
 # pylint: disable=import-error
 from colorlog import ColoredFormatter
 
+from max_ble_hci import BleHci
+from max_ble_hci.constants import PayloadOption, PhyOption
+from max_ble_hci.data_params import AdvParams, EstablishConnParams, ScanParams
+from max_ble_hci.utils import convert_str_address
+
 # pylint: enable=import-error
 
-from max_ble_hci import BleHci
-from max_ble_hci.constants import PhyOption, PayloadOption
-from max_ble_hci.data_params import EstablishConnParams, AdvParams, ScanParams
-from max_ble_hci.utils import convert_str_address
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)

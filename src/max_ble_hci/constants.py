@@ -51,8 +51,9 @@
 ##############################################################################
 """Contains HCI constants definitions."""
 from __future__ import annotations
-from typing import Tuple
+
 from enum import Enum
+from typing import Tuple
 
 ADI_PORT_BAUD_RATE = 115200
 
@@ -91,6 +92,24 @@ class PhyOption(Enum):
 
     PHY_CODED_S2 = 0x4
     """Coded S2 PHY option."""
+
+    def __repr__(self) -> str:
+        if self == PhyOption.PHY_1M:
+            return "1M"
+
+        if self == PhyOption.PHY_2M:
+            return "2M"
+
+        if self == PhyOption.PHY_CODED_S2:
+            return "S2"
+
+        if self == PhyOption.PHY_CODED_S8:
+            return "S8"
+
+        if self == PhyOption.PHY_CODED:
+            return "Coded"
+
+        return ""
 
     @staticmethod
     def to_mask(phy: PhyOption) -> Tuple[int, int]:

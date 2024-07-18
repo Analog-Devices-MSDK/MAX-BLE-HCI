@@ -70,7 +70,7 @@ from .data_params import (
 from .hci_packets import CommandPacket, EventPacket, byte_length
 from .packet_codes import StatusCode
 from .packet_defs import OCF, OGF
-from .utils import to_le_nbyte_list, convert_str_address
+from .utils import convert_str_address, to_le_nbyte_list
 
 
 class VendorSpecificCmds:

@@ -58,11 +58,11 @@ from typing import List, Optional, Tuple, Union
 from ._hci_logger import get_formatted_logger
 from ._transport import SerialUartTransport
 from .constants import PayloadOption, PhyOption
-from .data_params import AdvParams, EstablishConnParams, ScanParams, ConnParams
+from .data_params import AdvParams, ConnParams, EstablishConnParams, ScanParams
 from .hci_packets import CommandPacket, EventPacket
-from .packet_codes import StatusCode, EventMaskLE, EventMask
+from .packet_codes import EventMask, EventMaskLE, StatusCode
 from .packet_defs import OCF, OGF
-from .utils import to_le_nbyte_list, can_represent_as_bytes
+from .utils import can_represent_as_bytes, to_le_nbyte_list
 
 
 class BleStandardCmds:

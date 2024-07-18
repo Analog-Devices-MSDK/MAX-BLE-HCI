@@ -56,14 +56,14 @@ from typing import Any, Callable, Optional, Union
 
 from ._hci_logger import get_formatted_logger
 from ._transport import SerialUartTransport
+from .ad_types import ADTypes
 from .ble_standard_cmds import BleStandardCmds
 from .constants import ADI_PORT_BAUD_RATE
 from .data_params import AdvParams, EstablishConnParams
 from .hci_packets import AsyncPacket, CommandPacket, EventPacket
-from .packet_codes import StatusCode, EventMaskLE
-from .vendor_spec_cmds import VendorSpecificCmds
-from .ad_types import ADTypes
+from .packet_codes import EventMaskLE, StatusCode
 from .utils import convert_str_address
+from .vendor_spec_cmds import VendorSpecificCmds
 
 
 class BleHci(BleStandardCmds, VendorSpecificCmds):
