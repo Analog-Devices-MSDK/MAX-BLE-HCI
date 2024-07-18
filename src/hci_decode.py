@@ -23,8 +23,11 @@ def main():
     packet_type = PacketType(packet_type)
 
     command = binascii.unhexlify(args.command[2:])
+    
 
+    print(packet_type)
     if packet_type == PacketType.COMMAND:
+        
         print(CommandPacket.from_bytes(command))
     elif packet_type == PacketType.EXTENDED:
         pass

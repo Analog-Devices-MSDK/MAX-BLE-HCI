@@ -395,7 +395,9 @@ class BleStandardCmds:
         )
 
     def set_default_phy(
-        self, all_phys: int = 0x0, tx_phys: int = 0x7, rx_phys: int = 0x7
+        self, 
+        tx_phys: Union[PhyOption, List[PhyOption]] = None,
+        rx_phys: Union[PhyOption, List[PhyOption]] = None,
     ) -> StatusCode:
         """Set defaults for ALL, TX, and RX PHYs.
 
@@ -417,7 +419,35 @@ class BleStandardCmds:
             The return packet status code.
 
         """
-        params = [all_phys, tx_phys, rx_phys]
+
+        if not isinstance(tx_phys, list):
+            tx_phys = [tx_phys]
+
+        if not isinstance(rx_phys, list):
+            rx_phys = [rx_phys]
+
+        all_phys = 0
+        if tx_phys is None:
+            all_phys |= 1
+            tx_phys = []
+        elif rx_phys is None:
+            all_phys |= 2
+            rx_phys = []
+
+        phy_opts = 0
+        tx_phy_mask = 0
+        for phy in tx_phys:
+            tx_mask, coded_opt = PhyOption.to_mask(phy)
+            phy_opts |= coded_opt
+            tx_phy_mask |= tx_mask
+
+        rx_phy_mask = 0
+        for phy in rx_phys:
+            rx_mask, coded_opt = PhyOption.to_mask(phy)
+            rx_phy_mask |= rx_mask
+            phy_opts |= coded_opt
+
+        params = [all_phys, tx_phy_mask, rx_phy_mask]
         return self.send_le_controller_command(
             OCF.LE_CONTROLLER.SET_DEF_PHY, params=params
         )
