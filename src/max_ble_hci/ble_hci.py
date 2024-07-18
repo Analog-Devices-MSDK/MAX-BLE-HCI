@@ -375,7 +375,6 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         if event_mask is not None:
             self.set_event_mask(event_mask)
 
-        
         status = self.create_connection(conn_params)
 
         return status
