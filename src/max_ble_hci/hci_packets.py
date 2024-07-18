@@ -60,6 +60,15 @@ from typing import List, Optional, Union
 from .constants import Endian
 from .packet_codes import EventCode, EventSubcode, StatusCode
 from .packet_defs import OCF, OGF, PacketType
+from .packet_defs import (
+    NOpOCF,
+    VendorSpecificOCF,
+    LinkControlOCF,
+    ControllerOCF,
+    InformationalOCF,
+    StatusOCF,
+    LEControllerOCF,
+)
 
 
 def byte_length(num: int):
@@ -123,7 +132,17 @@ class CommandPacket:
             self.params = None
 
     def __repr__(self) -> str:
-        return str(self.__dict__)
+
+        ogf, ocf = CommandPacket.get_ogf_ocf(self.opcode)
+
+        cmd_str = f"OGF: {ogf}\n"
+        cmd_str += f"OCF: {ocf}\n"
+        cmd_str += f"OPCODE: {hex(self.opcode)}\n"
+        cmd_str += f"LENGTH: {self.length}\n"
+        cmd_str += f"PARAMS: {self.params}"
+        
+
+        return cmd_str
 
     def _enum_to_int(self, num):
         """Convert an enumeration value to an integer.
@@ -147,6 +166,64 @@ class CommandPacket:
             return byte_length(params)
 
         return sum(byte_length(x) for x in params)
+
+    @staticmethod
+    def get_ogf_ocf(opcode) -> tuple[OGF, Union[ControllerOCF, LEControllerOCF]]:
+        """Get OGF and OCF from opcode of command packet
+
+        Parameters
+        ----------
+        opcode : int
+            2 Bytes opcode
+
+        Returns
+        -------
+        tuple
+            OGF, OCF
+        """
+
+        ogf = OGF(opcode >> 10)
+        ocf = opcode & 0x03F
+
+        if ogf == OGF.NOP:
+            ocf = NOpOCF.NOP
+        elif ogf == OGF.LINK_CONTROL:
+            ocf = LinkControlOCF(ocf)
+
+        elif ogf == OGF.CONTROLLER:
+            ocf = ControllerOCF(ocf)
+        elif ogf == OGF.INFORMATIONAL:
+            ocf = InformationalOCF(ocf)
+        elif ogf == OGF.STATUS:
+            ocf = StatusOCF(ocf)
+        elif ogf == OGF.LE_CONTROLLER:
+            ocf = LEControllerOCF(ocf)
+
+        elif ogf == OGF.VENDOR_SPEC:
+            ocf = VendorSpecificOCF(ocf)
+        else:
+            ocf = None
+
+        return ogf, ocf
+
+    @staticmethod
+    def from_bytes(command: bytearray) -> CommandPacket:
+        """Convert command from byte array to command packet
+
+        Parameters
+        ----------
+        command : bytearray
+            raw command in bytes
+
+        Returns
+        -------
+        CommandPacket
+            Decoded command packet
+        """
+        opcode = command[1] << 8 | command[0]
+
+        ogf, ocf = CommandPacket.get_ogf_ocf(opcode=opcode)
+        return CommandPacket(ogf=OGF(ogf), ocf=OCF.CONTROLLER(ocf), params=list(command[2:]))
 
     @staticmethod
     def make_hci_opcode(ogf: Union[OGF, int], ocf: Union[OCF, int]) -> int:

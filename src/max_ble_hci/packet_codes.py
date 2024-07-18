@@ -93,7 +93,7 @@ class EventCode(Enum):
     """Vendor specific event."""
 
 
-class LEEventMask(Enum):
+class EventMask(Enum):
     CONNECTION_COMPLETE = 1 << 0
     ADV_REPORT = 1 << 1
     CONN_UPDATE_COMPLETE = 1 << 2
