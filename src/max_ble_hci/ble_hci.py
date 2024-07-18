@@ -60,7 +60,7 @@ from .ble_standard_cmds import BleStandardCmds
 from .constants import ADI_PORT_BAUD_RATE
 from .data_params import AdvParams, EstablishConnParams
 from .hci_packets import AsyncPacket, CommandPacket, EventPacket
-from .packet_codes import StatusCode, EventMask
+from .packet_codes import StatusCode, EventMaskLE
 from .vendor_spec_cmds import VendorSpecificCmds
 from .ad_types import ADTypes
 from .utils import convert_str_address
@@ -313,7 +313,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         interval: int = 0x6,
         sup_timeout: int = 0x64,
         conn_params: Optional[EstablishConnParams] = None,
-        event_mask: Optional[EventMask] = None,
+        event_mask: Optional[EventMaskLE] = None,
     ) -> StatusCode:
         """Initialize a connection.
 
