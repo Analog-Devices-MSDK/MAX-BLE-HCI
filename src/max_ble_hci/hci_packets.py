@@ -701,7 +701,10 @@ class EventPacket:
         # pylint: disable=unknown-option-value,possibly-used-before-assignment
         if self.evt_code == EventCode.COMMAND_COMPLETE:
             param_bytes = self.evt_params[4:]
-        elif self.evt_subcode in (EventSubcode.CONNECTION_CMPLT or EventSubcode.PHY_UPDATE_CMPLT, EventSubcode.CONNECTION_UPDATE):
+        elif self.evt_subcode in (
+            EventSubcode.CONNECTION_CMPLT or EventSubcode.PHY_UPDATE_CMPLT,
+            EventSubcode.CONNECTION_UPDATE,
+        ):
             param_bytes = self.evt_params
 
         if not param_lens:
