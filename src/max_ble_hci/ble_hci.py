@@ -286,7 +286,6 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         if status != StatusCode.SUCCESS:
             self.logger.warning("Failed to reset connection stats")
 
-        status = self.set_default_phy(all_phys=0, tx_phys=7, rx_phys=7)
         if status != StatusCode.SUCCESS:
             self.logger.warning("Failed to set default PHY")
 
@@ -376,7 +375,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         if event_mask is not None:
             self.set_event_mask(event_mask)
 
-        self.set_default_phy(all_phys=0, tx_phys=7, rx_phys=7)
+        
         status = self.create_connection(conn_params)
 
         return status
