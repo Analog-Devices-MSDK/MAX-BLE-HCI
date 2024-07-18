@@ -132,7 +132,6 @@ class CommandPacket:
             self.params = None
 
     def __repr__(self) -> str:
-
         ogf, ocf = CommandPacket.get_ogf_ocf(self.opcode)
 
         cmd_str = f"OGF: {ogf}\n"
@@ -140,7 +139,6 @@ class CommandPacket:
         cmd_str += f"OPCODE: {hex(self.opcode)}\n"
         cmd_str += f"LENGTH: {self.length}\n"
         cmd_str += f"PARAMS: {self.params}"
-        
 
         return cmd_str
 
@@ -223,7 +221,9 @@ class CommandPacket:
         opcode = command[1] << 8 | command[0]
 
         ogf, ocf = CommandPacket.get_ogf_ocf(opcode=opcode)
-        return CommandPacket(ogf=OGF(ogf), ocf=OCF.CONTROLLER(ocf), params=list(command[2:]))
+        return CommandPacket(
+            ogf=OGF(ogf), ocf=OCF.CONTROLLER(ocf), params=list(command[2:])
+        )
 
     @staticmethod
     def make_hci_opcode(ogf: Union[OGF, int], ocf: Union[OCF, int]) -> int:
