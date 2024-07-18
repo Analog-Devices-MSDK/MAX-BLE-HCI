@@ -675,7 +675,7 @@ class BleStandardCmds:
         return self.send_controller_command(OCF.CONTROLLER.RESET)
 
     def set_event_mask(
-        self, mask: Union[int, EventMaskLE], mask_pg2: Optional[int] = None
+        self, mask: Union[int, EventMask], mask_pg2: Optional[int] = None
     ) -> Union[StatusCode, Tuple[StatusCode, StatusCode]]:
         """Enable/disable events the board can generate.
 
@@ -724,7 +724,7 @@ class BleStandardCmds:
 
         return status
 
-    def set_event_mask_le(self, mask: int) -> StatusCode:
+    def set_event_mask_le(self, mask: Union[int, EventMaskLE]) -> StatusCode:
         """Enable/disable LE events the board can generate.
 
         Sends a command to the DUT, telling it to enable/disable
