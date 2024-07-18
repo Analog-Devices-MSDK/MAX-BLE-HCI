@@ -399,25 +399,19 @@ class BleStandardCmds:
         tx_phys: Union[PhyOption, List[PhyOption]] = None,
         rx_phys: Union[PhyOption, List[PhyOption]] = None,
     ) -> StatusCode:
-        """Set defaults for ALL, TX, and RX PHYs.
-
-        Sends a command to the DUT, telling it to set the default behavior
-        for ALL, TX, and RX PHYs in accordance with the given values.
+        """Set default phy used for TX and RX
 
         Parameters
         ----------
-        all_phys : int, optional
-            Value describing desired behavior of all PHYs.
-        tx_phys : int, optional
-            Value describing desired behavior of TX PHYs.
-        rx_phys : int, optional
-            Value describing desired behavior of RX PHYs.
+        tx_phys : Union[PhyOption, List[PhyOption]], optional
+            Preferred PHY or list of preferred PHYs for TX, by default None meaning no preference
+        rx_phys : Union[PhyOption, List[PhyOption]], optional
+            Preferred PHY or list of preferred PHYs for TX, by default None meaning no preference
 
         Returns
         -------
         StatusCode
             The return packet status code.
-
         """
 
         if not isinstance(tx_phys, list):
@@ -488,28 +482,21 @@ class BleStandardCmds:
         tx_phys: Union[PhyOption, List[PhyOption]] = None,
         rx_phys: Union[PhyOption, List[PhyOption]] = None,
     ) -> StatusCode:
-        """Set the PHY preferences for a connection.
-
-        Sends a command to the DUT, telling it to set the PHY preferences
-        for the indicated connection in accordance with the given values.
+        """Set PHY during connection
 
         Parameters
         ----------
         handle : int, optional
-            The handle to the desired connection.
-        all_phys : int, optional
-            Behavior settings for all PHYs. Indicates if a PHY preference
-            exists for both RX and TX PHYs.
-        tx_phys : PhyOption, optional
-            PHY preference for TX PHYs.
-        rx_phys : PhyOption, optional
-            PHY preference for RX PHYs.
+            connection handle, by default 0x0000
+        tx_phys : Union[PhyOption, List[PhyOption]], optional
+            PHY or list of PHYS preferred for TX, by default None meaning no preference
+        rx_phys : Union[PhyOption, List[PhyOption]], optional meaning no preference
+            PHY or list of PHYs preferred for RX, by default None
 
         Returns
         -------
         StatusCode
             The return packet status code.
-
         """
 
         if not isinstance(tx_phys, list):
