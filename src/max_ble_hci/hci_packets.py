@@ -57,7 +57,7 @@ import warnings
 from enum import Enum
 from typing import List, Optional, Union
 
-from .constants import Endian
+from .constants import Endian, PhyOption
 from .packet_codes import EventCode, EventSubcode, StatusCode
 from .packet_defs import (
     OCF,
@@ -739,9 +739,34 @@ class EventPacket:
                 "supervision_timeout": ret[7],
                 "master_clock_accuracy": ret[8],
             }
+        if self.evt_subcode == EventSubcode.PHY_UPDATE_CMPLT:
+            ret = self.get_return_params([1, 2, 1, 1])
+            return {
+                "status": StatusCode(ret[0]),
+                "handle": ret[1],
+                "tx_phy": PhyOption(ret[2]),
+                "rx_phy": PhyOption(ret[3]),
+            }
+
+        if self.evt_subcode == EventSubcode.CONNECTION_UPDATE:
+            ret = self.get_return_params([1, 2, 2, 2, 2])
+            return {
+                "status": StatusCode(ret[0]),
+                "handle": ret[1],
+                "conn_interval": ret[2],
+                "conn_latency": ret[3],
+                "supervision_timeout": ret[4],
+            }
 
         return None
 
-    def decode(self):
+    def decode(self) -> dict:
+        """Decode parameters from EventPacket
+
+        Returns
+        -------
+        dict
+            Decoded event parameters
+        """
         if self.evt_code == EventCode.LE_META:
             return self._decode_le_meta()
