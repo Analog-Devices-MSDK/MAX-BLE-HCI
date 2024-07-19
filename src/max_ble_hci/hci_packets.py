@@ -702,12 +702,8 @@ class EventPacket:
         if self.evt_code == EventCode.COMMAND_COMPLETE:
             param_bytes = self.evt_params[4:]
         elif self.evt_subcode in (
-<<<<<<< HEAD
-            EventSubcode.CONNECTION_CMPLT or EventSubcode.PHY_UPDATE_CMPLT,
-=======
             EventSubcode.CONNECTION_CMPLT,
             EventSubcode.PHY_UPDATE_CMPLT,
->>>>>>> 64dde09 (fixed decode bug)
             EventSubcode.CONNECTION_UPDATE,
         ):
             param_bytes = self.evt_params
@@ -723,12 +719,15 @@ class EventPacket:
 
         return_params = []
         p_idx = 0
+        # pylint: disable=unknown-option-value
+        # pylint: disable=possibly-used-before-assignment
         for p_len in param_lens:
             return_params.append(
                 int.from_bytes(param_bytes[p_idx : p_idx + p_len], endianness.value)
             )
             p_idx += p_len
-        # pylint: enable=unknown-option-value,possibly-used-before-assignment
+        # pylint: enable=possibly-used-before-assignment
+        # pylint: enable=unknown-option-value
 
         return return_params
 
@@ -778,3 +777,5 @@ class EventPacket:
         """
         if self.evt_code == EventCode.LE_META:
             return self._decode_le_meta()
+
+        return None
