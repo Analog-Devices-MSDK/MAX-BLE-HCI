@@ -58,14 +58,15 @@ from typing import List, Optional, Tuple, Union
 from ._hci_logger import get_formatted_logger
 from ._transport import SerialUartTransport
 from .constants import PayloadOption, PhyOption
-from .data_params import AdvParams, ConnParams, ScanParams
+from .data_params import AdvParams, ConnParams, EstablishConnParams, ScanParams
 from .hci_packets import CommandPacket, EventPacket
-from .packet_codes import StatusCode
+from .packet_codes import EventMask, EventMaskLE, StatusCode
 from .packet_defs import OCF, OGF
-from .utils import to_le_nbyte_list, can_represent_as_bytes
+from .utils import can_represent_as_bytes, to_le_nbyte_list
 
 
 class BleStandardCmds:
+    # pylint: disable=too-many-public-methods
     """Definitions for BLE standard HCI commands.
 
     Class contains functions used to implement BLE standard HCI
@@ -348,8 +349,29 @@ class BleStandardCmds:
             OCF.LE_CONTROLLER.SET_SCAN_ENABLE, params=params
         )
 
+    def update_connection_params(
+        self, handle: int, conn_params: ConnParams = ConnParams(0x0)
+    ) -> StatusCode:
+        """Update connection parameters
+
+        Parameters
+        ----------
+        handle : str
+            Connection Handle
+        conn_params : ConnParams, optional
+            Connection paramters by default ConnParams(0x0)
+
+        Returns
+        -------
+        StatusCode
+            The return packet status code.
+        """
+        params = to_le_nbyte_list(handle, 2) + conn_params.to_payload()
+
+        return self.send_le_controller_command(OCF.LE_CONTROLLER, params=params)
+
     def create_connection(
-        self, conn_params: ConnParams = ConnParams(0x0)
+        self, conn_params: EstablishConnParams = EstablishConnParams(0x0)
     ) -> StatusCode:
         """Command board to connect with a peer device.
 
@@ -367,47 +389,59 @@ class BleStandardCmds:
             The return packet status code.
 
         """
-        params = to_le_nbyte_list(conn_params.scan_interval, 2)
-        params.extend(to_le_nbyte_list(conn_params.scan_window, 2))
-        params.append(conn_params.init_filter_policy)
-        params.append(conn_params.peer_addr_type.value)
-        params.extend(to_le_nbyte_list(conn_params.peer_addr, 6))
-        params.append(conn_params.own_addr_type.value)
-        params.extend(to_le_nbyte_list(conn_params.conn_interval_min, 2))
-        params.extend(to_le_nbyte_list(conn_params.conn_interval_max, 2))
-        params.extend(to_le_nbyte_list(conn_params.max_latency, 2))
-        params.extend(to_le_nbyte_list(conn_params.sup_timeout, 2))
-        params.extend(to_le_nbyte_list(conn_params.min_ce_length, 2))
-        params.extend(to_le_nbyte_list(conn_params.max_ce_length, 2))
 
         return self.send_le_controller_command(
-            OCF.LE_CONTROLLER.CREATE_CONN, params=params
+            OCF.LE_CONTROLLER.CREATE_CONN, params=conn_params.to_payload()
         )
 
     def set_default_phy(
-        self, all_phys: int = 0x0, tx_phys: int = 0x7, rx_phys: int = 0x7
+        self,
+        tx_phys: Union[PhyOption, List[PhyOption]] = None,
+        rx_phys: Union[PhyOption, List[PhyOption]] = None,
     ) -> StatusCode:
-        """Set defaults for ALL, TX, and RX PHYs.
-
-        Sends a command to the DUT, telling it to set the default behavior
-        for ALL, TX, and RX PHYs in accordance with the given values.
+        """Set default phy used for TX and RX
 
         Parameters
         ----------
-        all_phys : int, optional
-            Value describing desired behavior of all PHYs.
-        tx_phys : int, optional
-            Value describing desired behavior of TX PHYs.
-        rx_phys : int, optional
-            Value describing desired behavior of RX PHYs.
+        tx_phys : Union[PhyOption, List[PhyOption]], optional
+            Preferred PHY or list of preferred PHYs for TX, by default None meaning no preference
+        rx_phys : Union[PhyOption, List[PhyOption]], optional
+            Preferred PHY or list of preferred PHYs for TX, by default None meaning no preference
 
         Returns
         -------
         StatusCode
             The return packet status code.
-
         """
-        params = [all_phys, tx_phys, rx_phys]
+
+        if not isinstance(tx_phys, list):
+            tx_phys = [tx_phys]
+
+        if not isinstance(rx_phys, list):
+            rx_phys = [rx_phys]
+
+        all_phys = 0
+        if tx_phys is None:
+            all_phys |= 1
+            tx_phys = []
+        elif rx_phys is None:
+            all_phys |= 2
+            rx_phys = []
+
+        phy_opts = 0
+        tx_phy_mask = 0
+        for phy in tx_phys:
+            tx_mask, coded_opt = PhyOption.to_mask(phy)
+            phy_opts |= coded_opt
+            tx_phy_mask |= tx_mask
+
+        rx_phy_mask = 0
+        for phy in rx_phys:
+            rx_mask, coded_opt = PhyOption.to_mask(phy)
+            rx_phy_mask |= rx_mask
+            phy_opts |= coded_opt
+
+        params = [all_phys, tx_phy_mask, rx_phy_mask]
         return self.send_le_controller_command(
             OCF.LE_CONTROLLER.SET_DEF_PHY, params=params
         )
@@ -445,60 +479,55 @@ class BleStandardCmds:
     def set_phy(
         self,
         handle: int = 0x0000,
-        all_phys: int = 0x0,
-        tx_phys: int = 0x7,
-        rx_phys: int = 0x7,
-        phy_opts: int = 0x0,
+        tx_phys: Union[PhyOption, List[PhyOption]] = None,
+        rx_phys: Union[PhyOption, List[PhyOption]] = None,
     ) -> StatusCode:
-        """Set the PHY preferences for a connection.
-
-        Sends a command to the DUT, telling it to set the PHY preferences
-        for the indicated connection in accordance with the given values.
+        """Set PHY during connection
 
         Parameters
         ----------
         handle : int, optional
-            The handle to the desired connection.
-        all_phys : int, optional
-            Behavior settings for all PHYs. Indicates if a PHY preference
-            exists for both RX and TX PHYs.
-        tx_phys : PhyOption, optional
-            PHY preference for TX PHYs.
-        rx_phys : PhyOption, optional
-            PHY preference for RX PHYs.
+            connection handle, by default 0x0000
+        tx_phys : Union[PhyOption, List[PhyOption]], optional
+            PHY or list of PHYS preferred for TX, by default None meaning no preference
+        rx_phys : Union[PhyOption, List[PhyOption]], optional meaning no preference
+            PHY or list of PHYs preferred for RX, by default None
 
         Returns
         -------
         StatusCode
             The return packet status code.
-
         """
-        if not 0 <= all_phys <= 3:
-            self.logger.warning(
-                "Invalid all PHYs option (%i), must be between 0x0 and 0x3. Defaulting to 0x0.",
-                all_phys,
-            )
-        if all_phys in (1, 3) and not 0 < tx_phys <= 7:
-            self.logger.warning(
-                "Invalid TX PHY option (%i), must be between 0x1 and 0x7. Defaulting to 0x7.",
-                tx_phys,
-            )
-            tx_phys = 0x7
-        if all_phys in (2, 3) and not 0 < rx_phys <= 7:
-            self.logger.warning(
-                "Invalid RX PHY option (%i), must be between 0x1 and 0x7. Defaulting to 0x7.",
-                rx_phys,
-            )
-            rx_phys = 0x7
-        if phy_opts not in (0, 1, 2, 4):
-            self.logger.warning(
-                "Invalid PHY options (%i), must be 0x0, 0x1, 0x2, or 0x4. Defaulting to 0x0.",
-                phy_opts,
-            )
-            phy_opts = 0x0
+
+        if not isinstance(tx_phys, list):
+            tx_phys = [tx_phys]
+
+        if not isinstance(rx_phys, list):
+            rx_phys = [rx_phys]
+
+        all_phys = 0
+        if tx_phys is None:
+            all_phys |= 1
+            tx_phys = []
+        elif rx_phys is None:
+            all_phys |= 2
+            rx_phys = []
+
+        phy_opts = 0
+        tx_phy_mask = 0
+        for phy in tx_phys:
+            tx_mask, coded_opt = PhyOption.to_mask(phy)
+            phy_opts |= coded_opt
+            tx_phy_mask |= tx_mask
+
+        rx_phy_mask = 0
+        for phy in rx_phys:
+            rx_mask, coded_opt = PhyOption.to_mask(phy)
+            rx_phy_mask |= rx_mask
+            phy_opts |= coded_opt
 
         params = to_le_nbyte_list(handle, 2)
-        params.extend([all_phys, tx_phys, rx_phys])
+        params.extend([all_phys, tx_phy_mask, rx_phy_mask])
         params.extend(to_le_nbyte_list(phy_opts, 2))
 
         return self.send_le_controller_command(OCF.LE_CONTROLLER.SET_PHY, params=params)
@@ -646,7 +675,7 @@ class BleStandardCmds:
         return self.send_controller_command(OCF.CONTROLLER.RESET)
 
     def set_event_mask(
-        self, mask: int, mask_pg2: Optional[int] = None
+        self, mask: Union[int, EventMask], mask_pg2: Optional[int] = None
     ) -> Union[StatusCode, Tuple[StatusCode, StatusCode]]:
         """Enable/disable events the board can generate.
 
@@ -675,6 +704,10 @@ class BleStandardCmds:
             command.
 
         """
+
+        if isinstance(mask, EventMask):
+            mask = mask.value
+
         params = to_le_nbyte_list(mask, 8)
         status = self.send_controller_command(
             OCF.CONTROLLER.SET_EVENT_MASK, params=params
@@ -691,7 +724,7 @@ class BleStandardCmds:
 
         return status
 
-    def set_event_mask_le(self, mask: int) -> StatusCode:
+    def set_event_mask_le(self, mask: Union[int, EventMaskLE]) -> StatusCode:
         """Enable/disable LE events the board can generate.
 
         Sends a command to the DUT, telling it to enable/disable
@@ -711,6 +744,11 @@ class BleStandardCmds:
             The return packet status code.
 
         """
+        if isinstance(mask, EventMaskLE):
+            mask = mask.value
+
+        self.set_event_mask(EventMask.LE_META)
+
         params = to_le_nbyte_list(mask, 8)
         return self.send_le_controller_command(
             OCF.LE_CONTROLLER.SET_EVENT_MASK, params=params

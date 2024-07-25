@@ -50,7 +50,7 @@
 #
 ##############################################################################
 """Contains definitions for BLE standard codes utilized in HCI packet creation/parsing."""
-from enum import Enum
+from enum import Enum, Flag
 
 
 class EventCode(Enum):
@@ -93,10 +93,104 @@ class EventCode(Enum):
     """Vendor specific event."""
 
 
+class EventMask(Flag):
+    """Controller Event Mask"""
+
+    INQUIRY_COMPLETE = 1 << 0
+    INQUIRY_RESULT = 1 << 1
+    CONNECTION_COMPLETE = 1 << 2
+    CONNECTION_REQUEST = 1 << 3
+    DISCONNECTION_COMPLETE = 1 << 4
+    AUTHENTICATION_COMPLETE = 1 << 5
+    REMOTE_NAME_REQUEST_COMPLETE = 1 << 6
+    ENCRYPTION_CHANGE = 1 << 7
+    CHANGE_CONNECTION_LINK_KEY_COMPLETE = 1 << 8
+    LINK_KEY_TYPE_CHANGED = 1 << 9
+    READ_REMOTE_SUPPORTED_FEATURES_COMPLETE = 1 << 10
+    READ_REMOTE_VERSION_INFORMATION_COMPLETE = 1 << 11
+    QOS_SETUP_COMPLETE = 1 << 12
+    HARDWARE_ERROR = 1 << 15
+    FLUSH_OCCURRED = 1 << 16
+    ROLE_CHANGE = 1 << 17
+    MODE_CHANGE = 1 << 19
+    RETURN_LINK_KEYS = 1 << 20
+    PIN_CODE_REQUEST = 1 << 21
+    LINK_KEY_REQUEST = 1 << 22
+    LINK_KEY_NOTIFICATION = 1 << 23
+    LOOPBACK_COMMAND = 1 << 24
+    DATA_BUFFER_OVERFLOW = 1 << 25
+    MAX_SLOTS_CHANGE = 1 << 26
+    READ_CLOCK_OFFSET_COMPLETE = 1 << 27
+    CONNECTION_PACKET_TYPE_CHANGED = 1 << 28
+    QOS_VIOLATION = 1 << 29
+    PREVIOUSLY_USED = 1 << 30
+    PAGE_SCAN_REPETITION_MODE_CHANGE = 1 << 31
+    FLOW_SPECIFICATION_COMPLETE = 1 << 32
+    INQUIRY_RESULT_WITH_RSSI = 1 << 33
+    READ_REMOTE_EXTENDED_FEATURES_COMPLETE = 1 << 34
+    SYNCHRONOUS_CONNECTION_COMPLETE = 1 << 43
+    SYNCHRONOUS_CONNECTION_CHANGED = 1 << 44
+    SNIFF_SUBRATING = 1 << 45
+    EXTENDED_INQUIRY_RESULT = 1 << 46
+    ENCRYPTION_KEY_REFRESH_COMPLETE = 1 << 47
+    IO_CAPABILITY_REQUEST = 1 << 48
+    IO_CAPABILITY_RESPONSE = 1 << 49
+    USER_CONFIRMATION_REQUEST = 1 << 50
+    USER_PASSKEY_REQUEST = 1 << 51
+    REMOTE_OOB_DATA_REQUEST = 1 << 52
+    SIMPLE_PAIRING_COMPLETE = 1 << 53
+    LINK_SUPERVISION_TIMEOUT_CHANGED = 1 << 55
+    ENHANCED_FLUSH_COMPLETE = 1 << 56
+    USER_PASSKEY_NOTIFICATION = 1 << 58
+    KEYPRESS_NOTIFICATION = 1 << 59
+    REMOTE_HOST_SUPPORTED_FEATURES_NOTIFICATION = 1 << 60
+    LE_META = 1 << 61
+
+
+class EventMaskLE(Flag):
+    """LE Event Mask"""
+
+    CONNECTION_COMPLETE = 1 << 0
+    ADV_REPORT = 1 << 1
+    CONN_UPDATE_COMPLETE = 1 << 2
+    READ_REMOTE_FEAT_CMPLT = 1 << 3
+    LTK_REQUEST = 1 << 4
+    REMOTE_CONN_PARAM_REQ = 1 << 5
+    DATA_LEN_CHANGE = 1 << 6
+    READ_LOCAL_P256_PUB_KEY_CMPLT = 1 << 7
+    GEN_DHKEY_CMPLT = 1 << 8
+    ENHANCED_CONNECTION_COMPLETE = 1 << 9
+    DIRECTED_ADV_REPORT = 1 << 10
+    PHY_UPDATE_COMPLETE = 1 << 11
+    EXTENDED_ADVERTISING_REPORT = 1 << 12
+    PERIODIC_ADV_SYNC_EST = 1 << 13
+    PERIODIC_ADV_REPORT = 1 << 14
+    PERIODIC_ADV_SYNC_LOST = 1 << 15
+    SCAN_TIMEOUT = 1 << 16
+    ADVERTISING_SET_TERMINATED = 1 << 17
+    SCAN_REQUEST_RECEIVED = 1 << 18
+    CHANNEL_SELECTION_ALGORITHM = 1 << 19
+    CONNECTIONLESS_IQ_REPORT = 1 << 20
+    CONNECTION_IQ_REPORT = 1 << 21
+    CTE_REQUEST_FAILED = 1 << 22
+    PERIODIC_ADV_SYNC_XFER_LOST = 1 << 23
+    CIS_ESTABLISHED = 1 << 24
+    CIS_REQUEST = 1 << 25
+    CREATE_BIG_COMPLETE = 1 << 26
+    TERMINATE_BIG_COMPLETE = 1 << 27
+    BIG_SYNC_ESTABLISHED = 1 << 28
+    BIG_SYNC_LOST = 1 << 29
+    REQUEST_PEER_SCA_COMPLETE = 1 << 30
+    PATH_LOSS_THRESHOLD = 1 << 31
+    TX_POWER_REPORTING = 1 << 32
+    BIG_INFO_ADV_REPORT = 1 << 33
+    SUBRATE_CHANGE = 1 << 34
+
+
 class EventSubcode(Enum):
     """Supported LE Meta event subcodes."""
 
-    CONNECTION_COMPLETE = 0x1
+    CONNECTION_CMPLT = 0x1
     """Connection complete event."""
 
     ADVERTISING_REPORT = 0x2
@@ -108,28 +202,28 @@ class EventSubcode(Enum):
     READ_REMOTE_FEATURES_COMPLETE = 0x4
     """Read remote feature complete event."""
 
-    LONG_TERM_KEY_REQUEST = 0x5
+    LTK_REQUEST = 0x5
     """Long term key request event."""
 
-    REMOTE_CONNECTION_PARAMETER_REQUEST = 0x6
+    REMOTE_CONNECTION_PARAMETER_REQ = 0x6
     """Remote connection parameter request event."""
 
     DATA_LENGTH_CHANGE = 0x7
     """Data length change event."""
 
-    READ_LOCAL_P256_PUBLIC_KEY_COMPLETE = 0x8
+    READ_LOCAL_P256_PUB_KEY_CMPLT = 0x8
     """Read local P-256 public key complete event."""
 
-    GENERATE_DHKEY_COMPLETE = 0x9
+    GENERATE_DHKEY_CMPLT = 0x9
     """Generate DHKey complete event."""
 
-    ENHANCED_CONNECTION_COMPLETE = 0xA
+    ENHANCED_CONNECTION_CMPLT = 0xA
     """Enhanced connection complete event."""
 
     DIRECTED_ADVERTISIING_REPORT = 0xB
     """Directed advertising report event."""
 
-    PHY_UPDATE_COMPLETE = 0xC
+    PHY_UPDATE_CMPLT = 0xC
     """PHY update complete event."""
 
     EXTENDED_ADVERTISING_REPORT = 0xD
@@ -174,19 +268,19 @@ class EventSubcode(Enum):
     CIS_REQUEST = 0x1A
     """CIS request event."""
 
-    CREATE_BIG_COMPLETE = 0x1B
+    CREATE_BIG_CMPLT = 0x1B
     """Create BIG complete event."""
 
-    TERMINATE_BIG_COMPLETE = 0x1C
+    TERMINATE_BIG_CMPLT = 0x1C
     """Terminate BIG complete event."""
 
-    BIG_SYNC_ESTABLISHED = 0x1D
+    BIG_SYNC_EST = 0x1D
     """BIG sync established event."""
 
     BIG_SYNC_LOST = 0x1E
     """BIG sync list event."""
 
-    REQUEST_PEER_SCA_COMPLETE = 0x1F
+    REQUEST_PEER_SCA_CMPLT = 0x1F
     """Request peeer SCA complete event."""
 
     PATH_LOSS_THRESHOLD = 0x20

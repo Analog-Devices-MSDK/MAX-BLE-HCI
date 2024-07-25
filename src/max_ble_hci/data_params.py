@@ -53,9 +53,10 @@
 from dataclasses import dataclass
 
 # pylint: disable=too-many-arguments,too-many-locals,too-many-instance-attributes
-from typing import Optional
+from typing import List, Optional
 
 from .constants import AddrType
+from .utils import to_le_nbyte_list
 
 
 @dataclass
@@ -126,8 +127,8 @@ class ScanParams:
 
 
 @dataclass
-class ConnParams:
-    """Connection parameters data container."""
+class EstablishConnParams:
+    """Connection parameters data container used when establishing a connection."""
 
     peer_addr: int
     """Connectable peer device address."""
@@ -167,9 +168,9 @@ class ConnParams:
 
     def __post_init__(self):
         if not 0x4 <= self.scan_interval <= 0x4000:
-            raise ValueError("Scane interval must be between 0x4 - 0x4000")
+            raise ValueError("Scan interval must be between 0x4 - 0x4000")
         if not 0x4 <= self.scan_window <= 0x4000:
-            raise ValueError("Scane window must be between 0x4 - 0x4000")
+            raise ValueError("Scan window must be between 0x4 - 0x4000")
 
         if not self.init_filter_policy in [0, 1]:
             raise ValueError(
@@ -203,21 +204,97 @@ class ConnParams:
 
         return "\n".join(print_lns)
 
+    def to_payload(self) -> List[int]:
+        """Convert struct to payload
+
+        Returns
+        -------
+        List[int]
+            Formatted BLE payload
+        """
+        params = to_le_nbyte_list(self.scan_interval, 2)
+        params.extend(to_le_nbyte_list(self.scan_window, 2))
+        params.append(self.init_filter_policy)
+        params.append(self.peer_addr_type.value)
+        params.extend(to_le_nbyte_list(self.peer_addr, 6))
+        params.append(self.own_addr_type.value)
+        params.extend(to_le_nbyte_list(self.conn_interval_min, 2))
+        params.extend(to_le_nbyte_list(self.conn_interval_max, 2))
+        params.extend(to_le_nbyte_list(self.max_latency, 2))
+        params.extend(to_le_nbyte_list(self.sup_timeout, 2))
+        params.extend(to_le_nbyte_list(self.min_ce_length, 2))
+        params.extend(to_le_nbyte_list(self.max_ce_length, 2))
+
+        return params
+
+
+@dataclass
+class ConnParams:
+    """Connection parameters data container used when establishing a connection."""
+
+    conn_interval_min: int = 0x6
+    """Connection interval minimum."""
+
+    conn_interval_max: int = 0x6
+    """Connection interval maximum."""
+
+    max_latency: int = 0x0000
+    """Maximum peripheral latency."""
+
+    sup_timeout: int = 0x64
+    """Supervision timeout."""
+
+    min_ce_length: int = 0x0F10
+    """Minimum connection event length."""
+
+    max_ce_length: int = 0x0F10
+    """Maximum connection event length."""
+
+    def __post_init__(self):
+        if not 0x6 <= self.conn_interval_max <= 0xC80:
+            raise ValueError("Connection interval min must be between 0x6 - 0xC80")
+
+    def __repr__(self) -> str:
+        print_lns = []
+        for key, val in self.__dict__.items():
+            if val is None:
+                continue
+            print_lns.append(f"{key}:  {val}")
+
+        return "\n".join(print_lns)
+
+    def to_payload(self) -> List[str]:
+        """To formatted payload
+
+        Returns
+        -------
+        List[str]
+            Struct as BLE payload
+        """
+        params = to_le_nbyte_list(self.conn_interval_min, 2)
+        params.extend(to_le_nbyte_list(self.conn_interval_max, 2))
+        params.extend(to_le_nbyte_list(self.max_latency, 2))
+        params.extend(to_le_nbyte_list(self.sup_timeout, 2))
+        params.extend(to_le_nbyte_list(self.min_ce_length, 2))
+        params.extend(to_le_nbyte_list(self.max_ce_length, 2))
+
+        return params
+
 
 class DataPktStats:
     """Generic data stats container for CM and DTM."""
 
     def __init__(
         self,
-        rx_data: int,
-        rx_data_crc: int,
-        rx_data_timeout: int,
-        tx_data: int,
-        err_data: int,
-        rx_setup: int,
-        tx_setup: int,
-        rx_isr: int,
-        tx_isr: int,
+        rx_data: int = 0,
+        rx_data_crc: int = 0,
+        rx_data_timeout: int = 0,
+        tx_data: int = 0,
+        err_data: int = 0,
+        rx_setup: int = 0,
+        tx_setup: int = 0,
+        rx_isr: int = 0,
+        tx_isr: int = 0,
     ) -> None:
         self.rx_data = rx_data
         """Number of packets received correctly."""
@@ -281,11 +358,16 @@ class DataPktStats:
             Calculated PER value.
 
         """
-        if peer_tx_data:
-            return 100 - 100 * (self.rx_data / peer_tx_data)
-        return 100 * (
-            1 - self.rx_data / (self.rx_data + self.rx_data_crc + self.rx_data_timeout)
-        )
+        try:
+            if peer_tx_data:
+                return 100 - 100 * (self.rx_data / peer_tx_data)
+            return 100 * (
+                1
+                - self.rx_data
+                / (self.rx_data + self.rx_data_crc + self.rx_data_timeout)
+            )
+        except ZeroDivisionError:
+            return float("NaN")
 
 
 @dataclass
@@ -364,10 +446,13 @@ class AdvPktStats:
         float
             response rate
         """
-        if dirty:
-            return 100 * ((self.rx_req + self.rx_req_crc) / self.tx_adv)
 
-        return 100 * (self.rx_req / self.tx_adv)
+        if self.tx_adv:
+            if dirty:
+                return 100 * ((self.rx_req + self.rx_req_crc) / self.tx_adv)
+
+            return 100 * (self.rx_req / self.tx_adv)
+        return float("NaN")
 
     def scan_request_timeout_rate(self) -> float:
         """Get rate of scan request timeouts
@@ -377,7 +462,10 @@ class AdvPktStats:
         float
             timeout rate
         """
-        return 100 * (self.rx_req_timeout / self.tx_adv)
+        if self.tx_adv:
+            return 100 * (self.rx_req_timeout / self.tx_adv)
+
+        return float("NaN")
 
     def scan_request_crc_rate(self) -> float:
         """Get rate of scan request CRCs
@@ -387,17 +475,34 @@ class AdvPktStats:
         float
             crc rate
         """
-        return 100 * (self.rx_req_crc / self.tx_adv)
+        if self.tx_adv:
+            return 100 * (self.rx_req_crc / self.tx_adv)
 
-    def scan_req_fulfillment(self) -> float:
+        return float("NaN")
+
+    def scan_req_fulfillment(self, tx_packets: Optional[int] = None) -> float:
         """Get rate of scan request fulfillments
         (i.e how often the dut responds to scan requests)
+
+        Parameters
+        ----------
+        tx_packets : int, optional
+            number of scan requests sent to device.
+            If not known calculated based off of how many request device received as counted by it
+
         Returns
         -------
         float
             scan request fulfillment
         """
-        return 100 * (self.tx_resp / self.rx_req)
+
+        if tx_packets is not None:
+            return 100 * (self.tx_resp / tx_packets)
+
+        if self.rx_req:
+            return 100 * (self.tx_resp / self.rx_req)
+
+        return float("NaN")
 
 
 @dataclass
@@ -491,10 +596,12 @@ class ScanPktStats:
             Calculated PER value.
 
         """
-
-        return 100 * (
-            1 - self.rx_adv / (self.rx_adv + self.rx_adv_crc + self.rx_adv_timeout)
-        )
+        try:
+            return 100 * (
+                1 - self.rx_adv / (self.rx_adv + self.rx_adv_crc + self.rx_adv_timeout)
+            )
+        except ZeroDivisionError:
+            return float("NaN")
 
     def scan_response_rate(self) -> float:
         """Get scan response rate
@@ -504,7 +611,10 @@ class ScanPktStats:
         float
             scan response rate
         """
-        return 100 * self.rx_rsp / self.tx_req
+        if self.tx_req:
+            return 100 * self.rx_rsp / self.tx_req
+
+        return float("NaN")
 
     def scan_response_timeout_rate(self) -> float:
         """Get scan response timeout rate
@@ -514,7 +624,11 @@ class ScanPktStats:
         float
             scan response timeout rate
         """
-        return 100 * self.rx_rsp_timeout / self.tx_req
+
+        if self.tx_req:
+            return 100 * self.rx_rsp_timeout / self.tx_req
+
+        return float("NaN")
 
     def scan_response_crc_rate(self) -> float:
         """Get scan response crc rate
@@ -524,7 +638,22 @@ class ScanPktStats:
         float
             scan response crc rate
         """
-        return 100 * self.rx_rsp_crc / self.tx_req
+        if self.tx_req:
+            return 100 * self.rx_rsp_crc / self.tx_req
+        return float("NaN")
+
+    def scan_request_rate(self) -> float:
+        """Get how often scan requests occur
+
+        Returns
+        -------
+        float
+            scan request rate
+        """
+        if self.rx_adv:
+            return 100 * self.tx_req / self.rx_adv
+
+        return float("NaN")
 
 
 @dataclass
