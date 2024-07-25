@@ -151,6 +151,13 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
             recover_on_power_loss,
         )
         super().__init__(self.port, logger_name)
+    
+    def __enter__(self):
+        return self
+     
+    def __exit__(self, exc_type, exc_value, exc_traceback):
+        self.reset()
+        pass
 
     def get_log_level(self) -> str:
         """Retrieve the current log level.
