@@ -56,14 +56,14 @@ from typing import Any, Callable, Optional, Union
 
 from ._hci_logger import get_formatted_logger
 from ._transport import SerialUartTransport
+from .ad_types import ADTypes
 from .ble_standard_cmds import BleStandardCmds
 from .constants import ADI_PORT_BAUD_RATE
-from .data_params import AdvParams, ConnParams
+from .data_params import AdvParams, EstablishConnParams
 from .hci_packets import AsyncPacket, CommandPacket, EventPacket
-from .packet_codes import StatusCode
-from .vendor_spec_cmds import VendorSpecificCmds
-from .ad_types import ADTypes
+from .packet_codes import EventMaskLE, StatusCode
 from .utils import convert_str_address
+from .vendor_spec_cmds import VendorSpecificCmds
 
 
 class BleHci(BleStandardCmds, VendorSpecificCmds):
@@ -286,7 +286,6 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         if status != StatusCode.SUCCESS:
             self.logger.warning("Failed to reset connection stats")
 
-        status = self.set_default_phy(all_phys=0, tx_phys=7, rx_phys=7)
         if status != StatusCode.SUCCESS:
             self.logger.warning("Failed to set default PHY")
 
@@ -313,7 +312,8 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         addr: Optional[Union[str, int]] = None,
         interval: int = 0x6,
         sup_timeout: int = 0x64,
-        conn_params: Optional[ConnParams] = None,
+        conn_params: Optional[EstablishConnParams] = None,
+        event_mask: Optional[EventMaskLE] = None,
     ) -> StatusCode:
         """Initialize a connection.
 
@@ -363,7 +363,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
                     f"Address ({addr}) is too large, must be 6 bytes or less."
                 )
 
-            conn_params = ConnParams(
+            conn_params = EstablishConnParams(
                 addr,
                 conn_interval_max=interval,
                 conn_interval_min=interval,
@@ -371,7 +371,9 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
             )
 
         self.reset_connection_stats()
-        self.set_default_phy(all_phys=0, tx_phys=7, rx_phys=7)
+
+        if event_mask is not None:
+            self.set_event_mask(event_mask)
 
         status = self.create_connection(conn_params)
 

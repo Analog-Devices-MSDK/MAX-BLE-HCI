@@ -55,10 +55,9 @@ max_ble_hci_cli.py
 Description: CLI Client to use MAX-BLE-HCI
 
 """
-import os
 import argparse
 import logging
-
+import os
 import signal
 
 # pylint: disable=unused-import,too-many-lines
@@ -74,12 +73,13 @@ from argparse import RawTextHelpFormatter
 # pylint: disable=import-error
 from colorlog import ColoredFormatter
 
+from max_ble_hci import BleHci
+from max_ble_hci.constants import PayloadOption, PhyOption
+from max_ble_hci.data_params import AdvParams, EstablishConnParams, ScanParams
+from max_ble_hci.utils import convert_str_address
+
 # pylint: enable=import-error
 
-from max_ble_hci import BleHci
-from max_ble_hci.constants import PhyOption, PayloadOption
-from max_ble_hci.data_params import ConnParams, AdvParams, ScanParams
-from max_ble_hci.utils import convert_str_address
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -405,7 +405,9 @@ def main():
                 addr=convert_str_address(args.addr[::-1]),
                 interval=args.conn_interval,
                 sup_timeout=args.sup_timeout,
-                conn_params=ConnParams(peer_addr=convert_str_address(args.addr)),
+                conn_params=EstablishConnParams(
+                    peer_addr=convert_str_address(args.addr)
+                ),
             )
         )
     )
@@ -811,28 +813,20 @@ def main():
         help="""Desired PHY
         1: 1M
         2: 2M
-        3: Coded
+        3: S2
+        4: S8
         Default: 1M""",
     )
-    set_phy_parser.add_argument(
-        "-o",
-        "--phyOption",
-        dest="phyOption",
-        type=int,
-        default=1,
-        help="""PHY Option
-        0: No preference
-        1: S2
-        2: S8
-        Default: S2""",
-    )
+    phy_lut = {
+        1: PhyOption.PHY_1M,
+        2: PhyOption.PHY_2M,
+        3: PhyOption.PHY_CODED_S2,
+        4: PhyOption.PHY_CODED_S8,
+    }
     set_phy_parser.set_defaults(
         func=lambda _: print(
             hci.set_phy(
-                handle=args.handle,
-                tx_phys=(0x1 << (args.phy - 1)),
-                rx_phys=(0x1 << (args.phy - 1)),
-                phy_opts=args.phyOption,
+                handle=args.handle, tx_phys=phy_lut[args.phy], rx_phys=phy_lut[args.phy]
             )
         ),
         which="set-phy",
