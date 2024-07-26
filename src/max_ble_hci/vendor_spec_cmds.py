@@ -134,15 +134,10 @@ class VendorSpecificCmds:
         return self.port.send_command(cmd).status
 
     def reset_device(self) -> StatusCode:
-        """Enable/disable ACL sink.
+        """Reset the device. 
 
-        Sends a vendor-specific command to the DUT, telling it to
-        reset the system with updated firmware or orignal firmware
-
-        Parameters
-        ----------
-        enable : bool
-            Enable update the firmware
+        Reset the device, which has the same functionality as pressing 
+        the reset button on dev board. 
 
         Returns
         -------
@@ -151,10 +146,7 @@ class VendorSpecificCmds:
 
         """
 
-
-        result = self.send_vs_command(OCF.VENDOR_SPEC.DEVICE_RESET, params=None)
-        print(result)
-        return result
+        return self.send_vs_command(OCF.VENDOR_SPEC.DEVICE_RESET, params=None)
     
     def erase_memory(self, start_address, size) -> StatusCode:
         """Enable/disable ACL sink.

@@ -192,25 +192,3 @@ def convert_str_address(addr: str) -> int:
         Address converted to integer value
     """
     return int(addr.replace(":", ""), 16)
-
-def hex_to_int_list(hex_str):
-    # Remove the '0x' prefix if it exists
-    hex_str = hex_str.lstrip('0x')
-    
-    # Ensure the hexadecimal string is 8 characters long by padding with zeros
-    hex_str = hex_str.zfill(8)
-    
-    # Convert the hexadecimal string to an integer
-    integer_value = int(hex_str, 16)
-    
-    # Extract each byte from the integer
-    byte_list = [
-        integer_value & 0xFF,            # Extract the least significant byte
-        (integer_value >> 8) & 0xFF,   # Extract the next byte
-        (integer_value >> 16) & 0xFF,  # Extract the next byte
-        (integer_value >> 24) & 0xFF # Extract the most significant byte
-        
-        
-    ]
-    
-    return byte_list
