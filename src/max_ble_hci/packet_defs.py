@@ -573,14 +573,14 @@ class LEControllerOCF(Enum):
 
 class VendorSpecificOCF(Enum):
     """ADI Vendor Specific group Opcode Command Field values."""
-    FIRM_RESET = 0x3C2
-    """reset the firmware"""
+    DEVICE_RESET = 0x3C2
+    """reset the device"""
 
-    FIRM_ERASE = 0x3C1
-    """Erase the firmware"""
+    MEMORY_ERASE = 0x3C1
+    """Erase the memory"""
 
-    FIRM_UPDATE = 0x3C0
-    """Update the firmware"""
+    FIRM_WRITE = 0x3C0
+    """WRITE the firmware"""
 
     SET_SCAN_CH_MAP = 0x3E0
     """Set scan channel map command."""

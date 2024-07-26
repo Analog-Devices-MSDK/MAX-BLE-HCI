@@ -152,7 +152,7 @@ class VendorSpecificCmds:
         """
 
 
-        result = self.send_vs_command(OCF.VENDOR_SPEC.FIRM_RESET, params=None)
+        result = self.send_vs_command(OCF.VENDOR_SPEC.DEVICE_RESET, params=None)
         print(result)
         return result
     
@@ -181,7 +181,7 @@ class VendorSpecificCmds:
 
         """
         param = hex_to_int_list(start_address) + hex_to_int_list(size)
-        result = self.send_vs_command(OCF.VENDOR_SPEC.FIRM_ERASE, params=param)
+        result = self.send_vs_command(OCF.VENDOR_SPEC.MEMORY_ERASE, params=param)
         print(result)
         return result
     
@@ -216,7 +216,7 @@ class VendorSpecificCmds:
             chunked_lists.append(chunk)
         with alive_bar(len(chunked_lists),enrich_print = False) as bar:
             for i, chunk in enumerate(chunked_lists):
-                result = self.send_vs_command(OCF.VENDOR_SPEC.FIRM_UPDATE, params=chunk)
+                result = self.send_vs_command(OCF.VENDOR_SPEC.FIRM_WRITE, params=chunk)
                 bar()
             
         return result
