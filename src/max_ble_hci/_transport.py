@@ -254,7 +254,7 @@ class SerialUartTransport:
             The retrieved packet.
 
         """
-     
+
         return self._write(pkt.to_bytes(), timeout)
 
     def send_command_raw(
@@ -474,7 +474,6 @@ class SerialUartTransport:
 
         while tries >= 0 and self._read_thread.is_alive():
             try:
-
                 return self._retrieve(timeout)
 
             except TimeoutError as err:
@@ -485,4 +484,3 @@ class SerialUartTransport:
                 )
 
         raise TimeoutError("Timeout occured. No retries remaining.") from timeout_err
-
