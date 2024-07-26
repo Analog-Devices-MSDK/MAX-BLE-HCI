@@ -282,23 +282,17 @@ class CommandPacket:
             The serialized command.
 
         """
-
         serialized_cmd = bytearray()
-
         serialized_cmd.append(PacketType.COMMAND.value)
-
         serialized_cmd.append(self.opcode & 0xFF)
-
         serialized_cmd.append((self.opcode & 0xFF00) >> 8)
 
         serialized_cmd.append(self.length)
 
         if self.params is not None:
-
             for param in self.params:
                 num_bytes = byte_length(param)
                 try:
-
                     serialized_cmd.extend(param.to_bytes(num_bytes, endianness.value))
                 except OverflowError:
                     serialized_cmd.extend(
