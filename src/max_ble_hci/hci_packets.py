@@ -57,9 +57,20 @@ import warnings
 from enum import Enum
 from typing import List, Optional, Union
 
-from .constants import Endian
+from .constants import Endian, PhyOption
 from .packet_codes import EventCode, EventSubcode, StatusCode
-from .packet_defs import OCF, OGF, PacketType
+from .packet_defs import (
+    OCF,
+    OGF,
+    ControllerOCF,
+    InformationalOCF,
+    LEControllerOCF,
+    LinkControlOCF,
+    NOpOCF,
+    PacketType,
+    StatusOCF,
+    VendorSpecificOCF,
+)
 
 
 def byte_length(num: int):
@@ -123,7 +134,15 @@ class CommandPacket:
             self.params = None
 
     def __repr__(self) -> str:
-        return str(self.__dict__)
+        ogf, ocf = CommandPacket.get_ogf_ocf(self.opcode)
+
+        cmd_str = f"OGF: {ogf}\n"
+        cmd_str += f"OCF: {ocf}\n"
+        cmd_str += f"OPCODE: {hex(self.opcode)}\n"
+        cmd_str += f"LENGTH: {self.length}\n"
+        cmd_str += f"PARAMS: {self.params}"
+
+        return cmd_str
 
     def _enum_to_int(self, num):
         """Convert an enumeration value to an integer.
@@ -147,6 +166,66 @@ class CommandPacket:
             return byte_length(params)
 
         return sum(byte_length(x) for x in params)
+
+    @staticmethod
+    def get_ogf_ocf(opcode) -> tuple[OGF, Union[ControllerOCF, LEControllerOCF]]:
+        """Get OGF and OCF from opcode of command packet
+
+        Parameters
+        ----------
+        opcode : int
+            2 Bytes opcode
+
+        Returns
+        -------
+        tuple
+            OGF, OCF
+        """
+
+        ogf = OGF(opcode >> 10)
+        ocf = opcode & 0x03F
+
+        if ogf == OGF.NOP:
+            ocf = NOpOCF.NOP
+        elif ogf == OGF.LINK_CONTROL:
+            ocf = LinkControlOCF(ocf)
+
+        elif ogf == OGF.CONTROLLER:
+            ocf = ControllerOCF(ocf)
+        elif ogf == OGF.INFORMATIONAL:
+            ocf = InformationalOCF(ocf)
+        elif ogf == OGF.STATUS:
+            ocf = StatusOCF(ocf)
+        elif ogf == OGF.LE_CONTROLLER:
+            ocf = LEControllerOCF(ocf)
+
+        elif ogf == OGF.VENDOR_SPEC:
+            ocf = VendorSpecificOCF(ocf)
+        else:
+            ocf = None
+
+        return ogf, ocf
+
+    @staticmethod
+    def from_bytes(command: bytearray) -> CommandPacket:
+        """Convert command from byte array to command packet
+
+        Parameters
+        ----------
+        command : bytearray
+            raw command in bytes
+
+        Returns
+        -------
+        CommandPacket
+            Decoded command packet
+        """
+        opcode = command[1] << 8 | command[0]
+
+        ogf, ocf = CommandPacket.get_ogf_ocf(opcode=opcode)
+        return CommandPacket(
+            ogf=OGF(ogf), ocf=OCF.CONTROLLER(ocf), params=list(command[2:])
+        )
 
     @staticmethod
     def make_hci_opcode(ogf: Union[OGF, int], ocf: Union[OCF, int]) -> int:
@@ -627,9 +706,15 @@ class EventPacket:
             The parsed return parameter(s).
 
         """
-        # pylint: disable=possibly-used-before-assignment
+        # pylint: disable=unknown-option-value,possibly-used-before-assignment
         if self.evt_code == EventCode.COMMAND_COMPLETE:
             param_bytes = self.evt_params[4:]
+        elif self.evt_subcode in (
+            EventSubcode.CONNECTION_CMPLT,
+            EventSubcode.PHY_UPDATE_CMPLT,
+            EventSubcode.CONNECTION_UPDATE,
+        ):
+            param_bytes = self.evt_params
 
         if not param_lens:
             return int.from_bytes(param_bytes, endianness.value, signed=signed)
@@ -642,11 +727,63 @@ class EventPacket:
 
         return_params = []
         p_idx = 0
+        # pylint: disable=unknown-option-value
+        # pylint: disable=possibly-used-before-assignment
         for p_len in param_lens:
             return_params.append(
                 int.from_bytes(param_bytes[p_idx : p_idx + p_len], endianness.value)
             )
             p_idx += p_len
         # pylint: enable=possibly-used-before-assignment
+        # pylint: enable=unknown-option-value
 
         return return_params
+
+    def _decode_le_meta(self):
+        if self.evt_subcode == EventSubcode.CONNECTION_CMPLT:
+            ret = self.get_return_params(param_lens=[1, 2, 1, 1, 6, 2, 2, 2, 1])
+
+            return {
+                "status": StatusCode(ret[0]),
+                "handle": ret[1],
+                "role": ret[2],
+                "peer_addr_type": ret[3],
+                "peer_addr": ret[4],
+                "conn_interval": ret[5],
+                "conn_latency": ret[6],
+                "supervision_timeout": ret[7],
+                "master_clock_accuracy": ret[8],
+            }
+        if self.evt_subcode == EventSubcode.PHY_UPDATE_CMPLT:
+            ret = self.get_return_params([1, 2, 1, 1])
+            return {
+                "status": StatusCode(ret[0]),
+                "handle": ret[1],
+                "tx_phy": PhyOption(ret[2]),
+                "rx_phy": PhyOption(ret[3]),
+            }
+
+        if self.evt_subcode == EventSubcode.CONNECTION_UPDATE:
+            ret = self.get_return_params([1, 2, 2, 2, 2])
+            return {
+                "status": StatusCode(ret[0]),
+                "handle": ret[1],
+                "conn_interval": ret[2],
+                "conn_latency": ret[3],
+                "supervision_timeout": ret[4],
+            }
+
+        return None
+
+    def decode(self) -> dict:
+        """Decode parameters from EventPacket
+
+        Returns
+        -------
+        dict
+            Decoded event parameters
+        """
+        if self.evt_code == EventCode.LE_META:
+            return self._decode_le_meta()
+
+        return None

@@ -42,9 +42,9 @@ if __name__ == "__main__":
         patch = int(patch) + 1
 
     new_version = f"{major}.{minor}.{patch}"
-    pytoml['project']['version'] = new_version
+    pytoml["project"]["version"] = new_version
 
     print(f"New version: {new_version}")
 
-    with open(args.pytoml, 'w') as new_toml:
+    with open(args.pytoml, "w") as new_toml:
         toml.dump(pytoml, new_toml)
