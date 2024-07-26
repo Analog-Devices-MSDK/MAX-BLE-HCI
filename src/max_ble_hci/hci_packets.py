@@ -291,12 +291,10 @@ class CommandPacket:
 
         serialized_cmd.append((self.opcode & 0xFF00) >> 8)
 
-     
- 
         serialized_cmd.append(self.length)
-    
+
         if self.params is not None:
-  
+
             for param in self.params:
                 num_bytes = byte_length(param)
                 try:
