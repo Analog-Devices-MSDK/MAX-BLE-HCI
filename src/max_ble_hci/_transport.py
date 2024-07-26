@@ -150,7 +150,7 @@ class SerialUartTransport:
         id_tag: str = "DUT",
         logger_name: str = "BLE-HCI",
         retries: int = 0,
-        timeout: float = 1.0,
+        timeout: float = 3.0,
         async_callback: Optional[Callable[[AsyncPacket], Any]] = None,
         evt_callback: Optional[Callable[[EventPacket], Any]] = None,
         exclusive_port: bool = True,
@@ -254,7 +254,7 @@ class SerialUartTransport:
             The retrieved packet.
 
         """
-
+     
         return self._write(pkt.to_bytes(), timeout)
 
     def send_command_raw(
@@ -474,6 +474,7 @@ class SerialUartTransport:
 
         while tries >= 0 and self._read_thread.is_alive():
             try:
+
                 return self._retrieve(timeout)
 
             except TimeoutError as err:
@@ -484,3 +485,4 @@ class SerialUartTransport:
                 )
 
         raise TimeoutError("Timeout occured. No retries remaining.") from timeout_err
+

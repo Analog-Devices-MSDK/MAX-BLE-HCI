@@ -70,7 +70,8 @@ from .data_params import (
 from .hci_packets import CommandPacket, EventPacket, byte_length
 from .packet_codes import StatusCode
 from .packet_defs import OCF, OGF
-from .utils import to_le_nbyte_list, convert_str_address
+from .utils import to_le_nbyte_list, convert_str_address, hex_to_int_list
+from alive_progress import alive_bar
 
 
 class VendorSpecificCmds:
@@ -129,9 +130,97 @@ class VendorSpecificCmds:
         cmd = CommandPacket(OGF.VENDOR_SPEC, ocf, params=params)
         if return_evt:
             return self.port.send_command(cmd)
-
+    
         return self.port.send_command(cmd).status
 
+    def reset_device(self) -> StatusCode:
+        """Enable/disable ACL sink.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        reset the system with updated firmware or orignal firmware
+
+        Parameters
+        ----------
+        enable : bool
+            Enable update the firmware
+
+        Returns
+        -------
+        StatusCode
+            The return packet status code.
+
+        """
+
+
+        result = self.send_vs_command(OCF.VENDOR_SPEC.FIRM_RESET, params=None)
+        print(result)
+        return result
+    
+    def erase_memory(self, start_address, size) -> StatusCode:
+        """Enable/disable ACL sink.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        erase the flash bank 1
+        make sure the address is exactly 32bits
+
+        Parameters
+        ----------
+
+        
+        start_address: the start address of flash memory you want to erase. 
+        ex: address 0x10040000
+
+    
+        len: length of memory you want to erase. also give in byte array
+        ex: size 0x38000
+
+        Returns
+        -------
+        StatusCode
+            The return packet status code.
+
+        """
+        param = hex_to_int_list(start_address) + hex_to_int_list(size)
+        result = self.send_vs_command(OCF.VENDOR_SPEC.FIRM_ERASE, params=param)
+        print(result)
+        return result
+    
+    def update_firmware(self, name) -> StatusCode:
+        """Enable/disable ACL sink.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        enable or disable asynchronous connection-less packet sink.
+
+        Parameters
+        ----------
+        name : 
+            the name of updated file
+
+        Returns
+        -------
+        StatusCode
+            The return packet status code.
+
+        """
+  
+
+        f = open(name, mode="rb")
+ 
+        data = f.read()
+        integer_list = [int(byte) for byte in data]
+        size = 128
+        chunked_lists = []
+        
+        for i in range(0, len(integer_list), size):
+            chunk = integer_list[i:i+size]
+            chunked_lists.append(chunk)
+        with alive_bar(len(chunked_lists),enrich_print = False) as bar:
+            for i, chunk in enumerate(chunked_lists):
+                result = self.send_vs_command(OCF.VENDOR_SPEC.FIRM_UPDATE, params=chunk)
+                bar()
+            
+        return result
+    
     def set_address(self, addr: Union[int, str]) -> StatusCode:
         """Sets the BD address.
 
