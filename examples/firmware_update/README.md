@@ -4,5 +4,5 @@ This is an example to show how to update the firmware through HCI script. The de
 
 helloW.bin is a program which will print the following result: 
 ```
-Updated Application: Hello World!
+Second Application: Hello World!
 ```
