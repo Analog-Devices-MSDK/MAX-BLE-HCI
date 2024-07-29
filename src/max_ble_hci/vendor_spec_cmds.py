@@ -130,7 +130,7 @@ class VendorSpecificCmds:
         cmd = CommandPacket(OGF.VENDOR_SPEC, ocf, params=params)
         if return_evt:
             return self.port.send_command(cmd)
-    
+
         return self.port.send_command(cmd).status
 
     def reset_device(self) -> StatusCode:
@@ -147,7 +147,7 @@ class VendorSpecificCmds:
         """
 
         return self.send_vs_command(OCF.VENDOR_SPEC.DEVICE_RESET, params=None)
-    
+
     def erase_memory(self, addr: Union[int, str], size: Union[int, str]) -> StatusCode:
         """Erase the flash memory.
 
@@ -169,16 +169,16 @@ class VendorSpecificCmds:
             The return packet status code.
 
         """
-        
+
         if isinstance(addr, str):
             addr = convert_str_address(addr)
         if isinstance(size, str):
             size = convert_str_address(size)
-       
+
         param = to_le_nbyte_list(addr, 4)
         params = param + to_le_nbyte_list(size, 4)
         return self.send_vs_command(OCF.VENDOR_SPEC.MEMORY_ERASE, params=params)
-    
+
     def write_flash(self, chunk: List[int]) -> StatusCode:
         """Write data to the flash memory.
 
@@ -195,9 +195,9 @@ class VendorSpecificCmds:
             The return packet status code.
 
         """
-  
+
         return self.send_vs_command(OCF.VENDOR_SPEC.WRITE_FLASH, params=chunk)
-    
+
     def set_address(self, addr: Union[int, str]) -> StatusCode:
         """Sets the BD address.
 

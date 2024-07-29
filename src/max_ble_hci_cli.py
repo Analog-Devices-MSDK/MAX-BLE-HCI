@@ -309,7 +309,7 @@ def main():
         "erase", help="erase the flash", formatter_class=RawTextHelpFormatter
     )
 
-    erase_parser.add_argument("addr", help="start address of memory bank for storing updated firmware")
+    erase_parser.add_argument("addr", help="start address of memory bank to upload")
     erase_parser.add_argument("len", help="size of memory bank")
 
     erase_parser.set_defaults(
