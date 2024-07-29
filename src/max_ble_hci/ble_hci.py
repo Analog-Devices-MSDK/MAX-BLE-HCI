@@ -385,7 +385,8 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
 
         Parameters
         ----------
-        name : the name of firmware binary file
+        name : str
+            the name of firmware binary file
 
         Returns
         -------
