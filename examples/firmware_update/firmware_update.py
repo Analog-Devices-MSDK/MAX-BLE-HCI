@@ -71,10 +71,7 @@ def main():
     conn.firmware_update("hello_world.bin")
 
     # reset the device to reload the uploaded firmware
-    try:
-        conn.reset_device()
-    except TimeoutError:
-        print("Update Successfully. ")
+    conn.reset_device()
 
 
 if __name__ == "__main__":
