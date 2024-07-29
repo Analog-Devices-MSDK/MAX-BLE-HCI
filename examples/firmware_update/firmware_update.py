@@ -74,7 +74,7 @@ def main():
     try:
         conn.reset_device()
     except TimeoutError:
-        pass
+        print("Update Successfully. ")
 
 
 if __name__ == "__main__":
