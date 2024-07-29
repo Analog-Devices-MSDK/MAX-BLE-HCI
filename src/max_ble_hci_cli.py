@@ -290,7 +290,7 @@ def main():
     )
     update_parser.add_argument("update", help="name of application file")
     update_parser.set_defaults(
-        func=lambda args: hci.update_firmware(args.update),
+        func=lambda args: hci.firmware_update(args.update),
         which="update",
     )
 

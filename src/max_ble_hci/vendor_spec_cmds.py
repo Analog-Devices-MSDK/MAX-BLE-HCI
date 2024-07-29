@@ -70,8 +70,8 @@ from .data_params import (
 from .hci_packets import CommandPacket, EventPacket, byte_length
 from .packet_codes import StatusCode
 from .packet_defs import OCF, OGF
-from .utils import convert_str_address, to_le_nbyte_list, hex_to_int_list
-from alive_progress import alive_bar
+from .utils import convert_str_address, to_le_nbyte_list
+
 
 
 class VendorSpecificCmds:
@@ -148,23 +148,20 @@ class VendorSpecificCmds:
 
         return self.send_vs_command(OCF.VENDOR_SPEC.DEVICE_RESET, params=None)
     
-    def erase_memory(self, start_address, size) -> StatusCode:
-        """Enable/disable ACL sink.
+    def erase_memory(self, addr: Union[int, str], size: Union[int, str]) -> StatusCode:
+        """Erase the flash memory.
 
-        Sends a vendor-specific command to the DUT, telling it to
-        erase the flash bank 1
-        make sure the address is exactly 32bits
+        Erase the flash memory with size bytes starting at addr. 
 
         Parameters
         ----------
+        addr : Union[int, str]
+            Desired flash memory address.
+            If str, format expected xx:xx:xx:xx
 
-        
-        start_address: the start address of flash memory you want to erase. 
-        ex: address 0x10040000
-
-    
-        len: length of memory you want to erase. also give in byte array
-        ex: size 0x38000
+        size : Union[int, str]
+            Desired size of memory to be erased.
+            If str, format expected xx:xx:xx:xx
 
         Returns
         -------
@@ -172,21 +169,25 @@ class VendorSpecificCmds:
             The return packet status code.
 
         """
-        param = hex_to_int_list(start_address) + hex_to_int_list(size)
-        result = self.send_vs_command(OCF.VENDOR_SPEC.MEMORY_ERASE, params=param)
-        print(result)
-        return result
+        
+        if isinstance(addr, str):
+            addr = convert_str_address(addr)
+        if isinstance(size, str):
+            size = convert_str_address(size)
+       
+        param = to_le_nbyte_list(addr, 4)
+        params = param + to_le_nbyte_list(size, 4)
+        return self.send_vs_command(OCF.VENDOR_SPEC.MEMORY_ERASE, params=params)
     
-    def update_firmware(self, name) -> StatusCode:
-        """Enable/disable ACL sink.
+    def write_flash(self, chunk: List[int]) -> StatusCode:
+        """Write data to the flash memory.
 
-        Sends a vendor-specific command to the DUT, telling it to
-        enable or disable asynchronous connection-less packet sink.
+        Write 128 bits of data chunk to the flash memory
 
         Parameters
         ----------
-        name : 
-            the name of updated file
+        chunk : List[int]
+            128bit data chunk of new firmware
 
         Returns
         -------
@@ -195,23 +196,7 @@ class VendorSpecificCmds:
 
         """
   
-
-        f = open(name, mode="rb")
- 
-        data = f.read()
-        integer_list = [int(byte) for byte in data]
-        size = 128
-        chunked_lists = []
-        
-        for i in range(0, len(integer_list), size):
-            chunk = integer_list[i:i+size]
-            chunked_lists.append(chunk)
-        with alive_bar(len(chunked_lists),enrich_print = False) as bar:
-            for i, chunk in enumerate(chunked_lists):
-                result = self.send_vs_command(OCF.VENDOR_SPEC.FIRM_WRITE, params=chunk)
-                bar()
-            
-        return result
+        return self.send_vs_command(OCF.VENDOR_SPEC.WRITE_FLASH, params=chunk)
     
     def set_address(self, addr: Union[int, str]) -> StatusCode:
         """Sets the BD address.

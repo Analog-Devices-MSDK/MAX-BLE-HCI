@@ -7,18 +7,9 @@ def main():
 
 
     # make sure you have to erase the flash memory before you flash to it
-    '''
-    start_address: the start address of flash memory you want to erase. 
-        ex: address 0x10004000
+    conn.erase_memory("10:04:00:00", "03:80:00")
 
-
-
-        len: length of memory you want to erase. 
-        ex: size 0x38000 
-    '''
-    conn.erase_memory("0x10040000", "0x38000")
-
-    conn.update_firmware("helloW.bin")
+    conn.firmware_update("hello_world.bin")
 
     #reset the device to reload the uploaded firmware
     try:

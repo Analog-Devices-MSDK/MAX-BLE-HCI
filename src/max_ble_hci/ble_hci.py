@@ -64,6 +64,7 @@ from .hci_packets import AsyncPacket, CommandPacket, EventPacket
 from .packet_codes import EventMaskLE, StatusCode
 from .utils import convert_str_address
 from .vendor_spec_cmds import VendorSpecificCmds
+from alive_progress import alive_bar
 
 
 class BleHci(BleStandardCmds, VendorSpecificCmds):
@@ -378,6 +379,39 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         status = self.create_connection(conn_params)
 
         return status
+    
+    def firmware_update(self, name: str) -> StatusCode:
+        """Upload the firmware to second flash memory bank
+
+        Parameters
+        ----------
+        name : the name of firmware binary file
+
+        Returns
+        -------
+        StatusCode
+            The return status of the firmware update command.
+
+        """
+        f = open(name, mode="rb")
+ 
+        data = f.read()
+        integer_list = [int(byte) for byte in data]
+        size = 128
+        chunked_lists = []
+        result = StatusCode.SUCCESS
+        for i in range(0, len(integer_list), size):
+            chunk = integer_list[i:i+size]
+            chunked_lists.append(chunk)
+        with alive_bar(len(chunked_lists),enrich_print = False) as bar:
+            for i, chunk in enumerate(chunked_lists):
+                if (result == StatusCode.SUCCESS):
+                    result = self.write_flash(chunk)
+                    bar()
+                else:
+                    return result
+            
+        return result
 
     def read_event(self, timeout: Optional[float] = None) -> EventPacket:
         """Read an event from controller.

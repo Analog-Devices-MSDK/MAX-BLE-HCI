@@ -579,7 +579,7 @@ class VendorSpecificOCF(Enum):
     MEMORY_ERASE = 0x3C1
     """Erase the memory"""
 
-    FIRM_WRITE = 0x3C0
+    WRITE_FLASH = 0x3C0
     """WRITE the firmware"""
 
     SET_SCAN_CH_MAP = 0x3E0
