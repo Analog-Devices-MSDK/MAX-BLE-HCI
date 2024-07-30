@@ -100,6 +100,13 @@ class VendorSpecificCmds:
         self.port = port
         self.logger = get_formatted_logger(name=logger_name)
 
+    def __enter__(self):
+        self.port.start()
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.port.close()
+
     def send_vs_command(
         self, ocf: OCF, params: List[int] = None, return_evt: bool = False
     ) -> Union[EventPacket, StatusCode]:

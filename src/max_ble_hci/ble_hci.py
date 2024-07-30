@@ -152,6 +152,13 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         )
         super().__init__(self.port, logger_name)
 
+    def __enter__(self):
+        self.port.start()
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.port.close()
+
     def get_log_level(self) -> str:
         """Retrieve the current log level.
 
