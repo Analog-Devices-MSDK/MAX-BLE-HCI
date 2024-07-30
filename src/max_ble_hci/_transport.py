@@ -475,7 +475,9 @@ class SerialUartTransport:
                 return self._retrieve(timeout)
 
             except TimeoutError as err:
-                self.port.write(pkt)
+                if tries:
+                    self.port.write(pkt)
+
                 tries -= 1
                 timeout_err = err
                 self.logger.warning(
