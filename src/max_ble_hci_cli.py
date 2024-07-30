@@ -244,6 +244,7 @@ def main():
         id_tag=args.idtag,
         async_callback=print,
         evt_callback=print,
+        retries=0,
         flowcontrol=args.enable_flow_control,
         recover_on_power_loss=True,
     )
