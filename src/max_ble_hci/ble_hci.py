@@ -128,7 +128,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         id_tag: str = "DUT",
         log_level: Union[str, int] = "INFO",
         logger_name: str = "BLE-HCI",
-        retries: int = 0,
+        retries: int = 3,
         timeout: float = 1.0,
         async_callback: Optional[Callable[[AsyncPacket], Any]] = None,
         evt_callback: Optional[Callable[[EventPacket], Any]] = None,
