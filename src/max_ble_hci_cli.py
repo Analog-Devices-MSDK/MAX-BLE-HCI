@@ -290,7 +290,7 @@ def main():
     )
     update_parser.add_argument("update", help="name of application file")
     update_parser.set_defaults(
-        func=lambda args: hci.firmware_update(args.update),
+        func=lambda args: print(hci.firmware_update(args.update)),
         which="update",
     )
 
@@ -300,8 +300,20 @@ def main():
     )
 
     reset_parser.set_defaults(
-        func=lambda args: hci.reset_device(),
+        func=lambda args: print(hci.reset_device()),
         which="sysreset",
+    )
+
+    #### SET_FLASH_ADDR PARSER ####
+    set_addr_parser = subparsers.add_parser(
+        "setflash", help="set the flash start address", formatter_class=RawTextHelpFormatter
+    )
+
+    set_addr_parser.add_argument("addr", help="start address of memory bank to upload")
+
+    set_addr_parser.set_defaults(
+        func=lambda args: print(hci.set_flash_addr(args.addr)),
+        which="setflash",
     )
 
     #### ERASE PARSER ####
@@ -309,11 +321,8 @@ def main():
         "erase", help="erase the flash", formatter_class=RawTextHelpFormatter
     )
 
-    erase_parser.add_argument("addr", help="start address of memory bank to upload")
-    erase_parser.add_argument("len", help="size of memory bank")
-
     erase_parser.set_defaults(
-        func=lambda args: hci.erase_memory(args.addr,args.len),
+        func=lambda args: print(hci.erase_memory()),
         which="erase",
     )
 

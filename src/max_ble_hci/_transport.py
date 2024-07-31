@@ -150,7 +150,7 @@ class SerialUartTransport:
         id_tag: str = "DUT",
         logger_name: str = "BLE-HCI",
         retries: int = 0,
-        timeout: float = 3.0,
+        timeout: float = 1.0,
         async_callback: Optional[Callable[[AsyncPacket], Any]] = None,
         evt_callback: Optional[Callable[[EventPacket], Any]] = None,
         exclusive_port: bool = True,
