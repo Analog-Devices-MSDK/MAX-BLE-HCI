@@ -185,10 +185,7 @@ class SerialUartTransport:
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        with self._port_lock:
-            self.stop()
-            self.port.close()
-            getattr(SerialUartTransport, "instances").pop(self.port_id)
+        self.close()
 
     def __del__(self):
         if self._read_thread and self._read_thread.is_alive():
@@ -223,13 +220,14 @@ class SerialUartTransport:
         closes the serial connection.
 
         """
-        if self._read_thread.is_alive():
-            self.stop()
+        with self._port_lock:
+            if self._read_thread.is_alive():
+                self.stop()
 
-        if self.port.is_open:
-            self.port.flush()
-            self.port.close()
-            getattr(SerialUartTransport, "instances").pop(self.port_id)
+            if self.port.is_open:
+                self.port.flush()
+                self.port.close()
+                getattr(SerialUartTransport, "instances").pop(self.port_id)
 
     def send_command(
         self, pkt: CommandPacket, timeout: Optional[float] = None
@@ -477,6 +475,7 @@ class SerialUartTransport:
                 return self._retrieve(timeout)
 
             except TimeoutError as err:
+                self.port.write(pkt)
                 tries -= 1
                 timeout_err = err
                 self.logger.warning(
