@@ -75,7 +75,7 @@ def main():
     while erased_size > 0:
         conn.erase_page(address_to_erase)
         erased_size -= PAGE_SIZE
-        address_to_erase -= PAGE_SIZE
+        address_to_erase += PAGE_SIZE
 
     conn.firmware_update("hello_world.bin")
 
