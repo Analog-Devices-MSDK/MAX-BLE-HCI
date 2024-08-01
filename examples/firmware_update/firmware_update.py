@@ -68,15 +68,15 @@ def main():
     # make sure you have to erase the flash memory before you flash to it
 
     # Page size of flash memory
-    PAGE_SIZE = 0x4000
+    PAGE_SIZE = 0x2000  # this is the page size of MAX32655
+    address_to_erase = 0x10040000
     erased_size = 0x38000
 
-    conn.set_flash_addr("10:04:00:00")
     while erased_size > 0:
-        conn.erase_memory()
+        conn.erase_page(address_to_erase)
         erased_size -= PAGE_SIZE
+        address_to_erase -= PAGE_SIZE
 
-    conn.set_flash_addr("10:04:00:00")
     conn.firmware_update("hello_world.bin")
 
     # reset the device to reload the uploaded firmware

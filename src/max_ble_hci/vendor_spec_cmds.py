@@ -148,24 +148,10 @@ class VendorSpecificCmds:
 
         return self.send_vs_command(OCF.VENDOR_SPEC.DEVICE_RESET, params=None)
 
-    def erase_memory(self) -> StatusCode:
-        """Erase the flash memory.
+    def erase_page(self, addr: Union[int, str]) -> StatusCode:
+        """Erase one page of the flash memory.
 
         Erase the flash memory with one page starting at addr. 
-
-        Returns
-        -------
-        StatusCode
-            The return packet status code.
-
-        """
-
-        return self.send_vs_command(OCF.VENDOR_SPEC.MEMORY_ERASE, params=None)
-
-    def set_flash_addr(self, addr: Union[int, str]) -> StatusCode:
-        """Set the flash write address.
-
-        Set the starting address of flash memory to be written 
 
         Parameters
         ----------
@@ -183,8 +169,8 @@ class VendorSpecificCmds:
         if isinstance(addr, str):
             addr = convert_str_address(addr)
 
-        params = to_le_nbyte_list(addr, 4)
-        return self.send_vs_command(OCF.VENDOR_SPEC.SET_FLASH_ADDR, params=params)
+        param = to_le_nbyte_list(addr, 4)
+        return self.send_vs_command(OCF.VENDOR_SPEC.PAGE_ERASE, params=param)
 
     def write_flash(self, chunk: List[int]) -> StatusCode:
         """Write data to the flash memory.

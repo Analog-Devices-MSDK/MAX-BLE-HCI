@@ -304,25 +304,15 @@ def main():
         which="sysreset",
     )
 
-    #### SET_FLASH_ADDR PARSER ####
-    set_addr_parser = subparsers.add_parser(
-        "setflash", help="set the flash start address", formatter_class=RawTextHelpFormatter
-    )
-
-    set_addr_parser.add_argument("addr", help="start address of memory bank to upload")
-
-    set_addr_parser.set_defaults(
-        func=lambda args: print(hci.set_flash_addr(args.addr)),
-        which="setflash",
-    )
-
     #### ERASE PARSER ####
     erase_parser = subparsers.add_parser(
         "erase", help="erase the flash", formatter_class=RawTextHelpFormatter
     )
 
+    erase_parser.add_argument("addr", help="start address of memory bank to upload")
+
     erase_parser.set_defaults(
-        func=lambda args: print(hci.erase_memory()),
+        func=lambda args: print(hci.erase_page(args.addr)),
         which="erase",
     )
 
