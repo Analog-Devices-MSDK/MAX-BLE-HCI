@@ -388,11 +388,15 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
 
         return status
 
-    def firmware_update(self, name: str) -> StatusCode:
+    def firmware_update(self, addr: Union[int, str], name: str) -> StatusCode:
         """Upload the firmware to second flash memory bank
 
         Parameters
         ----------
+        addr : Union[int, str]
+            Desired flash memory address of the new firmware.
+            If str, format expected xx:xx:xx:xx
+
         name : str
             The name of firmware binary file
 
@@ -402,10 +406,14 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
             The return status of the firmware update command.
 
         """
+
+        if isinstance(addr, str):
+            addr = convert_str_address(addr)
+
         with open(name, mode="rb") as file:
             data = file.read()
         integer_list = [int(byte) for byte in data]
-        size = 128
+        size = 224
         chunked_lists = []
         result = StatusCode.SUCCESS
         for i in range(0, len(integer_list), size):
@@ -414,7 +422,8 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         with alive_bar(len(chunked_lists),enrich_print = False) as progress_bar:
             for i, chunk in enumerate(chunked_lists):
                 if result == StatusCode.SUCCESS:
-                    result = self.write_flash(chunk)
+                    result = self.write_flash(addr, chunk)
+                    addr += len(chunk)
                     # pylint: disable=not-callable
                     progress_bar()
                 else:

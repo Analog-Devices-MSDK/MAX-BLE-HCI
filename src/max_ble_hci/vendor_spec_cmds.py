@@ -179,13 +179,17 @@ class VendorSpecificCmds:
         param = to_le_nbyte_list(addr, 4)
         return self.send_vs_command(OCF.VENDOR_SPEC.PAGE_ERASE, params=param)
 
-    def write_flash(self, chunk: List[int]) -> StatusCode:
+    def write_flash(self, addr: Union[int, str], chunk: List[int]) -> StatusCode:
         """Write data to the flash memory.
 
         Write 128 bits of data chunk to the flash memory
 
         Parameters
         ----------
+        addr : Union[int, str]
+            Desired flash memory address.
+            If str, format expected xx:xx:xx:xx
+
         chunk : List[int]
             128bit data chunk of new firmware
 
@@ -196,7 +200,11 @@ class VendorSpecificCmds:
 
         """
 
-        return self.send_vs_command(OCF.VENDOR_SPEC.WRITE_FLASH, params=chunk)
+        if isinstance(addr, str):
+            addr = convert_str_address(addr)
+
+        param = to_le_nbyte_list(addr, 4) + chunk
+        return self.send_vs_command(OCF.VENDOR_SPEC.WRITE_FLASH, params=param)
 
     def set_address(self, addr: Union[int, str]) -> StatusCode:
         """Sets the BD address.

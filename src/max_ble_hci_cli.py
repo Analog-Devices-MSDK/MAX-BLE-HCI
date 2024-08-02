@@ -288,9 +288,10 @@ def main():
     update_parser = subparsers.add_parser(
         "update", help="update the firmware", formatter_class=RawTextHelpFormatter
     )
+    update_parser.add_argument("addr", help="start address of memory bank to upload")
     update_parser.add_argument("update", help="name of application file")
     update_parser.set_defaults(
-        func=lambda args: print(hci.firmware_update(args.update)),
+        func=lambda args: print(hci.firmware_update(args.addr, args.update)),
         which="update",
     )
 
@@ -309,7 +310,7 @@ def main():
         "erase", help="erase the flash", formatter_class=RawTextHelpFormatter
     )
 
-    erase_parser.add_argument("addr", help="start address of memory bank to upload")
+    erase_parser.add_argument("addr", help="start address of memory bank to be erased")
 
     erase_parser.set_defaults(
         func=lambda args: print(hci.erase_page(args.addr)),

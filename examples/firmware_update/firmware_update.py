@@ -57,6 +57,7 @@ Description: This is an example to show how to update the firmware through HCI s
 
 """
 from max_ble_hci import BleHci
+from max_ble_hci.packet_codes import StatusCode
 
 PORT = "/dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_DT03O6J1-if00-port0"
 
@@ -72,15 +73,26 @@ def main():
     address_to_erase = 0x10040000
     erased_size = 0x38000
 
+    result = None
+    
     while erased_size > 0:
-        conn.erase_page(address_to_erase)
+        result = conn.erase_page(address_to_erase)
+        if (result != StatusCode.SUCCESS):
+            print(result)
+            return
         erased_size -= PAGE_SIZE
         address_to_erase += PAGE_SIZE
-
-    conn.firmware_update("hello_world.bin")
+    
+    result = conn.firmware_update(0x10040000, "hello_world.bin")
+    if (result != StatusCode.SUCCESS):
+            print(result)
+            return
 
     # reset the device to reload the uploaded firmware
-    conn.reset_device()
+    result = conn.reset_device()
+    if (result != StatusCode.SUCCESS):
+            print(result)
+            return
 
 
 if __name__ == "__main__":
