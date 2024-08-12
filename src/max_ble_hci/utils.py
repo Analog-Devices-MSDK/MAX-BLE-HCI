@@ -153,8 +153,10 @@ def le_list_to_int(nums: List[int]) -> int:
 
     """
     full_num = 0
+    
     for i, num in enumerate(nums):
         full_num |= num << 8 * i
+
     return full_num
 
 
