@@ -61,7 +61,7 @@ jobs:
 
 
       - name: Lock Resources
-        if: ${{ steps.check_files.outputs.changed_src == 'true' }}
+        if: ${{ env.changed_src == 'true' }}
         id: lock
         uses: Analog-Devices-MSDK/btm-ci-scripts/actions/lock-board@v1.1
         with:
@@ -70,13 +70,13 @@ jobs:
 
           lock: true
       - name: Flash
-        if: ${{ steps.check_files.outputs.changed_src == 'true' }}
+        if: ${{ env.changed_src == 'true' }}
         run: |
           ocdflash $TEST_BOARD .github/workflows/bin/max32655.elf $GITHUB_REF
           sleep 1
 
       - name: Test
-        if: ${{ steps.check_files.outputs.changed_src == 'true' }}
+        if: ${{ env.changed_src == 'true' }}
         run: |
           export HCI=$(resource_manager -g $TEST_BOARD.hci_port)
           perl -i -pe 's/PORT = ".*"/PORT = "$ENV{HCI}"/' tests/test.py
