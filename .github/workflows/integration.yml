@@ -49,7 +49,7 @@ jobs:
           
           num_changed=$(echo "${{ steps.abc.outputs.all }}" | grep \.py -c)
           echo Changed py files = $num_changed
-          if [[ $num_changed != 0 ]]; then
+          if [[ $num_changed -ne 0 ]]; then
           echo "changed_src=true" >> $GITHUB_ENV
           echo found py file
           else
