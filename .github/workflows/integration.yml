@@ -38,8 +38,26 @@ jobs:
     if: github.event.pull_request.draft == false
     steps:
       - uses: actions/checkout@v4
+      - uses: jitterbit/get-changed-files@v1
+        id: abc
+        with:
+          format: space-delimited
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check files
+        id: check_files
+        run: |
+          
+          num_changed=$(echo "${{ steps.abc.outputs.all }}" | grep .py -c)
+          echo Changed py files = $num_changed
+          if [[ $num_changed -ne 0 ]]; then
+          echo "changed_src=true" >> $GITHUB_ENV
+          else
+          echo "changed_src=false" >> $GITHUB_ENV
+          fi
+
 
       - name: Lock Resources
+        if: ${{ steps.check_files.outputs.changed_src == 'true' }}
         id: lock
         uses: Analog-Devices-MSDK/btm-ci-scripts/actions/lock-board@v1.1
         with:
@@ -48,11 +66,13 @@ jobs:
 
           lock: true
       - name: Flash
+        if: ${{ steps.check_files.outputs.changed_src == 'true' }}
         run: |
           ocdflash $TEST_BOARD .github/workflows/bin/max32655.elf $GITHUB_REF
           sleep 1
 
       - name: Test
+        if: ${{ steps.check_files.outputs.changed_src == 'true' }}
         run: |
           export HCI=$(resource_manager -g $TEST_BOARD.hci_port)
           perl -i -pe 's/PORT = ".*"/PORT = "$ENV{HCI}"/' tests/test.py
