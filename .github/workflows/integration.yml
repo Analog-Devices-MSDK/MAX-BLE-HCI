@@ -51,9 +51,13 @@ jobs:
           echo Changed py files = $num_changed
           if [[ $num_changed -ne 0 ]]; then
           echo "changed_src=true" >> $GITHUB_ENV
+          echo found py file
           else
+          echo did not find py file
           echo "changed_src=false" >> $GITHUB_ENV
           fi
+
+          
 
 
       - name: Lock Resources
