@@ -1,9 +1,9 @@
 name: Pylint
 
 on: 
-  push:
-    branches-ignore:
-      - gh-pages
+  # push:
+  #   branches-ignore:
+  #     - gh-pages
   pull_request:
     branches: ["main"]
   workflow_dispatch:
