@@ -1,5 +1,8 @@
 name: black-format-run
-on: [push, workflow_dispatch]
+on: 
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
 
 jobs:
   format_check:
