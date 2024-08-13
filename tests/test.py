@@ -96,6 +96,10 @@ class TestHci(unittest.TestCase):
             pc.StatusCode.ERROR_CODE_UNKNOWN_CONN_ID,
         )
 
+    def test_encyrption(self):
+        from fastecdsa.curve import P256
+        from fastecdsa.point import Point
+        pass
 
 if __name__ == "__main__":
     unittest.main()
