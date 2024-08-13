@@ -269,9 +269,11 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         controller_mask = EventMask.get_full_mask()
         controller_page2 = EventMaskPage2.get_full_mask()
         lemask = EventMaskLE.get_full_mask()
-        status = self.set_event_mask(controller_mask, mask_pg2=controller_page2)
+        status, status2 = self.set_event_mask(
+            controller_mask, mask_pg2=controller_page2
+        )
 
-        if status != StatusCode.SUCCESS:
+        if status != StatusCode.SUCCESS or status2 != StatusCode.SUCCESS:
             return status
 
         return self.set_event_mask_le(lemask)
@@ -474,7 +476,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
 
     def write_command_raw(
         self,
-        raw_command: bytearray,
+        raw_command: Union[bytearray, str],
         timeout: Optional[float] = None,
     ) -> EventPacket:
         """Write raw command to device
@@ -493,6 +495,9 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         EventPacket
 
         """
+
+        if isinstance(raw_command, str):
+            raw_command = bytes.fromhex(raw_command)
 
         if not timeout:
             timeout = self.timeout

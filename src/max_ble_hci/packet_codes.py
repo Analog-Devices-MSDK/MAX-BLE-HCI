@@ -96,11 +96,14 @@ class EventCode(Enum):
     """Vendor specific event."""
 
 
-def _get_full_mask(mask_type: Union[EventMask, EventMask]):
+def _get_full_mask(mask_type: Union[EventMask, EventMaskLE]):
+    full_mask = None
     for flag in mask_type:
-        if clear_mask is None:
-            clear_mask = flag
-        clear_mask |= flag
+        if full_mask is None:
+            full_mask = flag
+        full_mask |= flag
+
+    return full_mask
 
 
 class EventMask(Flag):

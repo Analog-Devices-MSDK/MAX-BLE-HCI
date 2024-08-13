@@ -724,6 +724,8 @@ class EventPacket:
             EventSubcode.CONNECTION_UPDATE,
         ):
             param_bytes = self.evt_params
+        else:
+            param_bytes = self.evt_params
 
         if not param_lens:
             return int.from_bytes(param_bytes, endianness.value, signed=signed)

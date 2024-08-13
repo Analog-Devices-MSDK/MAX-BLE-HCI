@@ -60,9 +60,9 @@ from ._transport import SerialUartTransport
 from .constants import PayloadOption, PhyOption
 from .data_params import AdvParams, ConnParams, EstablishConnParams, ScanParams
 from .hci_packets import CommandPacket, EventPacket
-from .packet_codes import EventMask, EventMaskLE, StatusCode
+from .packet_codes import EventMask, EventMaskPage2, EventMaskLE, StatusCode
 from .packet_defs import OCF, OGF
-from .utils import can_represent_as_bytes, to_le_nbyte_list
+from .utils import can_represent_as_bytes, to_le_nbyte_list, bit_length
 
 
 class BleStandardCmds:
@@ -682,7 +682,9 @@ class BleStandardCmds:
         return self.send_controller_command(OCF.CONTROLLER.RESET)
 
     def set_event_mask(
-        self, mask: Union[int, EventMask], mask_pg2: Optional[int] = None
+        self,
+        mask: Union[int, EventMask],
+        mask_pg2: Optional[Union[int, EventMaskPage2]] = None,
     ) -> Union[StatusCode, Tuple[StatusCode, StatusCode]]:
         """Enable/disable events the board can generate.
 
@@ -721,6 +723,8 @@ class BleStandardCmds:
         )
 
         if mask_pg2:
+            if isinstance(mask_pg2, EventMaskPage2):
+                mask_pg2 = mask_pg2.value
             params = to_le_nbyte_list(mask_pg2, 8)
             return (
                 status,
@@ -761,8 +765,80 @@ class BleStandardCmds:
             OCF.LE_CONTROLLER.SET_EVENT_MASK, params=params
         )
 
-    def read_local_p256_pub_key(self, callback=None) -> int:
+    def read_local_p256_pub_key(self, callback=None) -> StatusCode:
         if callback:
             self.port.evt_callback = callback
 
-        self.send_le_controller_command(OCF.LE_CONTROLLER.READ_LOCAL_P256_PUB_KEY)
+        return self.send_le_controller_command(
+            OCF.LE_CONTROLLER.READ_LOCAL_P256_PUB_KEY
+        )
+
+    def generate_dhk(
+        self, xcoord=None, ycoord=None, version: int = 1, use_debug_key=False
+    ) -> StatusCode:
+        if (
+            xcoord is None
+            and ycoord is not None
+            or ycoord is None
+            and xcoord is not None
+        ):
+            raise ValueError(
+                "X-Coordinate and Y-Coordinate of pub key must be given together or generated together"
+            )
+
+        if version not in (1, 2):
+            raise ValueError("DHK generate version must be 1 or 2")
+
+        if xcoord is None and ycoord is None:
+            if use_debug_key:
+                raise ValueError(
+                    "Using a debug key and generating the x/y coordinates is useless"
+                )
+
+            # TODO: Generate pub key
+
+            return StatusCode.SUCCESS
+
+        xcoords = to_le_nbyte_list(xcoord, 32)
+        ycoords = to_le_nbyte_list(ycoord, 32)
+
+        if version != 1:
+            key_type = 0 if not use_debug_key else 1
+        else:
+            key_type = 0x4B
+
+        params = xcoords + ycoords + [key_type]
+
+        ocf = (
+            OCF.LE_CONTROLLER.GENERATE_DHKEY
+            if version == 1
+            else OCF.LE_CONTROLLER.GENERATE_DHKEY_V2
+        )
+
+        return self.send_le_controller_command(ocf, params)
+    def encrypt(self, key:int, plaintext: Union[int,str]):
+
+        if key.bit_length() > 128:
+            raise ValueError('Key must be representable in 128 bits!')
+        if isinstance(plaintext, int)  and plaintext.bit_length() > 128:
+            raise ValueError('Plaintext must be representable in 128 bits!')
+        elif isinstance(plaintext,str) and len(plaintext) > 16:
+            raise ValueError('Plaintext must be representable in 128 bits!')
+
+
+
+        key = to_le_nbyte_list(16)
+
+
+        if isinstance(plaintext, str): 
+            plaintext = plaintext.encode('utf-8')
+            plaintext = int.from_bytes(plaintext)
+
+        plaintext = to_le_nbyte_list(plaintext, 16)
+
+        params = key + plaintext
+
+        return self.send_le_controller_command(OCF.LE_CONTROLLER.ENCRYPT, params=params)
+
+        
+    
