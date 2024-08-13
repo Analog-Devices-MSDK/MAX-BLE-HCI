@@ -99,7 +99,12 @@ class TestHci(unittest.TestCase):
     def test_encyrption(self):
         from fastecdsa.curve import P256
         from fastecdsa.point import Point
-        pass
+
+        hci1.enable_all_events()
+
+        hci1.read
+
+
 
 if __name__ == "__main__":
     unittest.main()

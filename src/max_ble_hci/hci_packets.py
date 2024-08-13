@@ -223,9 +223,26 @@ class CommandPacket:
         opcode = command[1] << 8 | command[0]
 
         ogf, ocf = CommandPacket.get_ogf_ocf(opcode=opcode)
-        return CommandPacket(
-            ogf=OGF(ogf), ocf=OCF.CONTROLLER(ocf), params=list(command[2:])
-        )
+
+        ogf = OGF(ogf)
+        # NO Link policy, testing OCF?
+
+        if ogf == OGF.NOP:
+            ocf = NOpOCF(ocf)
+        elif ogf == OGF.LINK_CONTROL:
+            ocf = LinkControlOCF(ocf)
+        elif ogf == OGF.CONTROLLER:
+            ocf = OCF.CONTROLLER(ocf)
+        elif ogf == OGF.INFORMATIONAL:
+            ocf = InformationalOCF(ocf)
+        elif ogf == OGF.STATUS:
+            ocf = StatusOCF(ocf)
+        elif ogf == OGF.LE_CONTROLLER:
+            ocf = LEControllerOCF(ocf)
+        elif ogf == OGF.VENDOR_SPEC:
+            ocf = VendorSpecificOCF(ocf)
+
+        return CommandPacket(ogf=ogf, ocf=ocf, params=list(command[2:]))
 
     @staticmethod
     def make_hci_opcode(ogf: Union[OGF, int], ocf: Union[OCF, int]) -> int:

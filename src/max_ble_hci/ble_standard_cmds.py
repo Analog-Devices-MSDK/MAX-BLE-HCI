@@ -760,3 +760,9 @@ class BleStandardCmds:
         return self.send_le_controller_command(
             OCF.LE_CONTROLLER.SET_EVENT_MASK, params=params
         )
+
+    def read_local_p256_pub_key(self, callback=None) -> int:
+        if callback:
+            self.port.evt_callback = callback
+
+        self.send_le_controller_command(OCF.LE_CONTROLLER.READ_LOCAL_P256_PUB_KEY)
