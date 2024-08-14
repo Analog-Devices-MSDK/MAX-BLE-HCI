@@ -1,14 +1,13 @@
-import os
+import argparse
 import sys
+from datetime import datetime
 from max_ble_hci import BleHci
 from max_ble_hci.utils import le_list_to_int
 from max_ble_hci.packet_codes import StatusCode
-from max_ble_hci.hci_packets import EventPacket, LEControllerOCF
-from max_ble_hci.constants import PhyOption, PubKeyValidateMode
-import pyaes
-from rich import print
+from max_ble_hci.hci_packets import EventPacket
 
-PORT = "/dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_DT03NOCL-if00-port0"
+from rich import print
+from cryptography.hazmat.primitives.asymmetric import ec
 
 
 from fastecdsa.curve import P256
@@ -18,11 +17,11 @@ from fastecdsa.point import Point
 class Tester:
     def __init__(self, serial_port) -> None:
         self.serial_port = serial_port
-        self.hci = BleHci(PORT, id_tag="hci1", timeout=5)
+        self.hci = BleHci(serial_port, id_tag="hci1", timeout=5)
         self.event_done = False
         self.results = {}
 
-    def pub_key_read_callback(self, packet: EventPacket):
+    def _pub_key_read_callback(self, packet: EventPacket):
         packet.get_return_params()
 
         status, xcoord, ycoord = packet.get_return_params([1, 32, 32])
@@ -38,7 +37,18 @@ class Tester:
             self.results["pub-key-read"] = False
             print("Point not on curve. Encryption fail")
 
+        self.event_done = True
         self.hci.port.evt_callback = print
+
+    def _dhk_event_callback(self, packet: EventPacket):
+        if (
+            StatusCode(packet.evt_params[0])
+            == StatusCode.ERROR_CODE_INVALID_HCI_CMD_PARAMS
+        ):
+            self.results["dhk"] = True
+        else:
+            self.results["dhk"] = False
+
         self.event_done = True
 
     def _run_pub_key_read(self):
@@ -48,7 +58,7 @@ class Tester:
             return False
 
         self.event_done = False
-        status = self.hci.read_local_p256_pub_key(callback=self.pub_key_read_callback)
+        status = self.hci.read_local_p256_pub_key(callback=self._pub_key_read_callback)
 
         if status != StatusCode.SUCCESS:
             return False
@@ -59,15 +69,39 @@ class Tester:
         self.hci.disable_all_events()
 
     def _run_bad_dhk(self):
-        event: EventPacket = self.hci.write_command_raw(
-            "012620401ea1f0f01faf1d9609592284f19e4c0047b58afd8616a69f559077b22faaa1904c55f33e429dad377356703a9ab85160472d1130e28e36765f89aff915b1214b"
+        """
+        TEST HCI/AEN/BI-01-C
+        Generate DH Key Error With Invalid Point
+        """
+        # Generate a private key for use with the P-256 curve
+        self.hci.enable_all_events()
+        private_key = ec.generate_private_key(ec.SECP256R1())
+
+        # Generate the corresponding public key
+        public_key = private_key.public_key()
+
+        # Get the x and y coordinates from the public key
+        public_numbers = public_key.public_numbers()
+        invalid_x_coordinate = public_numbers.x + 1_000_000
+        y_coordinate = public_numbers.y
+
+        self.event_done = False
+        start = datetime.now()
+        status = self.hci.generate_dhk(
+            xcoord=invalid_x_coordinate,
+            ycoord=y_coordinate,
+            callback=self._dhk_event_callback,
         )
 
-        if event.status == StatusCode.SUCCESS:
-            print("[red]DHK gen returned succes. Not expected[/red]")
+        alt1_maybe_fail = False
+        if status == StatusCode.SUCCESS:
+            alt1_maybe_fail = True
+
+        while not self.event_done and (datetime.now() - start).total_seconds() < 10:
+            continue
+
+        if not self.event_done and alt1_maybe_fail:
             self.results["dhk"] = False
-        else:
-            self.results["dhk"] = True
 
     def _run_simple_aes(self):
         expected_ct = "66C6C2278E3B8E053E7EA326521BAD99"
@@ -110,14 +144,30 @@ class Tester:
         return total_result
 
 
-if __name__ == "__main__":
-    PORT = "/dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_DT03NOCL-if00-port0"
-    PORT = "/dev/serial/by-id/usb-ARM_DAPLink_CMSIS-DAP_04091702a987036900000000000000000000000097969906-if01"
+def main():
+    port = ""
 
-    tester = Tester(PORT)
+    parser = argparse.ArgumentParser(description="Basic HCI Encryption tests")
+    parser.add_argument("serial_port", nargs="?", help="Serial port used for HCI")
+    args = parser.parse_args()
+
+    if args.serial_port and args.serial_port != "":
+        print(args.serial_port)
+        port = args.serial_port
+
+    if port == "":
+        raise ValueError(
+            "Serial port must be specified through command line or in script"
+        )
+
+    tester = Tester(port)
     result = tester.run()
 
     if not result:
         sys.exit(-1)
     else:
         sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()

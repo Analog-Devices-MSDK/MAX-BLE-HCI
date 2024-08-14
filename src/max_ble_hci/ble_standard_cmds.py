@@ -774,7 +774,12 @@ class BleStandardCmds:
         )
 
     def generate_dhk(
-        self, xcoord=None, ycoord=None, version: int = 1, use_debug_key=False
+        self,
+        xcoord=None,
+        ycoord=None,
+        version: int = 1,
+        use_debug_key=False,
+        callback=None,
     ) -> StatusCode:
         if (
             xcoord is None
@@ -814,6 +819,9 @@ class BleStandardCmds:
             if version == 1
             else OCF.LE_CONTROLLER.GENERATE_DHKEY_V2
         )
+
+        if callback is not None:
+            self.port.evt_callback = callback
 
         return self.send_le_controller_command(ocf, params)
 
@@ -871,3 +879,23 @@ class BleStandardCmds:
             return list(evt.evt_params[4:])
         else:
             return evt
+
+    def set_event_callback(self, callback):
+        """Set callback used for event packet
+
+        Parameters
+        ----------
+        callback : Callable
+            Function to call on event packet
+        """
+        self.port.evt_callback = callback
+
+    def set_async_callback(self, callback):
+        """Set callback used for async packet
+
+        Parameters
+        ----------
+        callback : Callable
+            Function to call on async packet
+        """
+        self.port.async_callback = callback
