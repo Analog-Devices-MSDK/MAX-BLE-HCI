@@ -53,7 +53,7 @@
 Module contains definitions for BLE standard HCI commands.
 """
 # pylint: disable=too-many-arguments
-from typing import List, Optional, Tuple, Union
+from typing import List, Optional, Tuple, Union, Callable
 
 from ._hci_logger import get_formatted_logger
 from ._transport import SerialUartTransport
@@ -765,7 +765,23 @@ class BleStandardCmds:
             OCF.LE_CONTROLLER.SET_EVENT_MASK, params=params
         )
 
-    def read_local_p256_pub_key(self, callback=None) -> StatusCode:
+    def read_local_p256_pub_key(
+        self, callback: Callable[[EventPacket], None] = None
+    ) -> StatusCode:
+        """Read local P256 Key
+
+        Parameters
+        ----------
+        callback : Callable[[EventPacket], None], optional
+            Callback to call when complete event is triggered, by default None
+
+        Returns
+        -------
+        StatusCode
+            The return packet status code.
+
+        NOTE: Event not enabled for you. Please enable event.
+        """
         if callback:
             self.port.evt_callback = callback
 
@@ -775,34 +791,41 @@ class BleStandardCmds:
 
     def generate_dhk(
         self,
-        xcoord=None,
-        ycoord=None,
+        xcoord: int,
+        ycoord: int,
         version: int = 1,
         use_debug_key=False,
-        callback=None,
+        callback: Callable[[EventPacket], None] = None,
     ) -> StatusCode:
-        if (
-            xcoord is None
-            and ycoord is not None
-            or ycoord is None
-            and xcoord is not None
-        ):
-            raise ValueError(
-                "X-Coordinate and Y-Coordinate of pub key must be given together or generated together"
-            )
+        """Generate Diffie-Hellman Key
 
+        Parameters
+        ----------
+        xcoord : int
+            X-Coordinate
+        ycoord : int
+            Y-Coordinate
+        version : int, optional
+            DHK gen version, by default 1. Options 1 or 2
+        use_debug_key : bool, optional
+            Use a debug key instead of in use key, by default False
+        callback : Callable[[EventPacket], None], optional
+            Callback to call when complete event is triggered, by default None, by default None
+
+        Returns
+        -------
+        StatusCode
+            The return packet status code.
+
+        Raises
+        ------
+        ValueError
+            If version not 1 or 2
+
+        NOTE: Complete event not enabled for you. Please enable event if needed.
+        """
         if version not in (1, 2):
             raise ValueError("DHK generate version must be 1 or 2")
-
-        if xcoord is None and ycoord is None:
-            if use_debug_key:
-                raise ValueError(
-                    "Using a debug key and generating the x/y coordinates is useless"
-                )
-
-            # TODO: Generate pub key
-
-            return StatusCode.SUCCESS
 
         xcoords = to_le_nbyte_list(xcoord, 32)
         ycoords = to_le_nbyte_list(ycoord, 32)
@@ -848,19 +871,45 @@ class BleStandardCmds:
     def encrypt(
         self, key: Union[bytes, int, str], plaintext: Union[int, bytes, str]
     ) -> Union[List[int], EventPacket]:
+        """Encrypt data
+
+        Parameters
+        ----------
+        key : Union[bytes, int, str]
+            Key to encrypt plaintex with
+        plaintext : Union[int, bytes, str]
+            data to encrypt
+            Will pad data with zeros if the block is not 16 bytes
+
+        Returns
+        -------
+        Union[List[int], EventPacket]
+            Ciphertext if encryption succeeded. Event packet othewise.
+
+        Raises
+        ------
+        ValueError
+            If key is an integer and cannot be represented in 128 bits
+        ValueError
+            If key is bytes or string an not 16-bytes in length
+        ValueError
+            If plaintext cannot be represented ins 128 bits
+        ValueError
+            If plaintext bytes or string and more than 16 bytes
+        """
         if isinstance(key, int) and key.bit_length() > 128:
             raise ValueError("Key must be representable in 128 bits!")
-        elif (isinstance(key, bytes) or isinstance(key, str)) and len(key) != 16:
+        if isinstance(key, (bytes, str)) and len(key) != 16:
             raise ValueError("Key must be 128 bits if given as bytes or str!")
 
         if isinstance(plaintext, int) and plaintext.bit_length() > 128:
             raise ValueError("Plaintext must be representable in 128 bits!")
-        elif type(plaintext) in (bytes, str) and len(plaintext) > 16:
+        if isinstance(plaintext, (bytes, str)) and len(plaintext) > 16:
             raise ValueError("Plaintext must be representable in 128 bits!")
 
         if isinstance(key, int):
             key = self._convert_fips197(key)
-        elif isinstance(key, bytes):
+        if isinstance(key, bytes):
             key = list(key)
 
         if not isinstance(plaintext, bytes):
@@ -877,8 +926,8 @@ class BleStandardCmds:
 
         if evt.status == StatusCode.SUCCESS:
             return list(evt.evt_params[4:])
-        else:
-            return evt
+
+        return evt
 
     def set_event_callback(self, callback):
         """Set callback used for event packet

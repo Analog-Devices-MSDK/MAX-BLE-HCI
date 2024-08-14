@@ -161,6 +161,13 @@ class EventMask(Flag):
 
     @staticmethod
     def get_full_mask():
+        """Get full event mask
+
+        Returns
+        -------
+        EventMask
+            All events in event mask
+        """
         return _get_full_mask(EventMask)
 
     @staticmethod
@@ -210,7 +217,14 @@ class EventMaskPage2(Flag):
     ENC_CHANGED = 1 << 25
 
     @staticmethod
-    def get_full_mask():
+    def get_full_mask() -> EventMaskPage2:
+        """Get full event mask page 2
+
+        Returns
+        -------
+        EventMaskPage2
+            Full event mask page 2
+        """
         return _get_full_mask(EventMaskPage2)
 
     @staticmethod
@@ -282,7 +296,14 @@ class EventMaskLE(Flag):
     SUBRATE_CHANGE = 1 << 34
 
     @staticmethod
-    def get_full_mask():
+    def get_full_mask() -> EventMaskLE:
+        """Get full LE Event mask
+
+        Returns
+        -------
+        EventMaskLE
+            Event mask with all events
+        """
         return _get_full_mask(EventMaskLE)
 
     def as_str_list(self) -> List[str]:
