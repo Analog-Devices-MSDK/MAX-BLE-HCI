@@ -722,7 +722,7 @@ class BleStandardCmds:
             OCF.CONTROLLER.SET_EVENT_MASK, params=params
         )
 
-        if mask_pg2:
+        if mask_pg2 is not None:
             if isinstance(mask_pg2, EventMaskPage2):
                 mask_pg2 = mask_pg2.value
             params = to_le_nbyte_list(mask_pg2, 8)
@@ -837,24 +837,24 @@ class BleStandardCmds:
 
         return data_bytes
 
-    def encrypt(self, key: Union[bytes, int, str], plaintext: Union[int, bytes, str]):
-
+    def encrypt(
+        self, key: Union[bytes, int, str], plaintext: Union[int, bytes, str]
+    ) -> Union[List[int], EventPacket]:
         if isinstance(key, int) and key.bit_length() > 128:
             raise ValueError("Key must be representable in 128 bits!")
         elif (isinstance(key, bytes) or isinstance(key, str)) and len(key) != 16:
             raise ValueError("Key must be 128 bits if given as bytes or str!")
-        
+
         if isinstance(plaintext, int) and plaintext.bit_length() > 128:
             raise ValueError("Plaintext must be representable in 128 bits!")
         elif type(plaintext) in (bytes, str) and len(plaintext) > 16:
             raise ValueError("Plaintext must be representable in 128 bits!")
 
-
         if isinstance(key, int):
             key = self._convert_fips197(key)
         elif isinstance(key, bytes):
             key = list(key)
-        
+
         if not isinstance(plaintext, bytes):
             plaintext = self._convert_fips197(plaintext)
         else:
@@ -866,7 +866,8 @@ class BleStandardCmds:
         evt = self.send_le_controller_command(
             OCF.LE_CONTROLLER.ENCRYPT, params=params, return_evt=True
         )
-        
-        return evt
 
-        return list(evt.evt_params)
+        if evt.status == StatusCode.SUCCESS:
+            return list(evt.evt_params[4:])
+        else:
+            return evt

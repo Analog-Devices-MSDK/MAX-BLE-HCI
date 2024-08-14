@@ -278,6 +278,23 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
 
         return self.set_event_mask_le(lemask)
 
+    def disable_all_events(self) -> StatusCode:
+        """Enable all available event masks for Controller (including page 2)
+        and LE Events
+
+        Returns
+        -------
+        StatusCode
+            The return status of the set event mask or set event mask le commands
+        """
+
+        status, status2 = self.set_event_mask(0, mask_pg2=0)
+
+        if status != StatusCode.SUCCESS or status2 != StatusCode.SUCCESS:
+            return status
+
+        return self.set_event_mask_le(0)
+
     def start_advertising(
         self, connect: bool = True, adv_params: Optional[AdvParams] = None, adv_name=""
     ) -> StatusCode:

@@ -6,6 +6,7 @@ from max_ble_hci.packet_codes import StatusCode
 from max_ble_hci.hci_packets import EventPacket, LEControllerOCF
 from max_ble_hci.constants import PhyOption, PubKeyValidateMode
 import pyaes
+from rich import print
 
 PORT = "/dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_DT03NOCL-if00-port0"
 
@@ -32,7 +33,6 @@ class Tester:
 
         try:
             _ = Point(xcoord, ycoord, curve=P256)
-            print("Pub key valid!")
             self.results["pub-key-read"] = True
         except ValueError:
             self.results["pub-key-read"] = False
@@ -56,35 +56,58 @@ class Tester:
         while not self.event_done:
             pass
 
+        self.hci.disable_all_events()
+
     def _run_bad_dhk(self):
         event: EventPacket = self.hci.write_command_raw(
-            "012620401ea1f0f01faf1d9609592284f19e4c0047b58afd8615a69f559077b22faaa1904c55f33e429dad377356703a9ab85160472d1130e28e36765f89aff915b1214b"
+            "012620401ea1f0f01faf1d9609592284f19e4c0047b58afd8616a69f559077b22faaa1904c55f33e429dad377356703a9ab85160472d1130e28e36765f89aff915b1214b"
         )
-        print(event.status)
+
+        if event.status == StatusCode.SUCCESS:
+            print("[red]DHK gen returned succes. Not expected[/red]")
+            self.results["dhk"] = False
+        else:
+            self.results["dhk"] = True
 
     def _run_simple_aes(self):
+        expected_ct = "66C6C2278E3B8E053E7EA326521BAD99"
+        expected_ct = list(bytes.fromhex(expected_ct))
 
-        key_128 = os.urandom(16)
-        aes = pyaes.AESModeOfOperationCTR(key_128)
-        plaintext  = 'test'
-        ciphertext_expected = aes.encrypt(plaintext)
-        
-        evt = self.hci.encrypt(key_128, plaintext)
-        print(evt)
+        evt = self.hci.write_command_raw(
+            "01172020bf01fb9d4ef3bc36d874f5394138684c1302f1e0dfcebdac7968574635241302"
+        )
 
+        if evt.status != StatusCode.SUCCESS:
+            self.results["encryption"] = False
+        else:
+            cyphertext = list(evt.evt_params[4:])
 
+            if cyphertext != expected_ct:
+                self.results["encryption"] = False
+            else:
+                self.results["encryption"] = True
 
-        
-        pass
+        if not self.results["encryption"]:
+            print("Failed basic AES test")
+            print("Resp", cyphertext)
+            print("Expected", expected_ct)
 
     def run(self):
         status = self.hci.reset()
         if status != StatusCode.SUCCESS:
             return False
 
-        # self._run_pub_key_read()
-        # self._run_bad_dhk()
+        self._run_pub_key_read()
+        self._run_bad_dhk()
         self._run_simple_aes()
+
+        total_result = True
+        for test, result in self.results.items():
+            print(f"{test}:", "[green]Pass[/green]" if result else "[red]Fail[/red]")
+            if not result:
+                total_result = False
+
+        return total_result
 
 
 if __name__ == "__main__":
