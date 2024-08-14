@@ -193,3 +193,20 @@ def convert_str_address(addr: str) -> int:
         Address converted to integer value
     """
     return int(addr.replace(":", ""), 16)
+
+
+def bytes_needed_to_represent(data: int) -> int:
+    """Get number of bytes needed to represent an integer value
+
+    Parameters
+    ----------
+    data : int
+        Number to get bytes needed
+
+    Returns
+    -------
+    int
+        Bytes needed to represent nearest value
+    """
+
+    return (data.bit_length() + 7) // 8

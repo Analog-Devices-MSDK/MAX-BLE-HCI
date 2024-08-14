@@ -62,7 +62,7 @@ from .data_params import AdvParams, ConnParams, EstablishConnParams, ScanParams
 from .hci_packets import CommandPacket, EventPacket
 from .packet_codes import EventMask, EventMaskPage2, EventMaskLE, StatusCode
 from .packet_defs import OCF, OGF
-from .utils import can_represent_as_bytes, to_le_nbyte_list, bit_length
+from .utils import can_represent_as_bytes, to_le_nbyte_list, bytes_needed_to_represent
 
 
 class BleStandardCmds:
@@ -816,29 +816,57 @@ class BleStandardCmds:
         )
 
         return self.send_le_controller_command(ocf, params)
-    def encrypt(self, key:int, plaintext: Union[int,str]):
 
-        if key.bit_length() > 128:
-            raise ValueError('Key must be representable in 128 bits!')
-        if isinstance(plaintext, int)  and plaintext.bit_length() > 128:
-            raise ValueError('Plaintext must be representable in 128 bits!')
-        elif isinstance(plaintext,str) and len(plaintext) > 16:
-            raise ValueError('Plaintext must be representable in 128 bits!')
+    def _convert_fips197(self, data: Union[int, str]) -> List[int]:
+        if isinstance(data, int):
+            byte_len = bytes_needed_to_represent(data)
+            data_bytes = [0] * 16
+            for i in range(byte_len):
+                bit_pos = 8 * (byte_len - i - 1)
+                data_bytes[i] = (data >> bit_pos) & 0xFF
+        elif isinstance(data, str):
+            data_bytes = data.encode("utf-8")
+            if len(data_bytes) < 16:
+                data_bytes = data_bytes.ljust(16, b"\x00")
+            data_bytes = list(data_bytes)
+        else:
+            raise ValueError("Input must be an integer or string")
+
+        if len(data_bytes) > 16:
+            raise ValueError("Value must be able to be represented in 16 bytes!")
+
+        return data_bytes
+
+    def encrypt(self, key: Union[bytes, int, str], plaintext: Union[int, bytes, str]):
+
+        if isinstance(key, int) and key.bit_length() > 128:
+            raise ValueError("Key must be representable in 128 bits!")
+        elif (isinstance(key, bytes) or isinstance(key, str)) and len(key) != 16:
+            raise ValueError("Key must be 128 bits if given as bytes or str!")
+        
+        if isinstance(plaintext, int) and plaintext.bit_length() > 128:
+            raise ValueError("Plaintext must be representable in 128 bits!")
+        elif type(plaintext) in (bytes, str) and len(plaintext) > 16:
+            raise ValueError("Plaintext must be representable in 128 bits!")
 
 
-
-        key = to_le_nbyte_list(16)
-
-
-        if isinstance(plaintext, str): 
-            plaintext = plaintext.encode('utf-8')
-            plaintext = int.from_bytes(plaintext)
-
-        plaintext = to_le_nbyte_list(plaintext, 16)
+        if isinstance(key, int):
+            key = self._convert_fips197(key)
+        elif isinstance(key, bytes):
+            key = list(key)
+        
+        if not isinstance(plaintext, bytes):
+            plaintext = self._convert_fips197(plaintext)
+        else:
+            if len(plaintext) < 16:
+                plaintext = plaintext.ljust(16, b"\x00")
+            plaintext = list(plaintext)
 
         params = key + plaintext
-
-        return self.send_le_controller_command(OCF.LE_CONTROLLER.ENCRYPT, params=params)
-
+        evt = self.send_le_controller_command(
+            OCF.LE_CONTROLLER.ENCRYPT, params=params, return_evt=True
+        )
         
-    
+        return evt
+
+        return list(evt.evt_params)

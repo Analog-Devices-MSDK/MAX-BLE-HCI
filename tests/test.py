@@ -11,6 +11,7 @@ from max_ble_hci.utils import le_list_to_int
 from max_ble_hci import packet_codes as pc
 from max_ble_hci.hci_packets import EventPacket
 from max_ble_hci.constants import PhyOption, PubKeyValidateMode
+import pyaes
 
 PORT = "/dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_DT03NOCL-if00-port0"
 
@@ -185,7 +186,17 @@ class TestHci(unittest.TestCase):
         ycoord_bad = le_list_to_int(bad_key[32:])
         status = hci1.generate_dhk(xcoord_bad, ycoord_bad, use_debug_key=True)
         self.assertEqual(status , pc.StatusCode.ERROR_CODE_INSUFFICIENT_SECURITY)
+    
+    def test_utils(self):
+        expected_fips1 = [170, 187, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        expected_fips2 = [104, 101, 108, 108, 111, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        
+        fips1 = hci1._convert_fips197(0xAABB)
+        fips2 = hci1._convert_fips197('hello')
+        self.assertEqual(fips1, expected_fips1)
+        self.assertEqual(fips2, expected_fips2)
 
+        pass
 
 
 if __name__ == "__main__":

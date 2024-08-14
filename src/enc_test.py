@@ -1,9 +1,11 @@
+import os
 import sys
 from max_ble_hci import BleHci
 from max_ble_hci.utils import le_list_to_int
 from max_ble_hci.packet_codes import StatusCode
 from max_ble_hci.hci_packets import EventPacket, LEControllerOCF
 from max_ble_hci.constants import PhyOption, PubKeyValidateMode
+import pyaes
 
 PORT = "/dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_DT03NOCL-if00-port0"
 
@@ -55,103 +57,38 @@ class Tester:
             pass
 
     def _run_bad_dhk(self):
-    
         event: EventPacket = self.hci.write_command_raw(
             "012620401ea1f0f01faf1d9609592284f19e4c0047b58afd8615a69f559077b22faaa1904c55f33e429dad377356703a9ab85160472d1130e28e36765f89aff915b1214b"
         )
         print(event.status)
 
-        # self.hci.write_command_raw()
-        # bad_params = [
-        #     65,
-        #     64,
-        #     30,
-        #     161,
-        #     240,
-        #     240,
-        #     31,
-        #     175,
-        #     29,
-        #     150,
-        #     9,
-        #     89,
-        #     34,
-        #     132,
-        #     241,
-        #     158,
-        #     76,
-        #     0,
-        #     71,
-        #     181,
-        #     138,
-        #     253,
-        #     134,
-        #     21,
-        #     166,
-        #     159,
-        #     85,
-        #     144,
-        #     119,
-        #     178,
-        #     47,
-        #     170,
-        #     161,
-        #     144,
-        #     76,
-        #     85,
-        #     243,
-        #     62,
-        #     66,
-        #     157,
-        #     173,
-        #     55,
-        #     115,
-        #     86,
-        #     112,
-        #     58,
-        #     154,
-        #     184,
-        #     81,
-        #     96,
-        #     71,
-        #     45,
-        #     17,
-        #     48,
-        #     226,
-        #     142,
-        #     54,
-        #     118,
-        #     95,
-        #     137,
-        #     175,
-        #     249,
-        #     21,
-        #     177,
-        #     33,
-        #     75,
-        # ]
-        # status = self.hci.send_le_controller_command(
-        #     LEControllerOCF.GENERATE_DHKEY, params=bad_params
-        # )
+    def _run_simple_aes(self):
+
+        key_128 = os.urandom(16)
+        aes = pyaes.AESModeOfOperationCTR(key_128)
+        plaintext  = 'test'
+        ciphertext_expected = aes.encrypt(plaintext)
+        
+        evt = self.hci.encrypt(key_128, plaintext)
+        print(evt)
+
+
 
         
-
-    def _run_simple_aes(self):
         pass
 
     def run(self):
         status = self.hci.reset()
         if status != StatusCode.SUCCESS:
             return False
-        
-        self._run_pub_key_read()
-        self._run_bad_dhk()
+
+        # self._run_pub_key_read()
+        # self._run_bad_dhk()
         self._run_simple_aes()
-      
 
 
 if __name__ == "__main__":
-    # PORT = "/dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_DT03NOCL-if00-port0"
+    PORT = "/dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_DT03NOCL-if00-port0"
     PORT = "/dev/serial/by-id/usb-ARM_DAPLink_CMSIS-DAP_04091702a987036900000000000000000000000097969906-if01"
 
     tester = Tester(PORT)
