@@ -3,7 +3,7 @@ import sys
 from datetime import datetime
 from max_ble_hci import BleHci
 from max_ble_hci.utils import le_list_to_int
-from max_ble_hci.packet_codes import StatusCode
+from max_ble_hci.packet_codes import StatusCode, EventSubcode
 from max_ble_hci.hci_packets import EventPacket
 
 from rich import print
@@ -17,11 +17,14 @@ from fastecdsa.point import Point
 class Tester:
     def __init__(self, serial_port) -> None:
         self.serial_port = serial_port
-        self.hci = BleHci(serial_port, id_tag="hci1", timeout=5)
+        self.hci = BleHci(
+            serial_port, id_tag="hci1", timeout=5, evt_callback=self.common_callback
+        )
+
         self.event_done = False
         self.results = {}
 
-    def _pub_key_read_callback(self, packet: EventPacket):
+    def _pub_key_read_event(self, packet: EventPacket):
         packet.get_return_params()
 
         status, xcoord, ycoord = packet.get_return_params([1, 32, 32])
@@ -37,10 +40,7 @@ class Tester:
             self.results["pub-key-read"] = False
             print("Point not on curve. Encryption fail")
 
-        self.event_done = True
-        self.hci.port.evt_callback = print
-
-    def _dhk_event_callback(self, packet: EventPacket):
+    def _dhk_event(self, packet: EventPacket):
         if (
             StatusCode(packet.evt_params[0])
             == StatusCode.ERROR_CODE_INVALID_HCI_CMD_PARAMS
@@ -49,16 +49,17 @@ class Tester:
         else:
             self.results["dhk"] = False
 
+    def common_callback(self, packet: EventPacket):
+        if packet.evt_subcode == EventSubcode.READ_LOCAL_P256_PUB_KEY_CMPLT:
+            self._pub_key_read_event(packet)
+        elif packet.evt_subcode == EventSubcode.GENERATE_DHKEY_CMPLT:
+            self._dhk_event(packet)
+
         self.event_done = True
 
     def _run_pub_key_read(self):
-        status = self.hci.enable_all_events()
-        if status != StatusCode.SUCCESS:
-            print("Failed to enable events")
-            return False
-
         self.event_done = False
-        status = self.hci.read_local_p256_pub_key(callback=self._pub_key_read_callback)
+        status = self.hci.read_local_p256_pub_key()
 
         if status != StatusCode.SUCCESS:
             return False
@@ -66,15 +67,13 @@ class Tester:
         while not self.event_done:
             pass
 
-        self.hci.disable_all_events()
-
     def _run_bad_dhk(self):
         """
         TEST HCI/AEN/BI-01-C
         Generate DH Key Error With Invalid Point
         """
         # Generate a private key for use with the P-256 curve
-        self.hci.enable_all_events()
+
         private_key = ec.generate_private_key(ec.SECP256R1())
 
         # Generate the corresponding public key
@@ -87,11 +86,7 @@ class Tester:
 
         self.event_done = False
         start = datetime.now()
-        status = self.hci.generate_dhk(
-            xcoord=invalid_x_coordinate,
-            ycoord=y_coordinate,
-            callback=self._dhk_event_callback,
-        )
+        status = self.hci.generate_dhk(xcoord=invalid_x_coordinate, ycoord=y_coordinate)
 
         alt1_maybe_fail = False
         if status == StatusCode.SUCCESS:
@@ -131,8 +126,14 @@ class Tester:
         if status != StatusCode.SUCCESS:
             return False
 
+        status = self.hci.enable_all_events()
+        if status != StatusCode.SUCCESS:
+            print("Failed to enable events")
+            return False
+
         self._run_pub_key_read()
         self._run_bad_dhk()
+        self.hci.disable_all_events()
         self._run_simple_aes()
 
         total_result = True
