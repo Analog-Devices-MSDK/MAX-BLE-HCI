@@ -209,4 +209,7 @@ def bytes_needed_to_represent(data: int) -> int:
         Bytes needed to represent nearest value
     """
 
+    if data == 0:
+        return 1
+
     return (data.bit_length() + 7) // 8
