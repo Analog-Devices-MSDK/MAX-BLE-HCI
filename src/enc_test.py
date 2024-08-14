@@ -115,4 +115,9 @@ if __name__ == "__main__":
     PORT = "/dev/serial/by-id/usb-ARM_DAPLink_CMSIS-DAP_04091702a987036900000000000000000000000097969906-if01"
 
     tester = Tester(PORT)
-    tester.run()
+    result = tester.run()
+
+    if not result:
+        sys.exit(-1)
+    else:
+        sys.exit(0)
