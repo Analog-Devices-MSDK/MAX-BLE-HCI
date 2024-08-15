@@ -60,7 +60,6 @@ import glob
 import os
 import sys
 from typing import List
-
 import serial
 
 DEFAULT_BAUDRATE = 115200
@@ -195,7 +194,7 @@ def convert_str_address(addr: str) -> int:
     return int(addr.replace(":", ""), 16)
 
 
-def bytes_needed_to_represent(data: int) -> int:
+def byte_length(data: int) -> int:
     """Get number of bytes needed to represent an integer value
 
     Parameters

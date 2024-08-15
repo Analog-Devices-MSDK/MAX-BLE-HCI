@@ -56,7 +56,7 @@ from __future__ import annotations
 import warnings
 from enum import Enum
 from typing import List, Optional, Union
-
+from .utils import byte_length
 from .constants import Endian, PhyOption
 from .packet_codes import EventCode, EventSubcode, StatusCode
 from .packet_defs import (
@@ -71,15 +71,6 @@ from .packet_defs import (
     StatusOCF,
     VendorSpecificOCF,
 )
-
-
-def byte_length(num: int):
-    """Calculate the length of an integer in bytes.
-
-    PRIVATE
-
-    """
-    return max((num.bit_length() + 7) // 8, 1)
 
 
 class CommandPacket:
@@ -603,6 +594,10 @@ class EventPacket:
         self.length = length
         self.status = StatusCode(status) if status is not None else None
         self.evt_subcode = EventSubcode(evt_subcode) if evt_subcode else None
+
+        if len(evt_params) != self.length:
+            raise ValueError("Mismatch in expected and actual length of event params")
+
         self.evt_params = evt_params
 
     def __repr__(self):

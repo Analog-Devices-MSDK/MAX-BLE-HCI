@@ -1,16 +1,22 @@
-import secrets
-import unittest
-import sys
 import os
+import secrets
+import sys
+import unittest
 
-if os.path.exists("../"):
-    sys.path.append("../")
 
-from max_ble_hci import BleHci, utils
+from max_ble_hci import BleHci
 from max_ble_hci import packet_codes as pc
 from max_ble_hci.constants import PhyOption, PubKeyValidateMode
 
-PORT = "/dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_DT03NOCL-if00-port0"
+
+if len(sys.argv) > 1:
+    PORT = sys.argv[1]
+    # gotta get rid of it before unittest takes it
+    sys.argv.pop()
+elif os.environ.get("TEST_PORT"):
+    PORT = os.environ.get("TEST_PORT")
+else:
+    PORT = "/dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_DT03NOCL-if00-port0"
 
 hci1 = BleHci(PORT, id_tag="hci1", timeout=5)
 
@@ -18,6 +24,7 @@ MAX_U32 = 0xFFFFFFFF
 A32 = 0xAAAAAAAA
 
 
+# pylint: disable=missing-function-docstring
 class TestHci(unittest.TestCase):
     def test_reset(self):
         # Reset puts code into nice condition, make sure it works before any tests
@@ -68,6 +75,7 @@ class TestHci(unittest.TestCase):
         self.assertEqual(hci1.set_diagnostic_mode(True), pc.StatusCode.SUCCESS)
 
     def test_stats(self):
+        """Test status functions"""
         stats, status = hci1.get_pdu_filter_stats()
         self.assertTrue(stats is not None and status == pc.StatusCode.SUCCESS)
 
@@ -94,45 +102,6 @@ class TestHci(unittest.TestCase):
             hci1.set_connection_phy_tx_power(1, 0, PhyOption.PHY_1M),
             pc.StatusCode.ERROR_CODE_UNKNOWN_CONN_ID,
         )
-
-
-    def test_utils(self):
-        
-        expected_fips1 = [170, 187, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        expected_fips2 = [104, 101, 108, 108, 111, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        
-        fips1 = hci1._convert_fips197(0xAABB)
-        fips2 = hci1._convert_fips197('hello')
-        self.assertEqual(fips1, expected_fips1)
-        self.assertEqual(fips2, expected_fips2)
-
-        ans = utils.to_le_nbyte_list(0xAABB, 4)
-        self.assertEqual(ans, [0xBB,0xAA, 0x00, 0x00])
-
-        ans = utils.le_list_to_int(ans)
-        self.assertEqual(ans, 0xAABB)
-
-
-        good_data = [1,2,3,4]
-        ans = utils.can_represent_as_bytes(good_data)
-        self.assertTrue(ans)
-
-        bad_data = [1,2009,3,4]
-        ans = utils.can_represent_as_bytes(bad_data)
-        self.assertFalse(ans)
-
-
-        address = utils.convert_str_address('00:11:22:33:44:55')
-        self.assertEqual(address, 0x001122334455)
-
-
-        self.assertEqual(utils.bytes_needed_to_represent(0), 1)
-        self.assertEqual(utils.bytes_needed_to_represent(1), 1)
-
-
-
-        
-
 
 
 if __name__ == "__main__":

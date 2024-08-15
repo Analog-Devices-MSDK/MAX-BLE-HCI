@@ -62,7 +62,7 @@ from .data_params import AdvParams, ConnParams, EstablishConnParams, ScanParams
 from .hci_packets import CommandPacket, EventPacket
 from .packet_codes import EventMask, EventMaskPage2, EventMaskLE, StatusCode
 from .packet_defs import OCF, OGF
-from .utils import can_represent_as_bytes, to_le_nbyte_list, bytes_needed_to_represent
+from .utils import can_represent_as_bytes, to_le_nbyte_list, byte_length
 
 
 class BleStandardCmds:
@@ -679,7 +679,10 @@ class BleStandardCmds:
             The return packet status code.
 
         """
+
         return self.send_controller_command(OCF.CONTROLLER.RESET)
+
+        # return self.send_controller_command(OCF.CONTROLLER.RESET)
 
     def set_event_mask(
         self,
@@ -848,9 +851,28 @@ class BleStandardCmds:
 
         return self.send_le_controller_command(ocf, params)
 
-    def _convert_fips197(self, data: Union[int, str]) -> List[int]:
+    def convert_fips197(self, data: Union[int, str]) -> List[int]:
+        """Convert data to fips197 format
+
+        Parameters
+        ----------
+        data : Union[int, str]
+            Integer of string
+
+        Returns
+        -------
+        List[int]
+            fips197 formatted data
+
+        Raises
+        ------
+        ValueError
+            Input is not an int or str
+        ValueError
+            Data cannot be represented in 16-bytes
+        """
         if isinstance(data, int):
-            byte_len = bytes_needed_to_represent(data)
+            byte_len = byte_length(data)
             data_bytes = [0] * 16
             for i in range(byte_len):
                 bit_pos = 8 * (byte_len - i - 1)
@@ -908,12 +930,12 @@ class BleStandardCmds:
             raise ValueError("Plaintext must be representable in 128 bits!")
 
         if isinstance(key, int):
-            key = self._convert_fips197(key)
+            key = self.convert_fips197(key)
         if isinstance(key, bytes):
             key = list(key)
 
         if not isinstance(plaintext, bytes):
-            plaintext = self._convert_fips197(plaintext)
+            plaintext = self.convert_fips197(plaintext)
         else:
             if len(plaintext) < 16:
                 plaintext = plaintext.ljust(16, b"\x00")

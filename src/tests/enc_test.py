@@ -1,24 +1,83 @@
+#! /usr/bin/env python3
+###############################################################################
+#
+#
+# Copyright (C) 2023 Maxim Integrated Products, Inc., All Rights Reserved.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+# OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+# IN NO EVENT SHALL MAXIM INTEGRATED BE LIABLE FOR ANY CLAIM, DAMAGES
+# OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+# Except as contained in this notice, the name of Maxim Integrated
+# Products, Inc. shall not be used except as stated in the Maxim Integrated
+# Products, Inc. Branding Policy.
+#
+# The mere transfer of this software does not imply any licenses
+# of trade secrets, proprietary technology, copyrights, patents,
+# trademarks, maskwork rights, or any other form of intellectual
+# property whatsoever. Maxim Integrated Products, Inc. retains all
+# ownership rights.
+#
+##############################################################################
+#
+# Copyright 2023 Analog Devices, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+##############################################################################
+"""
+enc_test.py
+
+Description: Small encryption HCI test
+
+"""
 import argparse
 import sys
 from datetime import datetime
-from max_ble_hci import BleHci
-from max_ble_hci.utils import le_list_to_int
-from max_ble_hci.packet_codes import StatusCode, EventSubcode
-from max_ble_hci.hci_packets import EventPacket
 
-from rich import print
+# pylint: disable=import-error,redefined-builtin
 from cryptography.hazmat.primitives.asymmetric import ec
-
-
 from fastecdsa.curve import P256
 from fastecdsa.point import Point
+from rich import print
+
+# pylint: enable=import-error,redefined-builtin
+from max_ble_hci import BleHci
+from max_ble_hci.hci_packets import EventPacket
+from max_ble_hci.packet_codes import EventSubcode, StatusCode
 
 
 class Tester:
+    """Test Harness"""
+    #pylint: disable=too-few-public-methods
     def __init__(self, serial_port) -> None:
         self.serial_port = serial_port
         self.hci = BleHci(
-            serial_port, id_tag="hci1", timeout=5, evt_callback=self.common_callback
+            serial_port, id_tag="hci1", timeout=5, evt_callback=self._common_callback
         )
 
         self.event_done = False
@@ -49,7 +108,7 @@ class Tester:
         else:
             self.results["dhk"] = False
 
-    def common_callback(self, packet: EventPacket):
+    def _common_callback(self, packet: EventPacket):
         if packet.evt_subcode == EventSubcode.READ_LOCAL_P256_PUB_KEY_CMPLT:
             self._pub_key_read_event(packet)
         elif packet.evt_subcode == EventSubcode.GENERATE_DHKEY_CMPLT:
@@ -62,10 +121,12 @@ class Tester:
         status = self.hci.read_local_p256_pub_key()
 
         if status != StatusCode.SUCCESS:
-            return False
+            self.results['pub-key-read'] = False
+            return
 
         while not self.event_done:
             pass
+
 
     def _run_bad_dhk(self):
         """
@@ -91,6 +152,11 @@ class Tester:
         alt1_maybe_fail = False
         if status == StatusCode.SUCCESS:
             alt1_maybe_fail = True
+        elif status == StatusCode.ERROR_CODE_INVALID_HCI_CMD_PARAMS:
+            self.results["dhk"] = True
+            self.event_done = True
+            return
+
 
         while not self.event_done and (datetime.now() - start).total_seconds() < 10:
             continue
@@ -121,7 +187,14 @@ class Tester:
             print("Resp", cyphertext)
             print("Expected", expected_ct)
 
-    def run(self):
+    def run(self) -> bool:
+        """RUN Encryption test
+
+        Returns
+        -------
+        bool
+            True if all pass. False if any failure
+        """
         status = self.hci.reset()
         if status != StatusCode.SUCCESS:
             return False
@@ -146,6 +219,8 @@ class Tester:
 
 
 def main():
+    """MAIN
+    """
     port = ""
 
     parser = argparse.ArgumentParser(description="Basic HCI Encryption tests")
