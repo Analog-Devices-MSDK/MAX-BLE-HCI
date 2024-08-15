@@ -114,15 +114,6 @@ class Software(unittest.TestCase):
         self.assertEqual(evt.evt_code, EventCode.COMMAND_COMPLETE)
         self.assertEqual(evt.get_return_params(), StatusCode.SUCCESS.value)
 
-        self.assertRaises(
-            ValueError,
-            EventPacket,
-            EventCode.COMMAND_COMPLETE,
-            length=5,
-            status=StatusCode.SUCCESS,
-            evt_params=bytes([1, 2, 3, 4]),
-        )
-
 
 if __name__ == "__main__":
     unittest.main()

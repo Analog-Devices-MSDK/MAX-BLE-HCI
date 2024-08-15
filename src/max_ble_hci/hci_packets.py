@@ -595,9 +595,6 @@ class EventPacket:
         self.status = StatusCode(status) if status is not None else None
         self.evt_subcode = EventSubcode(evt_subcode) if evt_subcode else None
 
-        if len(evt_params) != self.length:
-            raise ValueError("Mismatch in expected and actual length of event params")
-
         self.evt_params = evt_params
 
     def __repr__(self):

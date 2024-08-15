@@ -78,9 +78,8 @@ jobs:
       - name: Test
         if: ${{ env.changed_src == 'true' }}
         run: |
-          export HCI=$(resource_manager -g $TEST_BOARD.hci_port)
-          perl -i -pe 's/PORT = ".*"/PORT = "$ENV{HCI}"/' tests/test.py
-          (cd tests && python3 test.py)
+          export TEST_PORT=$(resource_manager -g $TEST_BOARD.hci_port)
+          (cd src && python3 -m tests.test)
 
       - name: Unlock Resources
         if: always()
