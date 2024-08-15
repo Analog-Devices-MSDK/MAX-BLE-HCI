@@ -24,4 +24,4 @@ jobs:
 
     - name: Analysing the code with pylint
       run: |
-        pylint $(git ls-files 'src/*.py') -d duplicate-code -d import-error
+        pylint $(git ls-files 'src/*.py') --rcfile src/.pylintrc
