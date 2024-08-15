@@ -82,6 +82,7 @@ A32 = 0xAAAAAAAA
 
 
 # pylint: disable=missing-function-docstring
+# pylint: disable=missing-class-docstring
 class TestHci(unittest.TestCase):
     def test_reset(self):
         # Reset puts code into nice condition, make sure it works before any tests
