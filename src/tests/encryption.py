@@ -64,49 +64,26 @@ import os
 from cryptography.hazmat.primitives.asymmetric import ec
 
 from rich import print
-from typing import Tuple
+
 
 # pylint: enable=import-error,redefined-builtin
 from max_ble_hci import BleHci
 from max_ble_hci.hci_packets import EventPacket
 from max_ble_hci.packet_codes import EventSubcode, StatusCode
 
-p256_p = 115792089210356248762697446949407573530086143415290314195533631308867097853951
-p256_a = -3
-p256_b = 41058363725152142129326129780047268409114441015993725554835256314039467401291
-def is_point_on_curve(point: Tuple[int, int]) -> bool:
-    r""" Check if a point lies on this curve.
-
-    The check is done by evaluating the curve equation :math:`y^2 \equiv x^3 + ax + b \pmod{p}`
-    at the given point :math:`(x,y)` with this curve's domain parameters :math:`(a, b, p)`. If
-    the congruence holds, then the point lies on this curve.
-
-    Args:
-        point (long, long): A tuple representing the point :math:`P` as an :math:`(x, y)` coordinate
-        pair.
-
-    Returns:
-        bool: :code:`True` if the point lies on this curve, otherwise :code:`False`.
-    """
-    x, y, = point
-    left = y * y
-    right = (x * x * x) + (p256_a * x) + p256_b
-    return (left - right) % p256_p == 0
-
-def check_point(x,y):
-
-    x = x % p256_p
-    y = y % p256_p
-
-    if not is_point_on_curve((x, y)):
-        return False
-    else:
-        return True
 
 class Tester:
     """Test Harness"""
 
     # pylint: disable=too-few-public-methods
+    P256_P = (
+        115792089210356248762697446949407573530086143415290314195533631308867097853951
+    )
+    P256_A = -3
+    P256_B = (
+        41058363725152142129326129780047268409114441015993725554835256314039467401291
+    )
+
     def __init__(self, serial_port) -> None:
         self.serial_port = serial_port
         self.hci = BleHci(
@@ -115,6 +92,20 @@ class Tester:
 
         self.event_done = False
         self.results = {}
+
+    def _is_point_on_curve(self, xcoord, ycoord) -> bool:
+        left = ycoord * ycoord
+        right = (xcoord * xcoord * xcoord) + (self.P256_A * xcoord) + self.P256_B
+        return (left - right) % self.P256_P == 0
+
+    def _check_point(self, xcoord, ycoord):
+        xcoord = xcoord % self.P256_P
+        ycoord = ycoord % self.P256_P
+
+        if not self._is_point_on_curve(xcoord, ycoord):
+            return False
+
+        return True
 
     def _pub_key_read_event(self, packet: EventPacket):
         packet.get_return_params()
@@ -125,8 +116,7 @@ class Tester:
         if status != StatusCode.SUCCESS:
             print(f"Read pub key failed. Status: {status}")
 
-        self.results["pub-key-read"] = check_point(xcoord, ycoord)
-
+        self.results["pub-key-read"] = self._check_point(xcoord, ycoord)
 
     def _dhk_event(self, packet: EventPacket):
         if (
@@ -274,5 +264,4 @@ def main():
 
 
 if __name__ == "__main__":
-
     main()
