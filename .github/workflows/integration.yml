@@ -79,7 +79,10 @@ jobs:
         if: ${{ env.changed_src == 'true' }}
         run: |
           export TEST_PORT=$(resource_manager -g $TEST_BOARD.hci_port)
-          (cd src && python3 -m tests.test)
+          (cd src && python3 -m tests.pure_software)
+          (cd src && python3 -m tests.integration)
+          (cd src && python3 -m tests.encryption)
+
 
       - name: Unlock Resources
         if: always()

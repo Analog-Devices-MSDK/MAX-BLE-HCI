@@ -58,6 +58,7 @@ Description: Small encryption HCI test
 import argparse
 import sys
 from datetime import datetime
+import os
 
 # pylint: disable=import-error,redefined-builtin
 from cryptography.hazmat.primitives.asymmetric import ec
@@ -228,6 +229,8 @@ def main():
     if args.serial_port and args.serial_port != "":
         print(args.serial_port)
         port = args.serial_port
+    elif os.environ.get("TEST_PORT"):
+        port = os.environ.get("TEST_PORT")
 
     if port == "":
         raise ValueError(
