@@ -62,15 +62,46 @@ import os
 
 # pylint: disable=import-error,redefined-builtin
 from cryptography.hazmat.primitives.asymmetric import ec
-from fastecdsa.curve import P256
-from fastecdsa.point import Point
+
 from rich import print
+from typing import Tuple
 
 # pylint: enable=import-error,redefined-builtin
 from max_ble_hci import BleHci
 from max_ble_hci.hci_packets import EventPacket
 from max_ble_hci.packet_codes import EventSubcode, StatusCode
 
+p256_p = 115792089210356248762697446949407573530086143415290314195533631308867097853951
+p256_a = -3
+p256_b = 41058363725152142129326129780047268409114441015993725554835256314039467401291
+def is_point_on_curve(point: Tuple[int, int]) -> bool:
+    r""" Check if a point lies on this curve.
+
+    The check is done by evaluating the curve equation :math:`y^2 \equiv x^3 + ax + b \pmod{p}`
+    at the given point :math:`(x,y)` with this curve's domain parameters :math:`(a, b, p)`. If
+    the congruence holds, then the point lies on this curve.
+
+    Args:
+        point (long, long): A tuple representing the point :math:`P` as an :math:`(x, y)` coordinate
+        pair.
+
+    Returns:
+        bool: :code:`True` if the point lies on this curve, otherwise :code:`False`.
+    """
+    x, y, = point
+    left = y * y
+    right = (x * x * x) + (p256_a * x) + p256_b
+    return (left - right) % p256_p == 0
+
+def check_point(x,y):
+
+    x = x % p256_p
+    y = y % p256_p
+
+    if not is_point_on_curve((x, y)):
+        return False
+    else:
+        return True
 
 class Tester:
     """Test Harness"""
@@ -94,12 +125,8 @@ class Tester:
         if status != StatusCode.SUCCESS:
             print(f"Read pub key failed. Status: {status}")
 
-        try:
-            _ = Point(xcoord, ycoord, curve=P256)
-            self.results["pub-key-read"] = True
-        except ValueError:
-            self.results["pub-key-read"] = False
-            print("Point not on curve. Encryption fail")
+        self.results["pub-key-read"] = check_point(xcoord, ycoord)
+
 
     def _dhk_event(self, packet: EventPacket):
         if (
@@ -247,4 +274,5 @@ def main():
 
 
 if __name__ == "__main__":
+
     main()

@@ -78,7 +78,7 @@ jobs:
       - name: Test
         if: ${{ env.changed_src == 'true' }}
         run: |
-          pip install . --upgrade
+          pip install .
           export TEST_PORT=$(resource_manager -g $TEST_BOARD.hci_port)
           (cd src && python3 -m tests.pure_software)
           (cd src && python3 -m tests.integration)
