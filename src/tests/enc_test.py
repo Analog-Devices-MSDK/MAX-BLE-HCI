@@ -73,7 +73,8 @@ from max_ble_hci.packet_codes import EventSubcode, StatusCode
 
 class Tester:
     """Test Harness"""
-    #pylint: disable=too-few-public-methods
+
+    # pylint: disable=too-few-public-methods
     def __init__(self, serial_port) -> None:
         self.serial_port = serial_port
         self.hci = BleHci(
@@ -121,12 +122,11 @@ class Tester:
         status = self.hci.read_local_p256_pub_key()
 
         if status != StatusCode.SUCCESS:
-            self.results['pub-key-read'] = False
+            self.results["pub-key-read"] = False
             return
 
         while not self.event_done:
             pass
-
 
     def _run_bad_dhk(self):
         """
@@ -156,7 +156,6 @@ class Tester:
             self.results["dhk"] = True
             self.event_done = True
             return
-
 
         while not self.event_done and (datetime.now() - start).total_seconds() < 10:
             continue
@@ -219,8 +218,7 @@ class Tester:
 
 
 def main():
-    """MAIN
-    """
+    """MAIN"""
     port = ""
 
     parser = argparse.ArgumentParser(description="Basic HCI Encryption tests")

@@ -64,9 +64,9 @@ from max_ble_hci.hci_packets import EventCode, EventPacket, StatusCode
 
 
 class Software(unittest.TestCase):
-    """Softare Unit Test
-    """
-    #pylint: disable=missing-function-docstring
+    """Softare Unit Test"""
+
+    # pylint: disable=missing-function-docstring
     def hci_required(self):
         if os.environ.get("TEST_PORT"):
             port = os.environ.get("TEST_PORT")
