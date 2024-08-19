@@ -73,6 +73,7 @@ from .packet_defs import OCF, OGF
 from .utils import convert_str_address, to_le_nbyte_list
 
 
+
 class VendorSpecificCmds:
     """Definitions for ADI vendor-specific HCI commands.
 
@@ -138,6 +139,78 @@ class VendorSpecificCmds:
             return self.port.send_command(cmd)
 
         return self.port.send_command(cmd).status
+
+    def reset_device(self) -> StatusCode:
+        """Reset the device. 
+
+        Reset the device, which has the same functionality as pressing 
+        the reset button on dev board. 
+
+        Returns
+        -------
+        StatusCode
+            The return packet status code.
+
+        """
+
+        return self.send_vs_command(OCF.VENDOR_SPEC.DEVICE_RESET, params=None)
+
+    def erase_memory(self) -> StatusCode:
+        """Erase the flash memory.
+
+        Erase the flash memory with one page starting at addr. 
+
+        Returns
+        -------
+        StatusCode
+            The return packet status code.
+
+        """
+
+        return self.send_vs_command(OCF.VENDOR_SPEC.MEMORY_ERASE, params=None)
+
+    def set_flash_addr(self, addr: Union[int, str]) -> StatusCode:
+        """Set the flash write address.
+
+        Set the starting address of flash memory to be written 
+
+        Parameters
+        ----------
+        addr : Union[int, str]
+            Desired flash memory address.
+            If str, format expected xx:xx:xx:xx
+
+        Returns
+        -------
+        StatusCode
+            The return packet status code.
+
+        """
+
+        if isinstance(addr, str):
+            addr = convert_str_address(addr)
+
+        params = to_le_nbyte_list(addr, 4)
+        return self.send_vs_command(OCF.VENDOR_SPEC.SET_FLASH_ADDR, params=params)
+
+    def write_flash(self, chunk: List[int]) -> StatusCode:
+        """Write data to the flash memory.
+
+        Write 128 bits of data chunk to the flash memory
+
+        Parameters
+        ----------
+        chunk : List[int]
+            128bit data chunk of new firmware
+
+        Returns
+        -------
+        StatusCode
+            The return packet status code.
+
+        """
+
+        return self.send_vs_command(OCF.VENDOR_SPEC.WRITE_FLASH, params=chunk)
 
     def set_address(self, addr: Union[int, str]) -> StatusCode:
         """Sets the BD address.

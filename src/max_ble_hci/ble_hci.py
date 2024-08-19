@@ -53,6 +53,7 @@
 # pylint: disable=too-many-arguments
 import logging
 from typing import Any, Callable, Optional, Union
+from alive_progress import alive_bar
 
 from ._hci_logger import get_formatted_logger
 from ._transport import SerialUartTransport
@@ -64,6 +65,7 @@ from .hci_packets import AsyncPacket, CommandPacket, EventPacket
 from .packet_codes import EventMask, EventMaskPage2, EventMaskLE, StatusCode
 from .utils import convert_str_address
 from .vendor_spec_cmds import VendorSpecificCmds
+
 
 
 class BleHci(BleStandardCmds, VendorSpecificCmds):
@@ -423,6 +425,40 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         status = self.create_connection(conn_params)
 
         return status
+
+    def firmware_update(self, name: str) -> StatusCode:
+        """Upload the firmware to second flash memory bank
+
+        Parameters
+        ----------
+        name : str
+            The name of firmware binary file
+
+        Returns
+        -------
+        StatusCode
+            The return status of the firmware update command.
+
+        """
+        with open(name, mode="rb") as file:
+            data = file.read()
+        integer_list = [int(byte) for byte in data]
+        size = 128
+        chunked_lists = []
+        result = StatusCode.SUCCESS
+        for i in range(0, len(integer_list), size):
+            chunk = integer_list[i:i+size]
+            chunked_lists.append(chunk)
+        with alive_bar(len(chunked_lists),enrich_print = False) as progress_bar:
+            for i, chunk in enumerate(chunked_lists):
+                if result == StatusCode.SUCCESS:
+                    result = self.write_flash(chunk)
+                    # pylint: disable=not-callable
+                    progress_bar()
+                else:
+                    return result
+
+        return result
 
     def read_event(self, timeout: Optional[float] = None) -> EventPacket:
         """Read an event from controller.
