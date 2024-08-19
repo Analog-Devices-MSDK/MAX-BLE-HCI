@@ -59,8 +59,86 @@ Description: Basic decoding of raw HCI command packets
 import argparse
 import binascii
 
-from max_ble_hci.hci_packets import AsyncPacket, CommandPacket, EventPacket
+# pylint: disable=redefined-builtin,import-error
+from rich import print
+
+from max_ble_hci.hci_packets import (
+    OGF,
+    AsyncPacket,
+    CommandPacket,
+    ControllerOCF,
+    EventPacket,
+    LEControllerOCF,
+)
+from max_ble_hci.packet_codes import EventMask, EventMaskLE
 from max_ble_hci.packet_defs import PacketType
+
+# pylint: enable=redefined-builtin,import-error
+
+
+def _make_event_mask(params):
+    event_mask = 0
+    param_len = params[0]
+
+    for i, value in enumerate(params[1:]):
+        event_mask |= value << (param_len - (i + 1)) * 8
+    return event_mask
+
+
+def _parse_event_mask(command: CommandPacket):
+    event_mask = _make_event_mask(command.params)
+
+    # clear all rfu bits
+    mask = EventMask.from_int(event_mask)
+    mask_list = mask.as_str_list()
+
+    print("[cyan]Event Mask\n-----------[/cyan]")
+    for mask_str in mask_list:
+        print(mask_str)
+
+
+def _parse_event_mask_le(command: CommandPacket):
+    event_mask = _make_event_mask(command.params)
+    event_mask &= (1 << 34) | ((1 << 34) - 1)
+
+    mask = EventMaskLE(event_mask)
+    mask_list = mask.as_str_list()
+
+    print("[cyan]Event Mask\n-----------[/cyan]")
+    for mask_str in mask_list:
+        print(mask_str)
+
+
+def _parse_packet(command):
+    packet_type = int(command[:2], 16)
+    packet_type = PacketType(packet_type)
+
+    command = binascii.unhexlify(command[2:])
+
+    print(packet_type)
+    if packet_type == PacketType.COMMAND:
+        command = CommandPacket.from_bytes(command)
+        print(command)
+        ogf = OGF(command.ogf)
+        if (
+            ogf == OGF.LE_CONTROLLER
+            and command.ocf == LEControllerOCF.SET_EVENT_MASK.value
+        ):
+            _parse_event_mask_le(command)
+
+        elif (
+            ogf == OGF.CONTROLLER and command.ocf == ControllerOCF.SET_EVENT_MASK.value
+        ):
+            _parse_event_mask(command)
+
+    elif packet_type == PacketType.EXTENDED:
+        pass
+    elif packet_type == PacketType.ASYNC:
+        print(AsyncPacket.from_bytes(command))
+    elif packet_type == PacketType.EVENT:
+        print(EventPacket.from_bytes(command))
+    else:
+        raise ValueError(f"Unnknown packet type {packet_type}")
 
 
 def main():
@@ -70,25 +148,13 @@ def main():
     )
 
     parser.add_argument("command", help="Central board")
+    parser.add_argument("-e", "--event-mask", help="Command is event mask")
 
     args = parser.parse_args()
 
-    packet_type = int(args.command[:2], 16)
-    packet_type = PacketType(packet_type)
+    command: str = args.command
 
-    command = binascii.unhexlify(args.command[2:])
-
-    print(packet_type)
-    if packet_type == PacketType.COMMAND:
-        print(CommandPacket.from_bytes(command))
-    elif packet_type == PacketType.EXTENDED:
-        pass
-    elif packet_type == PacketType.ASYNC:
-        print(AsyncPacket.from_bytes(command))
-    elif packet_type == PacketType.EVENT:
-        print(EventPacket.from_bytes(command))
-    else:
-        raise ValueError(f"Unnknown packet type {packet_type}")
+    _parse_packet(command)
 
 
 if __name__ == "__main__":

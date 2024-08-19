@@ -56,7 +56,7 @@ from __future__ import annotations
 import warnings
 from enum import Enum
 from typing import List, Optional, Union
-
+from .utils import byte_length
 from .constants import Endian, PhyOption
 from .packet_codes import EventCode, EventSubcode, StatusCode
 from .packet_defs import (
@@ -71,15 +71,6 @@ from .packet_defs import (
     StatusOCF,
     VendorSpecificOCF,
 )
-
-
-def byte_length(num: int):
-    """Calculate the length of an integer in bytes.
-
-    PRIVATE
-
-    """
-    return max((num.bit_length() + 7) // 8, 1)
 
 
 class CommandPacket:
@@ -223,9 +214,26 @@ class CommandPacket:
         opcode = command[1] << 8 | command[0]
 
         ogf, ocf = CommandPacket.get_ogf_ocf(opcode=opcode)
-        return CommandPacket(
-            ogf=OGF(ogf), ocf=OCF.CONTROLLER(ocf), params=list(command[2:])
-        )
+
+        ogf = OGF(ogf)
+        # NO Link policy, testing OCF?
+
+        if ogf == OGF.NOP:
+            ocf = NOpOCF(ocf)
+        elif ogf == OGF.LINK_CONTROL:
+            ocf = LinkControlOCF(ocf)
+        elif ogf == OGF.CONTROLLER:
+            ocf = OCF.CONTROLLER(ocf)
+        elif ogf == OGF.INFORMATIONAL:
+            ocf = InformationalOCF(ocf)
+        elif ogf == OGF.STATUS:
+            ocf = StatusOCF(ocf)
+        elif ogf == OGF.LE_CONTROLLER:
+            ocf = LEControllerOCF(ocf)
+        elif ogf == OGF.VENDOR_SPEC:
+            ocf = VendorSpecificOCF(ocf)
+
+        return CommandPacket(ogf=ogf, ocf=ocf, params=list(command[2:]))
 
     @staticmethod
     def make_hci_opcode(ogf: Union[OGF, int], ocf: Union[OCF, int]) -> int:
@@ -586,6 +594,7 @@ class EventPacket:
         self.length = length
         self.status = StatusCode(status) if status is not None else None
         self.evt_subcode = EventSubcode(evt_subcode) if evt_subcode else None
+
         self.evt_params = evt_params
 
     def __repr__(self):
@@ -706,6 +715,8 @@ class EventPacket:
             EventSubcode.PHY_UPDATE_CMPLT,
             EventSubcode.CONNECTION_UPDATE,
         ):
+            param_bytes = self.evt_params
+        else:
             param_bytes = self.evt_params
 
         if not param_lens:
