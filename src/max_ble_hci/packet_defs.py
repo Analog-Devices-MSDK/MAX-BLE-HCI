@@ -573,6 +573,7 @@ class LEControllerOCF(Enum):
 
 class VendorSpecificOCF(Enum):
     """ADI Vendor Specific group Opcode Command Field values."""
+
     SET_FLASH_ADDR = 0x3C3
     """set flash address pointer"""
 

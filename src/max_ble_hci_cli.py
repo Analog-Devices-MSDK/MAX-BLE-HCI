@@ -81,8 +81,6 @@ from max_ble_hci.utils import convert_str_address
 # pylint: enable=import-error
 
 
-
-
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
@@ -306,7 +304,9 @@ def main():
 
     #### SET_FLASH_ADDR PARSER ####
     set_addr_parser = subparsers.add_parser(
-        "setflash", help="set the flash start address", formatter_class=RawTextHelpFormatter
+        "setflash",
+        help="set the flash start address",
+        formatter_class=RawTextHelpFormatter,
     )
 
     set_addr_parser.add_argument("addr", help="start address of memory bank to upload")

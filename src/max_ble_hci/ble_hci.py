@@ -67,7 +67,6 @@ from .utils import convert_str_address
 from .vendor_spec_cmds import VendorSpecificCmds
 
 
-
 class BleHci(BleStandardCmds, VendorSpecificCmds):
     """Host-controller interface.
 
@@ -447,9 +446,9 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         chunked_lists = []
         result = StatusCode.SUCCESS
         for i in range(0, len(integer_list), size):
-            chunk = integer_list[i:i+size]
+            chunk = integer_list[i : i + size]
             chunked_lists.append(chunk)
-        with alive_bar(len(chunked_lists),enrich_print = False) as progress_bar:
+        with alive_bar(len(chunked_lists), enrich_print=False) as progress_bar:
             for i, chunk in enumerate(chunked_lists):
                 if result == StatusCode.SUCCESS:
                     result = self.write_flash(chunk)

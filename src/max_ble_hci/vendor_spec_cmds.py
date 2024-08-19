@@ -73,7 +73,6 @@ from .packet_defs import OCF, OGF
 from .utils import convert_str_address, to_le_nbyte_list
 
 
-
 class VendorSpecificCmds:
     """Definitions for ADI vendor-specific HCI commands.
 
@@ -141,10 +140,10 @@ class VendorSpecificCmds:
         return self.port.send_command(cmd).status
 
     def reset_device(self) -> StatusCode:
-        """Reset the device. 
+        """Reset the device.
 
-        Reset the device, which has the same functionality as pressing 
-        the reset button on dev board. 
+        Reset the device, which has the same functionality as pressing
+        the reset button on dev board.
 
         Returns
         -------
@@ -158,7 +157,7 @@ class VendorSpecificCmds:
     def erase_memory(self) -> StatusCode:
         """Erase the flash memory.
 
-        Erase the flash memory with one page starting at addr. 
+        Erase the flash memory with one page starting at addr.
 
         Returns
         -------
@@ -172,7 +171,7 @@ class VendorSpecificCmds:
     def set_flash_addr(self, addr: Union[int, str]) -> StatusCode:
         """Set the flash write address.
 
-        Set the starting address of flash memory to be written 
+        Set the starting address of flash memory to be written
 
         Parameters
         ----------
