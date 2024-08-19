@@ -70,6 +70,8 @@
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.CommandPacket.length"><code class="docutils literal notranslate"><span class="pre">CommandPacket.length</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.CommandPacket.opcode"><code class="docutils literal notranslate"><span class="pre">CommandPacket.opcode</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.CommandPacket.params"><code class="docutils literal notranslate"><span class="pre">CommandPacket.params</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.CommandPacket.from_bytes"><code class="docutils literal notranslate"><span class="pre">CommandPacket.from_bytes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.CommandPacket.get_ogf_ocf"><code class="docutils literal notranslate"><span class="pre">CommandPacket.get_ogf_ocf()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.CommandPacket.make_hci_opcode"><code class="docutils literal notranslate"><span class="pre">CommandPacket.make_hci_opcode()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.CommandPacket.to_bytes"><code class="docutils literal notranslate"><span class="pre">CommandPacket.to_bytes()</span></code></a></li>
 </ul>
@@ -80,6 +82,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.EventPacket.status"><code class="docutils literal notranslate"><span class="pre">EventPacket.status</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.EventPacket.evt_subcode"><code class="docutils literal notranslate"><span class="pre">EventPacket.evt_subcode</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.EventPacket.evt_params"><code class="docutils literal notranslate"><span class="pre">EventPacket.evt_params</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.EventPacket.decode"><code class="docutils literal notranslate"><span class="pre">EventPacket.decode()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.EventPacket.from_bytes"><code class="docutils literal notranslate"><span class="pre">EventPacket.from_bytes()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.EventPacket.get_return_params"><code class="docutils literal notranslate"><span class="pre">EventPacket.get_return_params()</span></code></a></li>
 </ul>
@@ -94,7 +97,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.hci_packets.ExtendedPacket.to_bytes"><code class="docutils literal notranslate"><span class="pre">ExtendedPacket.to_bytes()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.hci_packets.byte_length"><code class="docutils literal notranslate"><span class="pre">byte_length()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="packet_codes.html">max_ble_hci.packet_codes</a></li>
@@ -309,6 +311,40 @@ initializing an instance of the object.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.CommandPacket.from_bytes">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_bytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytearray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#max_ble_hci.hci_packets.CommandPacket" title="max_ble_hci.hci_packets.CommandPacket"><span class="pre">CommandPacket</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/hci_packets.html#CommandPacket.from_bytes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.hci_packets.CommandPacket.from_bytes" title="Permalink to this definition"></a></dt>
+<dd><p>Convert command from byte array to command packet</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>command</strong> (<em>bytearray</em>) – raw command in bytes</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Decoded command packet</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#max_ble_hci.hci_packets.CommandPacket" title="max_ble_hci.hci_packets.CommandPacket">CommandPacket</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.CommandPacket.get_ogf_ocf">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_ogf_ocf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">opcode</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.OGF" title="max_ble_hci.packet_defs.OGF"><span class="pre">OGF</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.ControllerOCF" title="max_ble_hci.packet_defs.ControllerOCF"><span class="pre">ControllerOCF</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.LEControllerOCF" title="max_ble_hci.packet_defs.LEControllerOCF"><span class="pre">LEControllerOCF</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/max_ble_hci/hci_packets.html#CommandPacket.get_ogf_ocf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.hci_packets.CommandPacket.get_ogf_ocf" title="Permalink to this definition"></a></dt>
+<dd><p>Get OGF and OCF from opcode of command packet</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>opcode</strong> (<em>int</em>) – 2 Bytes opcode</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>OGF, OCF</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="max_ble_hci.hci_packets.CommandPacket.make_hci_opcode">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_hci_opcode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ogf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.OGF" title="max_ble_hci.packet_defs.OGF"><span class="pre">OGF</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ocf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="packet_defs.html#max_ble_hci.packet_defs.OCF" title="max_ble_hci.packet_defs.OCF"><span class="pre">OCF</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/max_ble_hci/hci_packets.html#CommandPacket.make_hci_opcode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.hci_packets.CommandPacket.make_hci_opcode" title="Permalink to this definition"></a></dt>
 <dd><p>Make an HCI opcode.</p>
@@ -424,6 +460,20 @@ the object has been created.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bytes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.hci_packets.EventPacket.decode">
+<span class="sig-name descname"><span class="pre">decode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/max_ble_hci/hci_packets.html#EventPacket.decode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.hci_packets.EventPacket.decode" title="Permalink to this definition"></a></dt>
+<dd><p>Decode parameters from EventPacket</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Decoded event parameters</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
 </dd>
 </dl>
 </dd></dl>
@@ -591,13 +641,6 @@ values into a command data byte array.</p>
 </dl>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="max_ble_hci.hci_packets.byte_length">
-<span class="sig-name descname"><span class="pre">byte_length</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/max_ble_hci/hci_packets.html#byte_length"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.hci_packets.byte_length" title="Permalink to this definition"></a></dt>
-<dd><p>Calculate the length of an integer in bytes.</p>
-<p>PRIVATE</p>
 </dd></dl>
 
 </section>

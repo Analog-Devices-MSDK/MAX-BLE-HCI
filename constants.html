@@ -85,6 +85,8 @@
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.constants.PhyOption.PHY_CODED"><code class="docutils literal notranslate"><span class="pre">PhyOption.PHY_CODED</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.constants.PhyOption.PHY_CODED_S2"><code class="docutils literal notranslate"><span class="pre">PhyOption.PHY_CODED_S2</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.constants.PhyOption.PHY_CODED_S8"><code class="docutils literal notranslate"><span class="pre">PhyOption.PHY_CODED_S8</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.constants.PhyOption.str_to_enum"><code class="docutils literal notranslate"><span class="pre">PhyOption.str_to_enum()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.constants.PhyOption.to_mask"><code class="docutils literal notranslate"><span class="pre">PhyOption.to_mask()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.constants.PubKeyValidateMode"><code class="docutils literal notranslate"><span class="pre">PubKeyValidateMode</span></code></a><ul>
@@ -306,6 +308,44 @@ device address type.</p>
 <dt class="sig sig-object py" id="max_ble_hci.constants.PhyOption.PHY_CODED_S8">
 <span class="sig-name descname"><span class="pre">PHY_CODED_S8</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#max_ble_hci.constants.PhyOption.PHY_CODED_S8" title="Permalink to this definition"></a></dt>
 <dd><p>Coded S8 PHY option.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.constants.PhyOption.str_to_enum">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">str_to_enum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#max_ble_hci.constants.PhyOption" title="max_ble_hci.constants.PhyOption"><span class="pre">PhyOption</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/constants.html#PhyOption.str_to_enum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.constants.PhyOption.str_to_enum" title="Permalink to this definition"></a></dt>
+<dd><p>Convert phy as string to enum</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>phy</strong> (<em>str</em>) – PHY (1M, 2M, S8, S2)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>PHY option as enum</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#max_ble_hci.constants.PhyOption" title="max_ble_hci.constants.PhyOption">PhyOption</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If PHY option does not exist</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.constants.PhyOption.to_mask">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#max_ble_hci.constants.PhyOption" title="max_ble_hci.constants.PhyOption"><span class="pre">PhyOption</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/max_ble_hci/constants.html#PhyOption.to_mask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.constants.PhyOption.to_mask" title="Permalink to this definition"></a></dt>
+<dd><p>Convert list of phy options to PHY preference mask and PHY option mask</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>phy</strong> (<a class="reference internal" href="#max_ble_hci.constants.PhyOption" title="max_ble_hci.constants.PhyOption"><em>PhyOption</em></a>) – PhyOption Enum</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>PHY preference mask as defined by BLE spec
+PHY option mask as defined by BLE spec</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[int, int]</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

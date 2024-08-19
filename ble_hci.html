@@ -58,7 +58,10 @@
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_hci.BleHci.logger"><code class="docutils literal notranslate"><span class="pre">BleHci.logger</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_hci.BleHci.retries"><code class="docutils literal notranslate"><span class="pre">BleHci.retries</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_hci.BleHci.timeout"><code class="docutils literal notranslate"><span class="pre">BleHci.timeout</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_hci.BleHci.disable_all_events"><code class="docutils literal notranslate"><span class="pre">BleHci.disable_all_events()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_hci.BleHci.enable_all_events"><code class="docutils literal notranslate"><span class="pre">BleHci.enable_all_events()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_hci.BleHci.exit"><code class="docutils literal notranslate"><span class="pre">BleHci.exit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_hci.BleHci.firmware_update"><code class="docutils literal notranslate"><span class="pre">BleHci.firmware_update()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_hci.BleHci.get_log_level"><code class="docutils literal notranslate"><span class="pre">BleHci.get_log_level()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_hci.BleHci.init_connection"><code class="docutils literal notranslate"><span class="pre">BleHci.init_connection()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_hci.BleHci.read_event"><code class="docutils literal notranslate"><span class="pre">BleHci.read_event()</span></code></a></li>
@@ -213,11 +216,58 @@ is thrown.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.ble_hci.BleHci.disable_all_events">
+<span class="sig-name descname"><span class="pre">disable_all_events</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_hci.html#BleHci.disable_all_events"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_hci.BleHci.disable_all_events" title="Permalink to this definition"></a></dt>
+<dd><p>Enable all available event masks for Controller (including page 2)
+and LE Events</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The return status of the set event mask or set event mask le commands</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.ble_hci.BleHci.enable_all_events">
+<span class="sig-name descname"><span class="pre">enable_all_events</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_hci.html#BleHci.enable_all_events"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_hci.BleHci.enable_all_events" title="Permalink to this definition"></a></dt>
+<dd><p>Enable all available event masks for Controller (including page 2)
+and LE Events</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The return status of the set event mask or set event mask le commands</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="max_ble_hci.ble_hci.BleHci.exit">
 <span class="sig-name descname"><span class="pre">exit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_hci.html#BleHci.exit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_hci.BleHci.exit" title="Permalink to this definition"></a></dt>
 <dd><p>Close the HCI connection.</p>
 <p>Used to safely close the connection between the HCI and
 the test board.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.ble_hci.BleHci.firmware_update">
+<span class="sig-name descname"><span class="pre">firmware_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_hci.html#BleHci.firmware_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_hci.BleHci.firmware_update" title="Permalink to this definition"></a></dt>
+<dd><p>Upload the firmware to second flash memory bank</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – The name of firmware binary file</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The return status of the firmware update command.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -238,7 +288,7 @@ format.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="max_ble_hci.ble_hci.BleHci.init_connection">
-<span class="sig-name descname"><span class="pre">init_connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">addr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sup_timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="data_params.html#max_ble_hci.data_params.ConnParams" title="max_ble_hci.data_params.ConnParams"><span class="pre">ConnParams</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_hci.html#BleHci.init_connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_hci.BleHci.init_connection" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">init_connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">addr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sup_timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="data_params.html#max_ble_hci.data_params.EstablishConnParams" title="max_ble_hci.data_params.EstablishConnParams"><span class="pre">EstablishConnParams</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_mask</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.EventMaskLE" title="max_ble_hci.packet_codes.EventMaskLE"><span class="pre">EventMaskLE</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_hci.html#BleHci.init_connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_hci.BleHci.init_connection" title="Permalink to this definition"></a></dt>
 <dd><p>Initialize a connection.</p>
 <p>Convenience function which sends a sequence of commands to
 the DUT, telling it to initialize a connection. PHYs preferences
@@ -390,7 +440,7 @@ Can be used to temporarily override this object’s
 
 <dl class="py method">
 <dt class="sig sig-object py" id="max_ble_hci.ble_hci.BleHci.write_command_raw">
-<span class="sig-name descname"><span class="pre">write_command_raw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_command</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytearray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="hci_packets.html#max_ble_hci.hci_packets.EventPacket" title="max_ble_hci.hci_packets.EventPacket"><span class="pre">EventPacket</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_hci.html#BleHci.write_command_raw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_hci.BleHci.write_command_raw" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">write_command_raw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_command</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytearray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="hci_packets.html#max_ble_hci.hci_packets.EventPacket" title="max_ble_hci.hci_packets.EventPacket"><span class="pre">EventPacket</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_hci.html#BleHci.write_command_raw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_hci.BleHci.write_command_raw" title="Permalink to this definition"></a></dt>
 <dd><p>Write raw command to device</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

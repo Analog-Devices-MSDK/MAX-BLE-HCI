@@ -127,7 +127,10 @@
 <span class="c1">#</span>
 <span class="c1">##############################################################################</span>
 <span class="sd">&quot;&quot;&quot;Contains definitions for BLE standard codes utilized in HCI packet creation/parsing.&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">Flag</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
 
 
 <div class="viewcode-block" id="EventCode"><a class="viewcode-back" href="../../packet_codes.html#max_ble_hci.packet_codes.EventCode">[docs]</a><span class="k">class</span> <span class="nc">EventCode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
@@ -170,10 +173,249 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Vendor specific event.&quot;&quot;&quot;</span></div>
 
 
+<span class="k">def</span> <span class="nf">_get_full_mask</span><span class="p">(</span><span class="n">mask_type</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">EventMask</span><span class="p">,</span> <span class="n">EventMaskLE</span><span class="p">]):</span>
+    <span class="n">full_mask</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">flag</span> <span class="ow">in</span> <span class="n">mask_type</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">full_mask</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">full_mask</span> <span class="o">=</span> <span class="n">flag</span>
+        <span class="n">full_mask</span> <span class="o">|=</span> <span class="n">flag</span>
+
+    <span class="k">return</span> <span class="n">full_mask</span>
+
+
+<div class="viewcode-block" id="EventMask"><a class="viewcode-back" href="../../packet_codes.html#max_ble_hci.packet_codes.EventMask">[docs]</a><span class="k">class</span> <span class="nc">EventMask</span><span class="p">(</span><span class="n">Flag</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Controller Event Mask&quot;&quot;&quot;</span>
+
+    <span class="n">INQUIRY_COMPLETE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">0</span>
+    <span class="n">INQUIRY_RESULT</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span>
+    <span class="n">CONNECTION_COMPLETE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span>
+    <span class="n">CONNECTION_REQUEST</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">3</span>
+    <span class="n">DISCONNECTION_COMPLETE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">4</span>
+    <span class="n">AUTHENTICATION_COMPLETE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">5</span>
+    <span class="n">REMOTE_NAME_REQUEST_COMPLETE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">6</span>
+    <span class="n">ENCRYPTION_CHANGE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">7</span>
+    <span class="n">CHANGE_CONNECTION_LINK_KEY_COMPLETE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span>
+    <span class="n">LINK_KEY_TYPE_CHANGED</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">9</span>
+    <span class="n">READ_REMOTE_SUPPORTED_FEATURES_COMPLETE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">10</span>
+    <span class="n">READ_REMOTE_VERSION_INFORMATION_COMPLETE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">11</span>
+    <span class="n">QOS_SETUP_COMPLETE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">12</span>
+    <span class="n">HARDWARE_ERROR</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">15</span>
+    <span class="n">FLUSH_OCCURRED</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">16</span>
+    <span class="n">ROLE_CHANGE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">17</span>
+    <span class="n">MODE_CHANGE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">19</span>
+    <span class="n">RETURN_LINK_KEYS</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">20</span>
+    <span class="n">PIN_CODE_REQUEST</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">21</span>
+    <span class="n">LINK_KEY_REQUEST</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">22</span>
+    <span class="n">LINK_KEY_NOTIFICATION</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">23</span>
+    <span class="n">LOOPBACK_COMMAND</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">24</span>
+    <span class="n">DATA_BUFFER_OVERFLOW</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">25</span>
+    <span class="n">MAX_SLOTS_CHANGE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">26</span>
+    <span class="n">READ_CLOCK_OFFSET_COMPLETE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">27</span>
+    <span class="n">CONNECTION_PACKET_TYPE_CHANGED</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">28</span>
+    <span class="n">QOS_VIOLATION</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">29</span>
+    <span class="n">PREVIOUSLY_USED</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">30</span>
+    <span class="n">PAGE_SCAN_REPETITION_MODE_CHANGE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">31</span>
+    <span class="n">FLOW_SPECIFICATION_COMPLETE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">32</span>
+    <span class="n">INQUIRY_RESULT_WITH_RSSI</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">33</span>
+    <span class="n">READ_REMOTE_EXTENDED_FEATURES_COMPLETE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">34</span>
+    <span class="n">SYNCHRONOUS_CONNECTION_COMPLETE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">43</span>
+    <span class="n">SYNCHRONOUS_CONNECTION_CHANGED</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">44</span>
+    <span class="n">SNIFF_SUBRATING</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">45</span>
+    <span class="n">EXTENDED_INQUIRY_RESULT</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">46</span>
+    <span class="n">ENCRYPTION_KEY_REFRESH_COMPLETE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">47</span>
+    <span class="n">IO_CAPABILITY_REQUEST</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">48</span>
+    <span class="n">IO_CAPABILITY_RESPONSE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">49</span>
+    <span class="n">USER_CONFIRMATION_REQUEST</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">50</span>
+    <span class="n">USER_PASSKEY_REQUEST</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">51</span>
+    <span class="n">REMOTE_OOB_DATA_REQUEST</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">52</span>
+    <span class="n">SIMPLE_PAIRING_COMPLETE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">53</span>
+    <span class="n">LINK_SUPERVISION_TIMEOUT_CHANGED</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">55</span>
+    <span class="n">ENHANCED_FLUSH_COMPLETE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">56</span>
+    <span class="n">USER_PASSKEY_NOTIFICATION</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">58</span>
+    <span class="n">KEYPRESS_NOTIFICATION</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">59</span>
+    <span class="n">REMOTE_HOST_SUPPORTED_FEATURES_NOTIFICATION</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">60</span>
+    <span class="n">LE_META</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">61</span>
+
+<div class="viewcode-block" id="EventMask.get_full_mask"><a class="viewcode-back" href="../../packet_codes.html#max_ble_hci.packet_codes.EventMask.get_full_mask">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_full_mask</span><span class="p">():</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get full event mask</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        EventMask</span>
+<span class="sd">            All events in event mask</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">_get_full_mask</span><span class="p">(</span><span class="n">EventMask</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EventMask.from_int"><a class="viewcode-back" href="../../packet_codes.html#max_ble_hci.packet_codes.EventMask.from_int">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_int</span><span class="p">(</span><span class="n">mask</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventMask</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;From integer mask to EventMask class</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mask : int</span>
+<span class="sd">            Interger mask.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        EventMask</span>
+<span class="sd">            EventMask class</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">clear_mask</span> <span class="o">=</span> <span class="n">EventMask</span><span class="o">.</span><span class="n">get_full_mask</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">EventMask</span><span class="p">(</span><span class="n">mask</span> <span class="o">&amp;</span> <span class="n">clear_mask</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EventMask.as_str_list"><a class="viewcode-back" href="../../packet_codes.html#max_ble_hci.packet_codes.EventMask.as_str_list">[docs]</a>    <span class="k">def</span> <span class="nf">as_str_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get list of event mask strings</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[str]</span>
+<span class="sd">            List of event mask strings</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">flags</span> <span class="o">=</span> <span class="p">[</span><span class="n">flag</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">flag</span> <span class="ow">in</span> <span class="n">EventMask</span> <span class="k">if</span> <span class="n">flag</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">flags</span></div></div>
+
+
+<div class="viewcode-block" id="EventMaskPage2"><a class="viewcode-back" href="../../packet_codes.html#max_ble_hci.packet_codes.EventMaskPage2">[docs]</a><span class="k">class</span> <span class="nc">EventMaskPage2</span><span class="p">(</span><span class="n">Flag</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Controller Event Mask&quot;&quot;&quot;</span>
+
+    <span class="n">NUM_CMPLT_DAT_BLOCKS</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span>
+    <span class="n">TRIG_CLK_CAPTURE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">14</span>
+    <span class="n">SYNC_TRAIN_CMPLT</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">15</span>
+    <span class="n">SYNC_TRAIN_RECEIVED</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">16</span>
+    <span class="n">CONNECTIONLESS_PERIPH_BROADCAST</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">17</span>
+    <span class="n">CONNECTIONLESS_PERIPH_TIMEOUT</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">18</span>
+    <span class="n">TRUNCATED_PAGE_CMPLT</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">19</span>
+    <span class="n">PERIPH_PAGE_RESP_TIMEOUT</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">20</span>
+    <span class="n">CONNECTIONLESS_PERIPH_BROADCAST_CH_MAP_CHANGE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">21</span>
+    <span class="n">INQUIRY_RESP_NOTIF</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">22</span>
+    <span class="n">AUTH_PAYLOAD_TIMEOUT_EXPIRED</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">23</span>
+    <span class="n">SAM_STATUS_CHANGED</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">24</span>
+    <span class="n">ENC_CHANGED</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">25</span>
+
+<div class="viewcode-block" id="EventMaskPage2.get_full_mask"><a class="viewcode-back" href="../../packet_codes.html#max_ble_hci.packet_codes.EventMaskPage2.get_full_mask">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_full_mask</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">EventMaskPage2</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get full event mask page 2</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        EventMaskPage2</span>
+<span class="sd">            Full event mask page 2</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">_get_full_mask</span><span class="p">(</span><span class="n">EventMaskPage2</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EventMaskPage2.from_int"><a class="viewcode-back" href="../../packet_codes.html#max_ble_hci.packet_codes.EventMaskPage2.from_int">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_int</span><span class="p">(</span><span class="n">mask</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventMaskPage2</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;From integer mask to EventMask class</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mask : int</span>
+<span class="sd">            Interger mask.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        EventMask</span>
+<span class="sd">            EventMask class</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">clear_mask</span> <span class="o">=</span> <span class="n">EventMask</span><span class="o">.</span><span class="n">get_full_mask</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">EventMask</span><span class="p">(</span><span class="n">mask</span> <span class="o">&amp;</span> <span class="n">clear_mask</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EventMaskPage2.as_str_list"><a class="viewcode-back" href="../../packet_codes.html#max_ble_hci.packet_codes.EventMaskPage2.as_str_list">[docs]</a>    <span class="k">def</span> <span class="nf">as_str_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get list of event mask strings</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[str]</span>
+<span class="sd">            List of event mask strings</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">flags</span> <span class="o">=</span> <span class="p">[</span><span class="n">flag</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">flag</span> <span class="ow">in</span> <span class="n">EventMaskPage2</span> <span class="k">if</span> <span class="n">flag</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">flags</span></div></div>
+
+
+<div class="viewcode-block" id="EventMaskLE"><a class="viewcode-back" href="../../packet_codes.html#max_ble_hci.packet_codes.EventMaskLE">[docs]</a><span class="k">class</span> <span class="nc">EventMaskLE</span><span class="p">(</span><span class="n">Flag</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;LE Event Mask&quot;&quot;&quot;</span>
+
+    <span class="n">CONNECTION_COMPLETE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">0</span>
+    <span class="n">ADV_REPORT</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span>
+    <span class="n">CONN_UPDATE_COMPLETE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span>
+    <span class="n">READ_REMOTE_FEAT_CMPLT</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">3</span>
+    <span class="n">LTK_REQUEST</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">4</span>
+    <span class="n">REMOTE_CONN_PARAM_REQ</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">5</span>
+    <span class="n">DATA_LEN_CHANGE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">6</span>
+    <span class="n">READ_LOCAL_P256_PUB_KEY_CMPLT</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">7</span>
+    <span class="n">GEN_DHKEY_CMPLT</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span>
+    <span class="n">ENHANCED_CONNECTION_COMPLETE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">9</span>
+    <span class="n">DIRECTED_ADV_REPORT</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">10</span>
+    <span class="n">PHY_UPDATE_COMPLETE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">11</span>
+    <span class="n">EXTENDED_ADVERTISING_REPORT</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">12</span>
+    <span class="n">PERIODIC_ADV_SYNC_EST</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">13</span>
+    <span class="n">PERIODIC_ADV_REPORT</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">14</span>
+    <span class="n">PERIODIC_ADV_SYNC_LOST</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">15</span>
+    <span class="n">SCAN_TIMEOUT</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">16</span>
+    <span class="n">ADVERTISING_SET_TERMINATED</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">17</span>
+    <span class="n">SCAN_REQUEST_RECEIVED</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">18</span>
+    <span class="n">CHANNEL_SELECTION_ALGORITHM</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">19</span>
+    <span class="n">CONNECTIONLESS_IQ_REPORT</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">20</span>
+    <span class="n">CONNECTION_IQ_REPORT</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">21</span>
+    <span class="n">CTE_REQUEST_FAILED</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">22</span>
+    <span class="n">PERIODIC_ADV_SYNC_XFER_LOST</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">23</span>
+    <span class="n">CIS_ESTABLISHED</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">24</span>
+    <span class="n">CIS_REQUEST</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">25</span>
+    <span class="n">CREATE_BIG_COMPLETE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">26</span>
+    <span class="n">TERMINATE_BIG_COMPLETE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">27</span>
+    <span class="n">BIG_SYNC_ESTABLISHED</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">28</span>
+    <span class="n">BIG_SYNC_LOST</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">29</span>
+    <span class="n">REQUEST_PEER_SCA_COMPLETE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">30</span>
+    <span class="n">PATH_LOSS_THRESHOLD</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">31</span>
+    <span class="n">TX_POWER_REPORTING</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">32</span>
+    <span class="n">BIG_INFO_ADV_REPORT</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">33</span>
+    <span class="n">SUBRATE_CHANGE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">34</span>
+
+<div class="viewcode-block" id="EventMaskLE.get_full_mask"><a class="viewcode-back" href="../../packet_codes.html#max_ble_hci.packet_codes.EventMaskLE.get_full_mask">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_full_mask</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">EventMaskLE</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get full LE Event mask</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        EventMaskLE</span>
+<span class="sd">            Event mask with all events</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">_get_full_mask</span><span class="p">(</span><span class="n">EventMaskLE</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EventMaskLE.as_str_list"><a class="viewcode-back" href="../../packet_codes.html#max_ble_hci.packet_codes.EventMaskLE.as_str_list">[docs]</a>    <span class="k">def</span> <span class="nf">as_str_list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;List of flags as strings</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[str]</span>
+<span class="sd">            List of flags as string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">flags</span> <span class="o">=</span> <span class="p">[</span><span class="n">flag</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">flag</span> <span class="ow">in</span> <span class="n">EventMaskLE</span> <span class="k">if</span> <span class="n">flag</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">flags</span></div>
+
+<div class="viewcode-block" id="EventMaskLE.from_int"><a class="viewcode-back" href="../../packet_codes.html#max_ble_hci.packet_codes.EventMaskLE.from_int">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_int</span><span class="p">(</span><span class="n">mask</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventMaskLE</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;From int to EventMaskLE class</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        mask : int</span>
+<span class="sd">            Integer mask</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        EventMaskLE</span>
+<span class="sd">            EventMaskLE class</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">clear_mask</span> <span class="o">=</span> <span class="n">EventMaskLE</span><span class="o">.</span><span class="n">get_full_mask</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">EventMaskLE</span><span class="p">(</span><span class="n">mask</span> <span class="o">&amp;</span> <span class="n">clear_mask</span><span class="o">.</span><span class="n">value</span><span class="p">)</span></div></div>
+
+
 <div class="viewcode-block" id="EventSubcode"><a class="viewcode-back" href="../../packet_codes.html#max_ble_hci.packet_codes.EventSubcode">[docs]</a><span class="k">class</span> <span class="nc">EventSubcode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Supported LE Meta event subcodes.&quot;&quot;&quot;</span>
 
-    <span class="n">CONNECTION_COMPLETE</span> <span class="o">=</span> <span class="mh">0x1</span>
+    <span class="n">CONNECTION_CMPLT</span> <span class="o">=</span> <span class="mh">0x1</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Connection complete event.&quot;&quot;&quot;</span>
 
     <span class="n">ADVERTISING_REPORT</span> <span class="o">=</span> <span class="mh">0x2</span>
@@ -185,28 +427,28 @@
     <span class="n">READ_REMOTE_FEATURES_COMPLETE</span> <span class="o">=</span> <span class="mh">0x4</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Read remote feature complete event.&quot;&quot;&quot;</span>
 
-    <span class="n">LONG_TERM_KEY_REQUEST</span> <span class="o">=</span> <span class="mh">0x5</span>
+    <span class="n">LTK_REQUEST</span> <span class="o">=</span> <span class="mh">0x5</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Long term key request event.&quot;&quot;&quot;</span>
 
-    <span class="n">REMOTE_CONNECTION_PARAMETER_REQUEST</span> <span class="o">=</span> <span class="mh">0x6</span>
+    <span class="n">REMOTE_CONNECTION_PARAMETER_REQ</span> <span class="o">=</span> <span class="mh">0x6</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Remote connection parameter request event.&quot;&quot;&quot;</span>
 
     <span class="n">DATA_LENGTH_CHANGE</span> <span class="o">=</span> <span class="mh">0x7</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Data length change event.&quot;&quot;&quot;</span>
 
-    <span class="n">READ_LOCAL_P256_PUBLIC_KEY_COMPLETE</span> <span class="o">=</span> <span class="mh">0x8</span>
+    <span class="n">READ_LOCAL_P256_PUB_KEY_CMPLT</span> <span class="o">=</span> <span class="mh">0x8</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Read local P-256 public key complete event.&quot;&quot;&quot;</span>
 
-    <span class="n">GENERATE_DHKEY_COMPLETE</span> <span class="o">=</span> <span class="mh">0x9</span>
+    <span class="n">GENERATE_DHKEY_CMPLT</span> <span class="o">=</span> <span class="mh">0x9</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate DHKey complete event.&quot;&quot;&quot;</span>
 
-    <span class="n">ENHANCED_CONNECTION_COMPLETE</span> <span class="o">=</span> <span class="mh">0xA</span>
+    <span class="n">ENHANCED_CONNECTION_CMPLT</span> <span class="o">=</span> <span class="mh">0xA</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Enhanced connection complete event.&quot;&quot;&quot;</span>
 
     <span class="n">DIRECTED_ADVERTISIING_REPORT</span> <span class="o">=</span> <span class="mh">0xB</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Directed advertising report event.&quot;&quot;&quot;</span>
 
-    <span class="n">PHY_UPDATE_COMPLETE</span> <span class="o">=</span> <span class="mh">0xC</span>
+    <span class="n">PHY_UPDATE_CMPLT</span> <span class="o">=</span> <span class="mh">0xC</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;PHY update complete event.&quot;&quot;&quot;</span>
 
     <span class="n">EXTENDED_ADVERTISING_REPORT</span> <span class="o">=</span> <span class="mh">0xD</span>
@@ -251,19 +493,19 @@
     <span class="n">CIS_REQUEST</span> <span class="o">=</span> <span class="mh">0x1A</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;CIS request event.&quot;&quot;&quot;</span>
 
-    <span class="n">CREATE_BIG_COMPLETE</span> <span class="o">=</span> <span class="mh">0x1B</span>
+    <span class="n">CREATE_BIG_CMPLT</span> <span class="o">=</span> <span class="mh">0x1B</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create BIG complete event.&quot;&quot;&quot;</span>
 
-    <span class="n">TERMINATE_BIG_COMPLETE</span> <span class="o">=</span> <span class="mh">0x1C</span>
+    <span class="n">TERMINATE_BIG_CMPLT</span> <span class="o">=</span> <span class="mh">0x1C</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Terminate BIG complete event.&quot;&quot;&quot;</span>
 
-    <span class="n">BIG_SYNC_ESTABLISHED</span> <span class="o">=</span> <span class="mh">0x1D</span>
+    <span class="n">BIG_SYNC_EST</span> <span class="o">=</span> <span class="mh">0x1D</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;BIG sync established event.&quot;&quot;&quot;</span>
 
     <span class="n">BIG_SYNC_LOST</span> <span class="o">=</span> <span class="mh">0x1E</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;BIG sync list event.&quot;&quot;&quot;</span>
 
-    <span class="n">REQUEST_PEER_SCA_COMPLETE</span> <span class="o">=</span> <span class="mh">0x1F</span>
+    <span class="n">REQUEST_PEER_SCA_CMPLT</span> <span class="o">=</span> <span class="mh">0x1F</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Request peeer SCA complete event.&quot;&quot;&quot;</span>
 
     <span class="n">PATH_LOSS_THRESHOLD</span> <span class="o">=</span> <span class="mh">0x20</span>

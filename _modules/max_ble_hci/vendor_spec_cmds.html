@@ -147,7 +147,7 @@
 <span class="kn">from</span> <span class="nn">.hci_packets</span> <span class="kn">import</span> <span class="n">CommandPacket</span><span class="p">,</span> <span class="n">EventPacket</span><span class="p">,</span> <span class="n">byte_length</span>
 <span class="kn">from</span> <span class="nn">.packet_codes</span> <span class="kn">import</span> <span class="n">StatusCode</span>
 <span class="kn">from</span> <span class="nn">.packet_defs</span> <span class="kn">import</span> <span class="n">OCF</span><span class="p">,</span> <span class="n">OGF</span>
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">to_le_nbyte_list</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">convert_str_address</span><span class="p">,</span> <span class="n">to_le_nbyte_list</span>
 
 
 <div class="viewcode-block" id="VendorSpecificCmds"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds">[docs]</a><span class="k">class</span> <span class="nc">VendorSpecificCmds</span><span class="p">:</span>
@@ -176,6 +176,13 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="n">SerialUartTransport</span><span class="p">,</span> <span class="n">logger_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">port</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">get_formatted_logger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">logger_name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
 <div class="viewcode-block" id="VendorSpecificCmds.send_vs_command"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.send_vs_command">[docs]</a>    <span class="k">def</span> <span class="nf">send_vs_command</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">ocf</span><span class="p">:</span> <span class="n">OCF</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">return_evt</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
@@ -209,16 +216,11 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span><span class="o">.</span><span class="n">status</span></div>
 
-<div class="viewcode-block" id="VendorSpecificCmds.set_address"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.set_address">[docs]</a>    <span class="k">def</span> <span class="nf">set_address</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sets the BD address.</span>
+<div class="viewcode-block" id="VendorSpecificCmds.reset_device"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.reset_device">[docs]</a>    <span class="k">def</span> <span class="nf">reset_device</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset the device.</span>
 
-<span class="sd">        Function sets the chip BD address. Address can be given</span>
-<span class="sd">        as either a bytearray or as a list of integer values.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        addr : List[int]</span>
-<span class="sd">            Desired BD address.</span>
+<span class="sd">        Reset the device, which has the same functionality as pressing</span>
+<span class="sd">        the reset button on dev board.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -226,6 +228,88 @@
 <span class="sd">            The return packet status code.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">DEVICE_RESET</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.erase_memory"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.erase_memory">[docs]</a>    <span class="k">def</span> <span class="nf">erase_memory</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Erase the flash memory.</span>
+
+<span class="sd">        Erase the flash memory with one page starting at addr.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">MEMORY_ERASE</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.set_flash_addr"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.set_flash_addr">[docs]</a>    <span class="k">def</span> <span class="nf">set_flash_addr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the flash write address.</span>
+
+<span class="sd">        Set the starting address of flash memory to be written</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        addr : Union[int, str]</span>
+<span class="sd">            Desired flash memory address.</span>
+<span class="sd">            If str, format expected xx:xx:xx:xx</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">addr</span> <span class="o">=</span> <span class="n">convert_str_address</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">SET_FLASH_ADDR</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.write_flash"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.write_flash">[docs]</a>    <span class="k">def</span> <span class="nf">write_flash</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chunk</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Write data to the flash memory.</span>
+
+<span class="sd">        Write 128 bits of data chunk to the flash memory</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        chunk : List[int]</span>
+<span class="sd">            128bit data chunk of new firmware</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">WRITE_FLASH</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">chunk</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.set_address"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.set_address">[docs]</a>    <span class="k">def</span> <span class="nf">set_address</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sets the BD address.</span>
+
+<span class="sd">        Function sets the chip BD address. Address can be given</span>
+<span class="sd">        as either a bytearray or as a list of integer values.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        addr : Union[int, str]</span>
+<span class="sd">            Desired BD address.</span>
+<span class="sd">            If str, format expected xx:xx:xx:xx:xx</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">addr</span> <span class="o">=</span> <span class="n">convert_str_address</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
+
         <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">SET_BD_ADDR</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
 
@@ -1251,7 +1335,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">evt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">GET_ADV_STATS</span><span class="p">,</span> <span class="n">return_evt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">get_return_params</span><span class="p">(</span><span class="n">param_lens</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">get_return_params</span><span class="p">(</span><span class="n">param_lens</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
 
         <span class="n">stats</span> <span class="o">=</span> <span class="n">AdvPktStats</span><span class="p">(</span>
             <span class="n">tx_adv</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
@@ -1842,23 +1926,26 @@
 
         <span class="k">return</span> <span class="n">rssi</span><span class="p">,</span> <span class="n">evt</span><span class="o">.</span><span class="n">status</span></div>
 
-<div class="viewcode-block" id="VendorSpecificCmds.bb_enable"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.bb_enable">[docs]</a>    <span class="k">def</span> <span class="nf">bb_enable</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enable the baseband radio</span>
-<span class="sd">        NOTE: Must be done before using RSSI</span>
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        StatusCode</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">BB_EN</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="VendorSpecificCmds.bb_disable"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.bb_disable">[docs]</a>    <span class="k">def</span> <span class="nf">bb_disable</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Disable the baseband radio</span>
+<div class="viewcode-block" id="VendorSpecificCmds.reset_adv_stats"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.reset_adv_stats">[docs]</a>    <span class="k">def</span> <span class="nf">reset_adv_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset accumulated advertising stats</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">BB_DIS</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">RESET_ADV_STATS</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="VendorSpecificCmds.reset_scan_stats"><a class="viewcode-back" href="../../vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.reset_scan_stats">[docs]</a>    <span class="k">def</span> <span class="nf">reset_scan_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset accumulated scanning stats</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_vs_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">VENDOR_SPEC</span><span class="o">.</span><span class="n">RESET_SCAN_STATS</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

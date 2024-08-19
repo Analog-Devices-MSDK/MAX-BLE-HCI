@@ -130,19 +130,20 @@
 <span class="sd">Module contains definitions for BLE standard HCI commands.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1"># pylint: disable=too-many-arguments</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Callable</span>
 
 <span class="kn">from</span> <span class="nn">._hci_logger</span> <span class="kn">import</span> <span class="n">get_formatted_logger</span>
 <span class="kn">from</span> <span class="nn">._transport</span> <span class="kn">import</span> <span class="n">SerialUartTransport</span>
 <span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">PayloadOption</span><span class="p">,</span> <span class="n">PhyOption</span>
-<span class="kn">from</span> <span class="nn">.data_params</span> <span class="kn">import</span> <span class="n">AdvParams</span><span class="p">,</span> <span class="n">ConnParams</span><span class="p">,</span> <span class="n">ScanParams</span>
+<span class="kn">from</span> <span class="nn">.data_params</span> <span class="kn">import</span> <span class="n">AdvParams</span><span class="p">,</span> <span class="n">ConnParams</span><span class="p">,</span> <span class="n">EstablishConnParams</span><span class="p">,</span> <span class="n">ScanParams</span>
 <span class="kn">from</span> <span class="nn">.hci_packets</span> <span class="kn">import</span> <span class="n">CommandPacket</span><span class="p">,</span> <span class="n">EventPacket</span>
-<span class="kn">from</span> <span class="nn">.packet_codes</span> <span class="kn">import</span> <span class="n">StatusCode</span>
+<span class="kn">from</span> <span class="nn">.packet_codes</span> <span class="kn">import</span> <span class="n">EventMask</span><span class="p">,</span> <span class="n">EventMaskPage2</span><span class="p">,</span> <span class="n">EventMaskLE</span><span class="p">,</span> <span class="n">StatusCode</span>
 <span class="kn">from</span> <span class="nn">.packet_defs</span> <span class="kn">import</span> <span class="n">OCF</span><span class="p">,</span> <span class="n">OGF</span>
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">to_le_nbyte_list</span><span class="p">,</span> <span class="n">can_represent_as_bytes</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">can_represent_as_bytes</span><span class="p">,</span> <span class="n">to_le_nbyte_list</span><span class="p">,</span> <span class="n">byte_length</span>
 
 
 <div class="viewcode-block" id="BleStandardCmds"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds">[docs]</a><span class="k">class</span> <span class="nc">BleStandardCmds</span><span class="p">:</span>
+    <span class="c1"># pylint: disable=too-many-public-methods</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Definitions for BLE standard HCI commands.</span>
 
 <span class="sd">    Class contains functions used to implement BLE standard HCI</span>
@@ -168,6 +169,13 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="n">SerialUartTransport</span><span class="p">,</span> <span class="n">logger_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">port</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">get_formatted_logger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">logger_name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
 <div class="viewcode-block" id="BleStandardCmds.send_le_controller_command"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.send_le_controller_command">[docs]</a>    <span class="k">def</span> <span class="nf">send_le_controller_command</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">ocf</span><span class="p">:</span> <span class="n">OCF</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">return_evt</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
@@ -425,8 +433,29 @@
             <span class="n">OCF</span><span class="o">.</span><span class="n">LE_CONTROLLER</span><span class="o">.</span><span class="n">SET_SCAN_ENABLE</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span>
         <span class="p">)</span></div>
 
+<div class="viewcode-block" id="BleStandardCmds.update_connection_params"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.update_connection_params">[docs]</a>    <span class="k">def</span> <span class="nf">update_connection_params</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">handle</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">conn_params</span><span class="p">:</span> <span class="n">ConnParams</span> <span class="o">=</span> <span class="n">ConnParams</span><span class="p">(</span><span class="mh">0x0</span><span class="p">)</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update connection parameters</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        handle : str</span>
+<span class="sd">            Connection Handle</span>
+<span class="sd">        conn_params : ConnParams, optional</span>
+<span class="sd">            Connection paramters by default ConnParams(0x0)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">conn_params</span><span class="o">.</span><span class="n">to_payload</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_le_controller_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">LE_CONTROLLER</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="BleStandardCmds.create_connection"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.create_connection">[docs]</a>    <span class="k">def</span> <span class="nf">create_connection</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">conn_params</span><span class="p">:</span> <span class="n">ConnParams</span> <span class="o">=</span> <span class="n">ConnParams</span><span class="p">(</span><span class="mh">0x0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">conn_params</span><span class="p">:</span> <span class="n">EstablishConnParams</span> <span class="o">=</span> <span class="n">EstablishConnParams</span><span class="p">(</span><span class="mh">0x0</span><span class="p">)</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Command board to connect with a peer device.</span>
 
@@ -444,47 +473,59 @@
 <span class="sd">            The return packet status code.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">conn_params</span><span class="o">.</span><span class="n">scan_interval</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">conn_params</span><span class="o">.</span><span class="n">scan_window</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-        <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conn_params</span><span class="o">.</span><span class="n">init_filter_policy</span><span class="p">)</span>
-        <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conn_params</span><span class="o">.</span><span class="n">peer_addr_type</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">conn_params</span><span class="o">.</span><span class="n">peer_addr</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-        <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">conn_params</span><span class="o">.</span><span class="n">own_addr_type</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">conn_params</span><span class="o">.</span><span class="n">conn_interval_min</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">conn_params</span><span class="o">.</span><span class="n">conn_interval_max</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">conn_params</span><span class="o">.</span><span class="n">max_latency</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">conn_params</span><span class="o">.</span><span class="n">sup_timeout</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">conn_params</span><span class="o">.</span><span class="n">min_ce_length</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">conn_params</span><span class="o">.</span><span class="n">max_ce_length</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_le_controller_command</span><span class="p">(</span>
-            <span class="n">OCF</span><span class="o">.</span><span class="n">LE_CONTROLLER</span><span class="o">.</span><span class="n">CREATE_CONN</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span>
+            <span class="n">OCF</span><span class="o">.</span><span class="n">LE_CONTROLLER</span><span class="o">.</span><span class="n">CREATE_CONN</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">conn_params</span><span class="o">.</span><span class="n">to_payload</span><span class="p">()</span>
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="BleStandardCmds.set_default_phy"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_default_phy">[docs]</a>    <span class="k">def</span> <span class="nf">set_default_phy</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">all_phys</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">,</span> <span class="n">tx_phys</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x7</span><span class="p">,</span> <span class="n">rx_phys</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x7</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">tx_phys</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PhyOption</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">PhyOption</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">rx_phys</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PhyOption</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">PhyOption</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set defaults for ALL, TX, and RX PHYs.</span>
-
-<span class="sd">        Sends a command to the DUT, telling it to set the default behavior</span>
-<span class="sd">        for ALL, TX, and RX PHYs in accordance with the given values.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set default phy used for TX and RX</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        all_phys : int, optional</span>
-<span class="sd">            Value describing desired behavior of all PHYs.</span>
-<span class="sd">        tx_phys : int, optional</span>
-<span class="sd">            Value describing desired behavior of TX PHYs.</span>
-<span class="sd">        rx_phys : int, optional</span>
-<span class="sd">            Value describing desired behavior of RX PHYs.</span>
+<span class="sd">        tx_phys : Union[PhyOption, List[PhyOption]], optional</span>
+<span class="sd">            Preferred PHY or list of preferred PHYs for TX, by default None meaning no preference</span>
+<span class="sd">        rx_phys : Union[PhyOption, List[PhyOption]], optional</span>
+<span class="sd">            Preferred PHY or list of preferred PHYs for TX, by default None meaning no preference</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        StatusCode</span>
 <span class="sd">            The return packet status code.</span>
-
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="n">all_phys</span><span class="p">,</span> <span class="n">tx_phys</span><span class="p">,</span> <span class="n">rx_phys</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tx_phys</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">tx_phys</span> <span class="o">=</span> <span class="p">[</span><span class="n">tx_phys</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rx_phys</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">rx_phys</span> <span class="o">=</span> <span class="p">[</span><span class="n">rx_phys</span><span class="p">]</span>
+
+        <span class="n">all_phys</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">tx_phys</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">all_phys</span> <span class="o">|=</span> <span class="mi">1</span>
+            <span class="n">tx_phys</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">elif</span> <span class="n">rx_phys</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">all_phys</span> <span class="o">|=</span> <span class="mi">2</span>
+            <span class="n">rx_phys</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">phy_opts</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">tx_phy_mask</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">phy</span> <span class="ow">in</span> <span class="n">tx_phys</span><span class="p">:</span>
+            <span class="n">tx_mask</span><span class="p">,</span> <span class="n">coded_opt</span> <span class="o">=</span> <span class="n">PhyOption</span><span class="o">.</span><span class="n">to_mask</span><span class="p">(</span><span class="n">phy</span><span class="p">)</span>
+            <span class="n">phy_opts</span> <span class="o">|=</span> <span class="n">coded_opt</span>
+            <span class="n">tx_phy_mask</span> <span class="o">|=</span> <span class="n">tx_mask</span>
+
+        <span class="n">rx_phy_mask</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">phy</span> <span class="ow">in</span> <span class="n">rx_phys</span><span class="p">:</span>
+            <span class="n">rx_mask</span><span class="p">,</span> <span class="n">coded_opt</span> <span class="o">=</span> <span class="n">PhyOption</span><span class="o">.</span><span class="n">to_mask</span><span class="p">(</span><span class="n">phy</span><span class="p">)</span>
+            <span class="n">rx_phy_mask</span> <span class="o">|=</span> <span class="n">rx_mask</span>
+            <span class="n">phy_opts</span> <span class="o">|=</span> <span class="n">coded_opt</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="n">all_phys</span><span class="p">,</span> <span class="n">tx_phy_mask</span><span class="p">,</span> <span class="n">rx_phy_mask</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_le_controller_command</span><span class="p">(</span>
             <span class="n">OCF</span><span class="o">.</span><span class="n">LE_CONTROLLER</span><span class="o">.</span><span class="n">SET_DEF_PHY</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span>
         <span class="p">)</span></div>
@@ -522,60 +563,55 @@
 <div class="viewcode-block" id="BleStandardCmds.set_phy"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_phy">[docs]</a>    <span class="k">def</span> <span class="nf">set_phy</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">handle</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x0000</span><span class="p">,</span>
-        <span class="n">all_phys</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">,</span>
-        <span class="n">tx_phys</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x7</span><span class="p">,</span>
-        <span class="n">rx_phys</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x7</span><span class="p">,</span>
-        <span class="n">phy_opts</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x0</span><span class="p">,</span>
+        <span class="n">tx_phys</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PhyOption</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">PhyOption</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">rx_phys</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">PhyOption</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">PhyOption</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the PHY preferences for a connection.</span>
-
-<span class="sd">        Sends a command to the DUT, telling it to set the PHY preferences</span>
-<span class="sd">        for the indicated connection in accordance with the given values.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set PHY during connection</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        handle : int, optional</span>
-<span class="sd">            The handle to the desired connection.</span>
-<span class="sd">        all_phys : int, optional</span>
-<span class="sd">            Behavior settings for all PHYs. Indicates if a PHY preference</span>
-<span class="sd">            exists for both RX and TX PHYs.</span>
-<span class="sd">        tx_phys : PhyOption, optional</span>
-<span class="sd">            PHY preference for TX PHYs.</span>
-<span class="sd">        rx_phys : PhyOption, optional</span>
-<span class="sd">            PHY preference for RX PHYs.</span>
+<span class="sd">            connection handle, by default 0x0000</span>
+<span class="sd">        tx_phys : Union[PhyOption, List[PhyOption]], optional</span>
+<span class="sd">            PHY or list of PHYS preferred for TX, by default None meaning no preference</span>
+<span class="sd">        rx_phys : Union[PhyOption, List[PhyOption]], optional meaning no preference</span>
+<span class="sd">            PHY or list of PHYs preferred for RX, by default None</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        StatusCode</span>
 <span class="sd">            The return packet status code.</span>
-
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">all_phys</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                <span class="s2">&quot;Invalid all PHYs option (</span><span class="si">%i</span><span class="s2">), must be between 0x0 and 0x3. Defaulting to 0x0.&quot;</span><span class="p">,</span>
-                <span class="n">all_phys</span><span class="p">,</span>
-            <span class="p">)</span>
-        <span class="k">if</span> <span class="n">all_phys</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">tx_phys</span> <span class="o">&lt;=</span> <span class="mi">7</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                <span class="s2">&quot;Invalid TX PHY option (</span><span class="si">%i</span><span class="s2">), must be between 0x1 and 0x7. Defaulting to 0x7.&quot;</span><span class="p">,</span>
-                <span class="n">tx_phys</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="n">tx_phys</span> <span class="o">=</span> <span class="mh">0x7</span>
-        <span class="k">if</span> <span class="n">all_phys</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">rx_phys</span> <span class="o">&lt;=</span> <span class="mi">7</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                <span class="s2">&quot;Invalid RX PHY option (</span><span class="si">%i</span><span class="s2">), must be between 0x1 and 0x7. Defaulting to 0x7.&quot;</span><span class="p">,</span>
-                <span class="n">rx_phys</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="n">rx_phys</span> <span class="o">=</span> <span class="mh">0x7</span>
-        <span class="k">if</span> <span class="n">phy_opts</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                <span class="s2">&quot;Invalid PHY options (</span><span class="si">%i</span><span class="s2">), must be 0x0, 0x1, 0x2, or 0x4. Defaulting to 0x0.&quot;</span><span class="p">,</span>
-                <span class="n">phy_opts</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="n">phy_opts</span> <span class="o">=</span> <span class="mh">0x0</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tx_phys</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">tx_phys</span> <span class="o">=</span> <span class="p">[</span><span class="n">tx_phys</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rx_phys</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">rx_phys</span> <span class="o">=</span> <span class="p">[</span><span class="n">rx_phys</span><span class="p">]</span>
+
+        <span class="n">all_phys</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">tx_phys</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">all_phys</span> <span class="o">|=</span> <span class="mi">1</span>
+            <span class="n">tx_phys</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">elif</span> <span class="n">rx_phys</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">all_phys</span> <span class="o">|=</span> <span class="mi">2</span>
+            <span class="n">rx_phys</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">phy_opts</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">tx_phy_mask</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">phy</span> <span class="ow">in</span> <span class="n">tx_phys</span><span class="p">:</span>
+            <span class="n">tx_mask</span><span class="p">,</span> <span class="n">coded_opt</span> <span class="o">=</span> <span class="n">PhyOption</span><span class="o">.</span><span class="n">to_mask</span><span class="p">(</span><span class="n">phy</span><span class="p">)</span>
+            <span class="n">phy_opts</span> <span class="o">|=</span> <span class="n">coded_opt</span>
+            <span class="n">tx_phy_mask</span> <span class="o">|=</span> <span class="n">tx_mask</span>
+
+        <span class="n">rx_phy_mask</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">phy</span> <span class="ow">in</span> <span class="n">rx_phys</span><span class="p">:</span>
+            <span class="n">rx_mask</span><span class="p">,</span> <span class="n">coded_opt</span> <span class="o">=</span> <span class="n">PhyOption</span><span class="o">.</span><span class="n">to_mask</span><span class="p">(</span><span class="n">phy</span><span class="p">)</span>
+            <span class="n">rx_phy_mask</span> <span class="o">|=</span> <span class="n">rx_mask</span>
+            <span class="n">phy_opts</span> <span class="o">|=</span> <span class="n">coded_opt</span>
 
         <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">all_phys</span><span class="p">,</span> <span class="n">tx_phys</span><span class="p">,</span> <span class="n">rx_phys</span><span class="p">])</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">all_phys</span><span class="p">,</span> <span class="n">tx_phy_mask</span><span class="p">,</span> <span class="n">rx_phy_mask</span><span class="p">])</span>
         <span class="n">params</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">phy_opts</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_le_controller_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">LE_CONTROLLER</span><span class="o">.</span><span class="n">SET_PHY</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
@@ -720,10 +756,15 @@
 <span class="sd">            The return packet status code.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_controller_command</span><span class="p">(</span><span class="n">OCF</span><span class="o">.</span><span class="n">CONTROLLER</span><span class="o">.</span><span class="n">RESET</span><span class="p">)</span></div>
 
+        <span class="c1"># return self.send_controller_command(OCF.CONTROLLER.RESET)</span>
+
 <div class="viewcode-block" id="BleStandardCmds.set_event_mask"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_event_mask">[docs]</a>    <span class="k">def</span> <span class="nf">set_event_mask</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">mask</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">mask_pg2</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">mask</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">EventMask</span><span class="p">],</span>
+        <span class="n">mask_pg2</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">EventMaskPage2</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">StatusCode</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">StatusCode</span><span class="p">,</span> <span class="n">StatusCode</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Enable/disable events the board can generate.</span>
 
@@ -752,12 +793,18 @@
 <span class="sd">            command.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">EventMask</span><span class="p">):</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">value</span>
+
         <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
         <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_controller_command</span><span class="p">(</span>
             <span class="n">OCF</span><span class="o">.</span><span class="n">CONTROLLER</span><span class="o">.</span><span class="n">SET_EVENT_MASK</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span>
         <span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">mask_pg2</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">mask_pg2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mask_pg2</span><span class="p">,</span> <span class="n">EventMaskPage2</span><span class="p">):</span>
+                <span class="n">mask_pg2</span> <span class="o">=</span> <span class="n">mask_pg2</span><span class="o">.</span><span class="n">value</span>
             <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">mask_pg2</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
             <span class="k">return</span> <span class="p">(</span>
                 <span class="n">status</span><span class="p">,</span>
@@ -768,7 +815,7 @@
 
         <span class="k">return</span> <span class="n">status</span></div>
 
-<div class="viewcode-block" id="BleStandardCmds.set_event_mask_le"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_event_mask_le">[docs]</a>    <span class="k">def</span> <span class="nf">set_event_mask_le</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mask</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<div class="viewcode-block" id="BleStandardCmds.set_event_mask_le"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_event_mask_le">[docs]</a>    <span class="k">def</span> <span class="nf">set_event_mask_le</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mask</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">EventMaskLE</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Enable/disable LE events the board can generate.</span>
 
 <span class="sd">        Sends a command to the DUT, telling it to enable/disable</span>
@@ -788,10 +835,218 @@
 <span class="sd">            The return packet status code.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">EventMaskLE</span><span class="p">):</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">value</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_event_mask</span><span class="p">(</span><span class="n">EventMask</span><span class="o">.</span><span class="n">LE_META</span><span class="p">)</span>
+
         <span class="n">params</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_le_controller_command</span><span class="p">(</span>
             <span class="n">OCF</span><span class="o">.</span><span class="n">LE_CONTROLLER</span><span class="o">.</span><span class="n">SET_EVENT_MASK</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span>
-        <span class="p">)</span></div></div>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BleStandardCmds.read_local_p256_pub_key"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.read_local_p256_pub_key">[docs]</a>    <span class="k">def</span> <span class="nf">read_local_p256_pub_key</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">EventPacket</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read local P256 Key</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        callback : Callable[[EventPacket], None], optional</span>
+<span class="sd">            Callback to call when complete event is triggered, by default None</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        NOTE: Event not enabled for you. Please enable event.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">callback</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">.</span><span class="n">evt_callback</span> <span class="o">=</span> <span class="n">callback</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_le_controller_command</span><span class="p">(</span>
+            <span class="n">OCF</span><span class="o">.</span><span class="n">LE_CONTROLLER</span><span class="o">.</span><span class="n">READ_LOCAL_P256_PUB_KEY</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BleStandardCmds.generate_dhk"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.generate_dhk">[docs]</a>    <span class="k">def</span> <span class="nf">generate_dhk</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">xcoord</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">ycoord</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">version</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">use_debug_key</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">EventPacket</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate Diffie-Hellman Key</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        xcoord : int</span>
+<span class="sd">            X-Coordinate</span>
+<span class="sd">        ycoord : int</span>
+<span class="sd">            Y-Coordinate</span>
+<span class="sd">        version : int, optional</span>
+<span class="sd">            DHK gen version, by default 1. Options 1 or 2</span>
+<span class="sd">        use_debug_key : bool, optional</span>
+<span class="sd">            Use a debug key instead of in use key, by default False</span>
+<span class="sd">        callback : Callable[[EventPacket], None], optional</span>
+<span class="sd">            Callback to call when complete event is triggered, by default None, by default None</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return packet status code.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If version not 1 or 2</span>
+
+<span class="sd">        NOTE: Complete event not enabled for you. Please enable event if needed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">version</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;DHK generate version must be 1 or 2&quot;</span><span class="p">)</span>
+
+        <span class="n">xcoords</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">xcoord</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+        <span class="n">ycoords</span> <span class="o">=</span> <span class="n">to_le_nbyte_list</span><span class="p">(</span><span class="n">ycoord</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">version</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">key_type</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">use_debug_key</span> <span class="k">else</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">key_type</span> <span class="o">=</span> <span class="mh">0x4B</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="n">xcoords</span> <span class="o">+</span> <span class="n">ycoords</span> <span class="o">+</span> <span class="p">[</span><span class="n">key_type</span><span class="p">]</span>
+
+        <span class="n">ocf</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">OCF</span><span class="o">.</span><span class="n">LE_CONTROLLER</span><span class="o">.</span><span class="n">GENERATE_DHKEY</span>
+            <span class="k">if</span> <span class="n">version</span> <span class="o">==</span> <span class="mi">1</span>
+            <span class="k">else</span> <span class="n">OCF</span><span class="o">.</span><span class="n">LE_CONTROLLER</span><span class="o">.</span><span class="n">GENERATE_DHKEY_V2</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">callback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">.</span><span class="n">evt_callback</span> <span class="o">=</span> <span class="n">callback</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_le_controller_command</span><span class="p">(</span><span class="n">ocf</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BleStandardCmds.convert_fips197"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.convert_fips197">[docs]</a>    <span class="k">def</span> <span class="nf">convert_fips197</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert data to fips197 format</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : Union[int, str]</span>
+<span class="sd">            Integer of string</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[int]</span>
+<span class="sd">            fips197 formatted data</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            Input is not an int or str</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            Data cannot be represented in 16-bytes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">byte_len</span> <span class="o">=</span> <span class="n">byte_length</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">data_bytes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">16</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">byte_len</span><span class="p">):</span>
+                <span class="n">bit_pos</span> <span class="o">=</span> <span class="mi">8</span> <span class="o">*</span> <span class="p">(</span><span class="n">byte_len</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">data_bytes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span> <span class="o">&gt;&gt;</span> <span class="n">bit_pos</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">data_bytes</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_bytes</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">16</span><span class="p">:</span>
+                <span class="n">data_bytes</span> <span class="o">=</span> <span class="n">data_bytes</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">data_bytes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">data_bytes</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Input must be an integer or string&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_bytes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">16</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Value must be able to be represented in 16 bytes!&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">data_bytes</span></div>
+
+<div class="viewcode-block" id="BleStandardCmds.encrypt"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.encrypt">[docs]</a>    <span class="k">def</span> <span class="nf">encrypt</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bytes</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">plaintext</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">EventPacket</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Encrypt data</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key : Union[bytes, int, str]</span>
+<span class="sd">            Key to encrypt plaintex with</span>
+<span class="sd">        plaintext : Union[int, bytes, str]</span>
+<span class="sd">            data to encrypt</span>
+<span class="sd">            Will pad data with zeros if the block is not 16 bytes</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Union[List[int], EventPacket]</span>
+<span class="sd">            Ciphertext if encryption succeeded. Event packet othewise.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If key is an integer and cannot be represented in 128 bits</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If key is bytes or string an not 16-bytes in length</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If plaintext cannot be represented ins 128 bits</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If plaintext bytes or string and more than 16 bytes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">key</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">128</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Key must be representable in 128 bits!&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">(</span><span class="nb">bytes</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">16</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Key must be 128 bits if given as bytes or str!&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">plaintext</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="n">plaintext</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">128</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Plaintext must be representable in 128 bits!&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">plaintext</span><span class="p">,</span> <span class="p">(</span><span class="nb">bytes</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">plaintext</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">16</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Plaintext must be representable in 128 bits!&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convert_fips197</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">plaintext</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+            <span class="n">plaintext</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convert_fips197</span><span class="p">(</span><span class="n">plaintext</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">plaintext</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">16</span><span class="p">:</span>
+                <span class="n">plaintext</span> <span class="o">=</span> <span class="n">plaintext</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">plaintext</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">plaintext</span><span class="p">)</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="n">key</span> <span class="o">+</span> <span class="n">plaintext</span>
+        <span class="n">evt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_le_controller_command</span><span class="p">(</span>
+            <span class="n">OCF</span><span class="o">.</span><span class="n">LE_CONTROLLER</span><span class="o">.</span><span class="n">ENCRYPT</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">return_evt</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">evt</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">StatusCode</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">evt</span><span class="o">.</span><span class="n">evt_params</span><span class="p">[</span><span class="mi">4</span><span class="p">:])</span>
+
+        <span class="k">return</span> <span class="n">evt</span></div>
+
+<div class="viewcode-block" id="BleStandardCmds.set_event_callback"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_event_callback">[docs]</a>    <span class="k">def</span> <span class="nf">set_event_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set callback used for event packet</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        callback : Callable</span>
+<span class="sd">            Function to call on event packet</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">.</span><span class="n">evt_callback</span> <span class="o">=</span> <span class="n">callback</span></div>
+
+<div class="viewcode-block" id="BleStandardCmds.set_async_callback"><a class="viewcode-back" href="../../ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_async_callback">[docs]</a>    <span class="k">def</span> <span class="nf">set_async_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set callback used for async packet</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        callback : Callable</span>
+<span class="sd">            Function to call on async packet</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">.</span><span class="n">async_callback</span> <span class="o">=</span> <span class="n">callback</span></div></div>
 </pre></div>
 
            </div>

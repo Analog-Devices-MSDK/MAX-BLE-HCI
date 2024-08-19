@@ -651,6 +651,18 @@
 <div class="viewcode-block" id="VendorSpecificOCF"><a class="viewcode-back" href="../../packet_defs.html#max_ble_hci.packet_defs.VendorSpecificOCF">[docs]</a><span class="k">class</span> <span class="nc">VendorSpecificOCF</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;ADI Vendor Specific group Opcode Command Field values.&quot;&quot;&quot;</span>
 
+    <span class="n">SET_FLASH_ADDR</span> <span class="o">=</span> <span class="mh">0x3C3</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;set flash address pointer&quot;&quot;&quot;</span>
+
+    <span class="n">DEVICE_RESET</span> <span class="o">=</span> <span class="mh">0x3C2</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;reset the device&quot;&quot;&quot;</span>
+
+    <span class="n">MEMORY_ERASE</span> <span class="o">=</span> <span class="mh">0x3C1</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Erase the memory&quot;&quot;&quot;</span>
+
+    <span class="n">WRITE_FLASH</span> <span class="o">=</span> <span class="mh">0x3C0</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;WRITE the firmware&quot;&quot;&quot;</span>
+
     <span class="n">SET_SCAN_CH_MAP</span> <span class="o">=</span> <span class="mh">0x3E0</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Set scan channel map command.&quot;&quot;&quot;</span>
 
@@ -801,10 +813,10 @@
     <span class="n">GET_RSSI</span> <span class="o">=</span> <span class="mh">0x306</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get RSSI command.&quot;&quot;&quot;</span>
 
-    <span class="n">BB_EN</span> <span class="o">=</span> <span class="mh">0x307</span>
+    <span class="n">RESET_ADV_STATS</span> <span class="o">=</span> <span class="mh">0x307</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;PHY enable command.&quot;&quot;&quot;</span>
 
-    <span class="n">BB_DIS</span> <span class="o">=</span> <span class="mh">0x308</span>
+    <span class="n">RESET_SCAN_STATS</span> <span class="o">=</span> <span class="mh">0x308</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;PHY disable command.&quot;&quot;&quot;</span></div>
 
 

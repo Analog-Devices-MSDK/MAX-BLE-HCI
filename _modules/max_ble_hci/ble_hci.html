@@ -130,16 +130,18 @@
 <span class="c1"># pylint: disable=too-many-arguments</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">alive_progress</span> <span class="kn">import</span> <span class="n">alive_bar</span>
 
 <span class="kn">from</span> <span class="nn">._hci_logger</span> <span class="kn">import</span> <span class="n">get_formatted_logger</span>
 <span class="kn">from</span> <span class="nn">._transport</span> <span class="kn">import</span> <span class="n">SerialUartTransport</span>
+<span class="kn">from</span> <span class="nn">.ad_types</span> <span class="kn">import</span> <span class="n">ADTypes</span>
 <span class="kn">from</span> <span class="nn">.ble_standard_cmds</span> <span class="kn">import</span> <span class="n">BleStandardCmds</span>
 <span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">ADI_PORT_BAUD_RATE</span>
-<span class="kn">from</span> <span class="nn">.data_params</span> <span class="kn">import</span> <span class="n">AdvParams</span><span class="p">,</span> <span class="n">ConnParams</span>
+<span class="kn">from</span> <span class="nn">.data_params</span> <span class="kn">import</span> <span class="n">AdvParams</span><span class="p">,</span> <span class="n">EstablishConnParams</span>
 <span class="kn">from</span> <span class="nn">.hci_packets</span> <span class="kn">import</span> <span class="n">AsyncPacket</span><span class="p">,</span> <span class="n">CommandPacket</span><span class="p">,</span> <span class="n">EventPacket</span>
-<span class="kn">from</span> <span class="nn">.packet_codes</span> <span class="kn">import</span> <span class="n">StatusCode</span>
+<span class="kn">from</span> <span class="nn">.packet_codes</span> <span class="kn">import</span> <span class="n">EventMask</span><span class="p">,</span> <span class="n">EventMaskPage2</span><span class="p">,</span> <span class="n">EventMaskLE</span><span class="p">,</span> <span class="n">StatusCode</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">convert_str_address</span>
 <span class="kn">from</span> <span class="nn">.vendor_spec_cmds</span> <span class="kn">import</span> <span class="n">VendorSpecificCmds</span>
-<span class="kn">from</span> <span class="nn">.ad_types</span> <span class="kn">import</span> <span class="n">ADTypes</span>
 
 
 <div class="viewcode-block" id="BleHci"><a class="viewcode-back" href="../../ble_hci.html#max_ble_hci.ble_hci.BleHci">[docs]</a><span class="k">class</span> <span class="nc">BleHci</span><span class="p">(</span><span class="n">BleStandardCmds</span><span class="p">,</span> <span class="n">VendorSpecificCmds</span><span class="p">):</span>
@@ -227,6 +229,13 @@
             <span class="n">recover_on_power_loss</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">,</span> <span class="n">logger_name</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
 <div class="viewcode-block" id="BleHci.get_log_level"><a class="viewcode-back" href="../../ble_hci.html#max_ble_hci.ble_hci.BleHci.get_log_level">[docs]</a>    <span class="k">def</span> <span class="nf">get_log_level</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve the current log level.</span>
@@ -326,6 +335,44 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_adv_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="BleHci.enable_all_events"><a class="viewcode-back" href="../../ble_hci.html#max_ble_hci.ble_hci.BleHci.enable_all_events">[docs]</a>    <span class="k">def</span> <span class="nf">enable_all_events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enable all available event masks for Controller (including page 2)</span>
+<span class="sd">        and LE Events</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return status of the set event mask or set event mask le commands</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">controller_mask</span> <span class="o">=</span> <span class="n">EventMask</span><span class="o">.</span><span class="n">get_full_mask</span><span class="p">()</span>
+        <span class="n">controller_page2</span> <span class="o">=</span> <span class="n">EventMaskPage2</span><span class="o">.</span><span class="n">get_full_mask</span><span class="p">()</span>
+        <span class="n">lemask</span> <span class="o">=</span> <span class="n">EventMaskLE</span><span class="o">.</span><span class="n">get_full_mask</span><span class="p">()</span>
+        <span class="n">status</span><span class="p">,</span> <span class="n">status2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_event_mask</span><span class="p">(</span>
+            <span class="n">controller_mask</span><span class="p">,</span> <span class="n">mask_pg2</span><span class="o">=</span><span class="n">controller_page2</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">status</span> <span class="o">!=</span> <span class="n">StatusCode</span><span class="o">.</span><span class="n">SUCCESS</span> <span class="ow">or</span> <span class="n">status2</span> <span class="o">!=</span> <span class="n">StatusCode</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">status</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_event_mask_le</span><span class="p">(</span><span class="n">lemask</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BleHci.disable_all_events"><a class="viewcode-back" href="../../ble_hci.html#max_ble_hci.ble_hci.BleHci.disable_all_events">[docs]</a>    <span class="k">def</span> <span class="nf">disable_all_events</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enable all available event masks for Controller (including page 2)</span>
+<span class="sd">        and LE Events</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return status of the set event mask or set event mask le commands</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">status</span><span class="p">,</span> <span class="n">status2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_event_mask</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">mask_pg2</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">status</span> <span class="o">!=</span> <span class="n">StatusCode</span><span class="o">.</span><span class="n">SUCCESS</span> <span class="ow">or</span> <span class="n">status2</span> <span class="o">!=</span> <span class="n">StatusCode</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">status</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_event_mask_le</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="BleHci.start_advertising"><a class="viewcode-back" href="../../ble_hci.html#max_ble_hci.ble_hci.BleHci.start_advertising">[docs]</a>    <span class="k">def</span> <span class="nf">start_advertising</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">connect</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">adv_params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">AdvParams</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">adv_name</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
@@ -362,7 +409,6 @@
         <span class="k">if</span> <span class="n">status</span> <span class="o">!=</span> <span class="n">StatusCode</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Failed to reset connection stats&quot;</span><span class="p">)</span>
 
-        <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_default_phy</span><span class="p">(</span><span class="n">all_phys</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tx_phys</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">rx_phys</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">status</span> <span class="o">!=</span> <span class="n">StatusCode</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Failed to set default PHY&quot;</span><span class="p">)</span>
 
@@ -386,10 +432,11 @@
 
 <div class="viewcode-block" id="BleHci.init_connection"><a class="viewcode-back" href="../../ble_hci.html#max_ble_hci.ble_hci.BleHci.init_connection">[docs]</a>    <span class="k">def</span> <span class="nf">init_connection</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">addr</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">addr</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">interval</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x6</span><span class="p">,</span>
         <span class="n">sup_timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x64</span><span class="p">,</span>
-        <span class="n">conn_params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ConnParams</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">conn_params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">EstablishConnParams</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">event_mask</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">EventMaskLE</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize a connection.</span>
 
@@ -425,19 +472,21 @@
 <span class="sd">            If `addr` is more than 6 bytes in size.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">conn_params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">addr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="s2">&quot;Either connection parameters or address must be provided.&quot;</span>
                 <span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">addr</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">addr</span> <span class="o">=</span> <span class="n">convert_str_address</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="nb">max</span><span class="p">((</span><span class="n">addr</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span> <span class="o">+</span> <span class="mi">7</span><span class="p">)</span> <span class="o">//</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">6</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;Address (</span><span class="si">{</span><span class="n">addr</span><span class="si">}</span><span class="s2">) is too large, must be 6 bytes or less.&quot;</span>
                 <span class="p">)</span>
 
-            <span class="n">conn_params</span> <span class="o">=</span> <span class="n">ConnParams</span><span class="p">(</span>
+            <span class="n">conn_params</span> <span class="o">=</span> <span class="n">EstablishConnParams</span><span class="p">(</span>
                 <span class="n">addr</span><span class="p">,</span>
                 <span class="n">conn_interval_max</span><span class="o">=</span><span class="n">interval</span><span class="p">,</span>
                 <span class="n">conn_interval_min</span><span class="o">=</span><span class="n">interval</span><span class="p">,</span>
@@ -445,11 +494,47 @@
             <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">reset_connection_stats</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set_default_phy</span><span class="p">(</span><span class="n">all_phys</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">tx_phys</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">rx_phys</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">event_mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_event_mask</span><span class="p">(</span><span class="n">event_mask</span><span class="p">)</span>
 
         <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_connection</span><span class="p">(</span><span class="n">conn_params</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">status</span></div>
+
+<div class="viewcode-block" id="BleHci.firmware_update"><a class="viewcode-back" href="../../ble_hci.html#max_ble_hci.ble_hci.BleHci.firmware_update">[docs]</a>    <span class="k">def</span> <span class="nf">firmware_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StatusCode</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Upload the firmware to second flash memory bank</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            The name of firmware binary file</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        StatusCode</span>
+<span class="sd">            The return status of the firmware update command.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">integer_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">byte</span><span class="p">)</span> <span class="k">for</span> <span class="n">byte</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="mi">128</span>
+        <span class="n">chunked_lists</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">StatusCode</span><span class="o">.</span><span class="n">SUCCESS</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">integer_list</span><span class="p">),</span> <span class="n">size</span><span class="p">):</span>
+            <span class="n">chunk</span> <span class="o">=</span> <span class="n">integer_list</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">size</span><span class="p">]</span>
+            <span class="n">chunked_lists</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">alive_bar</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">chunked_lists</span><span class="p">),</span> <span class="n">enrich_print</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">progress_bar</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">chunked_lists</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="n">StatusCode</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">:</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_flash</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+                    <span class="c1"># pylint: disable=not-callable</span>
+                    <span class="n">progress_bar</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">result</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
 
 <div class="viewcode-block" id="BleHci.read_event"><a class="viewcode-back" href="../../ble_hci.html#max_ble_hci.ble_hci.BleHci.read_event">[docs]</a>    <span class="k">def</span> <span class="nf">read_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventPacket</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Read an event from controller.</span>
@@ -520,7 +605,7 @@
 
 <div class="viewcode-block" id="BleHci.write_command_raw"><a class="viewcode-back" href="../../ble_hci.html#max_ble_hci.ble_hci.BleHci.write_command_raw">[docs]</a>    <span class="k">def</span> <span class="nf">write_command_raw</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">raw_command</span><span class="p">:</span> <span class="nb">bytearray</span><span class="p">,</span>
+        <span class="n">raw_command</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">bytearray</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span>
         <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventPacket</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Write raw command to device</span>
@@ -539,6 +624,9 @@
 <span class="sd">        EventPacket</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw_command</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">raw_command</span> <span class="o">=</span> <span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="n">raw_command</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">timeout</span><span class="p">:</span>
             <span class="n">timeout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span>

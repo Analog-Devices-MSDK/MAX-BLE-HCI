@@ -127,7 +127,10 @@
 <span class="c1">#</span>
 <span class="c1">##############################################################################</span>
 <span class="sd">&quot;&quot;&quot;Contains HCI constants definitions.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
 
 <span class="n">ADI_PORT_BAUD_RATE</span> <span class="o">=</span> <span class="mi">115200</span>
 
@@ -165,7 +168,85 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Coded S8 PHY option.&quot;&quot;&quot;</span>
 
     <span class="n">PHY_CODED_S2</span> <span class="o">=</span> <span class="mh">0x4</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Coded S2 PHY option.&quot;&quot;&quot;</span></div>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Coded S2 PHY option.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span> <span class="o">==</span> <span class="n">PhyOption</span><span class="o">.</span><span class="n">PHY_1M</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;1M&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span> <span class="o">==</span> <span class="n">PhyOption</span><span class="o">.</span><span class="n">PHY_2M</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;2M&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span> <span class="o">==</span> <span class="n">PhyOption</span><span class="o">.</span><span class="n">PHY_CODED_S2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;S2&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span> <span class="o">==</span> <span class="n">PhyOption</span><span class="o">.</span><span class="n">PHY_CODED_S8</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;S8&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span> <span class="o">==</span> <span class="n">PhyOption</span><span class="o">.</span><span class="n">PHY_CODED</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;Coded&quot;</span>
+
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+<div class="viewcode-block" id="PhyOption.to_mask"><a class="viewcode-back" href="../../constants.html#max_ble_hci.constants.PhyOption.to_mask">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">to_mask</span><span class="p">(</span><span class="n">phy</span><span class="p">:</span> <span class="n">PhyOption</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert list of phy options to PHY preference mask and PHY option mask</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        phy : PhyOption</span>
+<span class="sd">            PhyOption Enum</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Tuple[int, int]</span>
+<span class="sd">            PHY preference mask as defined by BLE spec</span>
+<span class="sd">            PHY option mask as defined by BLE spec</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">phy</span> <span class="o">==</span> <span class="n">PhyOption</span><span class="o">.</span><span class="n">PHY_1M</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">phy</span> <span class="o">==</span> <span class="n">PhyOption</span><span class="o">.</span><span class="n">PHY_2M</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">phy</span> <span class="ow">in</span> <span class="p">(</span><span class="n">PhyOption</span><span class="o">.</span><span class="n">PHY_CODED</span><span class="p">,</span> <span class="n">PhyOption</span><span class="o">.</span><span class="n">PHY_CODED_S8</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PhyOption.str_to_enum"><a class="viewcode-back" href="../../constants.html#max_ble_hci.constants.PhyOption.str_to_enum">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">str_to_enum</span><span class="p">(</span><span class="n">phy</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PhyOption</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert phy as string to enum</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        phy : str</span>
+<span class="sd">            PHY (1M, 2M, S8, S2)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PhyOption</span>
+<span class="sd">            PHY option as enum</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If PHY option does not exist</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">phy</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;1M&quot;</span><span class="p">,</span> <span class="s2">&quot;2M&quot;</span><span class="p">,</span> <span class="s2">&quot;S8&quot;</span><span class="p">,</span> <span class="s2">&quot;S2&quot;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;PHY string must be in (1M, 2M, S8, S2)&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">phy</span> <span class="o">==</span> <span class="s2">&quot;1M&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">PhyOption</span><span class="o">.</span><span class="n">PHY_1M</span>
+        <span class="k">if</span> <span class="n">phy</span> <span class="o">==</span> <span class="s2">&quot;2M&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">PhyOption</span><span class="o">.</span><span class="n">PHY_2M</span>
+        <span class="k">if</span> <span class="n">phy</span> <span class="o">==</span> <span class="s2">&quot;S2&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">PhyOption</span><span class="o">.</span><span class="n">PHY_CODED_S2</span>
+        <span class="k">if</span> <span class="n">phy</span> <span class="o">==</span> <span class="s2">&quot;S8&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">PhyOption</span><span class="o">.</span><span class="n">PHY_CODED_S8</span>
+
+        <span class="k">return</span> <span class="n">PhyOption</span><span class="o">.</span><span class="n">PHY_1M</span></div></div>
 
 
 <div class="viewcode-block" id="PayloadOption"><a class="viewcode-back" href="../../constants.html#max_ble_hci.constants.PayloadOption">[docs]</a><span class="k">class</span> <span class="nc">PayloadOption</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
