@@ -50,7 +50,10 @@
 #
 ##############################################################################
 """Contains definitions for BLE standard codes utilized in HCI packet creation/parsing."""
+from __future__ import annotations
+
 from enum import Enum, Flag
+from typing import List, Union
 
 
 class EventCode(Enum):
@@ -91,6 +94,16 @@ class EventCode(Enum):
 
     VENDOR_SPEC = 0xFF
     """Vendor specific event."""
+
+
+def _get_full_mask(mask_type: Union[EventMask, EventMaskLE]):
+    full_mask = None
+    for flag in mask_type:
+        if full_mask is None:
+            full_mask = flag
+        full_mask |= flag
+
+    return full_mask
 
 
 class EventMask(Flag):
@@ -146,6 +159,102 @@ class EventMask(Flag):
     REMOTE_HOST_SUPPORTED_FEATURES_NOTIFICATION = 1 << 60
     LE_META = 1 << 61
 
+    @staticmethod
+    def get_full_mask():
+        """Get full event mask
+
+        Returns
+        -------
+        EventMask
+            All events in event mask
+        """
+        return _get_full_mask(EventMask)
+
+    @staticmethod
+    def from_int(mask: int) -> EventMask:
+        """From integer mask to EventMask class
+
+        Parameters
+        ----------
+        mask : int
+            Interger mask.
+
+        Returns
+        -------
+        EventMask
+            EventMask class
+        """
+        clear_mask = EventMask.get_full_mask()
+        return EventMask(mask & clear_mask.value)
+
+    def as_str_list(self) -> List[str]:
+        """Get list of event mask strings
+
+        Returns
+        -------
+        List[str]
+            List of event mask strings
+        """
+        flags = [flag.name for flag in EventMask if flag in self]
+        return flags
+
+
+class EventMaskPage2(Flag):
+    """Controller Event Mask"""
+
+    NUM_CMPLT_DAT_BLOCKS = 1 << 8
+    TRIG_CLK_CAPTURE = 1 << 14
+    SYNC_TRAIN_CMPLT = 1 << 15
+    SYNC_TRAIN_RECEIVED = 1 << 16
+    CONNECTIONLESS_PERIPH_BROADCAST = 1 << 17
+    CONNECTIONLESS_PERIPH_TIMEOUT = 1 << 18
+    TRUNCATED_PAGE_CMPLT = 1 << 19
+    PERIPH_PAGE_RESP_TIMEOUT = 1 << 20
+    CONNECTIONLESS_PERIPH_BROADCAST_CH_MAP_CHANGE = 1 << 21
+    INQUIRY_RESP_NOTIF = 1 << 22
+    AUTH_PAYLOAD_TIMEOUT_EXPIRED = 1 << 23
+    SAM_STATUS_CHANGED = 1 << 24
+    ENC_CHANGED = 1 << 25
+
+    @staticmethod
+    def get_full_mask() -> EventMaskPage2:
+        """Get full event mask page 2
+
+        Returns
+        -------
+        EventMaskPage2
+            Full event mask page 2
+        """
+        return _get_full_mask(EventMaskPage2)
+
+    @staticmethod
+    def from_int(mask: int) -> EventMaskPage2:
+        """From integer mask to EventMask class
+
+        Parameters
+        ----------
+        mask : int
+            Interger mask.
+
+        Returns
+        -------
+        EventMask
+            EventMask class
+        """
+        clear_mask = EventMask.get_full_mask()
+        return EventMask(mask & clear_mask.value)
+
+    def as_str_list(self) -> List[str]:
+        """Get list of event mask strings
+
+        Returns
+        -------
+        List[str]
+            List of event mask strings
+        """
+        flags = [flag.name for flag in EventMaskPage2 if flag in self]
+        return flags
+
 
 class EventMaskLE(Flag):
     """LE Event Mask"""
@@ -185,6 +294,45 @@ class EventMaskLE(Flag):
     TX_POWER_REPORTING = 1 << 32
     BIG_INFO_ADV_REPORT = 1 << 33
     SUBRATE_CHANGE = 1 << 34
+
+    @staticmethod
+    def get_full_mask() -> EventMaskLE:
+        """Get full LE Event mask
+
+        Returns
+        -------
+        EventMaskLE
+            Event mask with all events
+        """
+        return _get_full_mask(EventMaskLE)
+
+    def as_str_list(self) -> List[str]:
+        """List of flags as strings
+
+        Returns
+        -------
+        List[str]
+            List of flags as string
+        """
+        flags = [flag.name for flag in EventMaskLE if flag in self]
+        return flags
+
+    @staticmethod
+    def from_int(mask: int) -> EventMaskLE:
+        """From int to EventMaskLE class
+
+        Parameters
+        ----------
+        mask : int
+            Integer mask
+
+        Returns
+        -------
+        EventMaskLE
+            EventMaskLE class
+        """
+        clear_mask = EventMaskLE.get_full_mask()
+        return EventMaskLE(mask & clear_mask.value)
 
 
 class EventSubcode(Enum):
