@@ -139,7 +139,8 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         self.port_id = port_id
         self.port = None
         self.id_tag = id_tag
-        self.logger = get_formatted_logger(log_level=log_level, name=logger_name)
+        self.logger = get_formatted_logger(
+            log_level=log_level, name=logger_name)
         self.retries = retries
         self.timeout = timeout
         self._init_ports(
@@ -396,6 +397,10 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
 
         """
 
+        if interval and conn_params is not None:
+            self.logger.warning(
+                "Mulitple definitions of connection interval and conn params\n Ignoring interval.")
+
         if conn_params is None:
             if addr is None:
                 raise ValueError(
@@ -446,7 +451,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         chunked_lists = []
         result = StatusCode.SUCCESS
         for i in range(0, len(integer_list), size):
-            chunk = integer_list[i : i + size]
+            chunk = integer_list[i: i + size]
             chunked_lists.append(chunk)
         with alive_bar(len(chunked_lists), enrich_print=False) as progress_bar:
             for i, chunk in enumerate(chunked_lists):
@@ -495,7 +500,8 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
                     self.retries - tries,
                 )
 
-        raise TimeoutError("Timeout occured. No retries remaining.") from timeout_err
+        raise TimeoutError(
+            "Timeout occured. No retries remaining.") from timeout_err
 
     def write_command(
         self,
