@@ -43,7 +43,9 @@ jobs:
         id: check_files
         run: |
 
+          set +e
           git remote add parent https://github.com/Analog-Devices-MSDK/MAX-BLE-HCI.git
+          set -e
           num_changed=$(git diff origin/main --name-only | grep \.py -c)
           echo Changed py files = $num_changed
           if [[ $num_changed -ne 0 ]]; then
