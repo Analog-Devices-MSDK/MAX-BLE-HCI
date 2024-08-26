@@ -449,7 +449,9 @@ def main():
                 interval=args.conn_interval,
                 sup_timeout=args.sup_timeout,
                 conn_params=EstablishConnParams(
-                    peer_addr=convert_str_address(args.addr)
+                    peer_addr=convert_str_address(args.addr),
+                    conn_interval_min=args.conn_interval,
+                    conn_interval_max=args.conn_interval,
                 ),
             )
         )
