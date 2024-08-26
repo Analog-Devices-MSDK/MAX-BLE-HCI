@@ -179,8 +179,7 @@ def main():
         description=cli_description, formatter_class=RawTextHelpFormatter
     )
 
-    parser.add_argument("--version", action="version",
-                        version="%(prog)s 1.2.0")
+    parser.add_argument("--version", action="version", version="%(prog)s 1.2.0")
 
     parser.add_argument("serial_port", help="Serial port path or COM#")
     parser.add_argument(
@@ -310,8 +309,7 @@ def main():
         formatter_class=RawTextHelpFormatter,
     )
 
-    set_addr_parser.add_argument(
-        "addr", help="start address of memory bank to upload")
+    set_addr_parser.add_argument("addr", help="start address of memory bank to upload")
 
     set_addr_parser.set_defaults(
         func=lambda args: print(hci.set_flash_addr(args.addr)),
@@ -332,8 +330,7 @@ def main():
     addr_parser = subparsers.add_parser(
         "addr", help="Set the device address.", formatter_class=RawTextHelpFormatter
     )
-    addr_parser.add_argument(
-        "addr", help="Device address, ex: 00:11:22:33:44:55")
+    addr_parser.add_argument("addr", help="Device address, ex: 00:11:22:33:44:55")
     addr_parser.set_defaults(
         func=lambda args: print(hci.set_address(args.addr)),
         which="addr",
@@ -445,7 +442,6 @@ def main():
         help=f"""Supervision timeout in units of 10ms, 16-bit hex number 0x000A - 0x0C80.
         "Default: {hex(DEFAULT_SUP_TIMEOUT)}""",
     )
-
     init_parser.set_defaults(
         func=lambda args: print(
             hci.init_connection(
@@ -453,8 +449,9 @@ def main():
                 interval=args.conn_interval,
                 sup_timeout=args.sup_timeout,
                 conn_params=EstablishConnParams(
-                    peer_addr=convert_str_address(args.addr)
-                    conn_interval_min=a
+                    peer_addr=convert_str_address(args.addr),
+                    conn_interval_min=args.conn_interval,
+                    conn_interval_max=args.conn_interval,
                 ),
             )
         )
@@ -463,8 +460,7 @@ def main():
     datalen_parser = subparsers.add_parser(
         "data-len", help="Set the max data length", formatter_class=RawTextHelpFormatter
     )
-    datalen_parser.set_defaults(
-        func=lambda _: hci.set_data_len(), which="dataLen")
+    datalen_parser.set_defaults(func=lambda _: hci.set_data_len(), which="dataLen")
 
     send_acl_parser = subparsers.add_parser(
         "send-acl",
@@ -555,8 +551,7 @@ def main():
     rssi_parser.set_defaults(func=_print_rssi)
 
     #### RESET PARSER ####
-    reset_parser = subparsers.add_parser(
-        "reset", help="Sends an HCI reset command")
+    reset_parser = subparsers.add_parser("reset", help="Sends an HCI reset command")
     reset_parser.set_defaults(func=lambda _: print(hci.reset()), which="reset")
 
     #### TX TEST PARSER ####
@@ -904,8 +899,7 @@ def main():
         formatter_class=RawTextHelpFormatter,
     )
 
-    discon_parser.set_defaults(func=lambda _: print(
-        hci.disconnect()), which="discon")
+    discon_parser.set_defaults(func=lambda _: print(hci.disconnect()), which="discon")
 
     set_ch_map_parser = subparsers.add_parser(
         "set-chmap",
@@ -935,8 +929,7 @@ def main():
         help="Connection handle, integer. Default: 0",
     )
     set_ch_map_parser.set_defaults(
-        func=lambda args: hci.set_channel_map(
-            channels=args.mask, handle=args.handle),
+        func=lambda args: hci.set_channel_map(channels=args.mask, handle=args.handle),
     )
 
     cmd_parser = subparsers.add_parser(
@@ -955,8 +948,7 @@ def main():
     )
 
     cmd_parser.set_defaults(
-        func=lambda args: print(
-            hci.write_command_raw(bytes.fromhex(args.command)))
+        func=lambda args: print(hci.write_command_raw(bytes.fromhex(args.command)))
     )
 
     #### EXIT PARSER ####
@@ -966,8 +958,7 @@ def main():
         help="Exit the program",
         formatter_class=RawTextHelpFormatter,
     )
-    exit_parser.set_defaults(
-        func=lambda _: sys.exit(EXIT_FUNC_MAGIC), which="exit")
+    exit_parser.set_defaults(func=lambda _: sys.exit(EXIT_FUNC_MAGIC), which="exit")
 
     ls_parser = subparsers.add_parser(
         "ls",
@@ -1003,10 +994,8 @@ def main():
     run_parser.set_defaults(func=lambda args: os.system(" ".join(args.run)))
 
     #### HELP PARSER ####
-    help_parser = subparsers.add_parser(
-        "help", aliases=["h"], help="Show help message")
-    help_parser.set_defaults(
-        func=lambda _: terminal.print_help(), which="help")
+    help_parser = subparsers.add_parser("help", aliases=["h"], help="Show help message")
+    help_parser.set_defaults(func=lambda _: terminal.print_help(), which="help")
 
     def _completer(text, state):
         commands = subparsers.choices.keys()
@@ -1015,8 +1004,7 @@ def main():
 
     readline.set_completer(_completer)
     readline.parse_and_bind("tab: complete")
-    readline.set_completer_delims(
-        readline.get_completer_delims().replace("-", ""))
+    readline.set_completer_delims(readline.get_completer_delims().replace("-", ""))
 
     command_run = False
     if commands:
@@ -1046,8 +1034,7 @@ def main():
                 sys.exit(0)
             elif err.code != 0:
                 logger.error(
-                    "Process finished with exit code %s (%s)", err, type(
-                        err).__name__
+                    "Process finished with exit code %s (%s)", err, type(err).__name__
                 )
 
         except Exception as err:  # pylint: disable=broad-exception-caught

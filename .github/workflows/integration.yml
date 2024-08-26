@@ -30,7 +30,7 @@ on:
     branches: ["main"]
   workflow_dispatch:
 env:
-  TEST_BOARD: max32655_board_3
+  TEST_BOARD: max32655_board3
 
 jobs:
   run_integration:
