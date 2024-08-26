@@ -468,7 +468,7 @@ def main():
         formatter_class=RawTextHelpFormatter,
     )
     send_acl_parser.add_argument(
-        "packet_length",
+        "packet_len",
         type=int,
         help="Number of bytes per ACL packet, 16-bit decimal 1-65535, 0 to disable.",
     )
@@ -485,6 +485,8 @@ def main():
     )
     send_acl_parser.set_defaults(
         func=lambda args: print(
+            # TODO: If num_packets == 0, send the auto generate enable
+            hci.enable_autogenerate_acl(args.packet_len),
             hci.generate_acl(args.handle, args.packet_len, args.num_packets)
         ),
     )

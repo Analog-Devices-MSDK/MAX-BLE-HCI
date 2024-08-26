@@ -250,17 +250,18 @@ class VendorSpecificCmds:
         """
         return self.send_vs_command(OCF.VENDOR_SPEC.RESET_CONN_STATS)
 
-    def enable_autogenerate_acl(self, enable: bool) -> StatusCode:
+    def enable_autogenerate_acl(self, packet_len: int) -> StatusCode:
         """Enable/disable automatic generation of ACL packets.
 
         Sends a vendor-specific command to the DUT, telling it to
-        enable or disable automatic generation of asynchronous
-        connection-less packets.
+        enable automatic generation of asynchronous
+        connection-less packets. Requires a generate_acl command to initiate
+        the sending.
 
         Parameters
         ----------
-        enable: bool
-            Enable automatic ACL packet generation?
+        packet_len: int
+            Length of packet to auto-generate.
 
         Returns
         -------
@@ -268,8 +269,9 @@ class VendorSpecificCmds:
             The return packet status code.
 
         """
+        params = to_le_nbyte_list(packet_len, 2)
         return self.send_vs_command(
-            OCF.VENDOR_SPEC.ENA_AUTO_GEN_ACL, params=int(enable)
+            OCF.VENDOR_SPEC.ENA_AUTO_GEN_ACL, params=params
         )
 
     def generate_acl(
@@ -320,7 +322,7 @@ class VendorSpecificCmds:
             )
 
         params = to_le_nbyte_list(handle, 2)
-        params.append(packet_len)
+        params.extend(to_le_nbyte_list(packet_len, 2))
         params.extend(to_le_nbyte_list(num_packets, 2))
         return self.send_vs_command(OCF.VENDOR_SPEC.GENERATE_ACL, params=params)
 
