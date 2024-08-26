@@ -38,16 +38,13 @@ jobs:
     if: github.event.pull_request.draft == false
     steps:
       - uses: actions/checkout@v4
-      - uses: jitterbit/get-changed-files@v1
-        id: abc
-        with:
-          format: space-delimited
-          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Check files
         id: check_files
         run: |
-          
-          num_changed=$(echo "${{ steps.abc.outputs.all }}" | grep \.py -c)
+
+          git remote add parent https://github.com/Analog-Devices-MSDK/MAX-BLE-HCI.git
+          num_changed=$(git diff origin/main --name-only | grep \.py -c)
           echo Changed py files = $num_changed
           if [[ $num_changed -ne 0 ]]; then
           echo "changed_src=true" >> $GITHUB_ENV
