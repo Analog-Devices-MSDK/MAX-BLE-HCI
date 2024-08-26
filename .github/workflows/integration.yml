@@ -54,9 +54,6 @@ jobs:
           echo "changed_src=false" >> $GITHUB_ENV
           fi
 
-          
-
-
       - name: Lock Resources
         if: ${{ env.changed_src == 'true' }}
         id: lock
@@ -80,7 +77,6 @@ jobs:
           (cd src && python3 -m tests.pure_software)
           (cd src && python3 -m tests.integration)
           (cd src && python3 -m tests.encryption)
-
 
       - name: Unlock Resources
         if: always()
