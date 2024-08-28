@@ -270,9 +270,7 @@ class VendorSpecificCmds:
 
         """
         params = to_le_nbyte_list(packet_len, 2)
-        return self.send_vs_command(
-            OCF.VENDOR_SPEC.ENA_AUTO_GEN_ACL, params=params
-        )
+        return self.send_vs_command(OCF.VENDOR_SPEC.ENA_AUTO_GEN_ACL, params=params)
 
     def generate_acl(
         self, handle: int, packet_len: int, num_packets: int

@@ -179,7 +179,7 @@ def main():
         description=cli_description, formatter_class=RawTextHelpFormatter
     )
 
-    parser.add_argument("--version", action="version", version="%(prog)s 1.2.0")
+    parser.add_argument("--version", action="version", version="%(prog)s 1.3.0")
 
     parser.add_argument("serial_port", help="Serial port path or COM#")
     parser.add_argument(
@@ -483,13 +483,13 @@ def main():
         default=0,
         help="Number of bytes per ACL packet, 16-bit decimal 1-65535, 0 to disable.",
     )
-    send_acl_parser.set_defaults(
-        func=lambda args: print(
-            # TODO: If num_packets == 0, send the auto generate enable
-            hci.enable_autogenerate_acl(args.packet_len),
-            hci.generate_acl(args.handle, args.packet_len, args.num_packets)
-        ),
-    )
+
+    def auto_acl(args):
+        if args.num_packets == 0:
+            print(hci.enable_autogenerate_acl(args.packet_len))
+        print(hci.generate_acl(args.handle, args.packet_len, args.num_packets))
+
+    send_acl_parser.set_defaults(func=auto_acl)
 
     sinl_acl_parser = subparsers.add_parser(
         "sink-acl",
