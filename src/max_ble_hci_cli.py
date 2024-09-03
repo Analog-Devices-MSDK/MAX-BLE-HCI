@@ -77,7 +77,6 @@ from colorlog import ColoredFormatter
 from max_ble_hci import BleHci
 from max_ble_hci.constants import PayloadOption, PhyOption
 from max_ble_hci.data_params import AdvParams, EstablishConnParams, ScanParams
-from max_ble_hci.packet_codes import StatusCode
 from max_ble_hci import utils
 from max_ble_hci.utils import convert_str_address
 

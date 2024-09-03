@@ -208,12 +208,12 @@ def address_int2str(addr: int) -> str:
         Address converted to str (ex : 00:11:22:33:44:55)
     """
     addr_str = ""
-    NUM_BYTES = 6
-    for i in range(NUM_BYTES):
-        idx = (NUM_BYTES - 1) - i
+    addr_len = 6
+    for i in range(addr_len):
+        idx = (addr_len - 1) - i
         bvalue = (addr >> (idx * 8)) & 0xFF
 
-        if i < NUM_BYTES - 1:
+        if i < addr_len - 1:
             addr_str += f"{bvalue:02X}:"
         else:
             addr_str += f"{bvalue:02X}"
