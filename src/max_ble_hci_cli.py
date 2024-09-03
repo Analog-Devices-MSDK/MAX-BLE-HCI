@@ -59,6 +59,7 @@ import argparse
 import logging
 import os
 import signal
+import secrets
 
 # pylint: disable=unused-import,too-many-lines
 try:
@@ -76,6 +77,7 @@ from colorlog import ColoredFormatter
 from max_ble_hci import BleHci
 from max_ble_hci.constants import PayloadOption, PhyOption
 from max_ble_hci.data_params import AdvParams, EstablishConnParams, ScanParams
+from max_ble_hci.packet_codes import StatusCode
 from max_ble_hci import utils
 from max_ble_hci.utils import convert_str_address
 
@@ -246,7 +248,7 @@ def main():
 
     print("Bluetooth Low Energy HCI tool")
     print(f"Serial port: {args.serial_port}")
-    print(f"Monitor Trace Msg Serial Port: {args.monPort}")
+
     print(f"8N1 {args.baudRate}")
 
     commands = args.commands
@@ -372,7 +374,7 @@ def main():
 
     def start_adv(args):
         if args.rand_addr:
-            rand_addr = hci.get_rand_address()
+            rand_addr = secrets.randbits(6 * 8)
             hci.set_address(rand_addr)
             print(f"Advertising with random address {utils.address_int2str(rand_addr)}")
 
