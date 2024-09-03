@@ -223,6 +223,12 @@ def main():
     )
 
     parser.add_argument(
+        "--startup-script",
+        help="""Filepath to script to run commands to run on startup. 
+        Commands should be newline seperated""",
+    )
+
+    parser.add_argument(
         "-t",
         "--trace_level",
         dest="trace_level",
@@ -255,7 +261,19 @@ def main():
     print(f"8N1 {args.baudRate}")
 
     commands = args.commands
-    if commands:
+    if args.startup_script:
+        if commands:
+            raise NotImplementedError(
+                "Cannot decide on which order to run startup and commands"
+            )
+
+        with open(args.startup_script, "r", encoding="utf-8") as startup:
+            commands = startup.readlines()
+            commands = [command.strip() for command in commands]
+
+        print(commands)
+
+    elif commands:
         if len(commands) > 1:
             commands = " ".join(commands)
         else:
@@ -263,7 +281,7 @@ def main():
 
         commands = commands.split(";")
         commands = [x.strip() for x in commands]
-
+        print(commands)
         print("Startup commands: ")
         for command in commands:
             print(f"\t{command}")
@@ -988,12 +1006,28 @@ def main():
     pwd_parser.set_defaults(func=lambda args: print(os.getcwd()))
 
     run_parser = subparsers.add_parser(
+        "shell",
+        help="run command via os shell",
+        formatter_class=RawTextHelpFormatter,
+    )
+    run_parser.add_argument("shell", nargs="+")
+    run_parser.set_defaults(func=lambda args: os.system(" ".join(args.shell)))
+
+    def _script_runner(script_path):
+        print(script_path)
+        with open(script_path, "r", encoding="utf-8") as script:
+            commands = script.readlines()
+
+        if commands:
+            _run_input_cmds(commands, terminal)
+
+    run_parser = subparsers.add_parser(
         "run",
         help="run command via os",
         formatter_class=RawTextHelpFormatter,
     )
-    run_parser.add_argument("run", nargs="+")
-    run_parser.set_defaults(func=lambda args: os.system(" ".join(args.run)))
+    run_parser.add_argument("run")
+    run_parser.set_defaults(func=lambda args: _script_runner(args.run))
 
     #### HELP PARSER ####
     help_parser = subparsers.add_parser("help", aliases=["h"], help="Show help message")
