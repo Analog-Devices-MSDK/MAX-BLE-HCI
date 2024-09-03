@@ -194,6 +194,33 @@ def convert_str_address(addr: str) -> int:
     return int(addr.replace(":", ""), 16)
 
 
+def address_int2str(addr: int) -> str:
+    """Convert address as int to str
+
+    Parameters
+    ----------
+    addr : int
+        Address. Ex: 0x001122334455
+
+    Returns
+    -------
+    str
+        Address converted to str (ex : 00:11:22:33:44:55)
+    """
+    addr_str = ""
+    NUM_BYTES = 6
+    for i in range(NUM_BYTES):
+        idx = (NUM_BYTES - 1) - i
+        bvalue = (addr >> (idx * 8)) & 0xFF
+
+        if i < NUM_BYTES - 1:
+            addr_str += f"{bvalue:02X}:"
+        else:
+            addr_str += f"{bvalue:02X}"
+
+    return addr_str
+
+
 def byte_length(data: int) -> int:
     """Get number of bytes needed to represent an integer value
 
