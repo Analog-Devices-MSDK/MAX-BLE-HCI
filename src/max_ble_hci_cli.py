@@ -60,6 +60,7 @@ import logging
 import os
 import signal
 import secrets
+import json
 
 # pylint: disable=unused-import,too-many-lines
 try:
@@ -77,7 +78,6 @@ from colorlog import ColoredFormatter
 from max_ble_hci import BleHci
 from max_ble_hci.constants import PayloadOption, PhyOption
 from max_ble_hci.data_params import AdvParams, EstablishConnParams, ScanParams
-from max_ble_hci.packet_codes import StatusCode
 from max_ble_hci import utils
 from max_ble_hci.utils import convert_str_address
 
@@ -157,6 +157,66 @@ def _run_input_cmds(commands, terminal):
                 sys.exit(_err.code)
     return True
 
+def _init_from_json(args) -> BleHci:
+    
+    config:dict
+    with open(args.config, 'r') as config_file:
+        config = json.load(config_file)
+
+    serial_cfg:dict
+    if not args.port_id and "serial" not in config:
+        raise ValueError("Serial port not given and no serial conifg found in init file")
+
+    serial_cfg = config.get('serial')
+
+    if args.port_id:
+        port_id = args.port_id
+    else:
+        port_id = config.get('serial').get('port_id')
+
+    if args.baudrate != DEFAULT_BAUD:
+        baudrate = args.baudrate
+    else:
+        baudrate = serial_cfg.get('baudrate', DEFAULT_BAUD)
+
+    if args.enable_flow_control:
+       enable_flow_control = args.enable_flow_control
+    else:
+        enable_flow_control = config.get('serial', False).get('enable_flow_control', False)
+
+    logger_cfg : dict
+    logger_cfg = config.get('logger', {
+        "name": "BLE-HCI",
+        "id_tag": "DUT",
+        "level" : "INFO"
+    })
+
+    if args.idtag != "DUT":
+        id_tag = args.idTag
+    else:
+        id_tag = logger_cfg.get('id_tag')
+
+    if "transport" in config:
+        power_loss_recovery = config.get('transport').get('power_loss_recovery', True)
+    else:
+        power_loss_recovery = True
+
+
+    hci = BleHci(
+            port_id=port_id,
+            baud=baudrate,
+            id_tag=id_tag,
+            async_callback=print,
+            evt_callback=print,
+            flowcontrol=enable_flow_control,
+            recover_on_power_loss=power_loss_recovery,
+        )
+
+    
+    launch_commands = config.get('launch_commands', [])
+
+    return hci, launch_commands
+
 
 def main():
     """
@@ -184,11 +244,12 @@ def main():
 
     parser.add_argument("--version", action="version", version="%(prog)s 1.3.0")
 
-    parser.add_argument("serial_port", help="Serial port path or COM#")
+    parser.add_argument("serial_port", nargs="?", help="Serial port path or COM#")
+    parser.add_argument('--confif', nargs="?", help="Initialization file for HCI")
     parser.add_argument(
         "-b",
         "--baud",
-        dest="baudRate",
+        dest="baudrate",
         type=int,
         default=DEFAULT_BAUD,
         help="Serial port baud rate. Default: " + str(DEFAULT_BAUD),
@@ -234,24 +295,32 @@ def main():
     )
 
     args = parser.parse_args()
+    
+    commands = args.commands
 
-    hci = BleHci(
-        args.serial_port,
-        baud=args.baudRate,
-        id_tag=args.idtag,
-        async_callback=print,
-        evt_callback=print,
-        flowcontrol=args.enable_flow_control,
-        recover_on_power_loss=True,
-    )
+    if args.config:
+        hci, commands = _init_from_json(args)
+        
+    else:
+        hci = BleHci(
+            args.serial_port,
+            baud=args.baudrate,
+            id_tag=args.idtag,
+            async_callback=print,
+            evt_callback=print,
+            flowcontrol=args.enable_flow_control,
+            recover_on_power_loss=True,
+        )
+        
+        commands = args.commands
+
     hci.logger.setLevel(args.trace_level)
 
     print("Bluetooth Low Energy HCI tool")
     print(f"Serial port: {args.serial_port}")
 
-    print(f"8N1 {args.baudRate}")
+    print(f"8N1 {hci.baud}")
 
-    commands = args.commands
     if commands:
         if len(commands) > 1:
             commands = " ".join(commands)
