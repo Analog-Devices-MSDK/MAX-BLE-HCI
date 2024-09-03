@@ -52,9 +52,10 @@
 """Contains full HCI implementation."""
 # pylint: disable=too-many-arguments
 import logging
+import configparser
 from typing import Any, Callable, Optional, Union
 from alive_progress import alive_bar
-
+import os
 from ._hci_logger import get_formatted_logger
 from ._transport import SerialUartTransport
 from .ad_types import ADTypes
@@ -135,13 +136,25 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         evt_callback: Optional[Callable[[EventPacket], Any]] = None,
         flowcontrol=False,
         recover_on_power_loss=False,
+        ini_file=None,
     ):
+        self.ini_file = ini_file
+
+        # serial
+        self.baud = baud
         self.port_id = port_id
+        self.flowcontrol = flowcontrol
+
         self.port = None
         self.id_tag = id_tag
+
         self.logger = get_formatted_logger(log_level=log_level, name=logger_name)
         self.retries = retries
         self.timeout = timeout
+
+        if ini_file and os.path.exists(ini_file):
+            self._init_from_ini()
+
         self._init_ports(
             port_id,
             baud,
@@ -152,6 +165,21 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
             recover_on_power_loss,
         )
         super().__init__(self.port, logger_name)
+
+    def _init_from_ini(self):
+        config = configparser.ConfigParser()
+        config.read(self.init_file)
+
+        if not self.port_id:
+            self.port_id = config.get("serial", "port_id", fallback=None)
+            if self.port_id is None:
+                raise ValueError("Serial port must be given through CLI of .ini")
+
+        if not self.baud:
+            self.port_id = config.get("serial", "baudrate", fallback=115200)
+
+        if not self.flowcontrol:
+            self.flowcontrol = config.get("serial", "flowcontrol", fallback=False)
 
     def __enter__(self):
         self.port.start()
