@@ -60,7 +60,6 @@ import glob
 import os
 import sys
 from typing import List
-
 import serial
 
 DEFAULT_BAUDRATE = 115200
@@ -155,6 +154,7 @@ def le_list_to_int(nums: List[int]) -> int:
     full_num = 0
     for i, num in enumerate(nums):
         full_num |= num << 8 * i
+
     return full_num
 
 
@@ -192,3 +192,23 @@ def convert_str_address(addr: str) -> int:
         Address converted to integer value
     """
     return int(addr.replace(":", ""), 16)
+
+
+def byte_length(data: int) -> int:
+    """Get number of bytes needed to represent an integer value
+
+    Parameters
+    ----------
+    data : int
+        Number to get bytes needed
+
+    Returns
+    -------
+    int
+        Bytes needed to represent nearest value
+    """
+
+    if data == 0:
+        return 1
+
+    return (data.bit_length() + 7) // 8

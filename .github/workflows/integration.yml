@@ -24,13 +24,13 @@ concurrency:
   cancel-in-progress: true
 
 on:
-  push:
-    branches: ["main"]
+  # push:
+  #   branches: ["main"]
   pull_request:
     branches: ["main"]
   workflow_dispatch:
 env:
-  TEST_BOARD: max32655_board_3
+  TEST_BOARD: max32655_board3
 
 jobs:
   run_integration:
@@ -39,7 +39,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check files
+        id: check_files
+        run: |
+
+          set +e
+          git remote add parent https://github.com/Analog-Devices-MSDK/MAX-BLE-HCI.git
+          set -e
+          num_changed=$(git diff origin/main --name-only | grep \.py -c)
+          echo Changed py files = $num_changed
+          if [[ $num_changed -ne 0 ]]; then
+          echo "changed_src=true" >> $GITHUB_ENV
+          echo found py file
+          else
+          echo did not find py file
+          echo "changed_src=false" >> $GITHUB_ENV
+          fi
+
       - name: Lock Resources
+        if: ${{ env.changed_src == 'true' }}
         id: lock
         uses: Analog-Devices-MSDK/btm-ci-scripts/actions/lock-board@v1.1
         with:
@@ -48,15 +66,19 @@ jobs:
 
           lock: true
       - name: Flash
+        if: ${{ env.changed_src == 'true' }}
         run: |
           ocdflash $TEST_BOARD .github/workflows/bin/max32655.elf $GITHUB_REF
           sleep 1
 
       - name: Test
+        if: ${{ env.changed_src == 'true' }}
         run: |
-          export HCI=$(resource_manager -g $TEST_BOARD.hci_port)
-          perl -i -pe 's/PORT = ".*"/PORT = "$ENV{HCI}"/' tests/test.py
-          (cd tests && python3 test.py)
+          pip install .
+          export TEST_PORT=$(resource_manager -g $TEST_BOARD.hci_port)
+          (cd src && python3 -m tests.pure_software)
+          (cd src && python3 -m tests.integration)
+          (cd src && python3 -m tests.encryption)
 
       - name: Unlock Resources
         if: always()

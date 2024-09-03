@@ -62,7 +62,7 @@ from .ble_standard_cmds import BleStandardCmds
 from .constants import ADI_PORT_BAUD_RATE
 from .data_params import AdvParams, EstablishConnParams
 from .hci_packets import AsyncPacket, CommandPacket, EventPacket
-from .packet_codes import EventMaskLE, StatusCode
+from .packet_codes import EventMask, EventMaskPage2, EventMaskLE, StatusCode
 from .utils import convert_str_address
 from .vendor_spec_cmds import VendorSpecificCmds
 
@@ -259,6 +259,44 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
 
         return self.set_adv_data(data)
 
+    def enable_all_events(self) -> StatusCode:
+        """Enable all available event masks for Controller (including page 2)
+        and LE Events
+
+        Returns
+        -------
+        StatusCode
+            The return status of the set event mask or set event mask le commands
+        """
+        controller_mask = EventMask.get_full_mask()
+        controller_page2 = EventMaskPage2.get_full_mask()
+        lemask = EventMaskLE.get_full_mask()
+        status, status2 = self.set_event_mask(
+            controller_mask, mask_pg2=controller_page2
+        )
+
+        if status != StatusCode.SUCCESS or status2 != StatusCode.SUCCESS:
+            return status
+
+        return self.set_event_mask_le(lemask)
+
+    def disable_all_events(self) -> StatusCode:
+        """Enable all available event masks for Controller (including page 2)
+        and LE Events
+
+        Returns
+        -------
+        StatusCode
+            The return status of the set event mask or set event mask le commands
+        """
+
+        status, status2 = self.set_event_mask(0, mask_pg2=0)
+
+        if status != StatusCode.SUCCESS or status2 != StatusCode.SUCCESS:
+            return status
+
+        return self.set_event_mask_le(0)
+
     def start_advertising(
         self, connect: bool = True, adv_params: Optional[AdvParams] = None, adv_name=""
     ) -> StatusCode:
@@ -358,6 +396,11 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
             If `addr` is more than 6 bytes in size.
 
         """
+
+        if interval and conn_params is not None:
+            self.logger.warning(
+                "Mulitple definitions of connection interval and conn params\n Ignoring interval."
+            )
 
         if conn_params is None:
             if addr is None:
@@ -500,7 +543,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
 
     def write_command_raw(
         self,
-        raw_command: bytearray,
+        raw_command: Union[bytearray, str],
         timeout: Optional[float] = None,
     ) -> EventPacket:
         """Write raw command to device
@@ -519,6 +562,9 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         EventPacket
 
         """
+
+        if isinstance(raw_command, str):
+            raw_command = bytes.fromhex(raw_command)
 
         if not timeout:
             timeout = self.timeout

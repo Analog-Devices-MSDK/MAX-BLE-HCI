@@ -53,16 +53,16 @@
 Module contains definitions for BLE standard HCI commands.
 """
 # pylint: disable=too-many-arguments
-from typing import List, Optional, Tuple, Union
+from typing import List, Optional, Tuple, Union, Callable
 
 from ._hci_logger import get_formatted_logger
 from ._transport import SerialUartTransport
 from .constants import PayloadOption, PhyOption
 from .data_params import AdvParams, ConnParams, EstablishConnParams, ScanParams
 from .hci_packets import CommandPacket, EventPacket
-from .packet_codes import EventMask, EventMaskLE, StatusCode
+from .packet_codes import EventMask, EventMaskPage2, EventMaskLE, StatusCode
 from .packet_defs import OCF, OGF
-from .utils import can_represent_as_bytes, to_le_nbyte_list
+from .utils import can_represent_as_bytes, to_le_nbyte_list, byte_length
 
 
 class BleStandardCmds:
@@ -679,10 +679,15 @@ class BleStandardCmds:
             The return packet status code.
 
         """
+
         return self.send_controller_command(OCF.CONTROLLER.RESET)
 
+        # return self.send_controller_command(OCF.CONTROLLER.RESET)
+
     def set_event_mask(
-        self, mask: Union[int, EventMask], mask_pg2: Optional[int] = None
+        self,
+        mask: Union[int, EventMask],
+        mask_pg2: Optional[Union[int, EventMaskPage2]] = None,
     ) -> Union[StatusCode, Tuple[StatusCode, StatusCode]]:
         """Enable/disable events the board can generate.
 
@@ -720,7 +725,9 @@ class BleStandardCmds:
             OCF.CONTROLLER.SET_EVENT_MASK, params=params
         )
 
-        if mask_pg2:
+        if mask_pg2 is not None:
+            if isinstance(mask_pg2, EventMaskPage2):
+                mask_pg2 = mask_pg2.value
             params = to_le_nbyte_list(mask_pg2, 8)
             return (
                 status,
@@ -760,3 +767,206 @@ class BleStandardCmds:
         return self.send_le_controller_command(
             OCF.LE_CONTROLLER.SET_EVENT_MASK, params=params
         )
+
+    def read_local_p256_pub_key(
+        self, callback: Callable[[EventPacket], None] = None
+    ) -> StatusCode:
+        """Read local P256 Key
+
+        Parameters
+        ----------
+        callback : Callable[[EventPacket], None], optional
+            Callback to call when complete event is triggered, by default None
+
+        Returns
+        -------
+        StatusCode
+            The return packet status code.
+
+        NOTE: Event not enabled for you. Please enable event.
+        """
+        if callback:
+            self.port.evt_callback = callback
+
+        return self.send_le_controller_command(
+            OCF.LE_CONTROLLER.READ_LOCAL_P256_PUB_KEY
+        )
+
+    def generate_dhk(
+        self,
+        xcoord: int,
+        ycoord: int,
+        version: int = 1,
+        use_debug_key=False,
+        callback: Callable[[EventPacket], None] = None,
+    ) -> StatusCode:
+        """Generate Diffie-Hellman Key
+
+        Parameters
+        ----------
+        xcoord : int
+            X-Coordinate
+        ycoord : int
+            Y-Coordinate
+        version : int, optional
+            DHK gen version, by default 1. Options 1 or 2
+        use_debug_key : bool, optional
+            Use a debug key instead of in use key, by default False
+        callback : Callable[[EventPacket], None], optional
+            Callback to call when complete event is triggered, by default None, by default None
+
+        Returns
+        -------
+        StatusCode
+            The return packet status code.
+
+        Raises
+        ------
+        ValueError
+            If version not 1 or 2
+
+        NOTE: Complete event not enabled for you. Please enable event if needed.
+        """
+        if version not in (1, 2):
+            raise ValueError("DHK generate version must be 1 or 2")
+
+        xcoords = to_le_nbyte_list(xcoord, 32)
+        ycoords = to_le_nbyte_list(ycoord, 32)
+
+        if version != 1:
+            key_type = 0 if not use_debug_key else 1
+        else:
+            key_type = 0x4B
+
+        params = xcoords + ycoords + [key_type]
+
+        ocf = (
+            OCF.LE_CONTROLLER.GENERATE_DHKEY
+            if version == 1
+            else OCF.LE_CONTROLLER.GENERATE_DHKEY_V2
+        )
+
+        if callback is not None:
+            self.port.evt_callback = callback
+
+        return self.send_le_controller_command(ocf, params)
+
+    def convert_fips197(self, data: Union[int, str]) -> List[int]:
+        """Convert data to fips197 format
+
+        Parameters
+        ----------
+        data : Union[int, str]
+            Integer of string
+
+        Returns
+        -------
+        List[int]
+            fips197 formatted data
+
+        Raises
+        ------
+        ValueError
+            Input is not an int or str
+        ValueError
+            Data cannot be represented in 16-bytes
+        """
+        if isinstance(data, int):
+            byte_len = byte_length(data)
+            data_bytes = [0] * 16
+            for i in range(byte_len):
+                bit_pos = 8 * (byte_len - i - 1)
+                data_bytes[i] = (data >> bit_pos) & 0xFF
+        elif isinstance(data, str):
+            data_bytes = data.encode("utf-8")
+            if len(data_bytes) < 16:
+                data_bytes = data_bytes.ljust(16, b"\x00")
+            data_bytes = list(data_bytes)
+        else:
+            raise ValueError("Input must be an integer or string")
+
+        if len(data_bytes) > 16:
+            raise ValueError("Value must be able to be represented in 16 bytes!")
+
+        return data_bytes
+
+    def encrypt(
+        self, key: Union[bytes, int, str], plaintext: Union[int, bytes, str]
+    ) -> Union[List[int], EventPacket]:
+        """Encrypt data
+
+        Parameters
+        ----------
+        key : Union[bytes, int, str]
+            Key to encrypt plaintex with
+        plaintext : Union[int, bytes, str]
+            data to encrypt
+            Will pad data with zeros if the block is not 16 bytes
+
+        Returns
+        -------
+        Union[List[int], EventPacket]
+            Ciphertext if encryption succeeded. Event packet othewise.
+
+        Raises
+        ------
+        ValueError
+            If key is an integer and cannot be represented in 128 bits
+        ValueError
+            If key is bytes or string an not 16-bytes in length
+        ValueError
+            If plaintext cannot be represented ins 128 bits
+        ValueError
+            If plaintext bytes or string and more than 16 bytes
+        """
+        if isinstance(key, int) and key.bit_length() > 128:
+            raise ValueError("Key must be representable in 128 bits!")
+        if isinstance(key, (bytes, str)) and len(key) != 16:
+            raise ValueError("Key must be 128 bits if given as bytes or str!")
+
+        if isinstance(plaintext, int) and plaintext.bit_length() > 128:
+            raise ValueError("Plaintext must be representable in 128 bits!")
+        if isinstance(plaintext, (bytes, str)) and len(plaintext) > 16:
+            raise ValueError("Plaintext must be representable in 128 bits!")
+
+        if isinstance(key, int):
+            key = self.convert_fips197(key)
+        if isinstance(key, bytes):
+            key = list(key)
+
+        if not isinstance(plaintext, bytes):
+            plaintext = self.convert_fips197(plaintext)
+        else:
+            if len(plaintext) < 16:
+                plaintext = plaintext.ljust(16, b"\x00")
+            plaintext = list(plaintext)
+
+        params = key + plaintext
+        evt = self.send_le_controller_command(
+            OCF.LE_CONTROLLER.ENCRYPT, params=params, return_evt=True
+        )
+
+        if evt.status == StatusCode.SUCCESS:
+            return list(evt.evt_params[4:])
+
+        return evt
+
+    def set_event_callback(self, callback):
+        """Set callback used for event packet
+
+        Parameters
+        ----------
+        callback : Callable
+            Function to call on event packet
+        """
+        self.port.evt_callback = callback
+
+    def set_async_callback(self, callback):
+        """Set callback used for async packet
+
+        Parameters
+        ----------
+        callback : Callable
+            Function to call on async packet
+        """
+        self.port.async_callback = callback
