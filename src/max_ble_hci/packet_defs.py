@@ -582,18 +582,6 @@ class VendorSpecificOCF(Enum):
     WRITE_FLASH = 0x3C0
     """WRITE the firmware"""
 
-    SET_FLASH_ADDR = 0x3C3
-    """set flash address pointer"""
-
-    DEVICE_RESET = 0x3C2
-    """reset the device"""
-
-    MEMORY_ERASE = 0x3C1
-    """Erase the memory"""
-
-    WRITE_FLASH = 0x3C0
-    """WRITE the firmware"""
-
     SET_SCAN_CH_MAP = 0x3E0
     """Set scan channel map command."""
 

@@ -297,7 +297,7 @@ def main():
 
     #### RESET PARSER ####
     reset_parser = subparsers.add_parser(
-        "sysreset", help="reset the firmware", formatter_class=RawTextHelpFormatter
+        "sysreset", help="reset the device", formatter_class=RawTextHelpFormatter
     )
 
     reset_parser.set_defaults(
@@ -307,7 +307,7 @@ def main():
 
     #### ERASE PARSER ####
     erase_parser = subparsers.add_parser(
-        "erase", help="erase the flash", formatter_class=RawTextHelpFormatter
+        "erase", help="erase one page of the flash", formatter_class=RawTextHelpFormatter
     )
 
     erase_parser.add_argument("addr", help="start address of memory bank to be erased")
