@@ -388,20 +388,6 @@ def main():
             adv_name=args.name,
         )
 
-    # adv_parser.set_defaults(
-    #     func=lambda args: print(
-    #         hci.start_advertising(
-    #             connect=args.connect,
-    #             adv_params=AdvParams(
-    #                 adv_type=0 if args.connect else 0x3,
-    #                 interval_min=args.adv_interval,
-    #                 interval_max=args.adv_interval,
-    #             ),
-    #             adv_name=args.name,
-    #         )
-    #     ),
-    #     which="adv",
-    # )
     adv_parser.set_defaults(
         func=start_adv,
         which="adv",
