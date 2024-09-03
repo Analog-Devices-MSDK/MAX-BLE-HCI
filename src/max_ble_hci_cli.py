@@ -81,6 +81,8 @@ from max_ble_hci.utils import convert_str_address
 # pylint: enable=import-error
 
 
+
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
@@ -286,15 +288,16 @@ def main():
     update_parser = subparsers.add_parser(
         "update", help="update the firmware", formatter_class=RawTextHelpFormatter
     )
+    update_parser.add_argument("addr", help="start address of memory bank to upload")
     update_parser.add_argument("update", help="name of application file")
     update_parser.set_defaults(
-        func=lambda args: print(hci.firmware_update(args.update)),
+        func=lambda args: print(hci.firmware_update(args.addr, args.update)),
         which="update",
     )
 
     #### RESET PARSER ####
     reset_parser = subparsers.add_parser(
-        "sysreset", help="reset the firmware", formatter_class=RawTextHelpFormatter
+        "sysreset", help="reset the device", formatter_class=RawTextHelpFormatter
     )
 
     reset_parser.set_defaults(
@@ -302,27 +305,15 @@ def main():
         which="sysreset",
     )
 
-    #### SET_FLASH_ADDR PARSER ####
-    set_addr_parser = subparsers.add_parser(
-        "setflash",
-        help="set the flash start address",
-        formatter_class=RawTextHelpFormatter,
-    )
-
-    set_addr_parser.add_argument("addr", help="start address of memory bank to upload")
-
-    set_addr_parser.set_defaults(
-        func=lambda args: print(hci.set_flash_addr(args.addr)),
-        which="setflash",
-    )
-
     #### ERASE PARSER ####
     erase_parser = subparsers.add_parser(
-        "erase", help="erase the flash", formatter_class=RawTextHelpFormatter
+        "erase", help="erase one page of the flash", formatter_class=RawTextHelpFormatter
     )
 
+    erase_parser.add_argument("addr", help="start address of memory bank to be erased")
+
     erase_parser.set_defaults(
-        func=lambda args: print(hci.erase_memory()),
+        func=lambda args: print(hci.erase_page(args.addr)),
         which="erase",
     )
 
