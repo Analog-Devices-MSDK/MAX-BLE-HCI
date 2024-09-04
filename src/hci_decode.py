@@ -90,7 +90,7 @@ def _parse_event_mask(command: CommandPacket):
 
     # clear all rfu bits
     mask = EventMask.from_int(event_mask)
-    mask_list = mask.as_str_list() 
+    mask_list = mask.as_str_list()
 
     print("[cyan]Event Mask\n-----------[/cyan]")
     for mask_str in mask_list:
