@@ -1,7 +1,5 @@
 name: test-installer
-on: 
-  push:
-    branches: ["main"]
+on:
   pull_request:
     branches: ["main"]
   workflow_dispatch:
@@ -10,23 +8,23 @@ jobs:
     name: runner / linux
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
-    - run: |
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: |
           sudo chmod +x install.sh
           ./install.sh
   test_windows:
     name: runner / windows
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}    
-    - name: Run Installer
-      shell: cmd
-      run: install.bat
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run Installer
+        shell: cmd
+        run: install.bat

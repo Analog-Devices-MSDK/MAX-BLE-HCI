@@ -1,5 +1,5 @@
 name: black-format-run
-on: 
+on:
   push:
     branches: ["main"]
   workflow_dispatch:
@@ -33,7 +33,7 @@ jobs:
 
   format_run:
     name: runner / black formatter run
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, btm-ci]
     needs: format_check
     if: ${{ needs.format_check.outputs.step_result == 'failure' }}
     steps:
@@ -47,7 +47,7 @@ jobs:
       - name: Push reformatted files
         uses: EndBug/add-and-commit@v9.0.1
         with:
-          add: '*'
-          message: 'black-format bot reformatting.'
+          add: "*"
+          message: "black-format bot reformatting."
           push: true
           commiter_name: EricB-ADI
