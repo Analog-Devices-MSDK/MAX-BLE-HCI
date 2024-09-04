@@ -59,6 +59,7 @@ import argparse
 import logging
 import os
 import signal
+import secrets
 
 # pylint: disable=unused-import,too-many-lines
 try:
@@ -76,6 +77,7 @@ from colorlog import ColoredFormatter
 from max_ble_hci import BleHci
 from max_ble_hci.constants import PayloadOption, PhyOption
 from max_ble_hci.data_params import AdvParams, EstablishConnParams, ScanParams
+from max_ble_hci import utils
 from max_ble_hci.utils import convert_str_address
 
 # pylint: enable=import-error
@@ -200,13 +202,7 @@ def main():
         default=False,
         help="Enable flow control Default: False",
     )
-    parser.add_argument(
-        "-m",
-        "--monitor-trace-port",
-        dest="monPort",
-        default=None,
-        help="Monitor Trace Msg Serial Port path or COM#. Default: None",
-    )
+
     parser.add_argument(
         "-i",
         "--id-tag",
@@ -259,7 +255,7 @@ def main():
 
     print("Bluetooth Low Energy HCI tool")
     print(f"Serial port: {args.serial_port}")
-    print(f"Monitor Trace Msg Serial Port: {args.monPort}")
+
     print(f"8N1 {args.baudRate}")
 
     commands = args.commands
@@ -360,6 +356,12 @@ def main():
         formatter_class=RawTextHelpFormatter,
     )
     adv_parser.add_argument(
+        "-r",
+        "--rand-addr",
+        action="store_true",
+        help="Start advertising using a randomly generated address",
+    )
+    adv_parser.add_argument(
         "-i",
         "--interval",
         dest="adv_interval",
@@ -378,20 +380,27 @@ def main():
         help="Disable advertising as a connectable device.",
     )
 
+    def start_adv(args):
+        if args.rand_addr:
+            rand_addr = secrets.randbits(6 * 8)
+            hci.set_address(rand_addr)
+            print(f"Advertising with random address {utils.address_int2str(rand_addr)}")
+
+        hci.start_advertising(
+            connect=args.connect,
+            adv_params=AdvParams(
+                adv_type=0 if args.connect else 0x3,
+                interval_min=args.adv_interval,
+                interval_max=args.adv_interval,
+            ),
+            adv_name=args.name,
+        )
+
     adv_parser.set_defaults(
-        func=lambda args: print(
-            hci.start_advertising(
-                connect=args.connect,
-                adv_params=AdvParams(
-                    adv_type=0 if args.connect else 0x3,
-                    interval_min=args.adv_interval,
-                    interval_max=args.adv_interval,
-                ),
-                adv_name=args.name,
-            )
-        ),
+        func=start_adv,
         which="adv",
     )
+
     adv_stop_parser = subparsers.add_parser(
         "adv-stop",
         help="Stop advertising",
@@ -995,6 +1004,24 @@ def main():
         formatter_class=RawTextHelpFormatter,
     )
     pwd_parser.set_defaults(func=lambda args: print(os.getcwd()))
+
+    # Create the 'make' subparser
+    make_parser = subparsers.add_parser(
+        "make",
+        help="Run make",
+        formatter_class=RawTextHelpFormatter,
+    )
+
+    make_parser.add_argument(
+        "-j",
+        "--jobs",
+        default="",
+    )
+    make_parser.add_argument("-C", "--directory", default=".")
+
+    make_parser.set_defaults(
+        func=lambda args: os.system(f"make -j {args.jobs} -C {args.directory}")
+    )
 
     run_parser = subparsers.add_parser(
         "shell",

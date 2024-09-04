@@ -114,6 +114,13 @@ class Software(unittest.TestCase):
         self.assertEqual(evt.evt_code, EventCode.COMMAND_COMPLETE)
         self.assertEqual(evt.get_return_params(), StatusCode.SUCCESS.value)
 
+        test_addr = 0x112233445566
+        expected_str_addr = "11:22:33:44:55:66"
+
+        result = utils.address_int2str(test_addr)
+
+        self.assertEqual(expected_str_addr, result)
+
 
 if __name__ == "__main__":
     unittest.main()
