@@ -155,13 +155,8 @@ def _run_input_cmds(commands, terminal):
     return True
 
 
-def main():
-    """
-    MAIN
-    """
-    # pylint: disable=too-many-locals,too-many-branches,too-many-statements
+def _init_cli():
     command_state = ""
-
     # Setup the signal handler to catch the ctrl-C
     signal.signal(signal.SIGINT, _signal_handler)
 
@@ -242,7 +237,15 @@ def main():
         Default: 3""",
     )
 
-    args = parser.parse_args()
+    return parser.parse_args()
+
+
+def main():
+    """
+    MAIN
+    """
+
+    args = _init_cli()
 
     hci = BleHci(
         args.serial_port,
@@ -271,8 +274,6 @@ def main():
             commands = startup.readlines()
             commands = [command.strip() for command in commands]
 
-        print(commands)
-
     elif commands:
         if len(commands) > 1:
             commands = " ".join(commands)
@@ -281,7 +282,8 @@ def main():
 
         commands = commands.split(";")
         commands = [x.strip() for x in commands]
-        print(commands)
+
+    if commands and len(commands):
         print("Startup commands: ")
         for command in commands:
             print(f"\t{command}")
@@ -364,9 +366,16 @@ def main():
 
     #### ADV PARSER ####
     adv_parser = subparsers.add_parser(
-        "adv-start",
+        "adv",
         help="Start advertising",
         formatter_class=RawTextHelpFormatter,
+    )
+    scan_parser.add_argument(
+        "enable",
+        default="1"
+        choices=("1", "0", "enable", "start" "en", "e", "disable", "dis", "d", "stop"),
+        help=f"""Enable or disable scanning
+        Default: enable""",
     )
     adv_parser.add_argument(
         "-i",
@@ -387,20 +396,19 @@ def main():
         help="Disable advertising as a connectable device.",
     )
 
-    adv_parser.set_defaults(
-        func=lambda args: print(
-            hci.start_advertising(
-                connect=args.connect,
-                adv_params=AdvParams(
-                    adv_type=0 if args.connect else 0x3,
-                    interval_min=args.adv_interval,
-                    interval_max=args.adv_interval,
-                ),
-                adv_name=args.name,
-            )
-        ),
-        which="adv",
-    )
+    def _adv_func(args):
+
+        if args.enable 
+        adv_params = AdvParams(
+            adv_type=0 if args.connect else 0x3,
+            interval_min=args.adv_interval,
+            interval_max=args.adv_interval,
+        )
+        hci.start_advertising(
+            connect=args.connect, adv_params=adv_params, adv_name=args.name
+        )
+
+    adv_parser.set_defaults(func=lambda args: _adv_func(args))
     adv_stop_parser = subparsers.add_parser(
         "adv-stop",
         help="Stop advertising",
@@ -411,9 +419,17 @@ def main():
     #### SCAN PARSER ####
     scan_parser = subparsers.add_parser(
         "scan",
-        help="Send scanning commands and print scan reports, ctrl-c to exit.",
+        help="Start scanning.",
         formatter_class=RawTextHelpFormatter,
     )
+    scan_parser.add_argument(
+        "enable",
+        nargs="?",
+        choices=("1", "0", "enable", "en", "e", "disable", "dis", "d"),
+        help=f"""Enable or disable scanning
+        Default: enable""",
+    )
+
     scan_parser.add_argument(
         "-i",
         "--interval",
@@ -423,15 +439,30 @@ def main():
         help=f"""Scanning interval in units of 0.625 ms, 16-bit hex number 0x0004 - 0x4000.
         Default: 0x{DEFAULT_SCAN_INTERVAL}""",
     )
-    scan_parser.set_defaults(
-        func=lambda args: print(
-            hci.set_scan_params(
-                scan_params=ScanParams(scan_interval=args.scan_interval)
+
+    def _scan_func(args):
+        enable = args.enable
+
+        if not enable:
+            enable = "1"
+
+        if enable == "1" or "e" == enable[0]:
+            logger.info("Enabling scanning")
+            print(
+                hci.set_scan_params(
+                    scan_params=ScanParams(scan_interval=args.scan_interval)
+                )
             )
-        )
-        or hci.enable_scanning(enable=True),
-        which="scan",
-    )
+            print(hci.enable_scanning(True))
+            pass
+        elif enable == "0" or "d" == enable[0]:
+            logger.info("Disabling scanning")
+            print(hci.enable_scanning(False))
+        else:
+            logger.error("Could not match command to enable or disable")
+            return
+
+    scan_parser.set_defaults(func=lambda args: _scan_func(args))
 
     #### INIT PARSER ####
     init_parser = subparsers.add_parser(
@@ -1051,7 +1082,7 @@ def main():
             logger.info("Port set, running input commands.")
             command_run = _run_input_cmds(commands, terminal)
 
-        command_str = input(f"{command_state}>>> ")
+        command_str = input(">>> ")
 
         # just an empty command
         if command_str in ("", os.linesep):
