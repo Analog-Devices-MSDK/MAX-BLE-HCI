@@ -224,7 +224,7 @@ def main():
 
     parser.add_argument(
         "--startup-script",
-        help="""Filepath to script to run commands to run on startup. 
+        help="""Filepath to to run startup commands. 
         Commands should be newline seperated""",
     )
 
