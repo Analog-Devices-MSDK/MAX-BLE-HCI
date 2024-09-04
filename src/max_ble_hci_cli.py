@@ -77,6 +77,8 @@ from max_ble_hci import BleHci
 from max_ble_hci.constants import PayloadOption, PhyOption
 from max_ble_hci.data_params import AdvParams, EstablishConnParams, ScanParams
 from max_ble_hci.utils import convert_str_address
+from max_ble_hci.packet_codes import EventMaskLE, StatusCode
+from max_ble_hci.hci_packets import EventPacket
 
 # pylint: enable=import-error
 
@@ -155,8 +157,12 @@ def _run_input_cmds(commands, terminal):
     return True
 
 
+def _scan_event_callback(packet: EventPacket):
+    print(packet)
+    
+
+
 def _init_cli():
-    command_state = ""
     # Setup the signal handler to catch the ctrl-C
     signal.signal(signal.SIGINT, _signal_handler)
 
@@ -228,13 +234,14 @@ def _init_cli():
         "--trace_level",
         dest="trace_level",
         type=int,
-        default=3,
+        default=2,
+        choices=(0, 1, 2, 3),
         help="""Set the trace level
         0: Error only
         1: Warning/Error
         2: Info/Warning/Error
         3: All messages
-        Default: 3""",
+        Default: 2""",
     )
 
     return parser.parse_args()
@@ -256,11 +263,17 @@ def main():
         flowcontrol=args.enable_flow_control,
         recover_on_power_loss=True,
     )
-    hci.logger.setLevel(args.trace_level)
+    trace_lut = {
+        0: "ERROR",
+        1: "WARNING",
+        2: "INFO",
+        3: "DEBUG",
+    }
+    trace_level = trace_lut[args.trace_level]
+    hci.logger.setLevel(trace_level)
 
     print("Bluetooth Low Energy HCI tool")
     print(f"Serial port: {args.serial_port}")
-    print(f"Monitor Trace Msg Serial Port: {args.monPort}")
     print(f"8N1 {args.baudRate}")
 
     commands = args.commands
@@ -291,6 +304,34 @@ def main():
     # Start the terminal argparse
     terminal = ArgumentParser(prog="", add_help=True)
     subparsers = terminal.add_subparsers()
+
+    log_level_parser = subparsers.add_parser(
+        "loglevel",
+        aliases=["ll"],
+    )
+
+    log_level_parser.add_argument(
+        "loglevel",
+        type=int,
+        nargs="?",
+        choices=(0, 1, 2, 3),
+        help="""Set the log level
+        0: Error only
+        1: Warning/Error
+        2: Info/Warning/Error
+        3: All messages
+        Default: 2""",
+    )
+
+    def _set_log_level(level):
+        if level is None:
+            print(f"Current Log level {hci.get_log_level()}")
+            return
+
+        trace_level = level
+        hci.set_log_level(trace_lut[trace_level])
+
+    log_level_parser.set_defaults(func=lambda args: _set_log_level(args.loglevel))
 
     clear_parser = subparsers.add_parser(
         "clear",
@@ -370,11 +411,11 @@ def main():
         help="Start advertising",
         formatter_class=RawTextHelpFormatter,
     )
-    scan_parser.add_argument(
+    adv_parser.add_argument(
         "enable",
-        default="1"
-        choices=("1", "0", "enable", "start" "en", "e", "disable", "dis", "d", "stop"),
-        help=f"""Enable or disable scanning
+        nargs="?",
+        choices=("1", "0", "enable", "start", "en", "disable", "dis", "stop"),
+        help=f"""Enable or disable advertising
         Default: enable""",
     )
     adv_parser.add_argument(
@@ -397,24 +438,29 @@ def main():
     )
 
     def _adv_func(args):
+        enable: str = args.enable
 
-        if args.enable 
-        adv_params = AdvParams(
-            adv_type=0 if args.connect else 0x3,
-            interval_min=args.adv_interval,
-            interval_max=args.adv_interval,
-        )
-        hci.start_advertising(
-            connect=args.connect, adv_params=adv_params, adv_name=args.name
-        )
+        if not enable:
+            enable = "1"
+
+        if enable in ("1", "en", "enable", "start"):
+            logger.info("Enabling advertising")
+            adv_params = AdvParams(
+                adv_type=0 if args.connect else 0x3,
+                interval_min=args.adv_interval,
+                interval_max=args.adv_interval,
+            )
+            hci.start_advertising(
+                connect=args.connect, adv_params=adv_params, adv_name=args.name
+            )
+        elif enable in ("0", "dis", "disable", "stop"):
+            logger.info("Disabling advertising")
+            print(hci.enable_adv(False))
+
+        else:
+            assert "All options should be covered"
 
     adv_parser.set_defaults(func=lambda args: _adv_func(args))
-    adv_stop_parser = subparsers.add_parser(
-        "adv-stop",
-        help="Stop advertising",
-        formatter_class=RawTextHelpFormatter,
-    )
-    adv_stop_parser.set_defaults(func=lambda _: print(hci.enable_adv(False)))
 
     #### SCAN PARSER ####
     scan_parser = subparsers.add_parser(
@@ -425,7 +471,7 @@ def main():
     scan_parser.add_argument(
         "enable",
         nargs="?",
-        choices=("1", "0", "enable", "en", "e", "disable", "dis", "d"),
+        choices=("1", "0", "enable", "en", "start", "disable", "dis", "stop"),
         help=f"""Enable or disable scanning
         Default: enable""",
     )
@@ -442,22 +488,36 @@ def main():
 
     def _scan_func(args):
         enable = args.enable
-
         if not enable:
             enable = "1"
 
-        if enable == "1" or "e" == enable[0]:
+        if enable in ("1", "en", "enable", "start"):
             logger.info("Enabling scanning")
-            print(
-                hci.set_scan_params(
-                    scan_params=ScanParams(scan_interval=args.scan_interval)
-                )
+
+            hci.set_event_callback(_scan_event_callback)
+
+            status = hci.set_scan_params(
+                scan_params=ScanParams(scan_interval=args.scan_interval)
             )
+            if status != StatusCode.SUCCESS:
+                logger.error("Failed to set scan params!")
+                return
+
+            # This gives scan reports, but causes the callback to spam the terminal with prints
+            hci.set_event_mask_le(
+                EventMaskLE.ADV_REPORT
+                | EventMaskLE.PERIODIC_ADV_REPORT
+                | EventMaskLE.EXTENDED_ADV_REPORT
+            )
+
             print(hci.enable_scanning(True))
-            pass
-        elif enable == "0" or "d" == enable[0]:
+            hci.set_log_level(logging.ERROR)
+
+        elif enable in ("0", "dis", "disable", "stop"):
+            hci.set_log_level("INFO")
             logger.info("Disabling scanning")
             print(hci.enable_scanning(False))
+            hci.disable_all_events()
         else:
             logger.error("Could not match command to enable or disable")
             return

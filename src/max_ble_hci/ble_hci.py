@@ -216,9 +216,9 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         elif ll_str == "CRITICAL":
             self.logger.setLevel(logging.CRITICAL)
         else:
-            self.logger.setLevel(logging.NOTSET)
+            self.logger.setLevel(logging.INFO)
             self.logger.warning(
-                "Invalid log level string: %s, level set to 'logging.NOTSET'", ll_str
+                "Invalid log level string: %s, level set to 'logging.INFO'", ll_str
             )
 
     def set_local_adv_name(self, adv_name: str, complete=True) -> StatusCode:
@@ -295,6 +295,10 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
             return status
 
         return self.set_event_mask_le(0)
+
+    # def enable_adv_report_events(self):
+
+    #     self.set_event_mask_le(EventMaskLE.ADV_REPORT | EventMaskLE.PERIODIC_ADV_REPORT | EventMaskLE.EXTENDED_ADV_REPORT)
 
     def start_advertising(
         self, connect: bool = True, adv_params: Optional[AdvParams] = None, adv_name=""

@@ -92,6 +92,9 @@ class BleStandardCmds:
     def __init__(self, port: SerialUartTransport, logger_name: str):
         self.port = port
         self.logger = get_formatted_logger(name=logger_name)
+        self.event_mask = None
+        self.event_mask_pg2 = None
+        self.event_mask_le = None
 
     def __enter__(self):
         self.port.start()
@@ -718,7 +721,10 @@ class BleStandardCmds:
         """
 
         if isinstance(mask, EventMask):
+            self.event_mask = mask
             mask = mask.value
+        else:
+            self.event_mask = EventMask(mask)
 
         params = to_le_nbyte_list(mask, 8)
         status = self.send_controller_command(
@@ -727,7 +733,11 @@ class BleStandardCmds:
 
         if mask_pg2 is not None:
             if isinstance(mask_pg2, EventMaskPage2):
+                self.event_mask_pg2 = mask_pg2
                 mask_pg2 = mask_pg2.value
+            else:
+                self.event_mask_pg2 = EventMaskPage2(mask_pg2)
+
             params = to_le_nbyte_list(mask_pg2, 8)
             return (
                 status,
@@ -759,9 +769,15 @@ class BleStandardCmds:
 
         """
         if isinstance(mask, EventMaskLE):
+            self.event_mask_le = mask
             mask = mask.value
+        else:
+            self.event_mask_le = EventMaskLE(mask)
 
-        self.set_event_mask(EventMask.LE_META)
+        if self.event_mask is None:
+            self.set_event_mask(EventMask.LE_META)
+        else:
+            self.set_event_mask(self.event_mask | EventMask.LE_META)
 
         params = to_le_nbyte_list(mask, 8)
         return self.send_le_controller_command(
