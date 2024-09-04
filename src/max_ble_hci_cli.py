@@ -179,7 +179,7 @@ def main():
         description=cli_description, formatter_class=RawTextHelpFormatter
     )
 
-    parser.add_argument("--version", action="version", version="%(prog)s 1.3.0")
+    parser.add_argument("--version", action="version", version="%(prog)s 1.4.0")
 
     parser.add_argument("serial_port", help="Serial port path or COM#")
     parser.add_argument(
@@ -224,7 +224,7 @@ def main():
 
     parser.add_argument(
         "--startup-script",
-        help="""Filepath to to run startup commands. 
+        help="""Filepath to to run startup commands.
         Commands should be newline seperated""",
     )
 
