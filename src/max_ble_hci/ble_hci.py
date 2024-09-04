@@ -201,7 +201,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
 
         """
         if isinstance(level, int):
-            self.logger.setLevel(level)
+            self.logger.setLevel(level) 
             return
 
         ll_str = level.upper()
