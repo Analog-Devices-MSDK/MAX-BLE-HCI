@@ -62,20 +62,62 @@ hci.reset()
 By default, the CLI capable of driving the BLE-HCI is installed as part of the package and can be accessed by running
 
 ```bash
-max_ble_hci --version
+max_ble_hci -h
+usage: max_ble_hci [-h] [--version] [-b BAUDRATE] [-efc] [-m MONPORT] [-i IDTAG] [-c [COMMANDS ...]] [--startup-script STARTUP_SCRIPT] [-t TRACE_LEVEL]
+                   serial_port
+
+        Bluetooth Low Energy HCI tool.
+        This tool is used in tandem with the BLE controller examples. 
+        This tool sends HCI commands through the serial port to the target device. 
+        It will receive and print the HCI events received from the target device.
+        Serial port is configured as 8N1, no flow control, default baud rate of 115200
+        
+
+positional arguments:
+  serial_port           Serial port path or COM#
+
+options:
+  -h, --help            show this help message and exit
+  --version             show program's version number and exit
+  -b BAUDRATE, --baud BAUDRATE
+                        Serial port baud rate. Default: 115200
+  -efc, --enable-flow-control
+                        Enable flow control Default: False
+  -m MONPORT, --monitor-trace-port MONPORT
+                        Monitor Trace Msg Serial Port path or COM#. Default: None
+  -i IDTAG, --id-tag IDTAG
+                        Board ID tag for printing trace messages. Default: None
+  -c [COMMANDS ...], --commands [COMMANDS ...]
+                        Commands to run on startup.
+                                If more than 1, separate commands with a semicolon (;).
+  --startup-script STARTUP_SCRIPT
+                        Filepath to to run startup commands. 
+                                Commands should be newline seperated
+  -t TRACE_LEVEL, --trace_level TRACE_LEVEL
+                        Set the trace level
+                                0: Error only
+                                1: Warning/Error
+                                2: Info/Warning/Error
+                                3: All messages
+                                Default: 3
 ```
 
 The cli requires a serial port to connect the HCI to and is passed in through the command line.
 Once connected, you can type the help command as such, and begin to explore the CLI.
 
 ```bash
+>>> help
 usage:  [-h]
-        {clear,cls,addr,memstats,adv-start,adv-stop,scan,init,data-len,send-acl,sink-acl,adv-stats,as,scan-stats,ss,conn-stats,cs,test-stats,ts,rssi,ls,pwd,run,reset,tx-test,tx,txtestvs,txvs,rx-test,rx,rx-test-vs,rxvs,end-test,end,reset-ts,rsts,reset-cs,rscs,reset-adv-stats,rsas,reset-scan-stats,rsss,set-phy,sp,tx-power,txp,discon,dc,set-chmap,cmd,exit,quit,q,help,h}
+        {clear,cls,update,sysreset,setflash,erase,addr,memstats,adv-start,adv-stop,scan,init,data-len,send-acl,sink-acl,adv-stats,as,scan-stats,ss,conn-stats,cs,test-stats,ts,rssi,reset,tx-test,tx,txtestvs,txvs,rx-test,rx,rx-test-vs,rxvs,end-test,end,reset-ts,rsts,reset-cs,rscs,reset-adv-stats,rsas,reset-scan-stats,rsss,set-phy,sp,tx-power,txp,discon,dc,set-chmap,cmd,exit,quit,q,ls,cd,pwd,shell,run,help,h}
         ...
 
 positional arguments:
-  {clear,cls,addr,memstats,adv-start,adv-stop,scan,init,data-len,send-acl,sink-acl,adv-stats,as,scan-stats,ss,conn-stats,cs,test-stats,ts,rssi,ls,pwd,run,reset,tx-test,tx,txtestvs,txvs,rx-test,rx,rx-test-vs,rxvs,end-test,end,reset-ts,rsts,reset-cs,rscs,reset-adv-stats,rsas,reset-scan-stats,rsss,set-phy,sp,tx-power,txp,discon,dc,set-chmap,cmd,exit,quit,q,help,h}
+  {clear,cls,update,sysreset,setflash,erase,addr,memstats,adv-start,adv-stop,scan,init,data-len,send-acl,sink-acl,adv-stats,as,scan-stats,ss,conn-stats,cs,test-stats,ts,rssi,reset,tx-test,tx,txtestvs,txvs,rx-test,rx,rx-test-vs,rxvs,end-test,end,reset-ts,rsts,reset-cs,rscs,reset-adv-stats,rsas,reset-scan-stats,rsss,set-phy,sp,tx-power,txp,discon,dc,set-chmap,cmd,exit,quit,q,ls,cd,pwd,shell,run,help,h}
     clear (cls)         Clear the screen
+    update              update the firmware
+    sysreset            reset the firmware
+    setflash            set the flash start address
+    erase               erase the flash
     addr                Set the device address.
     memstats            Get BLE stack memory usage statistics
     adv-start           Start advertising
@@ -90,9 +132,6 @@ positional arguments:
     conn-stats (cs)     Get the connection stats
     test-stats (ts)     Get the test stats
     rssi                Get an RSSI sample using CCA
-    ls                  List directory
-    pwd                 print working directory
-    run                 run command via os
     reset               Sends an HCI reset command
     tx-test (tx)        Execute the transmitter test.
     txtestvs (txvs)     Execute the vendor-specific transmitter test
@@ -111,11 +150,41 @@ positional arguments:
     set-chmap           Set the connection channel map to a given channel.
     cmd                 Send raw HCI command
     exit (quit, q)      Exit the program
+    ls                  List directory
+    cd                  change working directory
+    pwd                 print working directory
+    shell               run command via os shell
+    run                 run command via os
     help (h)            Show help message
 
 options:
   -h, --help            show this help message and exit
+
+options:
+  -h, --help            show this help message and exit
 ```
+
+### Scripting
+
+Scripts can be used at startup and during runtime. The script should be a text file with the newline seperated commands entered as you would using the cli directly.
+
+#### Example (init.txt)
+
+``` txt
+reset
+addr 00:11:22:33:44:55
+```
+
+```bash
+max_ble_hci --startup-script init.txt
+```
+
+Or while in the CLI
+
+```bash
+>>> run init.txt
+```
+
 
 ## Contributing
 
