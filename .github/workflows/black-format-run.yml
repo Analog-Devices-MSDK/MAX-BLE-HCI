@@ -43,11 +43,6 @@ jobs:
         id: action_black
         with:
           black_args: ". --exclude .github"
-      # - name: Push reformatted files
-      #   run: |
-      #     git add -A 
-      #     git commit -m "black-format bot reformatting."
-      #     git push
 
       - name: Push reformatted files
         uses: EndBug/add-and-commit@v9.0.1
