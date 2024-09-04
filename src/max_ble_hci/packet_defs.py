@@ -573,6 +573,7 @@ class LEControllerOCF(Enum):
 
 class VendorSpecificOCF(Enum):
     """ADI Vendor Specific group Opcode Command Field values."""
+
     DEVICE_RESET = 0x3C2
     """reset the device"""
 

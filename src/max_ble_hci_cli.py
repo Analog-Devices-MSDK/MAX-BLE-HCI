@@ -83,8 +83,6 @@ from max_ble_hci.utils import convert_str_address
 # pylint: enable=import-error
 
 
-
-
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
@@ -144,6 +142,7 @@ def _signal_handler(_signal, _fname):  # pylint: disable=unused-argument
 def _run_input_cmds(commands, terminal):
     for cmd in commands:
         try:
+            print(cmd)
             # pylint: disable=used-before-assignment
             _args = terminal.parse_args(cmd.split())
             _args.func(_args)
@@ -321,7 +320,9 @@ def main():
 
     #### ERASE PARSER ####
     erase_parser = subparsers.add_parser(
-        "erase", help="erase one page of the flash", formatter_class=RawTextHelpFormatter
+        "erase",
+        help="erase one page of the flash",
+        formatter_class=RawTextHelpFormatter,
     )
 
     erase_parser.add_argument("addr", help="start address of memory bank to be erased")
@@ -1025,7 +1026,7 @@ def main():
 
     run_parser = subparsers.add_parser(
         "shell",
-        help="run command via os shell",
+        help="run command sript",
         formatter_class=RawTextHelpFormatter,
     )
     run_parser.add_argument("shell", nargs="+")
@@ -1037,6 +1038,7 @@ def main():
             commands = script.readlines()
 
         if commands:
+            commands = [command.strip() for command in commands if command != ""]
             _run_input_cmds(commands, terminal)
 
     run_parser = subparsers.add_parser(
