@@ -55,9 +55,23 @@ ad_types
 Description: Advertising data types
 
 """
+from __future__ import annotations
+from dataclasses import dataclass
+from enum import Enum1
+from typing import List
+import utils
+class AdvEventType(Enum):
+    ADV_IND = 0
+    ADV_DIRECT_IND = 1
+    ADV_SCAN_IND = 2
+    ADV_NONCONN_IND = 3
+    SCAN_RSP = 4
 
-from enum import Enum
-
+class AdressType(Enum):
+    PUB_DEV_ADDRESS = 0
+    RAND_DEV_ADDR = 1
+    PUBLIC_ID_ADDR = 2
+    RAND_ID_ADDR = 3
 
 class ADTypes(Enum):
     """Advertising data types"""
@@ -112,3 +126,51 @@ class ADTypes(Enum):
     ELECTRONIC_SHELF_LABEL = 0x34
     INFO_DATA_3D = 0x3D
     MANUFACTURER_SPEC_DATA = 0xFF
+
+@dataclass
+class AdvReport:
+
+    event_type: AdvEventType 
+    address_type: AdressType
+    address:str
+    data:list[list]
+    rssi:int
+
+    @staticmethod 
+    def from_bytes(data:bytes) -> List[AdvReport]:
+        reports = []
+
+
+        # conver to ints
+        data = list(data)
+
+        num_reports = data[0]
+        EVT_TYPE_SIZE = 1
+        ADDR_TYPE_SIZE = 1
+        ADDR_SIZE = 6
+        LEN_SIZE = 1
+
+        for i in range(num_reports):
+            offset = 2 + i
+            evt_type = AdvEventType(data[offset])
+            offset += num_reports * EVT_TYPE_SIZE
+            addr_type = AdressType(data[offset])
+            offset += num_reports *ADDR_TYPE_SIZE
+            address = data[offset:offset+ADDR_SIZE]
+            address = ":".join(map(str, address))
+            offset += ADDR_SIZE * num_reports
+            data_len = data[offset]
+            offset += LEN_SIZE * num_reports
+            report_data = data[offset:offset+data_len]
+
+
+            report = AdvReport(event_type=evt_type, 
+                address_type=addr_type,
+                address=address,
+                data=report_data)
+                
+            reports.append(report)
+
+
+
+        return reports

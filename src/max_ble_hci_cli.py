@@ -77,9 +77,9 @@ from max_ble_hci import BleHci
 from max_ble_hci.constants import PayloadOption, PhyOption
 from max_ble_hci.data_params import AdvParams, EstablishConnParams, ScanParams
 from max_ble_hci.utils import convert_str_address
-from max_ble_hci.packet_codes import EventMaskLE, StatusCode
+from max_ble_hci.packet_codes import EventMaskLE, StatusCode, EventCode, EventSubcode
 from max_ble_hci.hci_packets import EventPacket
-
+from max_ble_hci.ad_types import ADTypes
 # pylint: enable=import-error
 
 
@@ -158,7 +158,14 @@ def _run_input_cmds(commands, terminal):
 
 
 def _scan_event_callback(packet: EventPacket):
-    print(packet)
+
+    if packet.evt_code != EventCode.LE_META and packet.evt_subcode != EventSubcode.ADVERTISING_REPORT:
+        return
+    num_reports = int(packet.evt_params[0])
+    print(num_reports)
+
+
+    pass
     
 
 
@@ -1155,7 +1162,7 @@ def main():
             except AttributeError as err:
                 logger.error(str(err))
                 continue
-
+        
         except SystemExit as err:
             if err.code == EXIT_FUNC_MAGIC:
                 sys.exit(0)
