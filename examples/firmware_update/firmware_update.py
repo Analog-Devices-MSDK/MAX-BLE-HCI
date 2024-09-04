@@ -74,25 +74,25 @@ def main():
     erased_size = 0x38000
 
     result = None
-    
+
     while erased_size > 0:
         result = conn.erase_page(address_to_erase)
-        if (result != StatusCode.SUCCESS):
+        if result != StatusCode.SUCCESS:
             print(result)
             return
         erased_size -= PAGE_SIZE
         address_to_erase += PAGE_SIZE
-    
+
     result = conn.firmware_update(0x10040000, "hello_world.bin")
-    if (result != StatusCode.SUCCESS):
-            print(result)
-            return
+    if result != StatusCode.SUCCESS:
+        print(result)
+        return
 
     # reset the device to reload the uploaded firmware
     result = conn.reset_device()
-    if (result != StatusCode.SUCCESS):
-            print(result)
-            return
+    if result != StatusCode.SUCCESS:
+        print(result)
+        return
 
 
 if __name__ == "__main__":
