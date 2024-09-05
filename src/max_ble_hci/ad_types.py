@@ -82,16 +82,6 @@ class AddressType(Enum):
     RAND_ID_ADDR = 3
 
 
-class AdvEventType(Enum):
-    """Adv Event Type"""
-
-    ADV_IND = 0
-    ADV_DIRECT_IND = 1
-    ADV_SCAN_IND = 2
-    ADV_NONCONN_IND = 3
-    SCAN_RSP = 4
-
-
 class ADType(Enum):
     """Advertising data types"""
 
@@ -158,6 +148,18 @@ class AdvReport:
 
     @staticmethod
     def from_bytes(data: bytes) -> List[AdvReport]:
+        """Raw advertising report data to list of advertising reports
+
+        Parameters
+        ----------
+        data : bytes
+            Raw advertising report
+
+        Returns
+        -------
+        List[AdvReport]
+            List of deserialized advertising reports
+        """
         data_bytes = data
         # convert to ints
         data = list(data)

@@ -791,9 +791,23 @@ class BleStandardCmds:
         )
 
     def clear_whitelist(self) -> StatusCode:
+        """Clear whitelist entirely
+
+        Returns
+        -------
+        StatusCode
+            status of command
+        """
         return self.send_le_controller_command(OCF.LE_CONTROLLER.CLEAR_WHITE_LIST)
 
     def read_whitelist_size(self) -> Union[StatusCode, int]:
+        """Read total spaces in white list
+
+        Returns
+        -------
+        int
+            number of places in whitelist
+        """
         params: EventPacket = self.send_le_controller_command(
             OCF.LE_CONTROLLER.READ_WHITE_LIST_SIZE, return_evt=True
         )
@@ -834,6 +848,23 @@ class BleStandardCmds:
     def add_device_to_whitelist(
         self, addr_type: Union[AddressType, int], address: Union[str, int, List[int]]
     ) -> StatusCode:
+        """Add device to whitelist
+
+        Parameters
+        ----------
+        addr_type : Union[AddressType, int]
+            Address type of devcie
+        address : Union[str, int, List[int]]
+            Address of device
+            - str: aa:bb:cc:dd:ee
+            - List[int]: [aa, bb, cc, dd, ee, ff]
+            - int: 733295205870
+
+        Returns
+        -------
+        StatusCode
+            status of command
+        """
         params = self._form_whitelist_cmd_params(addr_type=addr_type, address=address)
 
         return self.send_le_controller_command(
@@ -843,6 +874,23 @@ class BleStandardCmds:
     def remove_device_to_whitelist(
         self, addr_type: Union[AddressType, int], address: Union[str, int, List[int]]
     ) -> StatusCode:
+        """Remove device from whitelist
+
+        Parameters
+        ----------
+        addr_type : Union[AddressType, int]
+            Address type of devcie
+        address : Union[str, int, List[int]]
+            Address of device
+            - str: aa:bb:cc:dd:ee
+            - List[int]: [aa, bb, cc, dd, ee, ff]
+            - int: 733295205870
+        Returns
+        -------
+        StatusCode
+            status of command
+
+        """
         params = self._form_whitelist_cmd_params(addr_type=addr_type, address=address)
 
         return self.send_le_controller_command(

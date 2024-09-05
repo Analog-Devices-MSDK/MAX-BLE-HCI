@@ -296,10 +296,6 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
 
         return self.set_event_mask_le(0)
 
-    # def enable_adv_report_events(self):
-
-    #     self.set_event_mask_le(EventMaskLE.ADV_REPORT | EventMaskLE.PERIODIC_ADV_REPORT | EventMaskLE.EXTENDED_ADV_REPORT)
-
     def start_advertising(
         self, connect: bool = True, adv_params: Optional[AdvParams] = None, adv_name=""
     ) -> StatusCode:

@@ -208,39 +208,12 @@ def address_int2str(addr: int) -> str:
         Address converted to str (ex : 00:11:22:33:44:55)
     """
     addr_str = ""
-    NUM_BYTES = 6
-    for i in range(NUM_BYTES):
-        idx = (NUM_BYTES - 1) - i
+    num_bytes = 6
+    for i in range(num_bytes):
+        idx = (num_bytes - 1) - i
         bvalue = (addr >> (idx * 8)) & 0xFF
 
-        if i < NUM_BYTES - 1:
-            addr_str += f"{bvalue:02X}:"
-        else:
-            addr_str += f"{bvalue:02X}"
-
-    return addr_str
-
-
-def address_int2str(addr: int) -> str:
-    """Convert address as int to str
-
-    Parameters
-    ----------
-    addr : int
-        Address. Ex: 0x001122334455
-
-    Returns
-    -------
-    str
-        Address converted to str (ex : 00:11:22:33:44:55)
-    """
-    addr_str = ""
-    addr_len = 6
-    for i in range(addr_len):
-        idx = (addr_len - 1) - i
-        bvalue = (addr >> (idx * 8)) & 0xFF
-
-        if i < addr_len - 1:
+        if i < num_bytes - 1:
             addr_str += f"{bvalue:02X}:"
         else:
             addr_str += f"{bvalue:02X}"
@@ -249,6 +222,18 @@ def address_int2str(addr: int) -> str:
 
 
 def address_int2list(addr: int):
+    """Address converted from int to list of ints
+
+    Parameters
+    ----------
+    addr : int
+        _description_
+
+    Returns
+    -------
+    _type_
+        _description_
+    """
     addr_str = ""
     addr_len = 6
     for i in range(addr_len):
@@ -283,7 +268,21 @@ def byte_length(data: int) -> int:
     return (data.bit_length() + 7) // 8
 
 
-def unsigned_to_signed(unsigned_value, bit_length):
+def unsigned_to_signed(unsigned_value: int, bit_length: int) -> int:
+    """Unsigned int to signed int
+
+    Parameters
+    ----------
+    unsigned_value : int
+        Unsigned value to convert to signed
+    bit_length : _type_
+        Number of bits in value. (Ex 135 needs 8-bits)
+
+    Returns
+    -------
+    int
+        Value converted to sign
+    """
     # Calculate the maximum unsigned value for the given bit length
     max_unsigned = 2**bit_length
     max_signed = 2 ** (bit_length - 1)
