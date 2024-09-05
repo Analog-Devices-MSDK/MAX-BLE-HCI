@@ -79,7 +79,7 @@ from max_ble_hci.data_params import AdvParams, EstablishConnParams, ScanParams
 from max_ble_hci.utils import convert_str_address
 from max_ble_hci.packet_codes import EventMaskLE, StatusCode, EventCode, EventSubcode
 from max_ble_hci.hci_packets import EventPacket
-from max_ble_hci.ad_types import ADTypes
+from max_ble_hci.ad_types import ADTypes, AdvReport
 # pylint: enable=import-error
 
 
@@ -161,8 +161,13 @@ def _scan_event_callback(packet: EventPacket):
 
     if packet.evt_code != EventCode.LE_META and packet.evt_subcode != EventSubcode.ADVERTISING_REPORT:
         return
-    num_reports = int(packet.evt_params[0])
-    print(num_reports)
+
+    # try:
+    reports = AdvReport.from_bytes(packet.evt_params)
+    for i, report in enumerate(reports):
+        print(report)
+    # except:
+    #     print(packet.evt_params)
 
 
     pass
