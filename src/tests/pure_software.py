@@ -100,7 +100,7 @@ class Software(unittest.TestCase):
         ans = utils.can_represent_as_bytes(bad_data)
         self.assertFalse(ans)
 
-        address = utils.convert_str_address("00:11:22:33:44:55")
+        address = utils.address_str2int("00:11:22:33:44:55")
         self.assertEqual(address, 0x001122334455)
 
         self.assertEqual(utils.byte_length(0), 1)

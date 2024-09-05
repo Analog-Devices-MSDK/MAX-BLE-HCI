@@ -178,7 +178,7 @@ def can_represent_as_bytes(data: List[int]) -> bool:
     return True
 
 
-def convert_str_address(addr: str) -> int:
+def address_str2int(addr: str) -> int:
     """Convert address as string to integer usable by HCI
 
     Parameters
@@ -207,6 +207,21 @@ def address_int2str(addr: int) -> str:
     str
         Address converted to str (ex : 00:11:22:33:44:55)
     """
+    addr_str = ""
+    addr_len = 6
+    for i in range(addr_len):
+        idx = (addr_len - 1) - i
+        bvalue = (addr >> (idx * 8)) & 0xFF
+
+        if i < addr_len - 1:
+            addr_str += f"{bvalue:02X}:"
+        else:
+            addr_str += f"{bvalue:02X}"
+
+    return addr_str
+
+
+def address_int2list(addr: int):
     addr_str = ""
     addr_len = 6
     for i in range(addr_len):

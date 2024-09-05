@@ -70,7 +70,7 @@ from .data_params import (
 from .hci_packets import CommandPacket, EventPacket, byte_length
 from .packet_codes import StatusCode
 from .packet_defs import OCF, OGF
-from .utils import convert_str_address, to_le_nbyte_list
+from .utils import address_str2int, to_le_nbyte_list
 
 
 class VendorSpecificCmds:
@@ -173,7 +173,7 @@ class VendorSpecificCmds:
         """
 
         if isinstance(addr, str):
-            addr = convert_str_address(addr)
+            addr = address_str2int(addr)
 
         param = to_le_nbyte_list(addr, 4)
         return self.send_vs_command(OCF.VENDOR_SPEC.PAGE_ERASE, params=param)
@@ -200,7 +200,7 @@ class VendorSpecificCmds:
         """
 
         if isinstance(addr, str):
-            addr = convert_str_address(addr)
+            addr = address_str2int(addr)
 
         param = to_le_nbyte_list(addr, 4) + chunk
         return self.send_vs_command(OCF.VENDOR_SPEC.WRITE_FLASH, params=param)
@@ -225,7 +225,7 @@ class VendorSpecificCmds:
         """
 
         if isinstance(addr, str):
-            addr = convert_str_address(addr)
+            addr = address_str2int(addr)
 
         params = to_le_nbyte_list(addr, 6)
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_BD_ADDR, params=params)

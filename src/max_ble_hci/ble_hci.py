@@ -63,7 +63,7 @@ from .constants import ADI_PORT_BAUD_RATE
 from .data_params import AdvParams, EstablishConnParams
 from .hci_packets import AsyncPacket, CommandPacket, EventPacket
 from .packet_codes import EventMask, EventMaskPage2, EventMaskLE, StatusCode
-from .utils import convert_str_address
+from .utils import address_str2int
 from .vendor_spec_cmds import VendorSpecificCmds
 
 
@@ -407,7 +407,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
                     "Either connection parameters or address must be provided."
                 )
             if isinstance(addr, str):
-                addr = convert_str_address(addr)
+                addr = address_str2int(addr)
 
             if max((addr.bit_length() + 7) // 8, 1) > 6:
                 raise ValueError(
@@ -450,7 +450,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         """
 
         if isinstance(addr, str):
-            addr = convert_str_address(addr)
+            addr = address_str2int(addr)
 
         with open(name, mode="rb") as file:
             data = file.read()

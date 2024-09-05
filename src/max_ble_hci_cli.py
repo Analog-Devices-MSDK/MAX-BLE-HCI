@@ -78,7 +78,7 @@ from max_ble_hci import BleHci
 from max_ble_hci.constants import PayloadOption, PhyOption
 from max_ble_hci.data_params import AdvParams, EstablishConnParams, ScanParams
 from max_ble_hci import utils
-from max_ble_hci.utils import convert_str_address
+from max_ble_hci.utils import address_str2int
 
 # pylint: enable=import-error
 
@@ -464,11 +464,11 @@ def main():
     init_parser.set_defaults(
         func=lambda args: print(
             hci.init_connection(
-                addr=convert_str_address(args.addr[::-1]),
+                addr=address_str2int(args.addr[::-1]),
                 interval=args.conn_interval,
                 sup_timeout=args.sup_timeout,
                 conn_params=EstablishConnParams(
-                    peer_addr=convert_str_address(args.addr),
+                    peer_addr=address_str2int(args.addr),
                     conn_interval_min=args.conn_interval,
                     conn_interval_max=args.conn_interval,
                 ),
@@ -953,6 +953,52 @@ def main():
         func=lambda args: hci.set_channel_map(channels=args.mask, handle=args.handle),
     )
 
+    def _whitelist_func(args):
+        method = args.method
+        if method == "size":
+            wl_size = hci.read_whitelist_size()
+            print(f"Whitelist size: {wl_size}")
+            return
+        elif method == "clear":
+            print(hci.clear_whitelist())
+            return
+
+        if len(args.args) != 2:
+            raise ValueError(
+                f"Incorrect number of arguments. Expected 2 got {len(args.args)}"
+            )
+
+        addr_type = int(args.args[0])
+        address = args.args[1]
+
+        if method == "add":
+            print(hci.add_device_to_whitelist(addr_type=addr_type, address=address))
+        else:
+            print(hci.clear_whitelist(addr_type=addr_type, address=address))
+
+    whitelist_parser = subparsers.add_parser(
+        "whitelist",
+        aliases=["wl"],
+        help="Add, remove devices from whitelist as well as clear",
+    )
+    whitelist_parser.add_argument(
+        "method",
+        nargs="?",
+        default="size",
+        type=str,
+        choices=("add", "remove", "clear", "size"),
+    )
+    wl_args_help = """Additional whitelist parameters depending on method.
+    add and remove require positional arguments <Address Type> <address>
+    adress: 6 bytes device address (Ex: xx:xx:xx:xx:xx:xx)
+    AddressType:
+    \tPublic Device Address 0
+    \tRandom Device Address 1
+    \tPublic ID Address 2 
+    \tRandom ID Address 3
+    """
+    whitelist_parser.add_argument("args", nargs="*", type=str, help=wl_args_help)
+    whitelist_parser.set_defaults(func=_whitelist_func)
     cmd_parser = subparsers.add_parser(
         "cmd", help="Send raw HCI command", formatter_class=RawTextHelpFormatter
     )
