@@ -59,6 +59,7 @@ import argparse
 import logging
 import os
 import signal
+import secrets
 
 # pylint: disable=unused-import,too-many-lines
 try:
@@ -80,6 +81,9 @@ from max_ble_hci.utils import convert_str_address
 from max_ble_hci.packet_codes import EventMaskLE, StatusCode, EventCode, EventSubcode
 from max_ble_hci.hci_packets import EventPacket
 from max_ble_hci.ad_types import ADTypes, AdvReport
+from max_ble_hci import utils
+from max_ble_hci.utils import address_str2int
+
 # pylint: enable=import-error
 
 
@@ -142,6 +146,7 @@ def _signal_handler(_signal, _fname):  # pylint: disable=unused-argument
 def _run_input_cmds(commands, terminal):
     for cmd in commands:
         try:
+            print(cmd)
             # pylint: disable=used-before-assignment
             _args = terminal.parse_args(cmd.split())
             _args.func(_args)
@@ -211,13 +216,7 @@ def _init_cli():
         default=False,
         help="Enable flow control Default: False",
     )
-    parser.add_argument(
-        "-m",
-        "--monitor-trace-port",
-        dest="monPort",
-        default=None,
-        help="Monitor Trace Msg Serial Port path or COM#. Default: None",
-    )
+
     parser.add_argument(
         "-i",
         "--id-tag",
@@ -299,6 +298,8 @@ def main():
             commands = startup.readlines()
             commands = [command.strip() for command in commands]
 
+        print(commands)
+
     elif commands:
         if len(commands) > 1:
             commands = " ".join(commands)
@@ -307,8 +308,7 @@ def main():
 
         commands = commands.split(";")
         commands = [x.strip() for x in commands]
-
-    if commands and len(commands):
+        print(commands)
         print("Startup commands: ")
         for command in commands:
             print(f"\t{command}")
@@ -359,15 +359,16 @@ def main():
     update_parser = subparsers.add_parser(
         "update", help="update the firmware", formatter_class=RawTextHelpFormatter
     )
+    update_parser.add_argument("addr", help="start address of memory bank to upload")
     update_parser.add_argument("update", help="name of application file")
     update_parser.set_defaults(
-        func=lambda args: print(hci.firmware_update(args.update)),
+        func=lambda args: print(hci.firmware_update(args.addr, args.update)),
         which="update",
     )
 
     #### RESET PARSER ####
     reset_parser = subparsers.add_parser(
-        "sysreset", help="reset the firmware", formatter_class=RawTextHelpFormatter
+        "sysreset", help="reset the device", formatter_class=RawTextHelpFormatter
     )
 
     reset_parser.set_defaults(
@@ -375,27 +376,17 @@ def main():
         which="sysreset",
     )
 
-    #### SET_FLASH_ADDR PARSER ####
-    set_addr_parser = subparsers.add_parser(
-        "setflash",
-        help="set the flash start address",
+    #### ERASE PARSER ####
+    erase_parser = subparsers.add_parser(
+        "erase",
+        help="erase one page of the flash",
         formatter_class=RawTextHelpFormatter,
     )
 
-    set_addr_parser.add_argument("addr", help="start address of memory bank to upload")
-
-    set_addr_parser.set_defaults(
-        func=lambda args: print(hci.set_flash_addr(args.addr)),
-        which="setflash",
-    )
-
-    #### ERASE PARSER ####
-    erase_parser = subparsers.add_parser(
-        "erase", help="erase the flash", formatter_class=RawTextHelpFormatter
-    )
+    erase_parser.add_argument("addr", help="start address of memory bank to be erased")
 
     erase_parser.set_defaults(
-        func=lambda args: print(hci.erase_memory()),
+        func=lambda args: print(hci.erase_page(args.addr)),
         which="erase",
     )
 
@@ -448,7 +439,12 @@ def main():
         action="store_false",
         help="Disable advertising as a connectable device.",
     )
-
+    adv_parser.add_argument(
+        "-r",
+        "--rand-addr",
+        action="store_true",
+        help="Start advertising using a randomly generated address",
+    )
     def _adv_func(args):
         enable: str = args.enable
 
@@ -456,6 +452,13 @@ def main():
             enable = "1"
 
         if enable in ("1", "en", "enable", "start"):
+
+            if args.rand_addr:
+                rand_addr = secrets.randbits(48)
+                logger.info("Advertising with random adrress %s", utils.address_int2str(rand_addr))
+                hci.set_address(rand_addr)
+                
+
             logger.info("Enabling advertising")
             adv_params = AdvParams(
                 adv_type=0 if args.connect else 0x3,
@@ -566,11 +569,11 @@ def main():
     init_parser.set_defaults(
         func=lambda args: print(
             hci.init_connection(
-                addr=convert_str_address(args.addr[::-1]),
+                addr=address_str2int(args.addr[::-1]),
                 interval=args.conn_interval,
                 sup_timeout=args.sup_timeout,
                 conn_params=EstablishConnParams(
-                    peer_addr=convert_str_address(args.addr),
+                    peer_addr=address_str2int(args.addr),
                     conn_interval_min=args.conn_interval,
                     conn_interval_max=args.conn_interval,
                 ),
@@ -1055,6 +1058,52 @@ def main():
         func=lambda args: hci.set_channel_map(channels=args.mask, handle=args.handle),
     )
 
+    def _whitelist_func(args):
+        method = args.method
+        if method == "size":
+            wl_size = hci.read_whitelist_size()
+            print(f"Whitelist size: {wl_size}")
+            return
+        elif method == "clear":
+            print(hci.clear_whitelist())
+            return
+
+        if len(args.args) != 2:
+            raise ValueError(
+                f"Incorrect number of arguments. Expected 2 got {len(args.args)}"
+            )
+
+        addr_type = int(args.args[0])
+        address = args.args[1]
+
+        if method == "add":
+            print(hci.add_device_to_whitelist(addr_type=addr_type, address=address))
+        else:
+            print(hci.clear_whitelist(addr_type=addr_type, address=address))
+
+    whitelist_parser = subparsers.add_parser(
+        "whitelist",
+        aliases=["wl"],
+        help="Add, remove devices from whitelist as well as clear",
+    )
+    whitelist_parser.add_argument(
+        "method",
+        nargs="?",
+        default="size",
+        type=str,
+        choices=("add", "remove", "clear", "size"),
+    )
+    wl_args_help = """Additional whitelist parameters depending on method.
+    add and remove require positional arguments <Address Type> <address>
+    adress: 6 bytes device address (Ex: xx:xx:xx:xx:xx:xx)
+    AddressType:
+    \tPublic Device Address 0
+    \tRandom Device Address 1
+    \tPublic ID Address 2 
+    \tRandom ID Address 3
+    """
+    whitelist_parser.add_argument("args", nargs="*", type=str, help=wl_args_help)
+    whitelist_parser.set_defaults(func=_whitelist_func)
     cmd_parser = subparsers.add_parser(
         "cmd", help="Send raw HCI command", formatter_class=RawTextHelpFormatter
     )
@@ -1107,6 +1156,41 @@ def main():
         formatter_class=RawTextHelpFormatter,
     )
     pwd_parser.set_defaults(func=lambda args: print(os.getcwd()))
+
+    # Create the 'make' subparser
+    make_parser = subparsers.add_parser(
+        "make",
+        help="Run make",
+        formatter_class=RawTextHelpFormatter,
+    )
+
+    make_parser.add_argument(
+        "-j",
+        "--jobs",
+        default="",
+    )
+    make_parser.add_argument("-C", "--directory", default=".")
+
+    make_parser.set_defaults(
+        func=lambda args: os.system(f"make -j {args.jobs} -C {args.directory}")
+    )
+
+    run_parser = subparsers.add_parser(
+        "shell",
+        help="run command sript",
+        formatter_class=RawTextHelpFormatter,
+    )
+    run_parser.add_argument("shell", nargs="+")
+    run_parser.set_defaults(func=lambda args: os.system(" ".join(args.shell)))
+
+    def _script_runner(script_path):
+        print(script_path)
+        with open(script_path, "r", encoding="utf-8") as script:
+            commands = script.readlines()
+
+        if commands:
+            commands = [command.strip() for command in commands if command != ""]
+            _run_input_cmds(commands, terminal)
 
     run_parser = subparsers.add_parser(
         "shell",

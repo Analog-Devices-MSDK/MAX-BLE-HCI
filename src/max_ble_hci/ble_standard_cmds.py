@@ -62,7 +62,13 @@ from .data_params import AdvParams, ConnParams, EstablishConnParams, ScanParams
 from .hci_packets import CommandPacket, EventPacket
 from .packet_codes import EventMask, EventMaskPage2, EventMaskLE, StatusCode
 from .packet_defs import OCF, OGF
-from .utils import can_represent_as_bytes, to_le_nbyte_list, byte_length
+from .utils import (
+    can_represent_as_bytes,
+    to_le_nbyte_list,
+    byte_length,
+    address_str2int,
+)
+from .ad_types import AddressType
 
 
 class BleStandardCmds:
@@ -782,6 +788,65 @@ class BleStandardCmds:
         params = to_le_nbyte_list(mask, 8)
         return self.send_le_controller_command(
             OCF.LE_CONTROLLER.SET_EVENT_MASK, params=params
+        )
+
+    def clear_whitelist(self) -> StatusCode:
+        return self.send_le_controller_command(OCF.LE_CONTROLLER.CLEAR_WHITE_LIST)
+
+    def read_whitelist_size(self) -> Union[StatusCode, int]:
+        params: EventPacket = self.send_le_controller_command(
+            OCF.LE_CONTROLLER.READ_WHITE_LIST_SIZE, return_evt=True
+        )
+
+        if params.status != StatusCode.SUCCESS:
+            self.logger.error("Failed to read whitelist size")
+            return params.status
+
+        print(list(params.evt_params))
+        return params.get_return_params()
+
+    def _form_whitelist_cmd_params(
+        self, addr_type: Union[AddressType, int], address: Union[str, int, List[int]]
+    ) -> List[int]:
+        if isinstance(addr_type, AddressType):
+            addr_type = addr_type.value
+
+        params = [addr_type]
+
+        if isinstance(address, list):
+            if len(address) != 6:
+                raise ValueError("Address length must be 6 bytes when given as list")
+
+            # Apped as little endian
+            params.extend(address.reverse())
+
+        else:
+            if isinstance(address, str):
+                address = address_str2int(address)
+
+            if byte_length(address) > 6:
+                raise ValueError("Address must be representable in 6 bytes!")
+
+            params.extend(to_le_nbyte_list(address, 6))
+
+        return params
+
+    def add_device_to_whitelist(
+        self, addr_type: Union[AddressType, int], address: Union[str, int, List[int]]
+    ) -> StatusCode:
+        params = self._form_whitelist_cmd_params(addr_type=addr_type, address=address)
+
+        return self.send_le_controller_command(
+            OCF.LE_CONTROLLER.ADD_DEV_WHITE_LIST, params=params
+        )
+
+    def remove_device_to_whitelist(
+        self, addr_type: Union[AddressType, int], address: Union[str, int, List[int]]
+    ) -> StatusCode:
+        params = self._form_whitelist_cmd_params(addr_type=addr_type, address=address)
+
+        return self.send_le_controller_command(
+            OCF.LE_CONTROLLER.REMOVE_DEV_WHITE_LIST, params=params
         )
 
     def read_local_p256_pub_key(

@@ -1,5 +1,8 @@
 name: black-format-check
-on: [workflow_dispatch]
+on: 
+  workflow_dispatch:
+  pull_request:
+    branches: ["main"]
 jobs:
   format_check:
     name: runner / black formatter

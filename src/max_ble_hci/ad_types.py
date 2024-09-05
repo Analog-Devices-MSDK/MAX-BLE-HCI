@@ -61,6 +61,7 @@ from enum import Enum
 from typing import List
 from .packet_codes import EventSubcode
 
+
 class AdvEventType(Enum):
     ADV_IND = 0
     ADV_DIRECT_IND = 1
@@ -68,11 +69,21 @@ class AdvEventType(Enum):
     ADV_NONCONN_IND = 3
     SCAN_RSP = 4
 
-class AdressType(Enum):
+
+class AddressType(Enum):
     PUB_DEV_ADDRESS = 0
     RAND_DEV_ADDR = 1
     PUBLIC_ID_ADDR = 2
     RAND_ID_ADDR = 3
+
+class AdvEventType(Enum):
+    ADV_IND = 0
+    ADV_DIRECT_IND = 1
+    ADV_SCAN_IND = 2
+    ADV_NONCONN_IND = 3
+    SCAN_RSP = 4
+
+
 
 class ADTypes(Enum):
     """Advertising data types"""
@@ -204,8 +215,8 @@ class AdvReport:
         # rssi_start = num_reports *(EVT_TYPE_SIZE + ADDR_TYPE_SIZE +ADDR_SIZE + LEN_SIZE) + data_len_offset
 
 
-        for i in range(num_reports):
-            reports[i].rssi = data[rssi_start + i]
+        # for i in range(num_reports):
+        #     reports[i].rssi = data[rssi_start + i]
 
         return reports
 
