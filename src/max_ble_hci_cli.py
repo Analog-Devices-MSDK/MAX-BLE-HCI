@@ -77,12 +77,12 @@ from colorlog import ColoredFormatter
 from max_ble_hci import BleHci
 from max_ble_hci.constants import PayloadOption, PhyOption
 from max_ble_hci.data_params import AdvParams, EstablishConnParams, ScanParams
-from max_ble_hci.utils import convert_str_address
+from max_ble_hci.utils import address_str2int
 from max_ble_hci.packet_codes import EventMaskLE, StatusCode, EventCode, EventSubcode
 from max_ble_hci.hci_packets import EventPacket
-from max_ble_hci.ad_types import ADTypes, AdvReport
+from max_ble_hci.ad_types import AdvReport
 from max_ble_hci import utils
-from max_ble_hci.utils import address_str2int
+
 
 # pylint: enable=import-error
 
@@ -160,23 +160,6 @@ def _run_input_cmds(commands, terminal):
 
                 sys.exit(_err.code)
     return True
-
-
-def _scan_event_callback(packet: EventPacket):
-
-    if packet.evt_code != EventCode.LE_META and packet.evt_subcode != EventSubcode.ADVERTISING_REPORT:
-        return
-
-    # try:
-    reports = AdvReport.from_bytes(packet.evt_params)
-    for i, report in enumerate(reports):
-        print(report)
-    # except:
-    #     print(packet.evt_params)
-
-
-    pass
-    
 
 
 def _init_cli():
@@ -259,6 +242,7 @@ def _init_cli():
 
 
 def main():
+    # pylint: disable=too-many-statements, too-many-branches, too-many-locals
     """
     MAIN
     """
@@ -418,7 +402,7 @@ def main():
         "enable",
         nargs="?",
         choices=("1", "0", "enable", "start", "en", "disable", "dis", "stop"),
-        help=f"""Enable or disable advertising
+        help="""Enable or disable advertising
         Default: enable""",
     )
     adv_parser.add_argument(
@@ -445,6 +429,7 @@ def main():
         action="store_true",
         help="Start advertising using a randomly generated address",
     )
+
     def _adv_func(args):
         enable: str = args.enable
 
@@ -452,12 +437,13 @@ def main():
             enable = "1"
 
         if enable in ("1", "en", "enable", "start"):
-
             if args.rand_addr:
                 rand_addr = secrets.randbits(48)
-                logger.info("Advertising with random adrress %s", utils.address_int2str(rand_addr))
+                logger.info(
+                    "Advertising with random adrress %s",
+                    utils.address_int2str(rand_addr),
+                )
                 hci.set_address(rand_addr)
-                
 
             logger.info("Enabling advertising")
             adv_params = AdvParams(
@@ -473,9 +459,9 @@ def main():
             print(hci.enable_adv(False))
 
         else:
-            assert "All options should be covered"
+            assert False, "All options should be covered"
 
-    adv_parser.set_defaults(func=lambda args: _adv_func(args))
+    adv_parser.set_defaults(func=_adv_func)
 
     #### SCAN PARSER ####
     scan_parser = subparsers.add_parser(
@@ -487,7 +473,7 @@ def main():
         "enable",
         nargs="?",
         choices=("1", "0", "enable", "en", "start", "disable", "dis", "stop"),
-        help=f"""Enable or disable scanning
+        help="""Enable or disable scanning
         Default: enable""",
     )
 
@@ -501,15 +487,40 @@ def main():
         Default: 0x{DEFAULT_SCAN_INTERVAL}""",
     )
 
+    scan_parser.add_argument(
+        "--no-log",
+        action="store_true",
+        help="Disable logging outut of events from advertising reports",
+    )
+
+    scan_parser.add_argument(
+        "--show-only",
+        action="append",
+        nargs="?",
+        default=[],
+        help="Disable logging outut of events from advertising reports",
+    )
+
     def _scan_func(args):
+        def _scan_event_callback(packet: EventPacket):
+            if (
+                packet.evt_code != EventCode.LE_META
+                and packet.evt_subcode != EventSubcode.ADVERTISING_REPORT
+            ):
+                return
+
+            reports = AdvReport.from_bytes(packet.evt_params)
+
+            for report in reports:
+                if report.address in args.show_only or args.show_only == []:
+                    print(report.address, report.rssi)
+
         enable = args.enable
         if not enable:
             enable = "1"
 
         if enable in ("1", "en", "enable", "start"):
             logger.info("Enabling scanning")
-
-            hci.set_event_callback(_scan_event_callback)
 
             status = hci.set_scan_params(
                 scan_params=ScanParams(scan_interval=args.scan_interval)
@@ -518,12 +529,15 @@ def main():
                 logger.error("Failed to set scan params!")
                 return
 
-            # This gives scan reports, but causes the callback to spam the terminal with prints
-            hci.set_event_mask_le(
-                EventMaskLE.ADV_REPORT
-                | EventMaskLE.PERIODIC_ADV_REPORT
-                | EventMaskLE.EXTENDED_ADV_REPORT
-            )
+            if args.no_log:
+                hci.set_event_callback(None)
+            else:
+                hci.set_event_callback(_scan_event_callback)
+                hci.set_event_mask_le(
+                    EventMaskLE.ADV_REPORT
+                    | EventMaskLE.PERIODIC_ADV_REPORT
+                    | EventMaskLE.EXTENDED_ADV_REPORT
+                )
 
             print(hci.enable_scanning(True))
             hci.set_log_level(logging.ERROR)
@@ -537,7 +551,7 @@ def main():
             logger.error("Could not match command to enable or disable")
             return
 
-    scan_parser.set_defaults(func=lambda args: _scan_func(args))
+    scan_parser.set_defaults(func=_scan_func)
 
     #### INIT PARSER ####
     init_parser = subparsers.add_parser(
@@ -1064,7 +1078,8 @@ def main():
             wl_size = hci.read_whitelist_size()
             print(f"Whitelist size: {wl_size}")
             return
-        elif method == "clear":
+
+        if method == "clear":
             print(hci.clear_whitelist())
             return
 
@@ -1079,7 +1094,7 @@ def main():
         if method == "add":
             print(hci.add_device_to_whitelist(addr_type=addr_type, address=address))
         else:
-            print(hci.clear_whitelist(addr_type=addr_type, address=address))
+            print(hci.remove_device_to_whitelist(addr_type=addr_type, address=address))
 
     whitelist_parser = subparsers.add_parser(
         "whitelist",
@@ -1200,6 +1215,9 @@ def main():
     run_parser.add_argument("shell", nargs="+")
     run_parser.set_defaults(func=lambda args: os.system(" ".join(args.shell)))
 
+    flush_parser = subparsers.add_parser("flush", help="Flush serial port")
+    flush_parser.set_defaults(func=lambda _: hci.port.flush())
+
     def _script_runner(script_path):
         print(script_path)
         with open(script_path, "r", encoding="utf-8") as script:
@@ -1251,7 +1269,7 @@ def main():
             except AttributeError as err:
                 logger.error(str(err))
                 continue
-        
+
         except SystemExit as err:
             if err.code == EXIT_FUNC_MAGIC:
                 sys.exit(0)

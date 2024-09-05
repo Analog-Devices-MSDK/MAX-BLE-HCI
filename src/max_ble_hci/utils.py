@@ -193,6 +193,7 @@ def address_str2int(addr: str) -> int:
     """
     return int(addr.replace(":", ""), 16)
 
+
 def address_int2str(addr: int) -> str:
     """Convert address as int to str
 
@@ -218,6 +219,7 @@ def address_int2str(addr: int) -> str:
             addr_str += f"{bvalue:02X}"
 
     return addr_str
+
 
 def address_int2str(addr: int) -> str:
     """Convert address as int to str
@@ -279,3 +281,18 @@ def byte_length(data: int) -> int:
         return 1
 
     return (data.bit_length() + 7) // 8
+
+
+def unsigned_to_signed(unsigned_value, bit_length):
+    # Calculate the maximum unsigned value for the given bit length
+    max_unsigned = 2**bit_length
+    max_signed = 2 ** (bit_length - 1)
+
+    # If the unsigned value is greater than or equal to the max signed value,
+    # convert it to a negative signed integer.
+    if unsigned_value >= max_signed:
+        signed_value = unsigned_value - max_unsigned
+    else:
+        signed_value = unsigned_value
+
+    return signed_value

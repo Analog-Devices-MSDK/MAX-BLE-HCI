@@ -57,7 +57,7 @@ from alive_progress import alive_bar
 
 from ._hci_logger import get_formatted_logger
 from ._transport import SerialUartTransport
-from .ad_types import ADTypes
+from .ad_types import ADType
 from .ble_standard_cmds import BleStandardCmds
 from .constants import ADI_PORT_BAUD_RATE
 from .data_params import AdvParams, EstablishConnParams
@@ -246,9 +246,9 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
             raise ValueError("Name cannot be an empty string")
 
         ad_type = (
-            ADTypes.LOCAL_NAME_COMPLETE.value
+            ADType.LOCAL_NAME_COMPLETE.value
             if complete
-            else ADTypes.LOCAL_NAME_SHORT.value
+            else ADType.LOCAL_NAME_SHORT.value
         )
 
         data = [len(adv_name) + 1, ad_type]

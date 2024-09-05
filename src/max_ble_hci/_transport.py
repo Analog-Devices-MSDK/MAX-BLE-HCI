@@ -423,6 +423,9 @@ class SerialUartTransport:
                 self.logger.error("Device lost! Waiting for reconnection.")
                 self._recover_power_loss()
 
+    def flush(self):
+        self.port.flush()
+
     def _retrieve(
         self,
         timeout: Optional[float],

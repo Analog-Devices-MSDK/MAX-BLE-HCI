@@ -60,9 +60,12 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import List
 from .packet_codes import EventSubcode
+from .utils import unsigned_to_signed
 
 
 class AdvEventType(Enum):
+    """Advertising Event Type"""
+
     ADV_IND = 0
     ADV_DIRECT_IND = 1
     ADV_SCAN_IND = 2
@@ -71,12 +74,17 @@ class AdvEventType(Enum):
 
 
 class AddressType(Enum):
+    """Adress Type"""
+
     PUB_DEV_ADDRESS = 0
     RAND_DEV_ADDR = 1
     PUBLIC_ID_ADDR = 2
     RAND_ID_ADDR = 3
 
+
 class AdvEventType(Enum):
+    """Adv Event Type"""
+
     ADV_IND = 0
     ADV_DIRECT_IND = 1
     ADV_SCAN_IND = 2
@@ -84,8 +92,7 @@ class AdvEventType(Enum):
     SCAN_RSP = 4
 
 
-
-class ADTypes(Enum):
+class ADType(Enum):
     """Advertising data types"""
 
     FLAGS = 0x1
@@ -139,86 +146,86 @@ class ADTypes(Enum):
     INFO_DATA_3D = 0x3D
     MANUFACTURER_SPEC_DATA = 0xFF
 
+
 @dataclass
 class AdvReport:
-
     event_type: AdvEventType = None
-    address_type: AdressType = None
-    address:str = None
-    data:list[list] = None
-    rssi:int = None
+    address_type: AddressType = None
+    address: str = None
+    data_len: int = None
+    data: list = None
+    rssi: int = None
 
-    @staticmethod 
-    def from_bytes(data:bytes) -> List[AdvReport]:
-
-
-
-        # conver to ints
+    @staticmethod
+    def from_bytes(data: bytes) -> List[AdvReport]:
+        data_bytes = data
+        # convert to ints
         data = list(data)
 
-        EVT_TYPE_SIZE = 1
-        ADDR_TYPE_SIZE = 1
-        ADDR_SIZE = 6
-        LEN_SIZE = 1
-
+        # Im sorry
+        evt_type_size = 1
+        addr_type_size = 1
+        addr_size = 6
+        len_size = 1
+        rssi_size = 1
         num_reports = data[0]
         reports = [AdvReport()] * num_reports
-        
+
         offset = 1
-        for i in range(num_reports):    
-            reports[i].event_type = AdvEventType(data[offset + i])
-            offset += EVT_TYPE_SIZE
-        
         for i in range(num_reports):
-            reports[i].address_type = AdressType(data[offset + i])
-            offset += ADDR_TYPE_SIZE
-        
+            reports[i].event_type = AdvEventType(data[offset])
+            offset += evt_type_size
+
         for i in range(num_reports):
-            address = data[offset:offset+ADDR_SIZE]
-            reports[i].address_type =  ":".join(map(hex, address))
-            offset += ADDR_SIZE
-        
-        total_data_len = 0
+            reports[i].address_type = AddressType(data[offset])
+            offset += addr_type_size
+
         for i in range(num_reports):
-            data_len = data[offset + i]
-            total_data_len += data_len
-        
+            address = data[offset : offset + addr_size]
+            address.reverse()
+            reports[i].address = ":".join(f"{byte:02x}" for byte in address)
+            offset += addr_size
 
-        # data_len_offset = 0
-        # for i in range(num_reports):
-        #     # Im sorry
-        #     offset = 1 + i
-        #     evt_type = AdvEventType(data[offset])
-        #     offset += num_reports * EVT_TYPE_SIZE
+        for i in range(num_reports):
+            data_len = data[offset]
+            reports[i].data_len = data_len
+            offset += len_size
 
-        #     addr_type = AdressType(data[offset])
-        #     offset += num_reports *ADDR_TYPE_SIZE
-            
-        #     address = data[offset:offset+ADDR_SIZE]
-        #     address = ":".join(map(hex, address))
-        #     offset += (ADDR_SIZE * num_reports) + data_len_offset
-            
-        #     data_len = data[offset]
-        #     offset += LEN_SIZE * num_reports
-            
-        #     report_data = data[offset:offset+data_len]
+        for i in range(num_reports):
+            data_len = reports[i].data_len
+            data = data[offset : offset + data_len]
+            reports[i].data = data.reverse()
+            offset += data_len
 
-        #     report = AdvReport(event_type=evt_type, 
-        #         address_type=addr_type,
-        #         address=address,
-        #         data=report_data)
-                
-        #     reports.append(report)
-            
-        #     data_len_offset += data_len
-
-        # rssi_start = num_reports *(EVT_TYPE_SIZE + ADDR_TYPE_SIZE +ADDR_SIZE + LEN_SIZE) + data_len_offset
-
-
-        # for i in range(num_reports):
-        #     reports[i].rssi = data[rssi_start + i]
+        for i in range(num_reports):
+            reports[i].rssi = unsigned_to_signed(data_bytes[offset], 8)
+            offset += rssi_size
 
         return reports
 
-    def decode(self):
-        pass
+
+@dataclass
+class AdvData:
+    length: int = None
+    type: ADType = None
+    data: object = None
+
+    @staticmethod
+    def from_raw_data(data: List[int]) -> List[AdvData]:
+        ad_data = []
+
+        idx = 0
+        while idx < len(data):
+            data_len = data[idx + 0]
+            type = ADType(data[idx + 1])
+
+            base = idx + 2
+            decoded_data = data[base : base + data_len]
+
+            if type == ADType.LOCAL_NAME_SHORT or type == ADType.LOCAL_NAME_COMPLETE:
+                decoded_data = str(decoded_data)
+            ad_data.append(AdvData(length=data_len, type=type, data=decoded_data))
+
+            idx += data_len + 2
+
+        return ad_data
