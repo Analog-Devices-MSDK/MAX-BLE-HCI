@@ -257,6 +257,33 @@ class BleStandardCmds:
             OCF.LE_CONTROLLER.SET_SCAN_RESP_DATA, params=params
         )
 
+    def set_random_address(self, addr: Union[int, str]) -> StatusCode:
+        """Sets the random address.
+
+        Function sets the chip random address. Address can be given
+        as either a bytearray or as a list of integer values.
+
+        Parameters
+        ----------
+        addr : Union[int, str]
+            Desired random address.
+            If str, format expected xx:xx:xx:xx:xx
+
+        Returns
+        -------
+        StatusCode
+            The return packet status code.
+
+        """
+
+        if isinstance(addr, str):
+            addr = address_str2int(addr)
+
+        params = to_le_nbyte_list(addr, 6)
+        return self.send_le_controller_command(
+            OCF.LE_CONTROLLER.SET_RAND_ADDR, params=params
+        )
+
     def set_adv_params(self, adv_params: AdvParams = AdvParams()) -> StatusCode:
         """Set test board advertising parameters.
 
