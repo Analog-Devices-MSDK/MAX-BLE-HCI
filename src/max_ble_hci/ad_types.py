@@ -55,11 +55,33 @@ ad_types
 Description: Advertising data types
 
 """
-
+from __future__ import annotations
+from dataclasses import dataclass
 from enum import Enum
+from typing import List
+from .utils import unsigned_to_signed
 
 
-class ADTypes(Enum):
+class AdvEventType(Enum):
+    """Advertising Event Type"""
+
+    ADV_IND = 0
+    ADV_DIRECT_IND = 1
+    ADV_SCAN_IND = 2
+    ADV_NONCONN_IND = 3
+    SCAN_RSP = 4
+
+
+class AddressType(Enum):
+    """Adress Type"""
+
+    PUB_DEV_ADDRESS = 0
+    RAND_DEV_ADDR = 1
+    PUBLIC_ID_ADDR = 2
+    RAND_ID_ADDR = 3
+
+
+class ADType(Enum):
     """Advertising data types"""
 
     FLAGS = 0x1
@@ -112,3 +134,112 @@ class ADTypes(Enum):
     ELECTRONIC_SHELF_LABEL = 0x34
     INFO_DATA_3D = 0x3D
     MANUFACTURER_SPEC_DATA = 0xFF
+
+
+@dataclass
+class AdvReport:
+    """Advertising Report"""
+
+    event_type: AdvEventType = None
+    address_type: AddressType = None
+    address: str = None
+    data_len: int = None
+    data: list = None
+    rssi: int = None
+
+    @staticmethod
+    def from_bytes(data: bytes) -> List[AdvReport]:
+        """Raw advertising report data to list of advertising reports
+
+        Parameters
+        ----------
+        data : bytes
+            Raw advertising report
+
+        Returns
+        -------
+        List[AdvReport]
+            List of deserialized advertising reports
+        """
+        data_bytes = data
+        data = list(data)  # Convert to ints
+        
+        # Constants for sizes
+        sizes = {
+            "evt_type": 1,
+            "addr_type": 1,
+            "addr": 6,
+            "len": 1,
+            "rssi": 1
+        }
+
+        num_reports = data[0]
+        reports = [AdvReport() for _ in range(num_reports)]
+
+        offset = 1
+
+        # Im sorry
+        for i in range(num_reports):
+            reports[i].event_type = AdvEventType(data[offset])
+            offset += sizes["evt_type"]
+
+            reports[i].address_type = AddressType(data[offset])
+            offset += sizes["addr_type"]
+
+            address = data[offset : offset + sizes["addr"]][::-1]
+            reports[i].address = ":".join(f"{byte:02x}" for byte in address)
+            offset += sizes["addr"]
+
+            data_len = data[offset]
+            reports[i].data_len = data_len
+            offset += sizes["len"]
+
+            data_slice = data[offset : offset + data_len][::-1]
+            reports[i].data = data_slice
+            offset += data_len
+
+            reports[i].rssi = unsigned_to_signed(data_bytes[offset], 8)
+            offset += sizes["rssi"]
+
+        return reports
+
+
+@dataclass
+class AdvData:
+    """Advertising Data"""
+
+    length: int = None
+    type: ADType = None
+    data: object = None
+
+    @staticmethod
+    def from_raw_data(data: List[int]) -> List[AdvData]:
+        """Convert advertising report data to N advertising data packets
+
+        Parameters
+        ----------
+        data : List[int]
+            Raw data from advertising report
+
+        Returns
+        -------
+        List[AdvData]
+            List of adverstising data packets
+        """
+        ad_data = []
+
+        idx = 0
+        while idx < len(data):
+            data_len = data[idx + 0]
+            ad_type = ADType(data[idx + 1])
+
+            base = idx + 2
+            decoded_data = data[base : base + data_len]
+
+            if ad_type in (ADType.LOCAL_NAME_SHORT, ADType.LOCAL_NAME_COMPLETE):
+                decoded_data = str(decoded_data)
+            ad_data.append(AdvData(length=data_len, type=ad_type, data=decoded_data))
+
+            idx += data_len + 2
+
+        return ad_data

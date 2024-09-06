@@ -52,7 +52,7 @@
 """
 Module contains definitions for BLE standard HCI commands.
 """
-# pylint: disable=too-many-arguments
+# pylint: disable=too-many-arguments,too-many-lines
 from typing import List, Optional, Tuple, Union, Callable
 
 from ._hci_logger import get_formatted_logger
@@ -62,7 +62,13 @@ from .data_params import AdvParams, ConnParams, EstablishConnParams, ScanParams
 from .hci_packets import CommandPacket, EventPacket
 from .packet_codes import EventMask, EventMaskPage2, EventMaskLE, StatusCode
 from .packet_defs import OCF, OGF
-from .utils import can_represent_as_bytes, to_le_nbyte_list, byte_length
+from .utils import (
+    can_represent_as_bytes,
+    to_le_nbyte_list,
+    byte_length,
+    address_str2int,
+)
+from .ad_types import AddressType
 
 
 class BleStandardCmds:
@@ -92,6 +98,9 @@ class BleStandardCmds:
     def __init__(self, port: SerialUartTransport, logger_name: str):
         self.port = port
         self.logger = get_formatted_logger(name=logger_name)
+        self.event_mask = None
+        self.event_mask_pg2 = None
+        self.event_mask_le = None
 
     def __enter__(self):
         self.port.start()
@@ -718,7 +727,10 @@ class BleStandardCmds:
         """
 
         if isinstance(mask, EventMask):
+            self.event_mask = mask
             mask = mask.value
+        else:
+            self.event_mask = EventMask(mask)
 
         params = to_le_nbyte_list(mask, 8)
         status = self.send_controller_command(
@@ -727,7 +739,11 @@ class BleStandardCmds:
 
         if mask_pg2 is not None:
             if isinstance(mask_pg2, EventMaskPage2):
+                self.event_mask_pg2 = mask_pg2
                 mask_pg2 = mask_pg2.value
+            else:
+                self.event_mask_pg2 = EventMaskPage2(mask_pg2)
+
             params = to_le_nbyte_list(mask_pg2, 8)
             return (
                 status,
@@ -759,13 +775,126 @@ class BleStandardCmds:
 
         """
         if isinstance(mask, EventMaskLE):
+            self.event_mask_le = mask
             mask = mask.value
+        else:
+            self.event_mask_le = EventMaskLE(mask)
 
-        self.set_event_mask(EventMask.LE_META)
+        if self.event_mask is None:
+            self.set_event_mask(EventMask.LE_META)
+        else:
+            self.set_event_mask(self.event_mask | EventMask.LE_META)
 
         params = to_le_nbyte_list(mask, 8)
         return self.send_le_controller_command(
             OCF.LE_CONTROLLER.SET_EVENT_MASK, params=params
+        )
+
+    def clear_whitelist(self) -> StatusCode:
+        """Clear whitelist entirely
+
+        Returns
+        -------
+        StatusCode
+            status of command
+        """
+        return self.send_le_controller_command(OCF.LE_CONTROLLER.CLEAR_WHITE_LIST)
+
+    def read_whitelist_size(self) -> Union[StatusCode, int]:
+        """Read total spaces in white list
+
+        Returns
+        -------
+        int
+            number of places in whitelist
+        """
+        params: EventPacket = self.send_le_controller_command(
+            OCF.LE_CONTROLLER.READ_WHITE_LIST_SIZE, return_evt=True
+        )
+
+        if params.status != StatusCode.SUCCESS:
+            self.logger.error("Failed to read whitelist size")
+            return params.status
+
+        print(list(params.evt_params))
+        return params.get_return_params()
+
+    def _form_whitelist_cmd_params(
+        self, addr_type: Union[AddressType, int], address: Union[str, int, List[int]]
+    ) -> List[int]:
+        if isinstance(addr_type, AddressType):
+            addr_type = addr_type.value
+
+        params = [addr_type]
+
+        if isinstance(address, list):
+            if len(address) != 6:
+                raise ValueError("Address length must be 6 bytes when given as list")
+
+            # Apped as little endian
+            params.extend(address.reverse())
+
+        else:
+            if isinstance(address, str):
+                address = address_str2int(address)
+
+            if byte_length(address) > 6:
+                raise ValueError("Address must be representable in 6 bytes!")
+
+            params.extend(to_le_nbyte_list(address, 6))
+
+        return params
+
+    def add_device_to_whitelist(
+        self, addr_type: Union[AddressType, int], address: Union[str, int, List[int]]
+    ) -> StatusCode:
+        """Add device to whitelist
+
+        Parameters
+        ----------
+        addr_type : Union[AddressType, int]
+            Address type of devcie
+        address : Union[str, int, List[int]]
+            Address of device
+            - str: aa:bb:cc:dd:ee
+            - List[int]: [aa, bb, cc, dd, ee, ff]
+            - int: 733295205870
+
+        Returns
+        -------
+        StatusCode
+            status of command
+        """
+        params = self._form_whitelist_cmd_params(addr_type=addr_type, address=address)
+
+        return self.send_le_controller_command(
+            OCF.LE_CONTROLLER.ADD_DEV_WHITE_LIST, params=params
+        )
+
+    def remove_device_from_whitelist(
+        self, addr_type: Union[AddressType, int], address: Union[str, int, List[int]]
+    ) -> StatusCode:
+        """Remove device from whitelist
+
+        Parameters
+        ----------
+        addr_type : Union[AddressType, int]
+            Address type of devcie
+        address : Union[str, int, List[int]]
+            Address of device
+            - str: aa:bb:cc:dd:ee
+            - List[int]: [aa, bb, cc, dd, ee, ff]
+            - int: 733295205870
+        Returns
+        -------
+        StatusCode
+            status of command
+
+        """
+        params = self._form_whitelist_cmd_params(addr_type=addr_type, address=address)
+
+        return self.send_le_controller_command(
+            OCF.LE_CONTROLLER.REMOVE_DEV_WHITE_LIST, params=params
         )
 
     def read_local_p256_pub_key(

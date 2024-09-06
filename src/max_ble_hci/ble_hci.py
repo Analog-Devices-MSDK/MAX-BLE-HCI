@@ -57,13 +57,13 @@ from alive_progress import alive_bar
 
 from ._hci_logger import get_formatted_logger
 from ._transport import SerialUartTransport
-from .ad_types import ADTypes
+from .ad_types import ADType
 from .ble_standard_cmds import BleStandardCmds
 from .constants import ADI_PORT_BAUD_RATE
 from .data_params import AdvParams, EstablishConnParams
 from .hci_packets import AsyncPacket, CommandPacket, EventPacket
 from .packet_codes import EventMask, EventMaskPage2, EventMaskLE, StatusCode
-from .utils import convert_str_address
+from .utils import address_str2int
 from .vendor_spec_cmds import VendorSpecificCmds
 
 
@@ -216,9 +216,9 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         elif ll_str == "CRITICAL":
             self.logger.setLevel(logging.CRITICAL)
         else:
-            self.logger.setLevel(logging.NOTSET)
+            self.logger.setLevel(logging.INFO)
             self.logger.warning(
-                "Invalid log level string: %s, level set to 'logging.NOTSET'", ll_str
+                "Invalid log level string: %s, level set to 'logging.INFO'", ll_str
             )
 
     def set_local_adv_name(self, adv_name: str, complete=True) -> StatusCode:
@@ -246,9 +246,9 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
             raise ValueError("Name cannot be an empty string")
 
         ad_type = (
-            ADTypes.LOCAL_NAME_COMPLETE.value
+            ADType.LOCAL_NAME_COMPLETE.value
             if complete
-            else ADTypes.LOCAL_NAME_SHORT.value
+            else ADType.LOCAL_NAME_SHORT.value
         )
 
         data = [len(adv_name) + 1, ad_type]
@@ -407,7 +407,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
                     "Either connection parameters or address must be provided."
                 )
             if isinstance(addr, str):
-                addr = convert_str_address(addr)
+                addr = address_str2int(addr)
 
             if max((addr.bit_length() + 7) // 8, 1) > 6:
                 raise ValueError(
@@ -450,7 +450,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         """
 
         if isinstance(addr, str):
-            addr = convert_str_address(addr)
+            addr = address_str2int(addr)
 
         with open(name, mode="rb") as file:
             data = file.read()

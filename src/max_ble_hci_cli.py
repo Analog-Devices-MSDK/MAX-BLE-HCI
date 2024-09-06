@@ -77,8 +77,12 @@ from colorlog import ColoredFormatter
 from max_ble_hci import BleHci
 from max_ble_hci.constants import PayloadOption, PhyOption
 from max_ble_hci.data_params import AdvParams, EstablishConnParams, ScanParams
+from max_ble_hci.utils import address_str2int
+from max_ble_hci.packet_codes import EventMaskLE, StatusCode, EventCode, EventSubcode
+from max_ble_hci.hci_packets import EventPacket
+from max_ble_hci.ad_types import AdvReport
 from max_ble_hci import utils
-from max_ble_hci.utils import convert_str_address
+
 
 # pylint: enable=import-error
 
@@ -158,13 +162,7 @@ def _run_input_cmds(commands, terminal):
     return True
 
 
-def main():
-    """
-    MAIN
-    """
-    # pylint: disable=too-many-locals,too-many-branches,too-many-statements
-    command_state = ""
-
+def _init_cli():
     # Setup the signal handler to catch the ctrl-C
     signal.signal(signal.SIGINT, _signal_handler)
 
@@ -230,16 +228,26 @@ def main():
         "--trace_level",
         dest="trace_level",
         type=int,
-        default=3,
+        default=2,
+        choices=(0, 1, 2, 3),
         help="""Set the trace level
         0: Error only
         1: Warning/Error
         2: Info/Warning/Error
         3: All messages
-        Default: 3""",
+        Default: 2""",
     )
 
-    args = parser.parse_args()
+    return parser.parse_args()
+
+
+def main():
+    # pylint: disable=too-many-statements, too-many-branches, too-many-locals
+    """
+    MAIN
+    """
+
+    args = _init_cli()
 
     hci = BleHci(
         args.serial_port,
@@ -250,11 +258,17 @@ def main():
         flowcontrol=args.enable_flow_control,
         recover_on_power_loss=True,
     )
-    hci.logger.setLevel(args.trace_level)
+    trace_lut = {
+        0: "ERROR",
+        1: "WARNING",
+        2: "INFO",
+        3: "DEBUG",
+    }
+    trace_level = trace_lut[args.trace_level]
+    hci.logger.setLevel(trace_level)
 
     print("Bluetooth Low Energy HCI tool")
     print(f"Serial port: {args.serial_port}")
-
     print(f"8N1 {args.baudRate}")
 
     commands = args.commands
@@ -286,6 +300,34 @@ def main():
     # Start the terminal argparse
     terminal = ArgumentParser(prog="", add_help=True)
     subparsers = terminal.add_subparsers()
+
+    log_level_parser = subparsers.add_parser(
+        "loglevel",
+        aliases=["ll"],
+    )
+
+    log_level_parser.add_argument(
+        "loglevel",
+        type=int,
+        nargs="?",
+        choices=(0, 1, 2, 3),
+        help="""Set the log level
+        0: Error only
+        1: Warning/Error
+        2: Info/Warning/Error
+        3: All messages
+        Default: 2""",
+    )
+
+    def _set_log_level(level):
+        if level is None:
+            print(f"Current Log level {hci.get_log_level()}")
+            return
+
+        trace_level = level
+        hci.set_log_level(trace_lut[trace_level])
+
+    log_level_parser.set_defaults(func=lambda args: _set_log_level(args.loglevel))
 
     clear_parser = subparsers.add_parser(
         "clear",
@@ -352,15 +394,16 @@ def main():
 
     #### ADV PARSER ####
     adv_parser = subparsers.add_parser(
-        "adv-start",
+        "adv",
         help="Start advertising",
         formatter_class=RawTextHelpFormatter,
     )
     adv_parser.add_argument(
-        "-r",
-        "--rand-addr",
-        action="store_true",
-        help="Start advertising using a randomly generated address",
+        "enable",
+        nargs="?",
+        choices=("1", "0", "enable", "start", "en", "disable", "dis", "stop"),
+        help="""Enable or disable advertising
+        Default: enable""",
     )
     adv_parser.add_argument(
         "-i",
@@ -380,41 +423,60 @@ def main():
         action="store_false",
         help="Disable advertising as a connectable device.",
     )
+    adv_parser.add_argument(
+        "-r",
+        "--rand-addr",
+        action="store_true",
+        help="Start advertising using a randomly generated address",
+    )
 
-    def start_adv(args):
-        if args.rand_addr:
-            rand_addr = secrets.randbits(6 * 8)
-            hci.set_address(rand_addr)
-            print(f"Advertising with random address {utils.address_int2str(rand_addr)}")
+    def _adv_func(args):
+        enable: str = args.enable
 
-        hci.start_advertising(
-            connect=args.connect,
-            adv_params=AdvParams(
+        if not enable:
+            enable = "1"
+
+        if enable in ("1", "en", "enable", "start"):
+            if args.rand_addr:
+                rand_addr = secrets.randbits(48)
+                logger.info(
+                    "Advertising with random adrress %s",
+                    utils.address_int2str(rand_addr),
+                )
+                hci.set_address(rand_addr)
+
+            logger.info("Enabling advertising")
+            adv_params = AdvParams(
                 adv_type=0 if args.connect else 0x3,
                 interval_min=args.adv_interval,
                 interval_max=args.adv_interval,
-            ),
-            adv_name=args.name,
-        )
+            )
+            hci.start_advertising(
+                connect=args.connect, adv_params=adv_params, adv_name=args.name
+            )
+        elif enable in ("0", "dis", "disable", "stop"):
+            logger.info("Disabling advertising")
+            print(hci.enable_adv(False))
 
-    adv_parser.set_defaults(
-        func=start_adv,
-        which="adv",
-    )
+        else:
+            assert False, "All options should be covered"
 
-    adv_stop_parser = subparsers.add_parser(
-        "adv-stop",
-        help="Stop advertising",
-        formatter_class=RawTextHelpFormatter,
-    )
-    adv_stop_parser.set_defaults(func=lambda _: print(hci.enable_adv(False)))
+    adv_parser.set_defaults(func=_adv_func)
 
     #### SCAN PARSER ####
     scan_parser = subparsers.add_parser(
         "scan",
-        help="Send scanning commands and print scan reports, ctrl-c to exit.",
+        help="Start scanning.",
         formatter_class=RawTextHelpFormatter,
     )
+    scan_parser.add_argument(
+        "enable",
+        nargs="?",
+        choices=("1", "0", "enable", "en", "start", "disable", "dis", "stop"),
+        help="""Enable or disable scanning
+        Default: enable""",
+    )
+
     scan_parser.add_argument(
         "-i",
         "--interval",
@@ -424,15 +486,72 @@ def main():
         help=f"""Scanning interval in units of 0.625 ms, 16-bit hex number 0x0004 - 0x4000.
         Default: 0x{DEFAULT_SCAN_INTERVAL}""",
     )
-    scan_parser.set_defaults(
-        func=lambda args: print(
-            hci.set_scan_params(
+
+    scan_parser.add_argument(
+        "--no-log",
+        action="store_true",
+        help="Disable logging outut of events from advertising reports",
+    )
+
+    scan_parser.add_argument(
+        "--show-only",
+        action="append",
+        nargs="?",
+        default=[],
+        help="Disable logging outut of events from advertising reports",
+    )
+
+    def _scan_func(args):
+        def _scan_event_callback(packet: EventPacket):
+            if (
+                packet.evt_code != EventCode.LE_META
+                and packet.evt_subcode != EventSubcode.ADVERTISING_REPORT
+            ):
+                return
+
+            reports = AdvReport.from_bytes(packet.evt_params)
+
+            for report in reports:
+                if report.address in args.show_only or args.show_only == []:
+                    print(report.address, report.rssi)
+
+        enable = args.enable
+        if not enable:
+            enable = "1"
+
+        if enable in ("1", "en", "enable", "start"):
+            logger.info("Enabling scanning")
+
+            status = hci.set_scan_params(
                 scan_params=ScanParams(scan_interval=args.scan_interval)
             )
-        )
-        or hci.enable_scanning(enable=True),
-        which="scan",
-    )
+            if status != StatusCode.SUCCESS:
+                logger.error("Failed to set scan params!")
+                return
+
+            if args.no_log:
+                hci.set_event_callback(None)
+            else:
+                hci.set_event_callback(_scan_event_callback)
+                hci.set_event_mask_le(
+                    EventMaskLE.ADV_REPORT
+                    | EventMaskLE.PERIODIC_ADV_REPORT
+                    | EventMaskLE.EXTENDED_ADV_REPORT
+                )
+
+            print(hci.enable_scanning(True))
+            hci.set_log_level(logging.ERROR)
+
+        elif enable in ("0", "dis", "disable", "stop"):
+            hci.set_log_level("INFO")
+            logger.info("Disabling scanning")
+            print(hci.enable_scanning(False))
+            hci.disable_all_events()
+        else:
+            logger.error("Could not match command to enable or disable")
+            return
+
+    scan_parser.set_defaults(func=_scan_func)
 
     #### INIT PARSER ####
     init_parser = subparsers.add_parser(
@@ -464,11 +583,11 @@ def main():
     init_parser.set_defaults(
         func=lambda args: print(
             hci.init_connection(
-                addr=convert_str_address(args.addr[::-1]),
+                addr=address_str2int(args.addr[::-1]),
                 interval=args.conn_interval,
                 sup_timeout=args.sup_timeout,
                 conn_params=EstablishConnParams(
-                    peer_addr=convert_str_address(args.addr),
+                    peer_addr=address_str2int(args.addr),
                     conn_interval_min=args.conn_interval,
                     conn_interval_max=args.conn_interval,
                 ),
@@ -953,6 +1072,53 @@ def main():
         func=lambda args: hci.set_channel_map(channels=args.mask, handle=args.handle),
     )
 
+    def _whitelist_func(args):
+        method = args.method
+        if method == "size":
+            wl_size = hci.read_whitelist_size()
+            print(f"Whitelist size: {wl_size}")
+            return
+
+        if method == "clear":
+            print(hci.clear_whitelist())
+            return
+
+        if len(args.args) != 2:
+            raise ValueError(
+                f"Incorrect number of arguments. Expected 2 got {len(args.args)}"
+            )
+
+        addr_type = int(args.args[0])
+        address = args.args[1]
+
+        if method == "add":
+            print(hci.add_device_to_whitelist(addr_type=addr_type, address=address))
+        else:
+            print(hci.remove_device_to_whitelist(addr_type=addr_type, address=address))
+
+    whitelist_parser = subparsers.add_parser(
+        "whitelist",
+        aliases=["wl"],
+        help="Add, remove devices from whitelist as well as clear",
+    )
+    whitelist_parser.add_argument(
+        "method",
+        nargs="?",
+        default="size",
+        type=str,
+        choices=("add", "remove", "clear", "size"),
+    )
+    wl_args_help = """Additional whitelist parameters depending on method.
+    add and remove require positional arguments <Address Type> <address>
+    adress: 6 bytes device address (Ex: xx:xx:xx:xx:xx:xx)
+    AddressType:
+    \tPublic Device Address 0
+    \tRandom Device Address 1
+    \tPublic ID Address 2 
+    \tRandom ID Address 3
+    """
+    whitelist_parser.add_argument("args", nargs="*", type=str, help=wl_args_help)
+    whitelist_parser.set_defaults(func=_whitelist_func)
     cmd_parser = subparsers.add_parser(
         "cmd", help="Send raw HCI command", formatter_class=RawTextHelpFormatter
     )
@@ -1042,6 +1208,25 @@ def main():
             _run_input_cmds(commands, terminal)
 
     run_parser = subparsers.add_parser(
+        "shell",
+        help="run command via os shell",
+        formatter_class=RawTextHelpFormatter,
+    )
+    run_parser.add_argument("shell", nargs="+")
+    run_parser.set_defaults(func=lambda args: os.system(" ".join(args.shell)))
+
+    flush_parser = subparsers.add_parser("flush", help="Flush serial port")
+    flush_parser.set_defaults(func=lambda _: hci.port.flush())
+
+    def _script_runner(script_path):
+        print(script_path)
+        with open(script_path, "r", encoding="utf-8") as script:
+            commands = script.readlines()
+
+        if commands:
+            _run_input_cmds(commands, terminal)
+
+    run_parser = subparsers.add_parser(
         "run",
         help="run command via os",
         formatter_class=RawTextHelpFormatter,
@@ -1071,7 +1256,7 @@ def main():
             logger.info("Port set, running input commands.")
             command_run = _run_input_cmds(commands, terminal)
 
-        command_str = input(f"{command_state}>>> ")
+        command_str = input(">>> ")
 
         # just an empty command
         if command_str in ("", os.linesep):

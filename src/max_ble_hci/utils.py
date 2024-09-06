@@ -178,7 +178,7 @@ def can_represent_as_bytes(data: List[int]) -> bool:
     return True
 
 
-def convert_str_address(addr: str) -> int:
+def address_str2int(addr: str) -> int:
     """Convert address as string to integer usable by HCI
 
     Parameters
@@ -206,6 +206,33 @@ def address_int2str(addr: int) -> str:
     -------
     str
         Address converted to str (ex : 00:11:22:33:44:55)
+    """
+    addr_str = ""
+    num_bytes = 6
+    for i in range(num_bytes):
+        idx = (num_bytes - 1) - i
+        bvalue = (addr >> (idx * 8)) & 0xFF
+
+        if i < num_bytes - 1:
+            addr_str += f"{bvalue:02X}:"
+        else:
+            addr_str += f"{bvalue:02X}"
+
+    return addr_str
+
+
+def address_int2list(addr: int):
+    """Address converted from int to list of ints
+
+    Parameters
+    ----------
+    addr : int
+        _description_
+
+    Returns
+    -------
+    _type_
+        _description_
     """
     addr_str = ""
     addr_len = 6
@@ -239,3 +266,32 @@ def byte_length(data: int) -> int:
         return 1
 
     return (data.bit_length() + 7) // 8
+
+
+def unsigned_to_signed(unsigned_value: int, bit_length: int) -> int:
+    """Unsigned int to signed int
+
+    Parameters
+    ----------
+    unsigned_value : int
+        Unsigned value to convert to signed
+    bit_length : _type_
+        Number of bits in value. (Ex 135 needs 8-bits)
+
+    Returns
+    -------
+    int
+        Value converted to sign
+    """
+    # Calculate the maximum unsigned value for the given bit length
+    max_unsigned = 2**bit_length
+    max_signed = 2 ** (bit_length - 1)
+
+    # If the unsigned value is greater than or equal to the max signed value,
+    # convert it to a negative signed integer.
+    if unsigned_value >= max_signed:
+        signed_value = unsigned_value - max_unsigned
+    else:
+        signed_value = unsigned_value
+
+    return signed_value
