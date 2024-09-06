@@ -163,15 +163,9 @@ class AdvReport:
         """
         data_bytes = data
         data = list(data)  # Convert to ints
-        
+
         # Constants for sizes
-        sizes = {
-            "evt_type": 1,
-            "addr_type": 1,
-            "addr": 6,
-            "len": 1,
-            "rssi": 1
-        }
+        sizes = {"evt_type": 1, "addr_type": 1, "addr": 6, "len": 1, "rssi": 1}
 
         num_reports = data[0]
         reports = [AdvReport() for _ in range(num_reports)]

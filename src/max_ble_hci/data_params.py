@@ -52,7 +52,7 @@
 """Contains data classes used for HCI function parameters/returns."""
 from dataclasses import dataclass
 
-# pylint: disable=too-many-arguments,too-many-locals,too-many-instance-attributes
+
 from typing import List, Optional
 
 from .constants import AddrType

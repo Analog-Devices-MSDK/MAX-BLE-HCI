@@ -52,7 +52,6 @@
 """
 Module contains definitions for BLE standard HCI commands.
 """
-# pylint: disable=too-many-arguments,too-many-lines
 from typing import List, Optional, Tuple, Union, Callable
 
 from ._hci_logger import get_formatted_logger
@@ -72,7 +71,6 @@ from .ad_types import AddressType
 
 
 class BleStandardCmds:
-    # pylint: disable=too-many-public-methods
     """Definitions for BLE standard HCI commands.
 
     Class contains functions used to implement BLE standard HCI
@@ -98,9 +96,9 @@ class BleStandardCmds:
     def __init__(self, port: SerialUartTransport, logger_name: str):
         self.port = port
         self.logger = get_formatted_logger(name=logger_name)
-        self.event_mask = None
-        self.event_mask_pg2 = None
-        self.event_mask_le = None
+        self.event_mask: EventMask = None
+        self.event_mask_pg2: EventMaskPage2 = None
+        self.event_mask_le: EventMaskLE = None
 
     def __enter__(self):
         self.port.start()
@@ -783,6 +781,7 @@ class BleStandardCmds:
         if self.event_mask is None:
             self.set_event_mask(EventMask.LE_META)
         else:
+            # pylint: disable=unsupported-binary-operation
             self.set_event_mask(self.event_mask | EventMask.LE_META)
 
         params = to_le_nbyte_list(mask, 8)

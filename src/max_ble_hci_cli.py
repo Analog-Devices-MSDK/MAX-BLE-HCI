@@ -61,7 +61,6 @@ import os
 import signal
 import secrets
 
-# pylint: disable=unused-import,too-many-lines
 try:
     import readline
 except ImportError:
@@ -129,7 +128,7 @@ class ArgumentParser(argparse.ArgumentParser):
         Child class adding functionality to basic Argument Parser
     """
 
-    def error(self, message):  # pylint: disable=unused-argument
+    def error(self, message):
         logger.error("Invalid input. Refer to 'help' for available commands.'")
         self.exit(2)
 
@@ -138,7 +137,7 @@ def _hex_int(hex_str: str) -> int:
     return int(hex_str, 16)
 
 
-def _signal_handler(_signal, _fname):  # pylint: disable=unused-argument
+def _signal_handler(_signal, _fname):
     print()
     sys.exit(0)
 
@@ -147,7 +146,6 @@ def _run_input_cmds(commands, terminal):
     for cmd in commands:
         try:
             print(cmd)
-            # pylint: disable=used-before-assignment
             _args = terminal.parse_args(cmd.split())
             _args.func(_args)
         except AttributeError:
@@ -242,7 +240,7 @@ def _init_cli():
 
 
 def main():
-    # pylint: disable=too-many-statements, too-many-branches, too-many-locals
+    # pylint: disable=too-many-locals, too-many-statements
     """
     MAIN
     """
@@ -1094,7 +1092,7 @@ def main():
         if method == "add":
             print(hci.add_device_to_whitelist(addr_type=addr_type, address=address))
         else:
-            print(hci.remove_device_to_whitelist(addr_type=addr_type, address=address))
+            print(hci.remove_device_from_whitelist(addr_type=addr_type, address=address))
 
     whitelist_parser = subparsers.add_parser(
         "whitelist",

@@ -75,7 +75,6 @@ from max_ble_hci.packet_codes import EventSubcode, StatusCode
 class Tester:
     """Test Harness"""
 
-    # pylint: disable=too-few-public-methods
     P256_P = (
         115792089210356248762697446949407573530086143415290314195533631308867097853951
     )

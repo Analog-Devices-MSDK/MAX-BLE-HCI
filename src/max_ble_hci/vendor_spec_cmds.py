@@ -52,7 +52,7 @@
 """
 Module contains definitions for ADI vendor-specific HCI commands.
 """
-# pylint: disable=too-many-lines, too-many-arguments, too-many-public-methods
+
 from typing import Dict, List, Optional, Tuple, Union
 
 from ._hci_logger import get_formatted_logger

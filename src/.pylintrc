@@ -39,7 +39,7 @@ extension-pkg-whitelist=
 fail-on=
 
 # Specify a score threshold under which the program will exit with error.
-fail-under=10
+fail-under=10.0
 
 # Interpret the stdin as a python script, whose filename needs to be passed as
 # the module_or_package argument.
@@ -88,7 +88,7 @@ persistent=yes
 
 # Minimum Python version to use for version dependent checks. Will default to
 # the version used to run pylint.
-py-version=3.10
+py-version=3.7
 
 # Discover python modules and packages in the file system subtree.
 recursive=no
@@ -155,7 +155,7 @@ class-const-naming-style=UPPER_CASE
 # Regular expression matching correct class constant names. Overrides class-
 # const-naming-style. If left empty, class constant names will be checked with
 # the set naming style.
-#class-const-rgx=
+class-const-rgx=(B\d{1,3}[MkK]?\d?)|(([^\W\da-z][^\Wa-z]*|__.*__)$)
 
 # Naming style matching correct class names.
 class-naming-style=PascalCase
@@ -190,7 +190,10 @@ good-names=i,
            k,
            ex,
            Run,
-           _
+           _,
+           d,
+           tx,
+           sn
 
 # Good variable names regexes, separated by a comma. If names match any regex,
 # they will always be accepted
@@ -276,44 +279,45 @@ valid-metaclass-classmethod-first-arg=mcs
 
 [DESIGN]
 
-
 # List of regular expressions of class ancestor names to ignore when counting
 # public methods (see R0903)
 exclude-too-few-public-methods=
+exclude-too-many-lines=
+
 
 # List of qualified class names to ignore when counting class parents (see
 # R0901)
 ignored-parents=
 
 # Maximum number of arguments for function / method.
-max-args=5
+max-args=10
 
 # Maximum number of attributes for a class (see R0902).
-max-attributes=7
+max-attributes=30
 
 # Maximum number of boolean expressions in an if statement (see R0916).
 max-bool-expr=5
 
 # Maximum number of branch for function / method body.
-max-branches=12
+max-branches=45
 
 # Maximum number of locals for function / method body.
-max-locals=15
+max-locals=35
 
 # Maximum number of parents for a class (see R0901).
 max-parents=7
 
 # Maximum number of public methods for a class (see R0904).
-max-public-methods=20
+max-public-methods=50
 
 # Maximum number of return / yield for function / method body.
 max-returns=6
 
 # Maximum number of statements in function / method body.
-max-statements=50
+max-statements=130
 
 # Minimum number of public methods for a class (see R0903).
-min-public-methods=2
+min-public-methods=0
 
 
 [EXCEPTIONS]
@@ -341,7 +345,7 @@ indent-string='    '
 max-line-length=100
 
 # Maximum number of lines in a module.
-max-module-lines=1000
+max-module-lines=1500
 
 # Allow the body of a class to be on the same line as the declaration if body
 # contains single statement.
@@ -404,7 +408,6 @@ logging-modules=logging
 
 [MESSAGES CONTROL]
 
-
 # Only show warnings with the listed confidence levels. Leave empty to show
 # all. Valid levels: HIGH, CONTROL_FLOW, INFERENCE, INFERENCE_FAILURE,
 # UNDEFINED.
@@ -428,17 +431,20 @@ disable=raw-checker-failed,
         locally-disabled,
         file-ignored,
         suppressed-message,
-        useless-suppression,
         deprecated-pragma,
         use-symbolic-message-instead,
+        unnecessary-lambda,
+        unnecessary-lambda-assignment,
         duplicate-code,
-        import-error
+        too-many-lines,
+        unsupported-binary-operation
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
 # multiple time (only on the command line, not in the configuration file where
 # it should appear only once). See also the "--disable" option for examples.
-enable=c-extension-no-member
+enable=useless-suppression,
+       c-extension-no-member
 
 
 [METHOD_ARGS]
