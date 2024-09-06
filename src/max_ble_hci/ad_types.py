@@ -162,47 +162,44 @@ class AdvReport:
             List of deserialized advertising reports
         """
         data_bytes = data
-        # convert to ints
-        data = list(data)
+        data = list(data)  # Convert to ints
+        
+        # Constants for sizes
+        sizes = {
+            "evt_type": 1,
+            "addr_type": 1,
+            "addr": 6,
+            "len": 1,
+            "rssi": 1
+        }
 
-        # Im sorry
-        evt_type_size = 1
-        addr_type_size = 1
-        addr_size = 6
-        len_size = 1
-        rssi_size = 1
         num_reports = data[0]
-        reports = [AdvReport()] * num_reports
+        reports = [AdvReport() for _ in range(num_reports)]
 
         offset = 1
+
+        # Im sorry
         for i in range(num_reports):
             reports[i].event_type = AdvEventType(data[offset])
-            offset += evt_type_size
+            offset += sizes["evt_type"]
 
-        for i in range(num_reports):
             reports[i].address_type = AddressType(data[offset])
-            offset += addr_type_size
+            offset += sizes["addr_type"]
 
-        for i in range(num_reports):
-            address = data[offset : offset + addr_size]
-            address.reverse()
+            address = data[offset : offset + sizes["addr"]][::-1]
             reports[i].address = ":".join(f"{byte:02x}" for byte in address)
-            offset += addr_size
+            offset += sizes["addr"]
 
-        for i in range(num_reports):
             data_len = data[offset]
             reports[i].data_len = data_len
-            offset += len_size
+            offset += sizes["len"]
 
-        for i in range(num_reports):
-            data_len = reports[i].data_len
-            data = data[offset : offset + data_len]
-            reports[i].data = data.reverse()
+            data_slice = data[offset : offset + data_len][::-1]
+            reports[i].data = data_slice
             offset += data_len
 
-        for i in range(num_reports):
             reports[i].rssi = unsigned_to_signed(data_bytes[offset], 8)
-            offset += rssi_size
+            offset += sizes["rssi"]
 
         return reports
 
