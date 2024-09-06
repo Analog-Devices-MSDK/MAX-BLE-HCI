@@ -871,7 +871,7 @@ class BleStandardCmds:
             OCF.LE_CONTROLLER.ADD_DEV_WHITE_LIST, params=params
         )
 
-    def remove_device_to_whitelist(
+    def remove_device_from_whitelist(
         self, addr_type: Union[AddressType, int], address: Union[str, int, List[int]]
     ) -> StatusCode:
         """Remove device from whitelist
