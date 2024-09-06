@@ -256,7 +256,7 @@ class BleStandardCmds:
         return self.send_le_controller_command(
             OCF.LE_CONTROLLER.SET_SCAN_RESP_DATA, params=params
         )
-    
+
     def set_random_address(self, addr: Union[int, str]) -> StatusCode:
         """Sets the random address.
 

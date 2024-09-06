@@ -1109,7 +1109,7 @@ def main():
         if method == "add":
             print(hci.add_device_to_whitelist(addr_type=addr_type, address=address))
         else:
-            print(hci.remove_device_to_whitelist(addr_type=addr_type, address=address))
+            print(hci.remove_device_from_whitelist(addr_type=addr_type, address=address))
 
     whitelist_parser = subparsers.add_parser(
         "filter",
