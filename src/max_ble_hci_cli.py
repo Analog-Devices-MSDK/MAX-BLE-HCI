@@ -424,10 +424,10 @@ def main():
         choices=[0, 1, 2, 3],
         default=0,
         help="""Set address type.
-        1: Public
-        2: Random
-        3: Public Identity
-        4: Random Identitiy
+        0: Public
+        1: Random
+        2: Public Identity
+        3: Random Identitiy
         Default: Public""",
     )
     adv_parser.add_argument(
@@ -446,7 +446,7 @@ def main():
 
     def _adv_func(args):
         enable: str = args.enable
-        addr_type: AddrType = AddrType[args.addr_type]
+        addr_type: AddrType = AddrType(args.addr_type)
         if not enable:
             enable = "1"
 
