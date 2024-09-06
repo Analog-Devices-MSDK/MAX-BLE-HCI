@@ -739,6 +739,9 @@ class VendorSpecificOCF(Enum):
     RESET_SCAN_STATS = 0x308
     """PHY disable command."""
 
+    FGEN_ENABLE = 0x309
+    """Enable Frequency Generator"""
+
 
 @dataclass
 class OCF:
