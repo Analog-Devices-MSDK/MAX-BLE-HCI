@@ -441,7 +441,7 @@ def main():
         action="store_const",
         const=3,
         default=0,
-        help="Filter devices using the whitelist."
+        help="Filter devices using the whitelist.",
     )
 
     def _adv_func(args):
@@ -464,7 +464,7 @@ def main():
                 adv_type=0 if args.connect else 0x3,
                 interval_min=args.adv_interval,
                 interval_max=args.adv_interval,
-                filter_policy=args.filter
+                filter_policy=args.filter,
             )
             hci.start_advertising(
                 connect=args.connect, adv_params=adv_params, adv_name=args.name
@@ -1109,7 +1109,9 @@ def main():
         if method == "add":
             print(hci.add_device_to_whitelist(addr_type=addr_type, address=address))
         else:
-            print(hci.remove_device_from_whitelist(addr_type=addr_type, address=address))
+            print(
+                hci.remove_device_from_whitelist(addr_type=addr_type, address=address)
+            )
 
     whitelist_parser = subparsers.add_parser(
         "filter",

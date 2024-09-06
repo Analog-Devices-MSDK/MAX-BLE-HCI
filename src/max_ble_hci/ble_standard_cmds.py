@@ -280,7 +280,9 @@ class BleStandardCmds:
             addr = address_str2int(addr)
 
         params = to_le_nbyte_list(addr, 6)
-        return self.send_le_controller_command(OCF.LE_CONTROLLER.SET_RAND_ADDR, params=params)
+        return self.send_le_controller_command(
+            OCF.LE_CONTROLLER.SET_RAND_ADDR, params=params
+        )
 
     def set_adv_params(self, adv_params: AdvParams = AdvParams()) -> StatusCode:
         """Set test board advertising parameters.
