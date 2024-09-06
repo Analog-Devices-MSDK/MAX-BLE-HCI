@@ -424,6 +424,7 @@ class SerialUartTransport:
                 self._recover_power_loss()
 
     def flush(self):
+        """Flush serial port (in/out)"""
         self.port.flush()
 
     def _retrieve(

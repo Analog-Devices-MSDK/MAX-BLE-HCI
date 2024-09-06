@@ -59,7 +59,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
 from typing import List
-from .packet_codes import EventSubcode
 from .utils import unsigned_to_signed
 
 
@@ -139,6 +138,8 @@ class ADType(Enum):
 
 @dataclass
 class AdvReport:
+    """Advertising Report"""
+
     event_type: AdvEventType = None
     address_type: AddressType = None
     address: str = None
@@ -208,25 +209,39 @@ class AdvReport:
 
 @dataclass
 class AdvData:
+    """Advertising Data"""
+
     length: int = None
     type: ADType = None
     data: object = None
 
     @staticmethod
     def from_raw_data(data: List[int]) -> List[AdvData]:
+        """Convert advertising report data to N advertising data packets
+
+        Parameters
+        ----------
+        data : List[int]
+            Raw data from advertising report
+
+        Returns
+        -------
+        List[AdvData]
+            List of adverstising data packets
+        """
         ad_data = []
 
         idx = 0
         while idx < len(data):
             data_len = data[idx + 0]
-            type = ADType(data[idx + 1])
+            ad_type = ADType(data[idx + 1])
 
             base = idx + 2
             decoded_data = data[base : base + data_len]
 
-            if type == ADType.LOCAL_NAME_SHORT or type == ADType.LOCAL_NAME_COMPLETE:
+            if ad_type in (ADType.LOCAL_NAME_SHORT, ADType.LOCAL_NAME_COMPLETE):
                 decoded_data = str(decoded_data)
-            ad_data.append(AdvData(length=data_len, type=type, data=decoded_data))
+            ad_data.append(AdvData(length=data_len, type=ad_type, data=decoded_data))
 
             idx += data_len + 2
 

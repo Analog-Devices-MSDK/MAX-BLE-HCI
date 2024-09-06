@@ -52,7 +52,7 @@
 """
 Module contains definitions for BLE standard HCI commands.
 """
-# pylint: disable=too-many-arguments
+# pylint: disable=too-many-arguments,too-many-lines
 from typing import List, Optional, Tuple, Union, Callable
 
 from ._hci_logger import get_formatted_logger
