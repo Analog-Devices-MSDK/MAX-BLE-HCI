@@ -393,7 +393,10 @@ class BleStandardCmds:
         )
 
     def update_connection_params(
-        self, handle: int, conn_params: ConnParams = ConnParams(0x0)
+        self,
+        handle: int,
+        conn_params: ConnParams = ConnParams(0x0),
+        callback: Callable = None,
     ) -> StatusCode:
         """Update connection parameters
 
@@ -409,9 +412,16 @@ class BleStandardCmds:
         StatusCode
             The return packet status code.
         """
+
+        if callback is not None:
+            self.set_event_mask_le(EventMaskLE.CONN_UPDATE_COMPLETE)
+            self.set_event_callback(callback)
+
         params = to_le_nbyte_list(handle, 2) + conn_params.to_payload()
 
-        return self.send_le_controller_command(OCF.LE_CONTROLLER, params=params)
+        return self.send_le_controller_command(
+            OCF.LE_CONTROLLER.CONN_UPDATE, params=params
+        )
 
     def create_connection(
         self, conn_params: EstablishConnParams = EstablishConnParams(0x0)
