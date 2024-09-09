@@ -1136,6 +1136,68 @@ def main():
     """
     whitelist_parser.add_argument("args", nargs="*", type=str, help=wl_args_help)
     whitelist_parser.set_defaults(func=_whitelist_func)
+
+    #### ENABLE ENCRYPTION PARSER ####
+    enable_enc_parser = subparsers.add_parser(
+        "ena-enc",
+        help="LE Enable Encryption Command",
+    )
+    enable_enc_parser.add_argument(
+        "handle",
+        type=int,
+        help="Connection handle.",
+    )
+    enable_enc_parser.add_argument(
+        "random",
+        type=_hex_int,
+        help="Random Number.",
+    )
+    enable_enc_parser.add_argument(
+        "ediv",
+        type=_hex_int,
+        help="Encrypted Diversifier.",
+    )
+    enable_enc_parser.add_argument(
+        "ltk",
+        type=_hex_int,
+        help="Long Term Key.",
+    )
+    enable_enc_parser.set_defaults(
+        func=lambda args: hci.enable_encryption(
+            handle=args.handle, random=args.random, ediv=args.ediv, ltk=args.ltk
+        ),
+    )
+
+    #### LTK REPLY PARSER ####
+    ltk_reply_parser = subparsers.add_parser(
+        "ltk-reply",
+        help="LE LTK Reply Command",
+    )
+    ltk_reply_parser.add_argument(
+        "handle",
+        type=int,
+        help="Connection handle.",
+    )
+    ltk_reply_parser.add_argument(
+        "ltk",
+        type=_hex_int,
+        help="Long Term Key.",
+    )
+    ltk_reply_parser.set_defaults(
+        func=lambda args: hci.ltk_reply(handle=args.handle, ltk=args.ltk),
+    )
+
+    #### ENABLE EVENT PARSER ####
+    ena_evt_mask_parser = subparsers.add_parser(
+        "ena-evt",
+        aliases=["evt"],
+        help="Enable all event masks.",
+        formatter_class=RawTextHelpFormatter,
+    )
+    ena_evt_mask_parser.set_defaults(
+        func=lambda args: hci.enable_all_events(),
+    )
+
     cmd_parser = subparsers.add_parser(
         "cmd", help="Send raw HCI command", formatter_class=RawTextHelpFormatter
     )
