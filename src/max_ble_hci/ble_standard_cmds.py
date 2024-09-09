@@ -413,7 +413,7 @@ class BleStandardCmds:
             The return packet status code.
         """
 
-        if callback != None:
+        if callback is not None:
             self.set_event_mask_le(EventMaskLE.CONN_UPDATE_COMPLETE)
             self.set_event_callback(callback)
 

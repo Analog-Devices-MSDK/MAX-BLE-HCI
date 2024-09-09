@@ -280,10 +280,6 @@ class ConnParams:
 
         return params
 
-    @staticmethod
-    def from_bytes(data: bytes):
-        pass
-
 
 class DataPktStats:
     """Generic data stats container for CM and DTM."""
