@@ -1149,17 +1149,17 @@ def main():
     )
     enable_enc_parser.add_argument(
         "random",
-        type=int,
+        type=_hex_int,
         help="Random Number.",
     )
     enable_enc_parser.add_argument(
         "ediv",
-        type=int,
+        type=_hex_int,
         help="Encrypted Diversifier.",
     )
     enable_enc_parser.add_argument(
         "ltk",
-        type=int,
+        type=_hex_int,
         help="Long Term Key.",
     )
     enable_enc_parser.set_defaults(
@@ -1179,7 +1179,7 @@ def main():
     )
     ltk_reply_parser.add_argument(
         "ltk",
-        type=int,
+        type=_hex_int,
         help="Long Term Key.",
     )
     ltk_reply_parser.set_defaults(

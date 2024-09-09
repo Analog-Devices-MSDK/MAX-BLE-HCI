@@ -1165,22 +1165,12 @@ class BleStandardCmds:
         if isinstance(ltk, (bytes, str)) and len(ltk) != 16:
             raise ValueError("LTK must be 128 bits if given as bytes or str!")
 
-        if isinstance(random, int):
-            random = self.convert_fips197(random)
-        if isinstance(random, bytes):
-            random = list(random)
-
-        if isinstance(ediv, int):
-            ediv = self.convert_fips197(ediv)
-        if isinstance(ediv, bytes):
-            ediv = list(ediv)
-
         if isinstance(ltk, int):
             ltk = self.convert_fips197(ltk)
         if isinstance(ltk, bytes):
             ltk = list(ltk)
 
-        params = to_le_nbyte_list(handle, 2) + random + ediv + ltk
+        params = to_le_nbyte_list(handle, 2) + to_le_nbyte_list(random, 8) + to_le_nbyte_list(ediv, 2) + ltk
 
         evt = self.send_le_controller_command(
             OCF.LE_CONTROLLER.START_ENCRYPTION, params=params, return_evt=True
