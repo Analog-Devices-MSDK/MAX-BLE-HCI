@@ -411,7 +411,9 @@ class BleStandardCmds:
         """
         params = to_le_nbyte_list(handle, 2) + conn_params.to_payload()
 
-        return self.send_le_controller_command(OCF.LE_CONTROLLER.CONN_UPDATE, params=params)
+        return self.send_le_controller_command(
+            OCF.LE_CONTROLLER.CONN_UPDATE, params=params
+        )
 
     def create_connection(
         self, conn_params: EstablishConnParams = EstablishConnParams(0x0)

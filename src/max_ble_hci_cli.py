@@ -76,7 +76,12 @@ from colorlog import ColoredFormatter
 
 from max_ble_hci import BleHci
 from max_ble_hci.constants import PayloadOption, PhyOption, AddrType
-from max_ble_hci.data_params import AdvParams, EstablishConnParams, ScanParams
+from max_ble_hci.data_params import (
+    AdvParams,
+    EstablishConnParams,
+    ScanParams,
+    ConnParams,
+)
 from max_ble_hci.utils import address_str2int
 from max_ble_hci.packet_codes import EventMaskLE, StatusCode, EventCode, EventSubcode
 from max_ble_hci.hci_packets import EventPacket
@@ -258,6 +263,7 @@ def main():
         flowcontrol=args.enable_flow_control,
         recover_on_power_loss=True,
     )
+    
     trace_lut = {
         0: "ERROR",
         1: "WARNING",
@@ -599,7 +605,7 @@ def main():
         func=lambda args: print(
             hci.init_connection(
                 addr=address_str2int(args.addr[::-1]),
-                interval=args.conn_interval,
+                # interval=args.conn_interval,
                 sup_timeout=args.sup_timeout,
                 conn_params=EstablishConnParams(
                     peer_addr=address_str2int(args.addr),
@@ -608,6 +614,63 @@ def main():
                 ),
             )
         )
+    )
+    conn_update = subparsers.add_parser(
+        "conn-update",
+        help="Start advertising",
+        formatter_class=RawTextHelpFormatter,
+    )
+    conn_update.add_argument(
+        "handle", 
+        nargs="?",
+        default=0,
+        help="""Connection handle""",
+    )
+    conn_update.add_argument(
+        "-i",
+        "--interval",
+        default=ConnParams.conn_interval_min,
+        help="""The Conn_Interval_Min and Conn_Interval_Max parameters are used to define
+the minimum and maximum allowed connection interval. The
+Conn_Interval_Min parameter shall not be greater than the Conn_Interval_Max
+parameter.(Note: min == max)""",
+    )
+    conn_update.add_argument(
+        "-l",
+          "--latency",
+        default=ConnParams.max_latency,
+        help="""The Conn_Latency parameter shall define the maximum allowed connection
+latency""",
+    )
+    conn_update.add_argument(
+        "-t",
+          "--supervision_timeout",
+        default=ConnParams.sup_timeout,
+        help="""The Supervision_Timeout parameter shall define the link supervision timeout
+for the LE link. The Supervision_Timeout in milliseconds shall be larger than (1
++ Conn_Latency) * Conn_Interval_Max * 2, where Conn_Interval_Max is given
+in milliseconds""",
+    )
+
+    conn_update.add_argument(
+        "-c",
+        "--ce_len",
+        default=ConnParams.min_ce_length,
+        help="""The Minimum_CE_Length and Maximum_CE_Length are information
+parameters providing the Controller with a hint about the expected minimum
+and maximum length of the connection events. The Minimum_CE_Length shall
+be less than or equal to the Maximum_CE_Length.""",
+    )
+
+    conn_update.set_defaults(
+        func=lambda args: hci.update_connection_params(args.handle, ConnParams(
+        conn_interval_max=args.interval,
+        conn_interval_min=args.interval,
+        max_latency=args.latency,
+        sup_timeout=args.supervision_timeout,
+        min_ce_length=args.ce_len,
+        max_ce_length=args.ce_len,
+    ))
     )
 
     datalen_parser = subparsers.add_parser(

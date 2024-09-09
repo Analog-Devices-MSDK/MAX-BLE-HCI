@@ -397,6 +397,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         """
 
         if interval and conn_params is not None:
+            print(interval, conn_params)
             self.logger.warning(
                 "Mulitple definitions of connection interval and conn params\n Ignoring interval."
             )
