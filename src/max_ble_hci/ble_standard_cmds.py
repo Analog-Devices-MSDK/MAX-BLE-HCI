@@ -1170,8 +1170,8 @@ class BleStandardCmds:
         if isinstance(ltk, bytes):
             ltk = list(ltk)
 
-        params = to_le_nbyte_list(handle, 2) + to_le_nbyte_list(random, 8) +
-            to_le_nbyte_list(ediv, 2) + ltk
+        params = to_le_nbyte_list(handle, 2) + to_le_nbyte_list(random, 8)
+        + to_le_nbyte_list(ediv, 2) + ltk
 
         evt = self.send_le_controller_command(
             OCF.LE_CONTROLLER.START_ENCRYPTION, params=params, return_evt=True
