@@ -1,3 +1,0 @@
-reset
-addr aa:bb:cc:dd:ee:ff
-adv -n upf_adi
