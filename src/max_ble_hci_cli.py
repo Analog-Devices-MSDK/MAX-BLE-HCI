@@ -263,7 +263,7 @@ def main():
         flowcontrol=args.enable_flow_control,
         recover_on_power_loss=True,
     )
-    
+
     trace_lut = {
         0: "ERROR",
         1: "WARNING",
@@ -621,7 +621,7 @@ def main():
         formatter_class=RawTextHelpFormatter,
     )
     conn_update.add_argument(
-        "handle", 
+        "handle",
         nargs="?",
         default=0,
         help="""Connection handle""",
@@ -637,14 +637,14 @@ parameter.(Note: min == max)""",
     )
     conn_update.add_argument(
         "-l",
-          "--latency",
+        "--latency",
         default=ConnParams.max_latency,
         help="""The Conn_Latency parameter shall define the maximum allowed connection
 latency""",
     )
     conn_update.add_argument(
         "-t",
-          "--supervision_timeout",
+        "--supervision_timeout",
         default=ConnParams.sup_timeout,
         help="""The Supervision_Timeout parameter shall define the link supervision timeout
 for the LE link. The Supervision_Timeout in milliseconds shall be larger than (1
@@ -663,14 +663,17 @@ be less than or equal to the Maximum_CE_Length.""",
     )
 
     conn_update.set_defaults(
-        func=lambda args: hci.update_connection_params(args.handle, ConnParams(
-        conn_interval_max=args.interval,
-        conn_interval_min=args.interval,
-        max_latency=args.latency,
-        sup_timeout=args.supervision_timeout,
-        min_ce_length=args.ce_len,
-        max_ce_length=args.ce_len,
-    ))
+        func=lambda args: hci.update_connection_params(
+            args.handle,
+            ConnParams(
+                conn_interval_max=args.interval,
+                conn_interval_min=args.interval,
+                max_latency=args.latency,
+                sup_timeout=args.supervision_timeout,
+                min_ce_length=args.ce_len,
+                max_ce_length=args.ce_len,
+            ),
+        )
     )
 
     datalen_parser = subparsers.add_parser(
