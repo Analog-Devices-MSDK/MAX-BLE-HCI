@@ -605,7 +605,6 @@ def main():
         func=lambda args: print(
             hci.init_connection(
                 addr=address_str2int(args.addr[::-1]),
-                # interval=args.conn_interval,
                 sup_timeout=args.sup_timeout,
                 conn_params=EstablishConnParams(
                     peer_addr=address_str2int(args.addr),
@@ -662,16 +661,26 @@ and maximum length of the connection events. The Minimum_CE_Length shall
 be less than or equal to the Maximum_CE_Length.""",
     )
 
+    def _conn_update_callback(packet: EventPacket):
+        if packet.evt_subcode == EventSubcode.CONNECTION_UPDATE:
+            logger.info("Connection update complete!")
+
+        hci.set_event_callback(print)
+        print(">>>>")
+
     conn_update.set_defaults(
-        func=lambda args: hci.update_connection_params(
-            args.handle,
-            ConnParams(
-                conn_interval_max=args.interval,
-                conn_interval_min=args.interval,
-                max_latency=args.latency,
-                sup_timeout=args.supervision_timeout,
-                min_ce_length=args.ce_len,
-                max_ce_length=args.ce_len,
+        func=lambda args: print(
+            hci.update_connection_params(
+                args.handle,
+                ConnParams(
+                    conn_interval_max=args.interval,
+                    conn_interval_min=args.interval,
+                    max_latency=args.latency,
+                    sup_timeout=args.supervision_timeout,
+                    min_ce_length=args.ce_len,
+                    max_ce_length=args.ce_len,
+                ),
+                callback=_conn_update_callback,
             ),
         )
     )

@@ -267,6 +267,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         StatusCode
             The return status of the set event mask or set event mask le commands
         """
+        print("enbaling all events")
         controller_mask = EventMask.get_full_mask()
         controller_page2 = EventMaskPage2.get_full_mask()
         lemask = EventMaskLE.get_full_mask()
@@ -396,8 +397,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
 
         """
 
-        if interval and conn_params is not None:
-            print(interval, conn_params)
+        if interval and interval != 0x6 and conn_params is not None:
             self.logger.warning(
                 "Mulitple definitions of connection interval and conn params\n Ignoring interval."
             )
