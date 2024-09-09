@@ -1882,8 +1882,13 @@ class VendorSpecificCmds:
         elif frequency_khz < 2_402_000 or frequency_khz > 2_500_000:
             raise ValueError("Frequency must be within 2,402,000 and 2,500.000")
         else:
-            params = [int(enable)] + to_le_nbyte_list(frequency_khz, 3) + [prbs_type.value]
-        
+            freq_le = to_le_nbyte_list(frequency_khz, 3)
+
+            params = [int(enable)] + freq_le + [prbs_type.value]
+
+            for x in freq_le:
+                print(hex(x))
+
         return self.send_vs_command(
             OCF.VENDOR_SPEC.FGEN_ENABLE, params=params
         )

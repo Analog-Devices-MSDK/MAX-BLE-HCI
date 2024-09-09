@@ -702,19 +702,19 @@ def main():
     def _fgen_func(args):
         if args.enable in ('enable','en', 'start', '1'):
             prbs_type = fgen_choices[args.type]
-            hci.fgen_enable_vs(True, args.freqency, prbs_type)
+            print(hci.fgen_enable_vs(True, args.frequency, prbs_type))
         else:
-            hci.fgen_enable_vs(False)
+            print(hci.fgen_enable_vs(False))
 
     fgen_vs_parser = subparsers.add_parser(
         "fgen",
-        aliases=["rxvs"],
-        help="Execute the vendor-specific receiver test",
+        aliases=["vs"],
+        help="Enable the radio as a function generator (Vendor Specfic)",
         formatter_class=RawTextHelpFormatter,
     )
     fgen_vs_parser.add_argument(
         "enable",
-        choices=('enable','en', 'start', '1', 'disable','dis','0', 'stop')
+        choices=('enable','en', 'start', '1', 'disable','dis','0', 'stop'),
         default='1',
         help="Enable or disable frequency generator Default: enable",
     )
@@ -723,13 +723,13 @@ def main():
         "--frequency",
         type=int,
         default=2_402_000,
-        help="Rx test channel. Default: 0",
+        help="TX Frequency",
     )
     fgen_vs_parser.add_argument(
         "-t",
         "--type",
-        type=int,
-        choices=fgen_choices.keys()
+        default='cw',
+        choices=fgen_choices.keys(),
         help="Rx test channel. Default: 0",
     )
     fgen_vs_parser.set_defaults(func=_fgen_func)
@@ -1328,7 +1328,10 @@ def main():
                 )
 
         except Exception as err:  # pylint: disable=broad-exception-caught
-            logger.error("Unexpected exception %s", type(err).__name__)
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            # print(exc_type, fname, exc_tb.tb_lineno)
+            logger.error("Unexpected exception %s", type(err).__name__,exc_tb.tb_lineno)
 
 
 ################## MAIN ##################
