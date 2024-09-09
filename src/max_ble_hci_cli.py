@@ -1163,8 +1163,9 @@ def main():
         help="Long Term Key.",
     )
     enable_enc_parser.set_defaults(
-        func=lambda args: hci.enable_encryption(handle=args.handle,
-            random=args.random, ediv=args.ediv, ltk=args.ltk),
+        func=lambda args: hci.enable_encryption(
+            handle=args.handle, random=args.random, ediv=args.ediv, ltk=args.ltk
+        ),
     )
 
     #### LTK REPLY PARSER ####
@@ -1183,8 +1184,7 @@ def main():
         help="Long Term Key.",
     )
     ltk_reply_parser.set_defaults(
-        func=lambda args: hci.ltk_reply(handle=args.handle,
-            ltk=args.ltk),
+        func=lambda args: hci.ltk_reply(handle=args.handle, ltk=args.ltk),
     )
 
     #### ENABLE EVENT PARSER ####
@@ -1197,7 +1197,6 @@ def main():
     ena_evt_mask_parser.set_defaults(
         func=lambda args: hci.enable_all_events(),
     )
-
 
     cmd_parser = subparsers.add_parser(
         "cmd", help="Send raw HCI command", formatter_class=RawTextHelpFormatter

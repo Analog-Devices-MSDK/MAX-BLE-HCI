@@ -1112,7 +1112,7 @@ class BleStandardCmds:
         handle: int,
         random: Union[bytes, int, str],
         ediv: Union[bytes, int, str],
-        ltk=Union[bytes, int, str]
+        ltk=Union[bytes, int, str],
     ) -> StatusCode:
         """Enable encryption command
 
@@ -1125,7 +1125,7 @@ class BleStandardCmds:
         random : Union[bytes, int, str]
             64 bit random number
         ediv : Union[bytes, int, str]
-            16 bit encrypted diversifier. 
+            16 bit encrypted diversifier.
         ltk : Union[int, bytes, str]
             128 bit Long term Key
 
@@ -1170,8 +1170,12 @@ class BleStandardCmds:
         if isinstance(ltk, bytes):
             ltk = list(ltk)
 
-        params = to_le_nbyte_list(handle, 2) + to_le_nbyte_list(random, 8) + \
-        to_le_nbyte_list(ediv, 2) + ltk
+        params = (
+            to_le_nbyte_list(handle, 2)
+            + to_le_nbyte_list(random, 8)
+            + to_le_nbyte_list(ediv, 2)
+            + ltk
+        )
 
         evt = self.send_le_controller_command(
             OCF.LE_CONTROLLER.START_ENCRYPTION, params=params, return_evt=True
@@ -1182,13 +1186,9 @@ class BleStandardCmds:
 
         return evt
 
-    def ltk_reply(
-        self,
-        handle: int,
-        ltk=Union[bytes, int, str]
-    ) -> StatusCode:
+    def ltk_reply(self, handle: int, ltk=Union[bytes, int, str]) -> StatusCode:
         """LTK Reply command
-        
+
         Used by the slave to set the LTK for a given connection.
 
         Parameters
