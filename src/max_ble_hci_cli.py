@@ -123,7 +123,8 @@ DEFAULT_ADV_INTERVAL = 0x60
 DEFAULT_SCAN_INTERVAL = 0x10
 DEFAULT_CONN_INTERVAL = 0x6  # 7.5 ms
 DEFAULT_SUP_TIMEOUT = 0x64  # 1 s
-
+DEFAULT_CE_LEN = 0x0F10
+DEFAULT_CONN_LATENCY = 0
 
 class ArgumentParser(argparse.ArgumentParser):
     """Argument  Parser
@@ -623,42 +624,45 @@ def main():
         "handle",
         nargs="?",
         default=0,
+        type=int,
         help="""Connection handle""",
     )
     conn_update.add_argument(
         "-i",
         "--interval",
-        default=ConnParams.conn_interval_min,
-        help="""The Conn_Interval_Min and Conn_Interval_Max parameters are used to define
-the minimum and maximum allowed connection interval. The
-Conn_Interval_Min parameter shall not be greater than the Conn_Interval_Max
-parameter.(Note: min == max)""",
+        type=_hex_int,
+        default=DEFAULT_CONN_INTERVAL,
+        help=f"""Connection interval in units of 1.25ms, 16-bit hex number 0x0006 - 0x0C80."
+Default: {hex(DEFAULT_CONN_INTERVAL)}""",
     )
     conn_update.add_argument(
         "-l",
         "--latency",
-        default=ConnParams.max_latency,
-        help="""The Conn_Latency parameter shall define the maximum allowed connection
-latency""",
+        type=_hex_int,
+        default=DEFAULT_CONN_LATENCY,
+        help=f"""The Conn_Latency parameter shall define the maximum allowed connection latency
+Default: {hex(DEFAULT_CONN_LATENCY)}""",
     )
     conn_update.add_argument(
         "-t",
-        "--supervision_timeout",
-        default=ConnParams.sup_timeout,
-        help="""The Supervision_Timeout parameter shall define the link supervision timeout
-for the LE link. The Supervision_Timeout in milliseconds shall be larger than (1
-+ Conn_Latency) * Conn_Interval_Max * 2, where Conn_Interval_Max is given
-in milliseconds""",
+        "--timeout",
+        dest="sup_timeout",
+        type=_hex_int,
+        default=DEFAULT_SUP_TIMEOUT,
+        help=f"""Supervision timeout in units of 10ms, 16-bit hex number 0x000A - 0x0C80.
+Default: {hex(DEFAULT_SUP_TIMEOUT)}""",
     )
 
     conn_update.add_argument(
         "-c",
         "--ce_len",
-        default=ConnParams.min_ce_length,
-        help="""The Minimum_CE_Length and Maximum_CE_Length are information
+        default=DEFAULT_CE_LEN,
+        type=_hex_int,
+        help=f"""The Minimum_CE_Length and Maximum_CE_Length are information
 parameters providing the Controller with a hint about the expected minimum
 and maximum length of the connection events. The Minimum_CE_Length shall
-be less than or equal to the Maximum_CE_Length.""",
+be less than or equal to the Maximum_CE_Length.
+Default: {hex(DEFAULT_CE_LEN)}""",
     )
 
     def _conn_update_callback(packet: EventPacket):
