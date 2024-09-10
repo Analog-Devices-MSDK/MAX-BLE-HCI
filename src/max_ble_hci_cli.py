@@ -708,7 +708,6 @@ def main():
 
     fgen_vs_parser = subparsers.add_parser(
         "fgen",
-        aliases=["vs"],
         help="Enable the radio as a function generator (Vendor Specfic)",
         formatter_class=RawTextHelpFormatter,
     )

@@ -1886,9 +1886,6 @@ class VendorSpecificCmds:
 
             params = [int(enable)] + freq_le + [prbs_type.value]
 
-            for x in freq_le:
-                print(hex(x))
-
         return self.send_vs_command(
             OCF.VENDOR_SPEC.FGEN_ENABLE, params=params
         )
