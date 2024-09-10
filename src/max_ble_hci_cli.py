@@ -126,6 +126,7 @@ DEFAULT_SUP_TIMEOUT = 0x64  # 1 s
 DEFAULT_CE_LEN = 0x0F10
 DEFAULT_CONN_LATENCY = 0
 
+
 class ArgumentParser(argparse.ArgumentParser):
     """Argument  Parser
 
