@@ -394,7 +394,7 @@ class BleStandardCmds:
 
     def update_connection_params(
         self,
-        handle: int,
+        handle: int = 0x0000,
         conn_params: ConnParams = ConnParams(0x0),
         callback: Callable = None,
     ) -> StatusCode:
