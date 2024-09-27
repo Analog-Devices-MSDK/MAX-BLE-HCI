@@ -75,7 +75,7 @@ from argparse import RawTextHelpFormatter
 from colorlog import ColoredFormatter
 
 from max_ble_hci import BleHci
-from max_ble_hci.constants import PayloadOption, PhyOption
+from max_ble_hci.constants import PayloadOption, PhyOption, AddrType
 from max_ble_hci.data_params import AdvParams, EstablishConnParams, ScanParams
 from max_ble_hci.utils import address_str2int
 from max_ble_hci.packet_codes import EventMaskLE, StatusCode, EventCode, EventSubcode
@@ -419,38 +419,53 @@ def main():
         "-n", "--name", type=str, default="", help="Advertising name"
     )
     adv_parser.add_argument(
+        "-a",
+        "--addr-type",
+        type=int,
+        choices=[0, 1, 2, 3],
+        default=0,
+        help="""Set address type.
+        0: Public
+        1: Random
+        2: Public Identity
+        3: Random Identitiy
+        Default: Public""",
+    )
+    adv_parser.add_argument(
         "--no-connect",
         dest="connect",
         action="store_false",
         help="Disable advertising as a connectable device.",
     )
     adv_parser.add_argument(
-        "-r",
-        "--rand-addr",
-        action="store_true",
-        help="Start advertising using a randomly generated address",
+        "--filter",
+        action="store_const",
+        const=3,
+        default=0,
+        help="Filter devices using the whitelist.",
     )
 
     def _adv_func(args):
         enable: str = args.enable
-
+        addr_type: AddrType = AddrType(args.addr_type)
         if not enable:
             enable = "1"
 
         if enable in ("1", "en", "enable", "start"):
-            if args.rand_addr:
+            if addr_type == AddrType.RANDOM:
                 rand_addr = secrets.randbits(48)
                 logger.info(
                     "Advertising with random adrress %s",
                     utils.address_int2str(rand_addr),
                 )
-                hci.set_address(rand_addr)
+                hci.set_random_address(rand_addr)
 
             logger.info("Enabling advertising")
             adv_params = AdvParams(
                 adv_type=0 if args.connect else 0x3,
                 interval_min=args.adv_interval,
                 interval_max=args.adv_interval,
+                filter_policy=args.filter,
             )
             hci.start_advertising(
                 connect=args.connect, adv_params=adv_params, adv_name=args.name
@@ -1142,11 +1157,13 @@ def main():
         if method == "add":
             print(hci.add_device_to_whitelist(addr_type=addr_type, address=address))
         else:
-            print(hci.remove_device_to_whitelist(addr_type=addr_type, address=address))
+            print(
+                hci.remove_device_from_whitelist(addr_type=addr_type, address=address)
+            )
 
     whitelist_parser = subparsers.add_parser(
-        "whitelist",
-        aliases=["wl"],
+        "filter",
+        aliases=["filt", "wl", "whitelist"],
         help="Add, remove devices from whitelist as well as clear",
     )
     whitelist_parser.add_argument(
