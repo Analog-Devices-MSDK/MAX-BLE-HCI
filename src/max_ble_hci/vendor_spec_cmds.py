@@ -591,58 +591,6 @@ class VendorSpecificCmds:
 
         return self.send_vs_command(OCF.VENDOR_SPEC.SET_CHAN_MAP, params=params)
 
-    def read_register(
-        self, addr: int, length: int, print_data: bool = False
-    ) -> Tuple[List[int], StatusCode]:
-        """Read a number of bytes from a register.
-
-        Sends a vendor-specific command to the DUT, telling it to
-        read bytes from a register in accordance with the given
-        length and register address values.
-
-        Parameters
-        ----------
-        addr : int
-            The address at which the read should begin.
-        length : int
-            The number of bytes to read.
-        print_data : bool, optional
-            Print read data to the console?
-
-        Returns
-        -------
-        List[int]
-            The read data.
-        StatusCode
-            The return packet status code.
-
-        """
-        params = [length]
-        params.extend(to_le_nbyte_list(addr, 4))
-        evt = self.send_vs_command(
-            OCF.VENDOR_SPEC.REG_READ, params=params, return_evt=True
-        )
-
-        param_lens = [4] * (length // 4)
-        if not length % 4 == 0:
-            param_lens.append(length % 4)
-        read_data = evt.get_return_params(param_lens=param_lens)
-
-        if print_data:
-            for idx, plen in enumerate(param_lens):
-                if plen == 1:
-                    self.logger.info("0x%08X: 0x______%02X", addr, read_data[idx])
-                elif plen == 2:
-                    self.logger.info("0x%08X: 0x____%04X", addr, read_data[idx])
-                elif plen == 3:
-                    self.logger.info("0x%08X: 0x__%06X", addr, read_data[idx])
-                else:
-                    self.logger.info("0x%08X: 0x%08X", addr, read_data[idx])
-
-                addr += 4
-
-        return read_data, evt.status
-
     def set_scan_channel_map(self, channel_map: int) -> StatusCode:
         """Set the channel map used for scanning.
 
