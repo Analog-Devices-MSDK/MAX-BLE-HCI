@@ -1207,7 +1207,6 @@ def main():
         func=lambda args: os.system(f"make -j {args.jobs} -C {args.directory}")
     )
 
-
     def _script_runner(script_path):
         print(script_path)
         with open(script_path, "r", encoding="utf-8") as script:
