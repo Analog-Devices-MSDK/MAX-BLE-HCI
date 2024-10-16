@@ -284,6 +284,7 @@ class ConnParams:
 class DataPktStats:
     """Generic data stats container for CM and DTM."""
 
+    # pylint-disable=too-many-positional-arguments
     def __init__(
         self,
         rx_data: int = 0,
@@ -322,6 +323,8 @@ class DataPktStats:
 
         self.tx_isr = tx_isr
         """TX ISR processing watermark in microseconds."""
+
+    # pylint-enable=too-many-positional-arguments
 
     def __repr__(self) -> str:
         print_lns = []
