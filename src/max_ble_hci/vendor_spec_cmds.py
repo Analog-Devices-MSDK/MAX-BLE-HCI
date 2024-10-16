@@ -1853,7 +1853,7 @@ class VendorSpecificCmds:
         return rssi, evt.status
     
 
-    def fgen_enable_vs(self, enable:bool, frequency_khz:int = 2_402_000, prbs_type:VsPrbsType = VsPrbsType.CW) -> StatusCode:
+    def fgen_enable_vs(self, enable:bool, frequency_khz:int = 2_402_000, prbs_type:VsPrbsType = VsPrbsType.CW, power = 0) -> StatusCode:
         """Enable radio as freqeuncy generator
 
         Parameters
@@ -1884,7 +1884,7 @@ class VendorSpecificCmds:
         else:
             freq_le = to_le_nbyte_list(frequency_khz, 3)
 
-            params = [int(enable)] + freq_le + [prbs_type.value]
+            params = [int(enable)] + freq_le + [prbs_type.value, power]
 
         return self.send_vs_command(
             OCF.VENDOR_SPEC.FGEN_ENABLE, params=params
