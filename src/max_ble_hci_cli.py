@@ -1207,13 +1207,6 @@ def main():
         func=lambda args: os.system(f"make -j {args.jobs} -C {args.directory}")
     )
 
-    run_parser = subparsers.add_parser(
-        "shell",
-        help="run command sript",
-        formatter_class=RawTextHelpFormatter,
-    )
-    run_parser.add_argument("shell", nargs="+")
-    run_parser.set_defaults(func=lambda args: os.system(" ".join(args.shell)))
 
     def _script_runner(script_path):
         print(script_path)
@@ -1229,8 +1222,8 @@ def main():
         help="run command via os shell",
         formatter_class=RawTextHelpFormatter,
     )
-    run_parser.add_argument("shell", nargs="+")
-    run_parser.set_defaults(func=lambda args: os.system(" ".join(args.shell)))
+    run_parser.add_argument("shellargs", nargs="+")
+    run_parser.set_defaults(func=lambda args: os.system(" ".join(args.shellargs)))
 
     flush_parser = subparsers.add_parser("flush", help="Flush serial port")
     flush_parser.set_defaults(func=lambda _: hci.port.flush())
