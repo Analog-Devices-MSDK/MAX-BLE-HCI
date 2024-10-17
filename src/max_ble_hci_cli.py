@@ -202,7 +202,7 @@ def _init_cli():
     parser.add_argument(
         "-efc",
         "--enable-flow-control",
-        action="store_false",
+        action="store_true",
         default=False,
         help="Enable flow control Default: False",
     )
