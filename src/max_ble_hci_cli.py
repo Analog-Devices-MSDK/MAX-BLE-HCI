@@ -256,8 +256,6 @@ def main():
 
     args = _init_cli()
 
-    print(args)
-
     hci = BleHci(
         args.serial_port,
         baud=args.baudRate,
