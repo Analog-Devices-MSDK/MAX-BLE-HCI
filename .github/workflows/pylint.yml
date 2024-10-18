@@ -27,8 +27,4 @@ jobs:
     - name: Analysing the code with pylint
       run: |
 
-        cat src/.pylintrc | grep max-args
-        echo
-        echo
-        echo
         pylint $(git ls-files 'src/*.py') --rcfile src/.pylintrc --enable=source
