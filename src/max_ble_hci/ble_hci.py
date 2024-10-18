@@ -122,7 +122,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
 
     """
 
-    # pylint-disable=too-many-positional-arguments
+    # pylint: disable=too-many-positional-arguments
     def __init__(
         self,
         port_id: str,

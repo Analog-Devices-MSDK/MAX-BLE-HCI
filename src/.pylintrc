@@ -286,7 +286,10 @@ exclude-too-few-public-methods=
 ignored-parents=
 
 # Maximum number of arguments for function / method.
-max-args=8
+max-args=15
+
+# Maximum number of positional arguments for function/method definitions.
+max-positional-arguments=15
 
 # Maximum number of attributes for a class (see R0902).
 max-attributes=7
@@ -432,7 +435,8 @@ disable=raw-checker-failed,
         deprecated-pragma,
         use-symbolic-message-instead,
         duplicate-code,
-        import-error
+        import-error,
+        unknown-option-value
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
