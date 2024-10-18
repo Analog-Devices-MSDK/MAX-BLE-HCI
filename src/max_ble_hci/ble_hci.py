@@ -122,7 +122,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
 
     """
 
-    # pylint-disable=too-many-positional-arguments
+    #pylint: disable=too-many-positional-arguments
     def __init__(
         self,
         port_id: str,
@@ -154,7 +154,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         )
         super().__init__(self.port, logger_name)
 
-    # pylint-enable=too-many-positional-arguments
+    #pylint-enable=too-many-positional-arguments
 
     def __enter__(self):
         self.port.start()
