@@ -73,13 +73,16 @@ from .packet_defs import OCF, OGF
 from .utils import address_str2int, to_le_nbyte_list
 
 
-
 class VsPrbsType(Enum):
+    """Pattern Types for FGEN to transmit
+    """
     CW = 0
-    PRBS9 = 1 
+    PRBS9 = 1
     PRBS15 = 2
     DF1 = 3
     DF2 = 4
+
+
 class VendorSpecificCmds:
     """Definitions for ADI vendor-specific HCI commands.
 
@@ -1797,11 +1800,15 @@ class VendorSpecificCmds:
 
         rssi = evt.get_return_params(signed=True)
 
-
         return rssi, evt.status
-    
 
-    def fgen_enable_vs(self, enable:bool, frequency_khz:int = 2_402_000, prbs_type:VsPrbsType = VsPrbsType.CW, power = 0) -> StatusCode:
+    def fgen_enable_vs(
+        self,
+        enable: bool,
+        frequency_khz: int = 2_402_000,
+        prbs_type: VsPrbsType = VsPrbsType.CW,
+        power=0,
+    ) -> StatusCode:
         """Enable radio as freqeuncy generator
 
         Parameters
@@ -1825,8 +1832,8 @@ class VendorSpecificCmds:
         """
 
         if not enable:
-            params = 0    
-            
+            params = 0
+
         elif frequency_khz < 2_402_000 or frequency_khz > 2_500_000:
             raise ValueError("Frequency must be within 2,402,000 and 2,500.000")
         else:
@@ -1834,9 +1841,7 @@ class VendorSpecificCmds:
 
             params = [int(enable)] + freq_le + [prbs_type.value, power]
 
-        return self.send_vs_command(
-            OCF.VENDOR_SPEC.FGEN_ENABLE, params=params
-        )
+        return self.send_vs_command(OCF.VENDOR_SPEC.FGEN, params=params)
 
     def reset_adv_stats(self) -> StatusCode:
         """Reset accumulated advertising stats

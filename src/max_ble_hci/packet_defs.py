@@ -737,7 +737,6 @@ class VendorSpecificOCF(Enum):
     """Function generator command."""
 
 
-
 @dataclass
 class OCF:
     """Supported Opcode Command Field values."""
