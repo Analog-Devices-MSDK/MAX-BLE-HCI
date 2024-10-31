@@ -74,8 +74,8 @@ from .utils import address_str2int, to_le_nbyte_list
 
 
 class VsPrbsType(Enum):
-    """Pattern Types for FGEN to transmit
-    """
+    """Pattern Types for FGEN to transmit"""
+
     CW = 0
     PRBS9 = 1
     PRBS15 = 2
