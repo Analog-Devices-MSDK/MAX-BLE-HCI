@@ -712,35 +712,30 @@ class VendorSpecificOCF(Enum):
     SET_CONN_PHY_TX_PWR = 0x3DD
     """Set connection PHY TX power command."""
 
-    REG_WRITE = 0x300
-    """Register write command."""
-
-    REG_READ = 0x301
-    """Register read command."""
-
-    RESET_CONN_STATS = 0x302
+    RESET_CONN_STATS = 0x300
     """Reset connection statistics command."""
 
-    TX_TEST = 0x303
+    TX_TEST = 0x301
     """Transmitter test command."""
 
-    RESET_TEST_STATS = 0x304
+    RESET_TEST_STATS = 0x302
     """Reset test statistics command."""
 
-    RX_TEST = 0x305
+    RX_TEST = 0x303
     """Receiver test command."""
 
-    GET_RSSI = 0x306
+    GET_RSSI = 0x304
     """Get RSSI command."""
 
-    RESET_ADV_STATS = 0x307
+    RESET_ADV_STATS = 0x305
     """PHY enable command."""
 
-    RESET_SCAN_STATS = 0x308
+    RESET_SCAN_STATS = 0x306
     """PHY disable command."""
 
-    FGEN_ENABLE = 0x309
-    """Enable Frequency Generator"""
+    FGEN = 0x307
+    """Function generator command."""
+
 
 
 @dataclass

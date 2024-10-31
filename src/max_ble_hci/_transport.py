@@ -143,6 +143,7 @@ class SerialUartTransport:
 
         return cls.instance
 
+    # pylint-disable=too-many-positional-arguments
     def __init__(
         self,
         port_id: str,
@@ -179,6 +180,8 @@ class SerialUartTransport:
 
         self._init_port(port_id, baud, exclusive_port, flowcontrol)
         self._init_read_thread()
+
+    # pylint-enable=too-many-positional-arguments
 
     def __enter__(self):
         self.start()

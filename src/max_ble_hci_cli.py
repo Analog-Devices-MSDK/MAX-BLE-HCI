@@ -76,7 +76,12 @@ from colorlog import ColoredFormatter
 
 from max_ble_hci import BleHci
 from max_ble_hci.constants import PayloadOption, PhyOption, AddrType
-from max_ble_hci.data_params import AdvParams, EstablishConnParams, ScanParams
+from max_ble_hci.data_params import (
+    AdvParams,
+    EstablishConnParams,
+    ScanParams,
+    ConnParams,
+)
 from max_ble_hci.utils import address_str2int
 from max_ble_hci.packet_codes import EventMaskLE, StatusCode, EventCode, EventSubcode
 from max_ble_hci.hci_packets import EventPacket
@@ -119,6 +124,8 @@ DEFAULT_ADV_INTERVAL = 0x60
 DEFAULT_SCAN_INTERVAL = 0x10
 DEFAULT_CONN_INTERVAL = 0x6  # 7.5 ms
 DEFAULT_SUP_TIMEOUT = 0x64  # 1 s
+DEFAULT_CE_LEN = 0x0F10
+DEFAULT_CONN_LATENCY = 0
 
 
 class ArgumentParser(argparse.ArgumentParser):
@@ -196,7 +203,7 @@ def _init_cli():
     parser.add_argument(
         "-efc",
         "--enable-flow-control",
-        action="store_false",
+        action="store_true",
         default=False,
         help="Enable flow control Default: False",
     )
@@ -259,6 +266,7 @@ def main():
         flowcontrol=args.enable_flow_control,
         recover_on_power_loss=True,
     )
+
     trace_lut = {
         0: "ERROR",
         1: "WARNING",
@@ -600,7 +608,6 @@ def main():
         func=lambda args: print(
             hci.init_connection(
                 addr=address_str2int(args.addr[::-1]),
-                interval=args.conn_interval,
                 sup_timeout=args.sup_timeout,
                 conn_params=EstablishConnParams(
                     peer_addr=address_str2int(args.addr),
@@ -608,6 +615,79 @@ def main():
                     conn_interval_max=args.conn_interval,
                 ),
             )
+        )
+    )
+    conn_update = subparsers.add_parser(
+        "conn-update",
+        help="Start advertising",
+        formatter_class=RawTextHelpFormatter,
+    )
+    conn_update.add_argument(
+        "handle",
+        nargs="?",
+        default=0,
+        type=int,
+        help="""Connection handle""",
+    )
+    conn_update.add_argument(
+        "-i",
+        "--interval",
+        type=_hex_int,
+        default=DEFAULT_CONN_INTERVAL,
+        help=f"""Connection interval in units of 1.25ms, 16-bit hex number 0x0006 - 0x0C80."
+Default: {hex(DEFAULT_CONN_INTERVAL)}""",
+    )
+    conn_update.add_argument(
+        "-l",
+        "--latency",
+        type=_hex_int,
+        default=DEFAULT_CONN_LATENCY,
+        help=f"""The Conn_Latency parameter shall define the maximum allowed connection latency
+Default: {hex(DEFAULT_CONN_LATENCY)}""",
+    )
+    conn_update.add_argument(
+        "-t",
+        "--timeout",
+        dest="sup_timeout",
+        type=_hex_int,
+        default=DEFAULT_SUP_TIMEOUT,
+        help=f"""Supervision timeout in units of 10ms, 16-bit hex number 0x000A - 0x0C80.
+Default: {hex(DEFAULT_SUP_TIMEOUT)}""",
+    )
+
+    conn_update.add_argument(
+        "-c",
+        "--ce_len",
+        default=DEFAULT_CE_LEN,
+        type=_hex_int,
+        help=f"""The Minimum_CE_Length and Maximum_CE_Length are information
+parameters providing the Controller with a hint about the expected minimum
+and maximum length of the connection events. The Minimum_CE_Length shall
+be less than or equal to the Maximum_CE_Length.
+Default: {hex(DEFAULT_CE_LEN)}""",
+    )
+
+    def _conn_update_callback(packet: EventPacket):
+        if packet.evt_subcode == EventSubcode.CONNECTION_UPDATE:
+            logger.info("Connection update complete!")
+
+        hci.set_event_callback(print)
+        print(">>>>")
+
+    conn_update.set_defaults(
+        func=lambda args: print(
+            hci.update_connection_params(
+                args.handle,
+                ConnParams(
+                    conn_interval_max=args.interval,
+                    conn_interval_min=args.interval,
+                    max_latency=args.latency,
+                    sup_timeout=args.supervision_timeout,
+                    min_ce_length=args.ce_len,
+                    max_ce_length=args.ce_len,
+                ),
+                callback=_conn_update_callback,
+            ),
         )
     )
 
@@ -1184,6 +1264,68 @@ def main():
     """
     whitelist_parser.add_argument("args", nargs="*", type=str, help=wl_args_help)
     whitelist_parser.set_defaults(func=_whitelist_func)
+
+    #### ENABLE ENCRYPTION PARSER ####
+    enable_enc_parser = subparsers.add_parser(
+        "ena-enc",
+        help="LE Enable Encryption Command",
+    )
+    enable_enc_parser.add_argument(
+        "handle",
+        type=int,
+        help="Connection handle.",
+    )
+    enable_enc_parser.add_argument(
+        "random",
+        type=_hex_int,
+        help="Random Number.",
+    )
+    enable_enc_parser.add_argument(
+        "ediv",
+        type=_hex_int,
+        help="Encrypted Diversifier.",
+    )
+    enable_enc_parser.add_argument(
+        "ltk",
+        type=_hex_int,
+        help="Long Term Key.",
+    )
+    enable_enc_parser.set_defaults(
+        func=lambda args: hci.enable_encryption(
+            handle=args.handle, random=args.random, ediv=args.ediv, ltk=args.ltk
+        ),
+    )
+
+    #### LTK REPLY PARSER ####
+    ltk_reply_parser = subparsers.add_parser(
+        "ltk-reply",
+        help="LE LTK Reply Command",
+    )
+    ltk_reply_parser.add_argument(
+        "handle",
+        type=int,
+        help="Connection handle.",
+    )
+    ltk_reply_parser.add_argument(
+        "ltk",
+        type=_hex_int,
+        help="Long Term Key.",
+    )
+    ltk_reply_parser.set_defaults(
+        func=lambda args: hci.ltk_reply(handle=args.handle, ltk=args.ltk),
+    )
+
+    #### ENABLE EVENT PARSER ####
+    ena_evt_mask_parser = subparsers.add_parser(
+        "ena-evt",
+        aliases=["evt"],
+        help="Enable all event masks.",
+        formatter_class=RawTextHelpFormatter,
+    )
+    ena_evt_mask_parser.set_defaults(
+        func=lambda args: hci.enable_all_events(),
+    )
+
     cmd_parser = subparsers.add_parser(
         "cmd", help="Send raw HCI command", formatter_class=RawTextHelpFormatter
     )
@@ -1255,14 +1397,6 @@ def main():
         func=lambda args: os.system(f"make -j {args.jobs} -C {args.directory}")
     )
 
-    run_parser = subparsers.add_parser(
-        "shell",
-        help="run command sript",
-        formatter_class=RawTextHelpFormatter,
-    )
-    run_parser.add_argument("shell", nargs="+")
-    run_parser.set_defaults(func=lambda args: os.system(" ".join(args.shell)))
-
     def _script_runner(script_path):
         print(script_path)
         with open(script_path, "r", encoding="utf-8") as script:
@@ -1277,8 +1411,8 @@ def main():
         help="run command via os shell",
         formatter_class=RawTextHelpFormatter,
     )
-    run_parser.add_argument("shell", nargs="+")
-    run_parser.set_defaults(func=lambda args: os.system(" ".join(args.shell)))
+    run_parser.add_argument("shellargs", nargs="+")
+    run_parser.set_defaults(func=lambda args: os.system(" ".join(args.shellargs)))
 
     flush_parser = subparsers.add_parser("flush", help="Flush serial port")
     flush_parser.set_defaults(func=lambda _: hci.port.flush())

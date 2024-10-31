@@ -393,7 +393,10 @@ class BleStandardCmds:
         )
 
     def update_connection_params(
-        self, handle: int, conn_params: ConnParams = ConnParams(0x0)
+        self,
+        handle: int = 0x0000,
+        conn_params: ConnParams = ConnParams(0x0),
+        callback: Callable = None,
     ) -> StatusCode:
         """Update connection parameters
 
@@ -409,9 +412,16 @@ class BleStandardCmds:
         StatusCode
             The return packet status code.
         """
+
+        if callback is not None:
+            self.set_event_mask_le(EventMaskLE.CONN_UPDATE_COMPLETE)
+            self.set_event_callback(callback)
+
         params = to_le_nbyte_list(handle, 2) + conn_params.to_payload()
 
-        return self.send_le_controller_command(OCF.LE_CONTROLLER, params=params)
+        return self.send_le_controller_command(
+            OCF.LE_CONTROLLER.CONN_UPDATE, params=params
+        )
 
     def create_connection(
         self, conn_params: EstablishConnParams = EstablishConnParams(0x0)
@@ -1100,6 +1110,131 @@ class BleStandardCmds:
         params = key + plaintext
         evt = self.send_le_controller_command(
             OCF.LE_CONTROLLER.ENCRYPT, params=params, return_evt=True
+        )
+
+        if evt.status == StatusCode.SUCCESS:
+            return list(evt.evt_params[4:])
+
+        return evt
+
+    def enable_encryption(
+        self,
+        handle: int,
+        random: Union[bytes, int, str],
+        ediv: Union[bytes, int, str],
+        ltk=Union[bytes, int, str],
+    ) -> StatusCode:
+        """Enable encryption command
+
+        Used by the master to enable LL encryption.
+
+        Parameters
+        ----------
+        handle : int
+            Connection handle
+        random : Union[bytes, int, str]
+            64 bit random number
+        ediv : Union[bytes, int, str]
+            16 bit encrypted diversifier.
+        ltk : Union[int, bytes, str]
+            128 bit Long term Key
+
+        Returns
+        -------
+        StatusCode
+            Status
+
+        Raises
+        ------
+        ValueError
+            If ltk is an integer and cannot be represented in 128 bits
+        ValueError
+            If ltk is bytes or string an not 16 bytes in length
+        ValueError
+            If random cannot be represented ins 64 bits
+        ValueError
+            If random bytes or string and more than 8 bytes
+        ValueError
+            If ediv cannot be represented ins 16 bits
+        ValueError
+            If ediv bytes or string and more than 2 bytes
+        """
+
+        if isinstance(random, int) and random.bit_length() > 64:
+            raise ValueError("Random must be representable in 128 bits!")
+        if isinstance(random, (bytes, str)) and len(random) != 8:
+            raise ValueError("Random must be 64 bits if given as bytes or str!")
+
+        if isinstance(ediv, int) and ediv.bit_length() > 16:
+            raise ValueError("Random must be representable in 16 bits!")
+        if isinstance(ediv, (bytes, str)) and len(ediv) != 2:
+            raise ValueError("Random must be 16 bits if given as bytes or str!")
+
+        if isinstance(ltk, int) and ltk.bit_length() > 128:
+            raise ValueError("LTK must be representable in 128 bits!")
+        if isinstance(ltk, (bytes, str)) and len(ltk) != 16:
+            raise ValueError("LTK must be 128 bits if given as bytes or str!")
+
+        if isinstance(ltk, int):
+            ltk = self.convert_fips197(ltk)
+        if isinstance(ltk, bytes):
+            ltk = list(ltk)
+
+        params = (
+            to_le_nbyte_list(handle, 2)
+            + to_le_nbyte_list(random, 8)
+            + to_le_nbyte_list(ediv, 2)
+            + ltk
+        )
+
+        evt = self.send_le_controller_command(
+            OCF.LE_CONTROLLER.START_ENCRYPTION, params=params, return_evt=True
+        )
+
+        if evt.status == StatusCode.SUCCESS:
+            return list(evt.evt_params[4:])
+
+        return evt
+
+    def ltk_reply(self, handle: int, ltk=Union[bytes, int, str]) -> StatusCode:
+        """LTK Reply command
+
+        Used by the slave to set the LTK for a given connection.
+
+        Parameters
+        ----------
+        handle : int
+            Connection handle
+        ltk : Union[int, bytes, str]
+            128 bit Long term Key
+
+        Returns
+        -------
+        StatusCode
+            Status
+
+        Raises
+        ------
+        ValueError
+            If ltk is an integer and cannot be represented in 128 bits
+        ValueError
+            If ltk is bytes or string an not 16 bytes in length
+        """
+
+        if isinstance(ltk, int) and ltk.bit_length() > 128:
+            raise ValueError("LTK must be representable in 128 bits!")
+        if isinstance(ltk, (bytes, str)) and len(ltk) != 16:
+            raise ValueError("LTK must be 128 bits if given as bytes or str!")
+
+        if isinstance(ltk, int):
+            ltk = self.convert_fips197(ltk)
+        if isinstance(ltk, bytes):
+            ltk = list(ltk)
+
+        params = to_le_nbyte_list(handle, 2) + ltk
+
+        evt = self.send_le_controller_command(
+            OCF.LE_CONTROLLER.LTK_REQ_REPL, params=params, return_evt=True
         )
 
         if evt.status == StatusCode.SUCCESS:
