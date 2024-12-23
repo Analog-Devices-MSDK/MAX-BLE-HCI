@@ -187,8 +187,7 @@ def _init_cli():
         description=cli_description, formatter_class=RawTextHelpFormatter
     )
 
-    parser.add_argument("--version", action="version",
-                        version="%(prog)s 1.4.1")
+    parser.add_argument("--version", action="version", version="%(prog)s 1.4.1")
 
     parser.add_argument("serial_port", help="Serial port path or COM#")
     parser.add_argument(
@@ -343,8 +342,7 @@ def main():
         trace_level = level
         hci.set_log_level(trace_lut[trace_level])
 
-    log_level_parser.set_defaults(
-        func=lambda args: _set_log_level(args.loglevel))
+    log_level_parser.set_defaults(func=lambda args: _set_log_level(args.loglevel))
 
     clear_parser = subparsers.add_parser(
         "clear",
@@ -360,8 +358,7 @@ def main():
     update_parser = subparsers.add_parser(
         "update", help="update the firmware", formatter_class=RawTextHelpFormatter
     )
-    update_parser.add_argument(
-        "addr", help="start address of memory bank to upload")
+    update_parser.add_argument("addr", help="start address of memory bank to upload")
     update_parser.add_argument("update", help="name of application file")
     update_parser.set_defaults(
         func=lambda args: print(hci.firmware_update(args.addr, args.update)),
@@ -385,8 +382,7 @@ def main():
         formatter_class=RawTextHelpFormatter,
     )
 
-    erase_parser.add_argument(
-        "addr", help="start address of memory bank to be erased")
+    erase_parser.add_argument("addr", help="start address of memory bank to be erased")
 
     erase_parser.set_defaults(
         func=lambda args: print(hci.erase_page(args.addr)),
@@ -397,8 +393,7 @@ def main():
     addr_parser = subparsers.add_parser(
         "addr", help="Set the device address.", formatter_class=RawTextHelpFormatter
     )
-    addr_parser.add_argument(
-        "addr", help="Device address, ex: 00:11:22:33:44:55")
+    addr_parser.add_argument("addr", help="Device address, ex: 00:11:22:33:44:55")
     addr_parser.set_defaults(
         func=lambda args: print(hci.set_address(args.addr)),
         which="addr",
@@ -705,8 +700,7 @@ Default: {hex(DEFAULT_CE_LEN)}""",
     datalen_parser = subparsers.add_parser(
         "data-len", help="Set the max data length", formatter_class=RawTextHelpFormatter
     )
-    datalen_parser.set_defaults(
-        func=lambda _: hci.set_data_len(), which="dataLen")
+    datalen_parser.set_defaults(func=lambda _: hci.set_data_len(), which="dataLen")
 
     send_acl_parser = subparsers.add_parser(
         "send-acl",
@@ -799,8 +793,7 @@ Default: {hex(DEFAULT_CE_LEN)}""",
     rssi_parser.set_defaults(func=_print_rssi)
 
     #### RESET PARSER ####
-    reset_parser = subparsers.add_parser(
-        "reset", help="Sends an HCI reset command")
+    reset_parser = subparsers.add_parser("reset", help="Sends an HCI reset command")
     reset_parser.set_defaults(func=lambda _: print(hci.reset()), which="reset")
 
     #### TX TEST PARSER ####
@@ -1148,8 +1141,7 @@ Default: {hex(DEFAULT_CE_LEN)}""",
         formatter_class=RawTextHelpFormatter,
     )
 
-    discon_parser.set_defaults(func=lambda _: print(
-        hci.disconnect()), which="discon")
+    discon_parser.set_defaults(func=lambda _: print(hci.disconnect()), which="discon")
 
     set_ch_map_parser = subparsers.add_parser(
         "set-chmap",
@@ -1179,8 +1171,7 @@ Default: {hex(DEFAULT_CE_LEN)}""",
         help="Connection handle, integer. Default: 0",
     )
     set_ch_map_parser.set_defaults(
-        func=lambda args: hci.set_channel_map(
-            channels=args.mask, handle=args.handle),
+        func=lambda args: hci.set_channel_map(channels=args.mask, handle=args.handle),
     )
 
     def _whitelist_func(args):
@@ -1203,12 +1194,10 @@ Default: {hex(DEFAULT_CE_LEN)}""",
         address = args.args[1]
 
         if method == "add":
-            print(hci.add_device_to_whitelist(
-                addr_type=addr_type, address=address))
+            print(hci.add_device_to_whitelist(addr_type=addr_type, address=address))
         else:
             print(
-                hci.remove_device_from_whitelist(
-                    addr_type=addr_type, address=address)
+                hci.remove_device_from_whitelist(addr_type=addr_type, address=address)
             )
 
     whitelist_parser = subparsers.add_parser(
@@ -1232,8 +1221,7 @@ Default: {hex(DEFAULT_CE_LEN)}""",
     \tPublic ID Address 2 
     \tRandom ID Address 3
     """
-    whitelist_parser.add_argument(
-        "args", nargs="*", type=str, help=wl_args_help)
+    whitelist_parser.add_argument("args", nargs="*", type=str, help=wl_args_help)
     whitelist_parser.set_defaults(func=_whitelist_func)
 
     #### ENABLE ENCRYPTION PARSER ####
@@ -1322,8 +1310,7 @@ Default: {hex(DEFAULT_CE_LEN)}""",
     )
 
     cmd_parser.set_defaults(
-        func=lambda args: print(
-            hci.write_command_raw(bytes.fromhex(args.command)))
+        func=lambda args: print(hci.write_command_raw(bytes.fromhex(args.command)))
     )
 
     #### EXIT PARSER ####
@@ -1333,8 +1320,7 @@ Default: {hex(DEFAULT_CE_LEN)}""",
         help="Exit the program",
         formatter_class=RawTextHelpFormatter,
     )
-    exit_parser.set_defaults(
-        func=lambda _: sys.exit(EXIT_FUNC_MAGIC), which="exit")
+    exit_parser.set_defaults(func=lambda _: sys.exit(EXIT_FUNC_MAGIC), which="exit")
 
     ls_parser = subparsers.add_parser(
         "ls",
@@ -1385,8 +1371,7 @@ Default: {hex(DEFAULT_CE_LEN)}""",
             commands = script.readlines()
 
         if commands:
-            commands = [command.strip()
-                        for command in commands if command != ""]
+            commands = [command.strip() for command in commands if command != ""]
             _run_input_cmds(commands, terminal)
 
     run_parser = subparsers.add_parser(
@@ -1395,8 +1380,7 @@ Default: {hex(DEFAULT_CE_LEN)}""",
         formatter_class=RawTextHelpFormatter,
     )
     run_parser.add_argument("shellargs", nargs="+")
-    run_parser.set_defaults(
-        func=lambda args: os.system(" ".join(args.shellargs)))
+    run_parser.set_defaults(func=lambda args: os.system(" ".join(args.shellargs)))
 
     flush_parser = subparsers.add_parser("flush", help="Flush serial port")
     flush_parser.set_defaults(func=lambda _: hci.port.flush())
@@ -1418,10 +1402,8 @@ Default: {hex(DEFAULT_CE_LEN)}""",
     run_parser.set_defaults(func=lambda args: _script_runner(args.run))
 
     #### HELP PARSER ####
-    help_parser = subparsers.add_parser(
-        "help", aliases=["h"], help="Show help message")
-    help_parser.set_defaults(
-        func=lambda _: terminal.print_help(), which="help")
+    help_parser = subparsers.add_parser("help", aliases=["h"], help="Show help message")
+    help_parser.set_defaults(func=lambda _: terminal.print_help(), which="help")
 
     def _completer(text, state):
         commands = subparsers.choices.keys()
@@ -1430,8 +1412,7 @@ Default: {hex(DEFAULT_CE_LEN)}""",
 
     readline.set_completer(_completer)
     readline.parse_and_bind("tab: complete")
-    readline.set_completer_delims(
-        readline.get_completer_delims().replace("-", ""))
+    readline.set_completer_delims(readline.get_completer_delims().replace("-", ""))
 
     command_run = False
     if commands:
@@ -1461,8 +1442,7 @@ Default: {hex(DEFAULT_CE_LEN)}""",
                 sys.exit(0)
             elif err.code != 0:
                 logger.error(
-                    "Process finished with exit code %s (%s)", err, type(
-                        err).__name__
+                    "Process finished with exit code %s (%s)", err, type(err).__name__
                 )
 
         except Exception as err:  # pylint: disable=broad-exception-caught
