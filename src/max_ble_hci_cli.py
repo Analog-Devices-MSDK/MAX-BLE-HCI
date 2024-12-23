@@ -187,7 +187,7 @@ def _init_cli():
         description=cli_description, formatter_class=RawTextHelpFormatter
     )
 
-    parser.add_argument("--version", action="version", version="%(prog)s 1.4.0")
+    parser.add_argument("--version", action="version", version="%(prog)s 1.4.1")
 
     parser.add_argument("serial_port", help="Serial port path or COM#")
     parser.add_argument(
@@ -213,6 +213,12 @@ def _init_cli():
         dest="idtag",
         default="DUT",
         help="Board ID tag for printing trace messages. Default: None",
+    )
+    parser.add_argument(
+        "--timeout",
+        default=1.0,
+        type=float,
+        help="UART RX/TX Timeout",
     )
     parser.add_argument(
         "-c",
@@ -260,6 +266,7 @@ def main():
         args.serial_port,
         baud=args.baudRate,
         id_tag=args.idtag,
+        timeout=args.timeout,
         async_callback=print,
         evt_callback=print,
         flowcontrol=args.enable_flow_control,
@@ -681,7 +688,7 @@ Default: {hex(DEFAULT_CE_LEN)}""",
                     conn_interval_max=args.interval,
                     conn_interval_min=args.interval,
                     max_latency=args.latency,
-                    sup_timeout=args.supervision_timeout,
+                    sup_timeout=args.sup_timeout,
                     min_ce_length=args.ce_len,
                     max_ce_length=args.ce_len,
                 ),
@@ -1276,6 +1283,15 @@ Default: {hex(DEFAULT_CE_LEN)}""",
     )
     ena_evt_mask_parser.set_defaults(
         func=lambda args: hci.enable_all_events(),
+    )
+
+    dis_evt_mask_parser = subparsers.add_parser(
+        "dis-evt",
+        help="Disable all event masks.",
+        formatter_class=RawTextHelpFormatter,
+    )
+    dis_evt_mask_parser.set_defaults(
+        func=lambda args: hci.disable_all_events(),
     )
 
     cmd_parser = subparsers.add_parser(
