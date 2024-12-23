@@ -693,7 +693,7 @@ Default: {hex(DEFAULT_CE_LEN)}""",
                     conn_interval_max=args.interval,
                     conn_interval_min=args.interval,
                     max_latency=args.latency,
-                    sup_timeout=args.supervision_timeout,
+                    sup_timeout=args.sup_timeout,
                     min_ce_length=args.ce_len,
                     max_ce_length=args.ce_len,
                 ),
@@ -1295,6 +1295,15 @@ Default: {hex(DEFAULT_CE_LEN)}""",
     )
     ena_evt_mask_parser.set_defaults(
         func=lambda args: hci.enable_all_events(),
+    )
+
+    dis_evt_mask_parser = subparsers.add_parser(
+        "dis-evt",
+        help="Disable all event masks.",
+        formatter_class=RawTextHelpFormatter,
+    )
+    dis_evt_mask_parser.set_defaults(
+        func=lambda args: hci.disable_all_events(),
     )
 
     cmd_parser = subparsers.add_parser(
