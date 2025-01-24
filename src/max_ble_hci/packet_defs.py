@@ -561,6 +561,9 @@ class LEControllerOCF(Enum):
     SET_TX_POWER_REPORT_ENABLE = 0x7A
     """Set TX power reporting enable command."""
 
+    TRANSMITTER_TEST_V4 = 0x7B
+    """Transmitter test version3 command."""
+
     SET_DATA_RELATED_ADDRESS_CHANGES = 0x7C
     """Set data related address changes command."""
 

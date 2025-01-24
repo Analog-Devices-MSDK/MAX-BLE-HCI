@@ -244,3 +244,58 @@ class PubKeyValidateMode(Enum):
 
     ALT2 = 0x1
     """ALT2 validation mode."""
+
+
+class TxTestMode(Enum):
+
+    ENHANCED = 1
+
+    V3 = 3
+
+    V4 = 4
+
+class CteType(Enum):
+    """Requested CTE Types"""
+
+    AOA = 0
+    """AoA Constant Tone Extension"""     
+    AOD_1_US = 1
+    """AoD Constant Tone Extension with 1 us slots"""
+    AOD_2_US = 2
+    """AoD Constant Tone Extension with 2 us slots"""
+
+class SwitchPatternLen(Enum):
+
+    MIN = 0x02
+
+    MAX = 0x4B
+
+    @staticmethod
+    def str_to_mask(option: str) -> int:
+        option = option.lower()
+
+        if option == "min":
+            return SwitchPatternLen.MIN.value
+
+        if option == "max":
+            return SwitchPatternLen.MAX.value
+
+        return SwitchPatternLen.MIN.value
+    
+class TxPower(Enum):
+
+    MAX = 0x7F
+
+    MIN = 0x7E
+
+    @staticmethod
+    def str_to_mask(option: str) -> int:
+        option = option.lower()
+
+        if option == "max":
+            return TxPower.MAX.value
+
+        if option == "min":
+            return TxPower.MIN.value
+
+        return TxPower.MAX.value

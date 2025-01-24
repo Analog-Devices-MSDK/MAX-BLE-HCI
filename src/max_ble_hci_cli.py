@@ -75,7 +75,11 @@ from argparse import RawTextHelpFormatter
 from colorlog import ColoredFormatter
 
 from max_ble_hci import BleHci
-from max_ble_hci.constants import PayloadOption, PhyOption, AddrType
+from max_ble_hci.constants import (
+    PayloadOption,
+    PhyOption,
+    AddrType,
+)
 from max_ble_hci.data_params import (
     AdvParams,
     EstablishConnParams,
@@ -804,6 +808,17 @@ Default: {hex(DEFAULT_CE_LEN)}""",
         formatter_class=RawTextHelpFormatter,
     )
     tx_test_parser.add_argument(
+        "-m",
+        "--mode",
+        type=int,
+        default=1,
+        help="""Tx test mode.
+         1: Enhanced
+         3: V3
+         4: V4
+         Default: Enhanced"""
+    )
+    tx_test_parser.add_argument(
         "-c",
         "--channel",
         type=int,
@@ -847,14 +862,57 @@ Default: {hex(DEFAULT_CE_LEN)}""",
         default=0,
         help="Tx packet length, number of bytes per packet, 0-255. Default: 0",
     )
+    tx_test_parser.add_argument(
+        "-cl",
+        "--cte-length",
+        type=int,
+        default=0,
+        help="CTE length, 0-255. Default: 0",
+    )
+    tx_test_parser.add_argument(
+        "-ct",
+        "--cte-type",
+        type=int,
+        default=0,
+        help="""CTE length
+        0: AOA
+        1: AOA with 1 us slots
+        2: AOA with 2 us slots
+        Default: AOA""",
+    )
+    tx_test_parser.add_argument(
+        "--switch-pattern-length",
+        nargs="?",
+        choices=("min", "MIN", "max", "MAX"),
+        default="min",
+        help="""Set the switch pattern length
+        min: 0x02
+        max: 0x4B
+        Default: min""",
+    )
+    tx_test_parser.add_argument(
+        "--power",
+        nargs="?",
+        choices=("min", "MIN", "max", "MAX"),
+        default="max",
+        help="""Set the Tx power level
+        min: 0x7F
+        max: 0x7E
+        Default: max""",
+    )
 
     tx_test_parser.set_defaults(
         func=lambda args: print(
             hci.tx_test(
+                mode=args.mode,
                 channel=args.channel,
                 phy=PhyOption(args.phy),
                 payload=PayloadOption(args.payload),
                 packet_len=args.packet_length,
+                cte_len=args.cte_length,
+                cte_type=args.cte_type,
+                switch_pattern_len=args.switch_pattern_length,
+                power=args.power,
             )
         ),
     )
