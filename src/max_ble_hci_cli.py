@@ -881,16 +881,6 @@ Default: {hex(DEFAULT_CE_LEN)}""",
         Default: AOA""",
     )
     tx_test_parser.add_argument(
-        "--switch-pattern-length",
-        nargs="?",
-        choices=("min", "MIN", "max", "MAX"),
-        default="min",
-        help="""Set the switch pattern length
-        min: 0x02
-        max: 0x4B
-        Default: min""",
-    )
-    tx_test_parser.add_argument(
         "--power",
         nargs="?",
         choices=("min", "MIN", "max", "MAX"),
@@ -911,7 +901,6 @@ Default: {hex(DEFAULT_CE_LEN)}""",
                 packet_len=args.packet_length,
                 cte_len=args.cte_length,
                 cte_type=args.cte_type,
-                switch_pattern_len=args.switch_pattern_length,
                 power=args.power,
             )
         ),

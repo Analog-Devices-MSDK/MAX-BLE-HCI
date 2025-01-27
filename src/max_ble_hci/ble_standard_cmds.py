@@ -57,7 +57,7 @@ from typing import List, Optional, Tuple, Union, Callable
 
 from ._hci_logger import get_formatted_logger
 from ._transport import SerialUartTransport
-from .constants import PayloadOption, PhyOption, TxTestMode, CteType, SwitchPatternLen, TxPower
+from .constants import PayloadOption, PhyOption, TxTestMode, CteType, TxPower
 from .data_params import AdvParams, ConnParams, EstablishConnParams, ScanParams
 from .hci_packets import CommandPacket, EventPacket
 from .packet_codes import EventMask, EventMaskPage2, EventMaskLE, StatusCode
@@ -594,8 +594,6 @@ class BleStandardCmds:
         packet_len: int = 0,
         cte_len: int = 0,
         cte_type: Union[CteType, int] = CteType.AOA,
-        switch_pattern_len: Union[SwitchPatternLen, str] = SwitchPatternLen.MIN,
-        switch_pattern: int = 0,
         power: Union[TxPower, str] = TxPower.MAX,
     ) -> StatusCode:
         """Start a transmitter test.
@@ -641,18 +639,11 @@ class BleStandardCmds:
             phy = phy.value
         if isinstance(cte_type, CteType):
             cte_type = cte_type.value
-        
-        if isinstance(switch_pattern_len, SwitchPatternLen):
-            switch_pattern_len = switch_pattern_len.value
-        if isinstance(switch_pattern_len, str):            
-            switch_pattern_len = SwitchPatternLen.str_to_mask(switch_pattern_len)
 
         if isinstance(power, TxPower):
             power = power.value
         if isinstance(power, str):
             power = TxPower.str_to_mask(power)
-
-        
 
         if mode == TxTestMode.ENHANCED.value:
             params = [channel, packet_len, payload, phy]
@@ -660,12 +651,24 @@ class BleStandardCmds:
                 OCF.LE_CONTROLLER.ENHANCED_TRANSMITTER_TEST, params=params
             )
         elif mode == TxTestMode.V4.value:
-            params = [channel, packet_len, payload, phy, cte_len, cte_type, switch_pattern_len, switch_pattern, power]
+            # Angle of Arrival (AOA) is not needed, so no switch pattern will be provided
+            switch_pattern_len = 0
+            params = [
+                channel,
+                packet_len,
+                payload,
+                phy,
+                cte_len,
+                cte_type,
+                switch_pattern_len,
+                power
+            ]
+
             return self.send_le_controller_command(
                 OCF.LE_CONTROLLER.TRANSMITTER_TEST_V4, params=params
             )
 
-        
+
 
     def rx_test(
         self,

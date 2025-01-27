@@ -247,6 +247,7 @@ class PubKeyValidateMode(Enum):
 
 
 class TxTestMode(Enum):
+    """Transmitter Test Modes"""
 
     ENHANCED = 1
     """Transmitter Test Enhanced"""
@@ -267,27 +268,8 @@ class CteType(Enum):
     AOD_2_US = 2
     """AoD Constant Tone Extension with 2 us slots"""
 
-class SwitchPatternLen(Enum):
-
-    MIN = 0x02
-    """Switching pattern minimum length"""
-
-    MAX = 0x4B
-    """Switching pattern maximum length"""
-
-    @staticmethod
-    def str_to_mask(option: str) -> int:
-        option = option.lower()
-
-        if option == "min":
-            return SwitchPatternLen.MIN.value
-
-        if option == "max":
-            return SwitchPatternLen.MAX.value
-
-        return SwitchPatternLen.MIN.value
-    
 class TxPower(Enum):
+    """Transmitter Power Levels"""
 
     MAX = 0x7F
     """Maximum power level"""
@@ -297,6 +279,18 @@ class TxPower(Enum):
 
     @staticmethod
     def str_to_mask(option: str) -> int:
+        """Select a power level.
+        
+        Parameters
+        ----------
+        option: str
+            The desired power level.
+
+        Returns
+        -------
+        int
+            The power level's corresponding power symbol.
+        """
         option = option.lower()
 
         if option == "max":
