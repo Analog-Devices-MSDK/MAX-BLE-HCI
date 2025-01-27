@@ -605,6 +605,8 @@ class BleStandardCmds:
 
         Parameters
         ----------
+        mode: Union[TxTestMode, int]
+            The test and set of parameters to be transmitted.
         channel : int, optional
             The channel on which transmission should take place.
         phy : Union[PhyOption,int], optional
@@ -613,6 +615,16 @@ class BleStandardCmds:
             The packet payload type that should be used.
         packet_len : int, optional
             The desired length of the transmitted packets.
+        cte_len: int
+            CTE length measureed in units of 8 micro-seconds.
+        cte_type: Union[CteType, int]
+            A CTE type for Angle of Arrival (AoA) selection.
+        switch_pattern_len: Union[SwitchPatternLen, int]
+            The number of transmitter antennas to be used
+        switch_pattern: int
+            The ID of the transmitter antenna
+        power: Union[TxPower, str]
+            The transmitter power level.
 
         Returns
         -------

@@ -249,10 +249,13 @@ class PubKeyValidateMode(Enum):
 class TxTestMode(Enum):
 
     ENHANCED = 1
+    """Transmitter Test Enhanced"""
 
     V3 = 3
+    """Transmitter Test V4"""
 
     V4 = 4
+    """Transmitter Test V4"""
 
 class CteType(Enum):
     """Requested CTE Types"""
@@ -267,8 +270,10 @@ class CteType(Enum):
 class SwitchPatternLen(Enum):
 
     MIN = 0x02
+    """Switching pattern minimum length"""
 
     MAX = 0x4B
+    """Switching pattern maximum length"""
 
     @staticmethod
     def str_to_mask(option: str) -> int:
@@ -285,8 +290,10 @@ class SwitchPatternLen(Enum):
 class TxPower(Enum):
 
     MAX = 0x7F
+    """Maximum power level"""
 
     MIN = 0x7E
+    """Minimum power level"""
 
     @staticmethod
     def str_to_mask(option: str) -> int:
