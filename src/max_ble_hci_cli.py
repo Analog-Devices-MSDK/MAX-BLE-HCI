@@ -816,7 +816,7 @@ Default: {hex(DEFAULT_CE_LEN)}""",
          1: Enhanced
          3: V3
          4: V4
-         Default: Enhanced"""
+         Default: Enhanced""",
     )
     tx_test_parser.add_argument(
         "-c",

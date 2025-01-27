@@ -650,7 +650,7 @@ class BleStandardCmds:
             return self.send_le_controller_command(
                 OCF.LE_CONTROLLER.ENHANCED_TRANSMITTER_TEST, params=params
             )
-        elif mode == TxTestMode.V4.value:
+        if mode == TxTestMode.V4.value:
             # Angle of Arrival (AOA) is not needed, so no switch pattern will be provided
             switch_pattern_len = 0
             params = [
@@ -661,14 +661,13 @@ class BleStandardCmds:
                 cte_len,
                 cte_type,
                 switch_pattern_len,
-                power
+                power,
             ]
 
             return self.send_le_controller_command(
                 OCF.LE_CONTROLLER.TRANSMITTER_TEST_V4, params=params
             )
-
-
+        return None
 
     def rx_test(
         self,

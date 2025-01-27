@@ -258,15 +258,17 @@ class TxTestMode(Enum):
     V4 = 4
     """Transmitter Test V4"""
 
+
 class CteType(Enum):
     """Requested CTE Types"""
 
     AOA = 0
-    """AoA Constant Tone Extension"""     
+    """AoA Constant Tone Extension"""
     AOD_1_US = 1
     """AoD Constant Tone Extension with 1 us slots"""
     AOD_2_US = 2
     """AoD Constant Tone Extension with 2 us slots"""
+
 
 class TxPower(Enum):
     """Transmitter Power Levels"""
@@ -280,7 +282,7 @@ class TxPower(Enum):
     @staticmethod
     def str_to_mask(option: str) -> int:
         """Select a power level.
-        
+
         Parameters
         ----------
         option: str
