@@ -587,11 +587,11 @@ class BleStandardCmds:
 
     def tx_test(
         self,
-        mode: Union[TxTestMode, int] = TxTestMode.ENHANCED,
         channel: int = 0,
         phy: Union[PhyOption, int] = PhyOption.PHY_1M,
         payload: Union[PayloadOption, int] = PayloadOption.PLD_PRBS9,
         packet_len: int = 0,
+        mode: Union[TxTestMode, int] = TxTestMode.ENHANCED,
         cte_len: int = 0,
         cte_type: Union[CteType, int] = CteType.AOA,
         power: Union[TxPower, str] = TxPower.MAX,
