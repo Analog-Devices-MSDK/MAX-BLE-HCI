@@ -244,3 +244,61 @@ class PubKeyValidateMode(Enum):
 
     ALT2 = 0x1
     """ALT2 validation mode."""
+
+
+class TxTestMode(Enum):
+    """Transmitter Test Modes"""
+
+    ENHANCED = 1
+    """Transmitter Test Enhanced"""
+
+    V3 = 3
+    """Transmitter Test V4"""
+
+    V4 = 4
+    """Transmitter Test V4"""
+
+
+class CteType(Enum):
+    """Requested CTE Types"""
+
+    AOA = 0
+    """AoA Constant Tone Extension"""
+    AOD_1_US = 1
+    """AoD Constant Tone Extension with 1 us slots"""
+    AOD_2_US = 2
+    """AoD Constant Tone Extension with 2 us slots"""
+
+
+class TxPower(Enum):
+    """Transmitter Power Levels"""
+
+    MAX = 0x7F
+    """Maximum power level"""
+
+    MIN = 0x7E
+    """Minimum power level"""
+
+    @staticmethod
+    def str_to_mask(option: str) -> int:
+        """Select a power level.
+
+        Parameters
+        ----------
+        option: str
+            The desired power level.
+
+        Returns
+        -------
+        int
+            The power level's corresponding power symbol.
+        """
+        option = option.lower()
+
+        if option == "max":
+            return TxPower.MAX.value
+
+        if option == "min":
+            return TxPower.MIN.value
+
+        return TxPower.MAX.value

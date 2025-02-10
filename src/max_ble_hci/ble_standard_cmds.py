@@ -57,7 +57,7 @@ from typing import List, Optional, Tuple, Union, Callable
 
 from ._hci_logger import get_formatted_logger
 from ._transport import SerialUartTransport
-from .constants import PayloadOption, PhyOption
+from .constants import PayloadOption, PhyOption, TxTestMode, CteType, TxPower
 from .data_params import AdvParams, ConnParams, EstablishConnParams, ScanParams
 from .hci_packets import CommandPacket, EventPacket
 from .packet_codes import EventMask, EventMaskPage2, EventMaskLE, StatusCode
@@ -587,10 +587,14 @@ class BleStandardCmds:
 
     def tx_test(
         self,
+        mode: Union[TxTestMode, int] = TxTestMode.ENHANCED,
         channel: int = 0,
         phy: Union[PhyOption, int] = PhyOption.PHY_1M,
         payload: Union[PayloadOption, int] = PayloadOption.PLD_PRBS9,
         packet_len: int = 0,
+        cte_len: int = 0,
+        cte_type: Union[CteType, int] = CteType.AOA,
+        power: Union[TxPower, str] = TxPower.MAX,
     ) -> StatusCode:
         """Start a transmitter test.
 
@@ -599,6 +603,8 @@ class BleStandardCmds:
 
         Parameters
         ----------
+        mode: Union[TxTestMode, int]
+            The test and set of parameters to be transmitted.
         channel : int, optional
             The channel on which transmission should take place.
         phy : Union[PhyOption,int], optional
@@ -607,6 +613,16 @@ class BleStandardCmds:
             The packet payload type that should be used.
         packet_len : int, optional
             The desired length of the transmitted packets.
+        cte_len: int
+            CTE length measureed in units of 8 micro-seconds.
+        cte_type: Union[CteType, int]
+            A CTE type for Angle of Arrival (AoA) selection.
+        switch_pattern_len: Union[SwitchPatternLen, int]
+            The number of transmitter antennas to be used
+        switch_pattern: int
+            The ID of the transmitter antenna
+        power: Union[TxPower, str]
+            The transmitter power level.
 
         Returns
         -------
@@ -615,15 +631,43 @@ class BleStandardCmds:
 
         """
 
+        if isinstance(mode, TxTestMode):
+            mode = mode.value
         if isinstance(payload, PayloadOption):
             payload = payload.value
         if isinstance(phy, PhyOption):
             phy = phy.value
+        if isinstance(cte_type, CteType):
+            cte_type = cte_type.value
 
-        params = [channel, packet_len, payload, phy]
-        return self.send_le_controller_command(
-            OCF.LE_CONTROLLER.ENHANCED_TRANSMITTER_TEST, params=params
-        )
+        if isinstance(power, TxPower):
+            power = power.value
+        if isinstance(power, str):
+            power = TxPower.str_to_mask(power)
+
+        if mode == TxTestMode.ENHANCED.value:
+            params = [channel, packet_len, payload, phy]
+            return self.send_le_controller_command(
+                OCF.LE_CONTROLLER.ENHANCED_TRANSMITTER_TEST, params=params
+            )
+        if mode == TxTestMode.V4.value:
+            # Angle of Arrival (AOA) is not needed, so no switch pattern will be provided
+            switch_pattern_len = 0
+            params = [
+                channel,
+                packet_len,
+                payload,
+                phy,
+                cte_len,
+                cte_type,
+                switch_pattern_len,
+                power,
+            ]
+
+            return self.send_le_controller_command(
+                OCF.LE_CONTROLLER.TRANSMITTER_TEST_V4, params=params
+            )
+        return None
 
     def rx_test(
         self,
