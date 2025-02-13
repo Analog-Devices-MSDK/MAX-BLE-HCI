@@ -1357,7 +1357,7 @@ Default: {hex(DEFAULT_CE_LEN)}""",
     )
 
     cmd_parser.set_defaults(
-        func=lambda args: print(hci.write_command_raw(bytes.fromhex(args.command)))
+        func=lambda args: print(hci.write_command_raw(bytes.fromhex(args.cmd)))
     )
 
     #### EXIT PARSER ####
