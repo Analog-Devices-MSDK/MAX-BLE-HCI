@@ -91,6 +91,7 @@ from max_ble_hci.packet_codes import EventMaskLE, StatusCode, EventCode, EventSu
 from max_ble_hci.hci_packets import EventPacket
 from max_ble_hci.ad_types import AdvReport
 from max_ble_hci import utils
+from max_ble_hci.vendor_spec_cmds import VsPrbsType
 
 
 # pylint: enable=import-error
@@ -796,6 +797,48 @@ Default: {hex(DEFAULT_CE_LEN)}""",
 
     rssi_parser.set_defaults(func=_print_rssi)
 
+    fgen_choices = {
+        "cw": VsPrbsType.CW,
+        "prbs9": VsPrbsType.PRBS9,
+        "prbs15": VsPrbsType.PRBS15,
+        "df1": VsPrbsType.DF1,
+        "df2": VsPrbsType.DF2,
+    }
+
+    def _fgen_func(args):
+        if args.enable in ("enable", "en", "start", "1"):
+            prbs_type = fgen_choices[args.type]
+            print(hci.fgen_enable_vs(True, args.frequency, prbs_type))
+        else:
+            print(hci.fgen_enable_vs(False))
+
+    fgen_vs_parser = subparsers.add_parser(
+        "fgen",
+        help="Enable the radio as a function generator (Vendor Specfic)",
+        formatter_class=RawTextHelpFormatter,
+    )
+    fgen_vs_parser.add_argument(
+        "enable",
+        choices=("enable", "en", "start", "1", "disable", "dis", "0", "stop"),
+        default="1",
+        help="Enable or disable frequency generator Default: enable",
+    )
+    fgen_vs_parser.add_argument(
+        "-f",
+        "--frequency",
+        type=int,
+        default=2_402_000,
+        help="TX Frequency",
+    )
+    fgen_vs_parser.add_argument(
+        "-t",
+        "--type",
+        default="cw",
+        choices=fgen_choices.keys(),
+        help="Rx test channel. Default: 0",
+    )
+    fgen_vs_parser.set_defaults(func=_fgen_func)
+
     #### RESET PARSER ####
     reset_parser = subparsers.add_parser("reset", help="Sends an HCI reset command")
     reset_parser.set_defaults(func=lambda _: print(hci.reset()), which="reset")
@@ -1102,6 +1145,7 @@ Default: {hex(DEFAULT_CE_LEN)}""",
         func=lambda _: print(hci.reset_connection_stats()),
         which="reset-connection-stats",
     )
+
     #### RESET Adv STATS PARSER ####
     reset_adv_stats_parser = subparsers.add_parser(
         "reset-adv-stats",
@@ -1493,7 +1537,12 @@ Default: {hex(DEFAULT_CE_LEN)}""",
                 )
 
         except Exception as err:  # pylint: disable=broad-exception-caught
-            logger.error("Unexpected exception %s", type(err).__name__)
+            _, _, exc_tb = sys.exc_info()
+            _ = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+
+            logger.error(
+                "Unexpected exception %s", type(err).__name__, exc_tb.tb_lineno
+            )
 
 
 ################## MAIN ##################
