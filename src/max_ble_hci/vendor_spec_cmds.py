@@ -54,7 +54,7 @@ Module contains definitions for ADI vendor-specific HCI commands.
 """
 # pylint: disable=too-many-lines, too-many-arguments, too-many-public-methods
 from typing import Dict, List, Optional, Tuple, Union
-
+from enum import Enum
 from ._hci_logger import get_formatted_logger
 from ._transport import SerialUartTransport
 from .constants import MAX_U32, MAX_U64, PayloadOption, PhyOption, PubKeyValidateMode
@@ -71,6 +71,16 @@ from .hci_packets import CommandPacket, EventPacket, byte_length
 from .packet_codes import StatusCode
 from .packet_defs import OCF, OGF
 from .utils import address_str2int, to_le_nbyte_list
+
+
+class VsPrbsType(Enum):
+    """Pattern Types for FGEN to transmit"""
+
+    CW = 0
+    PRBS9 = 1
+    PRBS15 = 2
+    DF1 = 3
+    DF2 = 4
 
 
 class VendorSpecificCmds:
@@ -1784,12 +1794,54 @@ class VendorSpecificCmds:
         evt = self.send_vs_command(
             OCF.VENDOR_SPEC.GET_RSSI, params=channel, return_evt=True
         )
+
+        if evt.status != StatusCode.SUCCESS:
+            return 0, evt.status
+
         rssi = evt.get_return_params(signed=True)
 
-        if rssi == -128:
-            self.logger.warning("RSSI= -128, possible timeout occured")
-
         return rssi, evt.status
+
+    def fgen_enable_vs(
+        self,
+        enable: bool,
+        frequency_khz: int = 2_402_000,
+        prbs_type: VsPrbsType = VsPrbsType.CW,
+        power=0,
+    ) -> StatusCode:
+        """Enable radio as freqeuncy generator
+
+        Parameters
+        ----------
+        enable : bool
+            Enable or disbale
+        frequency_khz : int, optional
+            _description_, by default 2_402_000
+        prbs_type : VsPrbsType, optional
+            _description_, by default VsPrbsType.CW
+
+        Returns
+        -------
+        StatusCode
+            _description_
+
+        Raises
+        ------
+        ValueError
+            _description_
+        """
+
+        if not enable:
+            params = 0
+
+        elif frequency_khz < 2_402_000 or frequency_khz > 2_500_000:
+            raise ValueError("Frequency must be within 2,402,000 and 2,500.000")
+        else:
+            freq_le = to_le_nbyte_list(frequency_khz, 3)
+
+            params = [int(enable)] + freq_le + [prbs_type.value, power]
+
+        return self.send_vs_command(OCF.VENDOR_SPEC.FGEN, params=params)
 
     def reset_adv_stats(self) -> StatusCode:
         """Reset accumulated advertising stats
