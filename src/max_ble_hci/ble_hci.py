@@ -83,6 +83,8 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         established.
     baud : int
         Port baud rate.
+    stopbits : int
+        Number of stop bits to use for the port.
     id_tag : str
         Connection ID string to use when logging.
     log_level : Union[str, int]
@@ -135,6 +137,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         async_callback: Optional[Callable[[AsyncPacket], Any]] = None,
         evt_callback: Optional[Callable[[EventPacket], Any]] = None,
         flowcontrol=False,
+        stopbits=1,
         recover_on_power_loss=False,
     ):
         self.port_id = port_id
@@ -150,6 +153,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
             async_callback,
             evt_callback,
             flowcontrol,
+            stopbits,
             recover_on_power_loss,
         )
         super().__init__(self.port, logger_name)
@@ -590,6 +594,7 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         async_callback: Optional[Callable[[AsyncPacket], Any]],
         evt_callback: Optional[Callable[[EventPacket], Any]],
         flowcontrol=False,
+        stopbits=1,
         recover_on_power_loss=False,
     ) -> None:
         """Initializes serial ports.
@@ -607,5 +612,6 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
             async_callback=async_callback,
             evt_callback=evt_callback,
             flowcontrol=flowcontrol,
+            stopbits=stopbits,
             recover_on_power_loss=recover_on_power_loss,
         )

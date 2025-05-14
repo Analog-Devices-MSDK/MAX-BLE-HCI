@@ -194,6 +194,7 @@ def _init_cli():
     parser.add_argument("--version", action="version", version="%(prog)s 1.4.1")
 
     parser.add_argument("serial_port", help="Serial port path or COM#")
+    
     parser.add_argument(
         "-b",
         "--baud",
@@ -203,6 +204,13 @@ def _init_cli():
         help="Serial port baud rate. Default: " + str(DEFAULT_BAUD),
     )
 
+    parser.add_argument(
+        "--stop-bits",
+        type=int,
+        default=1,
+        help="Number of stop bits. Default: 1",
+    )
+    
     parser.add_argument(
         "-efc",
         "--enable-flow-control",
@@ -218,12 +226,14 @@ def _init_cli():
         default="DUT",
         help="Board ID tag for printing trace messages. Default: None",
     )
+    
     parser.add_argument(
         "--timeout",
         default=1.0,
         type=float,
         help="UART RX/TX Timeout",
     )
+    
     parser.add_argument(
         "-c",
         "--commands",
@@ -274,6 +284,7 @@ def main():
         async_callback=print,
         evt_callback=print,
         flowcontrol=args.enable_flow_control,
+        stopbits=args.stop_bits,
         recover_on_power_loss=True,
     )
 

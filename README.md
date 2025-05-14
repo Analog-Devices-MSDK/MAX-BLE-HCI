@@ -83,6 +83,8 @@ options:
                         Serial port baud rate. Default: 115200
   -efc, --enable-flow-control
                         Enable flow control Default: False
+  --stop-bits
+                        Number of stop bits. Default: 1
   -m MONPORT, --monitor-trace-port MONPORT
                         Monitor Trace Msg Serial Port path or COM#. Default: None
   -i IDTAG, --id-tag IDTAG

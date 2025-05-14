@@ -156,6 +156,7 @@ class SerialUartTransport:
         evt_callback: Optional[Callable[[EventPacket], Any]] = None,
         exclusive_port: bool = True,
         flowcontrol: bool = False,
+        stopbits: int = serial.STOPBITS_ONE,
         recover_on_power_loss=False,
     ):
         self.port_id = port_id
@@ -177,8 +178,9 @@ class SerialUartTransport:
         self.baud = baud
         self.exclusive_port = exclusive_port
         self.flowcontrol = flowcontrol
+        self.stop_bits = stopbits
 
-        self._init_port(port_id, baud, exclusive_port, flowcontrol)
+        self._init_port(port_id, baud, exclusive_port, flowcontrol, stopbits)
         self._init_read_thread()
 
     # pylint-enable=too-many-positional-arguments
@@ -320,7 +322,7 @@ class SerialUartTransport:
         self.start()
 
     def _init_port(
-        self, port_id: str, baud: int, exclusive: bool, flowcontrol=False
+        self, port_id: str, baud: int, exclusive: bool, flowcontrol=False, stop_bits=serial.STOPBITS_ONE
     ) -> None:
         """Initializes serial port.
 
@@ -332,7 +334,7 @@ class SerialUartTransport:
                 port=port_id,
                 baudrate=baud,
                 parity=serial.PARITY_NONE,
-                stopbits=serial.STOPBITS_ONE,
+                stopbits=self.stop_bits,
                 bytesize=serial.EIGHTBITS,
                 rtscts=flowcontrol,
                 dsrdtr=False,
@@ -358,7 +360,7 @@ class SerialUartTransport:
                     port=self.port_id,
                     baudrate=self.baud,
                     parity=serial.PARITY_NONE,
-                    stopbits=serial.STOPBITS_ONE,
+                    stopbits=self.stop_bits,
                     bytesize=serial.EIGHTBITS,
                     rtscts=self.flowcontrol,
                     dsrdtr=False,
