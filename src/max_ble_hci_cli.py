@@ -1454,27 +1454,30 @@ Default: {hex(DEFAULT_CE_LEN)}""",
     hds_em_parser.add_argument(
         "--data",
         type=_hex_int,
-        help="data to write in HEX formoat: XX or XXXX ...",
+        help="data to write in bytes (HEX, LSB first, little-endian): XX or XXXX ...",
     )
 
+    def _hds_em_rd(args):
+        cmd_str = utils.build_hds_em_rd_cmd_str(args.addr, args.bits)   # generate the HCI command string
+        ret = hci.write_command_raw(bytes.fromhex(cmd_str))
+        res = utils.parse_hds_em_rd_cmd_res(ret.evt_params, args.bits)  # parse the response
+        data_str = ' '.join([f'{byte:02X}' for byte in res['data']])    # get the data string
+        logger.info(f'Reading from address 0x{args.addr:04X} with {args.bits} bits: {data_str}')
+    
     def _hds_em_func(args):
         size = args.bits // 4
         if args.write:
-            logger.info(f'Read from address 0x{args.addr:04X} with {args.bits} bits')
-            res = hci.write_command_raw(bytes.fromhex(" 0180fc050403112233"))
-            print(res)
+            _hds_em_rd(args)    # read the data from the address first
             
-            print(f"Write 0x{args.data:0{size}X} to address 0x{args.addr:04X} with {args.bits} bits")
-            print(hci.write_command_raw(bytes.fromhex(" 0180fc050403112233")))
-            
-            print(f'Read again from address 0x{args.addr:04X} with {args.bits} bits')
-            print(hci.write_command_raw(bytes.fromhex(" 0180fc050403112233")))
-        else:
-            cmd_str = utils.build_hds_em_rd_cmd_str(args.addr, args.bits)   # generate the HCI command string
+            # write
+            print(f"Write 0x{args.data} to address 0x{args.addr:04X} with {args.bits} bits")
+            cmd_str = utils.build_hds_em_wr_cmd_str(args.addr, args.bits, args.data)
             ret = hci.write_command_raw(bytes.fromhex(cmd_str))
-            res = utils.parse_hds_em_rd_cmd_res(ret.evt_params, args.bits)  # parse the response
-            data_str = ' '.join([f'{byte:02X}' for byte in res['data']])    # get the data string
-            logger.info(f'Reading from address 0x{args.addr:04X} with {args.bits} bits: {data_str}')
+            
+            # read back to verify
+            _hds_em_rd(args)
+        else:   # read
+            _hds_em_rd(args)
     
     hds_em_parser.set_defaults(func=_hds_em_func)
     

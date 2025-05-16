@@ -358,3 +358,28 @@ def parse_hds_em_rd_cmd_res(data: bytes, bits: int) -> dict:
     }
     
     return parsed_data
+
+
+def build_hds_em_wr_cmd_str(addr: int, bits: int, data: int) -> str:
+    """Build hds-em write command string
+
+    Parameters
+    ----------
+    addr : int
+        Address to write to
+    bits : int
+        Number of bits to write to address
+    data : int
+        Data to write
+
+    Returns
+    -------
+    str
+        Command string to send to HDS
+
+    """
+    size = bits // 8
+    array_len = 5 + size    # 0x01, 0x02, addr LSB, addr MSB, bits, data
+    ceva_fmt_len = array_len + 1
+    total_payload_len = ceva_fmt_len + 1
+    return f"0180fc{total_payload_len:02x}{ceva_fmt_len:02x}{array_len:02x}0102{(addr & 0xFF):02x}{(addr & 0xFF00)>>8:02x}{bits:02x}{data:0{size * 2}x}"
