@@ -1422,7 +1422,62 @@ Default: {hex(DEFAULT_CE_LEN)}""",
     make_parser.set_defaults(
         func=lambda args: os.system(f"make -j {args.jobs} -C {args.directory}")
     )
+    
+    #### HDS-EM PARSER ####
+    hds_em_parser = subparsers.add_parser(
+        "hds-em", 
+        help="HUDSON EM command", 
+        formatter_class=RawTextHelpFormatter
+    )
+    
+    hds_em_parser.add_argument(
+        "addr",
+        type=_hex_int,
+        help="The address to read/write from/to in HEX format: XXXX",
+    )
+    
+    hds_em_parser.add_argument(
+        "-w",
+        "--write",
+        action="store_true",
+        default=False,
+        help="Write operation, Default: False",
+    )
+    
+    hds_em_parser.add_argument(
+        "--bits",
+        type=int,
+        default=8,
+        help="read/write operation bits, 8, 16, 32, 64. Default: 8",
+    )
+    
+    hds_em_parser.add_argument(
+        "--data",
+        type=_hex_int,
+        help="data to write in HEX formoat: XX or XXXX ...",
+    )
 
+    def _hds_em_func(args):
+        size = args.bits // 4
+        if args.write:
+            logger.info(f'Read from address 0x{args.addr:04X} with {args.bits} bits')
+            res = hci.write_command_raw(bytes.fromhex(" 0180fc050403112233"))
+            print(res)
+            
+            print(f"Write 0x{args.data:0{size}X} to address 0x{args.addr:04X} with {args.bits} bits")
+            print(hci.write_command_raw(bytes.fromhex(" 0180fc050403112233")))
+            
+            print(f'Read again from address 0x{args.addr:04X} with {args.bits} bits')
+            print(hci.write_command_raw(bytes.fromhex(" 0180fc050403112233")))
+        else:
+            cmd_str = utils.build_hds_em_rd_cmd_str(args.addr, args.bits)   # generate the HCI command string
+            ret = hci.write_command_raw(bytes.fromhex(cmd_str))
+            res = utils.parse_hds_em_rd_cmd_res(ret.evt_params, args.bits)  # parse the response
+            data_str = ' '.join([f'{byte:02X}' for byte in res['data']])    # get the data string
+            logger.info(f'Reading from address 0x{args.addr:04X} with {args.bits} bits: {data_str}')
+    
+    hds_em_parser.set_defaults(func=_hds_em_func)
+    
     def _script_runner(script_path):
         print(script_path)
         with open(script_path, "r", encoding="utf-8") as script:

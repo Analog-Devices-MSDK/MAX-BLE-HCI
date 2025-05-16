@@ -295,3 +295,66 @@ def unsigned_to_signed(unsigned_value: int, bit_length: int) -> int:
         signed_value = unsigned_value
 
     return signed_value
+
+
+def build_hds_em_rd_cmd_str(addr: int, bits: int) -> str:
+    """Build hds-em read command string
+
+    Parameters
+    ----------
+    addr : int
+        Address to read from
+    bits : int
+        Number of bits to read from address
+    
+    Returns
+    -------
+    str
+        Command string to send to HDS
+    
+    Example: 01 80fc 07 06 05 01 01 22 11 08
+        01: HCI command
+        80fc: Command opcode (HDS-EM read)
+        07: Total payload length
+        06: CEVA format length
+        05: Array length
+        01: Command ID for hds-em
+        01: read
+        2211: address 0x1122 to read from
+        08: 8 bits to read
+    """
+    array_len = 5
+    ceva_fmt_len = array_len + 1
+    total_payload_len = ceva_fmt_len + 1
+    return f"0180fc{total_payload_len:02x}{ceva_fmt_len:02x}{array_len:02x}0101{(addr & 0xFF):02x}{(addr & 0xFF00)>>8:02x}{bits:02x}"
+
+
+def parse_hds_em_rd_cmd_res(data: bytes, bits: int) -> dict:
+    """Parse HDS-EM read command response
+
+    Parameters
+    ----------
+    data : bytes
+        Data to parse
+    bits : int
+        Number of bits to read from address
+
+    Returns
+    -------
+    dict
+        Parsed data
+        
+    Example:
+        INFO - 2025-05-15 20:21:07.251297  DUT>0180fc0706050101034a08
+        INFO - 2025-05-15 20:21:07.264273  DUT<040e060580fc00015c
+        
+    """
+    # Parse the response data here
+    # This is a placeholder implementation and should be replaced with actual parsing logic
+    parsed_data = {
+        "status": data[3],
+        "len": data[4],
+        "data": data[5:],
+    }
+    
+    return parsed_data
