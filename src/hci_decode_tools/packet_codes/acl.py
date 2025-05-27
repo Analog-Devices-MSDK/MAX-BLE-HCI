@@ -8,18 +8,22 @@ codes used by HCI ACL packets.
 """
 from enum import Enum
 
+
 class AclChannelIds(Enum):
     """
     ACL packet channel IDs.
     """
+
     ACL_CHANNEL_ID_ACL = 0x01
     ACL_CHANNEL_ID_GATT = 0x04
     ACL_CHANNEL_ID_LE = 0x05
+
 
 class L2CAPSignalingCodes(Enum):
     """
     ACL packet L2CAP signaling codes.
     """
+
     L2CAP_COMMAND_REJECT_RSP = 0x01
     L2CAP_CONNECTION_REQ = 0x02
     L2CAP_CONNECTION_RSP = 0x03

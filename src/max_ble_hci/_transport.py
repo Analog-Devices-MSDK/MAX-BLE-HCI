@@ -483,7 +483,9 @@ class SerialUartTransport:
             except TimeoutError as err:
                 timeout_err = err
                 if tries > 0:
-                    self.logger.warning("Timeout occured. Retrying. %d retries remaining.", tries)
+                    self.logger.warning(
+                        "Timeout occured. Retrying. %d retries remaining.", tries
+                    )
                     tries -= 1
                     self.port.write(pkt)
                     continue

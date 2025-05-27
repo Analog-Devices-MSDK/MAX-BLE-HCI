@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from typing import NamedTuple, Optional
 from .types import hci_type
 
+
 class HciParam(NamedTuple):
     """HCI parameter information container.
 
@@ -33,9 +34,11 @@ class HciParam(NamedTuple):
         Parameter type.
 
     """
+
     label: str
     length: Optional[int]
     dtype: hci_type
+
 
 @dataclass
 class HciParamIdxRef:
@@ -52,4 +55,5 @@ class HciParamIdxRef:
         Parameter index reference value.
 
     """
+
     ref: int

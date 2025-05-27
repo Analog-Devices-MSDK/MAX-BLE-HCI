@@ -9,10 +9,12 @@ specifically by HCI LEMeta event packets.
 """
 from enum import Enum
 
+
 class EventCode(Enum):
     """
     Event packet event codes.
     """
+
     INQUIRY_COMPLETE = 0x1
     INQUIRY_RESULT = 0x2
     CONNECTION_COMPLETE = 0x3
@@ -78,10 +80,12 @@ class EventCode(Enum):
     SAM_STATUS_CHANGE = 0x58
     ENCRYPTION_CHANGE_V2 = 0x59
 
+
 class SubEventCode(Enum):
     """
     Event packet subevent codes.
     """
+
     LE_CONNECTION_COMPLETE = 0x01
     LE_ADVERTISING_REPORT = 0x02
     LE_CONNECTION_UPDATE = 0x03
