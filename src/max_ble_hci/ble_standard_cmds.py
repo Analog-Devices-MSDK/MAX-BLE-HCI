@@ -1048,7 +1048,7 @@ class BleStandardCmds:
         else:
             key_type = 0x4B
 
-        params = xcoords + ycoords + [key_type] if version == 2 else xcoord + ycoords
+        params = xcoords + ycoords + [key_type] if version == 2 else xcoords + ycoords
 
         ocf = (
             OCF.LE_CONTROLLER.GENERATE_DHKEY
