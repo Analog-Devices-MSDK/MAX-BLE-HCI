@@ -232,7 +232,7 @@ def init_cli() -> argparse.Namespace:
     )
     subparsers = parser.add_subparsers()
     decode_parser = subparsers.add_parser(
-        "decode",
+        "packet",
         help="Decode an HCI packet",
         formatter_class=argparse.RawTextHelpFormatter
     )
