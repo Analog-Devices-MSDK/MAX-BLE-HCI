@@ -20,9 +20,10 @@ Example: Decoding an HCI ACL packet
 
 """
 from __future__ import annotations
-from typing import Tuple
+from typing import List, Tuple, Union
 from ..packet_codes.acl import L2CAPSignalingCodes
 from ..utils._packet_structs.acl_struct import get_params
+from ..utils.params import HciParam, HciParamIdxRef
 
 class AclPacket:
     """ACL packet deserializer.
@@ -89,6 +90,8 @@ class AclPacket:
         self.packet_length, self.payload_length = lengths
         self.channel_id = channel_id
         self.packet_data = packet_data
+        self._p_idx = None
+        self._p_vals = None
 
     @staticmethod
     def from_bytes(packet: bytes) -> AclPacket:
@@ -119,43 +122,43 @@ class AclPacket:
         packet_data = packet[8:]
         return AclPacket(connection_handle, bc_flag, pb_flag, lengths, channel_id, packet_data)
 
-    def parse_packet(self) -> str:
-        """Parse and format a deserialized ACL packet.
+    # def parse_packet(self) -> str:
+    #     """Parse and format a deserialized ACL packet.
 
-        Returns
-        -------
-        str
-            The formatted ACL packet.
+    #     Returns
+    #     -------
+    #     str
+    #         The formatted ACL packet.
 
-        """
-        rstr = "PacketType=ACL\n"
-        rstr += f"ConnectionHdl={self.connection_handle}\n"
-        rstr += f"PacketLength={self.packet_length}\n"
-        rstr += f"PayloadLength={self.payload_length}\n"
-        rstr += f"ChannelId={self.channel_id}\n"
+    #     """
+    #     rstr = "PacketType=ACL\n"
+    #     rstr += f"ConnectionHdl={self.connection_handle}\n"
+    #     rstr += f"PacketLength={self.packet_length}\n"
+    #     rstr += f"PayloadLength={self.payload_length}\n"
+    #     rstr += f"ChannelId={self.channel_id}\n"
 
-        if not self.channel_id in [0x01, 0x05]:
-            rstr += f"PacketData: {int.from_bytes(self.packet_data, byteorder='little')}"
-            return rstr
+    #     if not self.channel_id in [0x01, 0x05]:
+    #         rstr += f"PacketData: {int.from_bytes(self.packet_data, byteorder='little')}"
+    #         return rstr
 
-        code = L2CAPSignalingCodes(int.from_bytes(self.packet_data[0], byteorder="little"))
-        rstr += f"SignalingCode={code.name}"
-        rstr += f"PacketId={int.from_bytes(self.packet_data[1], byteorder='little')}"
-        rstr += f"DataLength={int.from_bytes(self.packet_data[2:4])}"
-        rstr += f"Params:\n"
-        p_idx = 4
-        for param in iterate_params(code):
-            if param.length < 0:
-                length = len(self.packet_data) - p_idx - param.length
-                p_val = param.dtype.from_bytes(self.packet_data[p_idx:p_idx + length])
-                p_idx += length
-            elif param.length is None:
-                p_val = param.dtype.from_bytes(self.packet_data[p_idx:])
-            else:
-                p_val = param.dtype.from_bytes(self.packet_data[p_idx:p_idx + param.length])
-                p_idx += param.length
-            print(f"    {param.label}={p_val}\n")
-        return rstr
+    #     code = L2CAPSignalingCodes(int.from_bytes(self.packet_data[0], byteorder="little"))
+    #     rstr += f"SignalingCode={code.name}"
+    #     rstr += f"PacketId={int.from_bytes(self.packet_data[1], byteorder='little')}"
+    #     rstr += f"DataLength={int.from_bytes(self.packet_data[2:4])}"
+    #     rstr += f"Params:\n"
+    #     p_idx = 4
+    #     for param in get_params(code):
+    #         if param.length < 0:
+    #             length = len(self.packet_data) - p_idx - param.length
+    #             p_val = param.dtype.from_bytes(self.packet_data[p_idx:p_idx + length])
+    #             p_idx += length
+    #         elif param.length is None:
+    #             p_val = param.dtype.from_bytes(self.packet_data[p_idx:])
+    #         else:
+    #             p_val = param.dtype.from_bytes(self.packet_data[p_idx:p_idx + param.length])
+    #             p_idx += param.length
+    #         print(f"    {param.label}={p_val}\n")
+    #     return rstr
 
     def parse_packet(self) -> str:
         """Parse and format a deserialized ACL packet.
@@ -169,8 +172,61 @@ class AclPacket:
         rstr = "PacketType=ACL\n"
         rstr += f"ConnectionHandle={self.connection_handle}\n"
         rstr += f"PacketLength={self.packet_length}\n"
+        if self.packet_length == 0:
+            return rstr
         rstr += f"PayloadLength={self.payload_length}\n"
         rstr += f"ChannelId={self.channel_id}\n"
 
         if not self.channel_id in [0x01, 0x05]:
-            rstr += f""
+            rstr += f"PacketData: {int.from_bytes(self.packet_data, byteorder='little')}\n"
+            return rstr
+        code = L2CAPSignalingCodes(int.from_bytes(self.packet_data[0:1], byteorder="little"))
+        rstr += f"SignalingCode={code.name}\n"
+        rstr += f"PacketId={int.from_bytes(self.packet_data[1:2], byteorder='little')}\n"
+        rstr += f"DataLength={int.from_bytes(self.packet_data[2:4], byteorder='little')}\n"
+        self._p_idx = 4
+        params = get_params(code)
+        if params is None:
+            rstr += f"Params: None\n"
+            return rstr
+        rstr += f"Params:\n"
+        self._p_vals = []
+        idx = 0
+        for param in params:
+            p_str, idx = self._parse_param(param, idx)
+            rstr += p_str
+        return rstr
+
+    def _parse_param(self, param: Union[HciParam, List[HciParam]], idx: int) -> Tuple[str, int]:
+        """
+        Parse a single command parameter.
+        """
+        rstr = ""
+        if isinstance(param, list):
+            idxref = param.pop(0).ref
+            maxidx = 0
+            if idxref is None:
+                maxidx = int((len(self.packet_data) - self._p_idx)/sum(p.length for p in param))
+            else:
+                maxidx = self._p_vals[idx + idxref].value
+            for subidx in range(maxidx):
+                for subparam in param:
+                    p_str, idx = self._parse_param(subparam, idx)
+                    rstr += p_str.format(subidx)
+            return rstr, idx
+
+        p_len = len(self.packet_data) - self._p_idx if param.length is None else param.length
+        if isinstance(p_len, HciParamIdxRef):
+            if p_len.ref is None:
+                p_len = len(self.packet_data) - self._p_idx
+            else:
+                p_len = self._p_vals[idx + p_len.ref].value
+        if p_len < 0:
+            print(f"HERE: {p_len}")
+            p_len = len(self.packet_data) - self._p_idx - abs(p_len)
+        p_val = param.dtype.from_bytes(self.packet_data[self._p_idx:self._p_idx + p_len])
+        self._p_idx += p_len
+        idx += 1
+        rstr += f"    {param.label}={p_val}\n"
+        self._p_vals.append(p_val)
+        return rstr, idx

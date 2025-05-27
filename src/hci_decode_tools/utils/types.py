@@ -5010,7 +5010,7 @@ class hci_l2cap_status(hci_type):
         """
         return hci_l2cap_status(int.from_bytes(val, byteorder="little"))
 
-    class hci_l2cap_status(Enum):
+    class _l2cap_status(Enum):
         NO_FUTHER_INFORMATION_AVAILABLE = 0x00
         AUTHENTICATION_PENDING = 0x01
         AUTHORIZATION_PENDING = 0x02
@@ -5048,3 +5048,63 @@ class hci_l2cap_info_type(hci_type):
         CONNECTIONLESS_MTU = 0x01
         EXTENDED_FEATURE_MASK = 0x02
         FIXED_CHANNELS_SUPPORTED_OVER_BR_EDR = 0x03
+
+class hci_l2cap_info_result_type(hci_type):
+    """
+    HCI L2CAP info result type.
+    """
+    def __init__(self, val: int) -> None:
+        to_mask = self._l2cap_info_result(val)
+        self.name = to_mask.name
+        self.value = to_mask.value
+
+    def __repr__(self) -> str:
+        return f"{self.name} ({self.value})"
+
+    @staticmethod
+    def from_bytes(val: bytes) -> hci_l2cap_info_result_type:
+        """Typcast bytes object.
+
+        Parameters
+        ----------
+        val : bytes
+            Bytes object to typecast.
+
+        Returns
+        -------
+        hci_l2cap_info_result_type
+            Typecast object.
+
+        """
+        return hci_l2cap_info_result_type(int.from_bytes(val, byteorder="little"))
+
+    class _l2cap_info_result(Enum):
+        SUCCESS = 0x00
+        NOT_SUPPORTED = 0x01
+
+class hci_l2cap_hex(hci_type):
+    """
+    HCI L2CAP hex integer type.
+    """
+    def __init__(self, val: int) -> None:
+        self.value = val
+
+    def __repr__(self) -> str:
+        return f"0x{self.value:X}"
+
+    @staticmethod
+    def from_bytes(val: bytes) -> hci_l2cap_hex:
+        """Typecast bytes object.
+
+        Parameters
+        ----------
+        val : bytes
+            Bytes object to typecast.
+
+        Returns
+        -------
+        hci_l2cap_hex
+            Typecast object.
+
+        """
+        return hci_l2cap_hex(int.from_bytes(val, byteorder='little'))

@@ -132,15 +132,24 @@ class EventPacket:
         """
         rstr = ""
         if isinstance(param, list):
-            for subidx in range(self._p_vals[idx + param.pop(0).ref].value):
+            idxref = param.pop(0)
+            maxidx = 0
+            if idxref is None:
+                maxidx = int((len(self.params) - self._p_idx)/sum(p.length for p in param))
+            else:
+                maxidx = self._p_vals[idx + idxref].value
+            for subidx in range(maxidx):
                 for subparam in param:
                     p_str, idx = self._parse_param(subparam, idx)
                     rstr += p_str.format(subidx)
             return rstr, idx
 
-        p_len = param.length
+        p_len = len(self.params) - self._p_idx if param.length is None else param.length
         if isinstance(p_len, HciParamIdxRef):
-            p_len = self._p_vals[idx + p_len.ref].value
+            if p_len.ref is None:
+                p_len = len(self.params) - self._p_idx
+            else:
+                p_len = self._p_vals[idx + p_len.ref].value
         p_val = param.dtype.from_bytes(self.params[self._p_idx:self._p_idx + p_len])
         self._p_idx += p_len
         idx += 1

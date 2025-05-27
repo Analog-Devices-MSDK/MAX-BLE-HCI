@@ -63,7 +63,6 @@ def decode_packet(packet: bytes) -> str:
     """
     packet_code = packet[0]
     packet = packet[1:]
-
     if packet_code == AclPacket.PACKET_ID:
         return AclPacket.from_bytes(packet).parse_packet()
     if packet_code == CommandPacket.PACKET_ID:
