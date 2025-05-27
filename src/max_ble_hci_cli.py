@@ -1345,7 +1345,7 @@ Default: {hex(DEFAULT_CE_LEN)}""",
         "cmd", help="Send raw HCI command", formatter_class=RawTextHelpFormatter
     )
     cmd_parser.add_argument(
-        "cmd",
+        "command",
         help='String of hex bytes LSB first\nex: "01030C00" to send HCI Reset command',
     )
     cmd_parser.add_argument(
@@ -1357,7 +1357,7 @@ Default: {hex(DEFAULT_CE_LEN)}""",
     )
 
     cmd_parser.set_defaults(
-        func=lambda args: print(hci.write_command_raw(bytes.fromhex(args.cmd)))
+        func=lambda args: print(hci.write_command_raw(bytes.fromhex(args.command)))
     )
 
     #### EXIT PARSER ####

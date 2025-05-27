@@ -477,17 +477,15 @@ class SerialUartTransport:
 
         self.logger.info("%s  %s>%s", datetime.datetime.now(), self.id_tag, pkt.hex())
 
-        while tries >= 0 and self._read_thread.is_alive():
+        while self._read_thread.is_alive():
             try:
                 return self._retrieve(timeout)
-
             except TimeoutError as err:
-                if tries:
-                    self.port.write(pkt)
-                tries -= 1
                 timeout_err = err
-                self.logger.warning(
-                    "Timeout occured. Retrying. %d retries remaining.", tries + 1
-                )
-
+                if tries > 0:
+                    self.logger.warning("Timeout occured. Retrying. %d retries remaining.", tries)
+                    tries -= 1
+                    self.port.write(pkt)
+                    continue
+                break
         raise TimeoutError("Timeout occured. No retries remaining.") from timeout_err
