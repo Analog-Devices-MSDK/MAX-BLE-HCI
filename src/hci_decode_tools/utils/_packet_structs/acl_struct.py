@@ -7,6 +7,7 @@ of all HCI ACL L2CAP signaling packets. As it is part of an
 internal package, it is not intended for external use.
 
 """
+# pylint: disable=wildcard-import, too-many-lines, unused-wildcard-import
 from typing import Dict, List
 from ...packet_codes.acl import L2CAPSignalingCodes
 from ..types import *

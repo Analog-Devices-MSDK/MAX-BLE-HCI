@@ -116,9 +116,9 @@ class EventPacket:
 
         params = get_params(param_code)
         if params is None:
-            rstr += f"Params: None\n"
+            rstr += "Params: None\n"
             return rstr
-        rstr += f"Params:\n"
+        rstr += "Params:\n"
         self._p_vals = []
         idx = 0
         for param in params:

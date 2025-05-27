@@ -26,6 +26,7 @@ from ..utils._packet_structs.acl_struct import get_params
 from ..utils.params import HciParam, HciParamIdxRef
 
 class AclPacket:
+    # pylint: disable=too-many-instance-attributes
     """ACL packet deserializer.
 
     HCI ACL packet format:
@@ -122,44 +123,6 @@ class AclPacket:
         packet_data = packet[8:]
         return AclPacket(connection_handle, bc_flag, pb_flag, lengths, channel_id, packet_data)
 
-    # def parse_packet(self) -> str:
-    #     """Parse and format a deserialized ACL packet.
-
-    #     Returns
-    #     -------
-    #     str
-    #         The formatted ACL packet.
-
-    #     """
-    #     rstr = "PacketType=ACL\n"
-    #     rstr += f"ConnectionHdl={self.connection_handle}\n"
-    #     rstr += f"PacketLength={self.packet_length}\n"
-    #     rstr += f"PayloadLength={self.payload_length}\n"
-    #     rstr += f"ChannelId={self.channel_id}\n"
-
-    #     if not self.channel_id in [0x01, 0x05]:
-    #         rstr += f"PacketData: {int.from_bytes(self.packet_data, byteorder='little')}"
-    #         return rstr
-
-    #     code = L2CAPSignalingCodes(int.from_bytes(self.packet_data[0], byteorder="little"))
-    #     rstr += f"SignalingCode={code.name}"
-    #     rstr += f"PacketId={int.from_bytes(self.packet_data[1], byteorder='little')}"
-    #     rstr += f"DataLength={int.from_bytes(self.packet_data[2:4])}"
-    #     rstr += f"Params:\n"
-    #     p_idx = 4
-    #     for param in get_params(code):
-    #         if param.length < 0:
-    #             length = len(self.packet_data) - p_idx - param.length
-    #             p_val = param.dtype.from_bytes(self.packet_data[p_idx:p_idx + length])
-    #             p_idx += length
-    #         elif param.length is None:
-    #             p_val = param.dtype.from_bytes(self.packet_data[p_idx:])
-    #         else:
-    #             p_val = param.dtype.from_bytes(self.packet_data[p_idx:p_idx + param.length])
-    #             p_idx += param.length
-    #         print(f"    {param.label}={p_val}\n")
-    #     return rstr
-
     def parse_packet(self) -> str:
         """Parse and format a deserialized ACL packet.
 
@@ -187,9 +150,9 @@ class AclPacket:
         self._p_idx = 4
         params = get_params(code)
         if params is None:
-            rstr += f"Params: None\n"
+            rstr += "Params: None\n"
             return rstr
-        rstr += f"Params:\n"
+        rstr += "Params:\n"
         self._p_vals = []
         idx = 0
         for param in params:

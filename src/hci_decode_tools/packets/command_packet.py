@@ -106,9 +106,9 @@ class CommandPacket:
         self._p_idx = 0
         params = get_params(self.ogf, self.ocf)
         if params is None:
-            rstr += f"Params: None\n"
+            rstr += "Params: None\n"
             return rstr
-        rstr += f"Params:\n"
+        rstr += "Params:\n"
         self._p_vals = []
         idx = 0
         for param in params:

@@ -143,8 +143,8 @@ def decode_text_file(
                 rstr += "[Controller-->Host]\n"
                 line = line.replace(c2h_tag, "")
             elif h2c_tag is not None and line.startswith(h2c_tag):
-                    rstr += "[Host-->Controller]\n"
-                    line = line.replace(h2c_tag, "")
+                rstr += "[Host-->Controller]\n"
+                line = line.replace(h2c_tag, "")
             elif leading is not None:
                 is_pkt = False
                 for leader in leading:

@@ -7,6 +7,7 @@ parameters. These data types are used by the decoder
 to convert and format HCI packet parameter data.
 
 """
+# pylint: skip-file
 from __future__ import annotations
 from enum import Enum, Flag
 from typing import List

@@ -41,9 +41,10 @@ from enum import Enum
 import os
 import queue
 import select
-import serial
 import threading
 from typing import Optional
+
+import serial
 
 from .packets.acl_packet import AclPacket
 from .packets.command_packet import CommandPacket
@@ -52,6 +53,7 @@ from .decode import decode_packet
 
 @dataclass
 class HciSerialSnifferPortCfg:
+    # pylint: disable=too-many-instance-attributes
     """Serial port configuration container.
 
     Parameters
@@ -117,7 +119,8 @@ class HciSerialSnifferPortCfg:
     inter_byte_timeout: Optional[float] = None
     exclusive: Optional[bool] = False
 
-class HciSerialSniffer(threading.Thread):
+class HciSerialSniffer:
+    # pylint: disable=too-many-instance-attributes
     """HCI serial port sniffer.
 
     Object sniffs/decodes HCI packets from a serial
@@ -406,4 +409,3 @@ class HciSerialSniffer(threading.Thread):
                     print(decode_packet(pkt.get_data()))
             except queue.Empty:
                 continue
-
