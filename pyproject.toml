@@ -17,7 +17,7 @@ file = "LICENSE"
 
 [project.scripts]
 max_ble_hci = "max_ble_hci_cli:main"
-hcidecode = "hci_decode_tools_cli:main"
+hci_decoder = "hci_decode_tools_cli:main"
 
 [project.urls]
 Homepage = "https://github.com/Analog-Devices-MSDK/BLE-HCI"
