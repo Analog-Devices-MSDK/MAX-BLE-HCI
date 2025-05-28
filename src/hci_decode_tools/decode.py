@@ -47,6 +47,7 @@ from .packets.acl_packet import AclPacket
 from .packets.command_packet import CommandPacket
 from .packets.event_packet import EventPacket
 
+
 def decode_packet(packet: bytes) -> str:
     """Decode an HCI packet.
 
@@ -70,6 +71,7 @@ def decode_packet(packet: bytes) -> str:
     if packet_code == EventPacket.PACKET_ID:
         return EventPacket.from_bytes(packet).parse_packet()
     return "--Invalid packet ID--"
+
 
 def decode_bytes_file(fname: str) -> str:
     """Decode HCI packets from a binary file.
@@ -114,11 +116,12 @@ def decode_bytes_file(fname: str) -> str:
                 break
     return rstr
 
+
 def decode_text_file(
     fname: str,
     leading: Optional[List[str]] = None,
     c2h_tag: Optional[str] = None,
-    h2c_tag: Optional[str] = None
+    h2c_tag: Optional[str] = None,
 ) -> str:
     """Decode HCI packets from a text-based file.
 

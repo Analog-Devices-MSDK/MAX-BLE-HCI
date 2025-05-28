@@ -25,6 +25,7 @@ from ..packet_codes.command import parse_opcode
 from ..utils._packet_structs.command_struct import get_params
 from ..utils.params import HciParam, HciParamIdxRef
 
+
 class CommandPacket:
     """Command packet deserializer.
 
@@ -58,7 +59,9 @@ class CommandPacket:
         Command parameters.
 
     """
+
     PACKET_ID = 0x01
+
     def __init__(self, opcode: int, length: int, params: bytes) -> None:
         self.ogf, self.ocf = parse_opcode(opcode)
         self.length = length
@@ -116,7 +119,9 @@ class CommandPacket:
             rstr += p_str
         return rstr
 
-    def _parse_param(self, param: Union[HciParam, List[HciParam]], idx: int) -> Tuple[str, int]:
+    def _parse_param(
+        self, param: Union[HciParam, List[HciParam]], idx: int
+    ) -> Tuple[str, int]:
         """
         Parse a single command parameter.
         """
@@ -125,7 +130,9 @@ class CommandPacket:
             idxref = param.pop(0).ref
             maxidx = 0
             if idxref is None:
-                maxidx = int((len(self.params) - self._p_idx)/sum(p.length for p in param))
+                maxidx = int(
+                    (len(self.params) - self._p_idx) / sum(p.length for p in param)
+                )
             else:
                 maxidx = self._p_vals[idx + idxref].value
             for subidx in range(maxidx):
@@ -140,7 +147,7 @@ class CommandPacket:
                 p_len = len(self.params) - self._p_idx
             else:
                 p_len = self._p_vals[idx + p_len.ref].value
-        p_val = param.dtype.from_bytes(self.params[self._p_idx:self._p_idx + p_len])
+        p_val = param.dtype.from_bytes(self.params[self._p_idx : self._p_idx + p_len])
         self._p_idx += p_len
         idx += 1
         rstr += f"    {param.label}={p_val}\n"

@@ -12,10 +12,12 @@ from __future__ import annotations
 from enum import Enum, Flag
 from typing import List
 
+
 class hci_type:
     """
     Base HCI type.
     """
+
     @staticmethod
     def from_bytes(*args) -> hci_type:
         """Typecast bytes object.
@@ -33,10 +35,12 @@ class hci_type:
         """
         return hci_type()
 
+
 class hci_int(hci_type):
     """
     HCI signed integer type.
     """
+
     def __init__(self, val: int) -> None:
         self.value = val
 
@@ -60,10 +64,12 @@ class hci_int(hci_type):
         """
         return hci_int(int.from_bytes(val, byteorder="little", signed=True))
 
+
 class hci_uint(hci_type):
     """
     HCI unsigned integer type.
     """
+
     def __init__(self, val: int) -> None:
         self.value = val
 
@@ -87,10 +93,12 @@ class hci_uint(hci_type):
         """
         return hci_uint(int.from_bytes(val, byteorder="little", signed=False))
 
+
 class hci_str(hci_type):
     """
     HCI big-endian string type.
     """
+
     def __init__(self, val: int) -> None:
         self.value = val
 
@@ -114,10 +122,12 @@ class hci_str(hci_type):
         """
         return hci_str(int.from_bytes(val, byteorder="big", signed=False))
 
+
 class hci_bool(hci_type):
     """
     HCI boolean type.
     """
+
     def __init__(self, val: bool) -> None:
         self.value = val
 
@@ -141,10 +151,12 @@ class hci_bool(hci_type):
         """
         return hci_bool(int.from_bytes(val, byteorder="little", signed=False) > 0)
 
+
 class hci_time_1p28s(hci_type):
     """
     HCI time type with 1.28s units.
     """
+
     def __init__(self, val: float) -> None:
         self.value = val
 
@@ -166,12 +178,16 @@ class hci_time_1p28s(hci_type):
             Typecast object.
 
         """
-        return hci_time_1p28s(int.from_bytes(val, byteorder="little", signed=False)*1.28)
+        return hci_time_1p28s(
+            int.from_bytes(val, byteorder="little", signed=False) * 1.28
+        )
+
 
 class hci_time_p625ms(hci_type):
     """
     HCI time type with 0.625ms units.
     """
+
     def __init__(self, val: float) -> None:
         self.value = val
 
@@ -193,12 +209,16 @@ class hci_time_p625ms(hci_type):
             Typecast object.
 
         """
-        return hci_time_p625ms(int.from_bytes(val, byteorder="little", signed=False)*0.625)
+        return hci_time_p625ms(
+            int.from_bytes(val, byteorder="little", signed=False) * 0.625
+        )
+
 
 class hci_time_1p25ms(hci_type):
     """
     HCI time type with 1.25ms units.
     """
+
     def __init__(self, val: float) -> None:
         self.value = val
 
@@ -220,12 +240,16 @@ class hci_time_1p25ms(hci_type):
             Typecast object.
 
         """
-        return hci_time_1p25ms(int.from_bytes(val, byteorder="little", signed=False)*1.25)
+        return hci_time_1p25ms(
+            int.from_bytes(val, byteorder="little", signed=False) * 1.25
+        )
+
 
 class hci_time_p125ms(hci_type):
     """
     HCI time type with 0.125ms units.
     """
+
     def __init__(self, val: float) -> None:
         self.value = val
 
@@ -247,12 +271,16 @@ class hci_time_p125ms(hci_type):
             Typecast object.
 
         """
-        return hci_time_p125ms(int.from_bytes(val, byteorder="little", signed=False)*0.125)
+        return hci_time_p125ms(
+            int.from_bytes(val, byteorder="little", signed=False) * 0.125
+        )
+
 
 class hci_time_p3125ms(hci_type):
     """
     HCI time type with 0.3125ms units.
     """
+
     def __init__(self, val: float) -> None:
         self.value = val
 
@@ -274,12 +302,16 @@ class hci_time_p3125ms(hci_type):
             Typecast object.
 
         """
-        return hci_time_p3125ms(int.from_bytes(val, byteorder="little", signed=False)*0.3125)
+        return hci_time_p3125ms(
+            int.from_bytes(val, byteorder="little", signed=False) * 0.3125
+        )
+
 
 class hci_time_10ms(hci_type):
     """
     HCI time type with 10ms units.
     """
+
     def __init__(self, val: float) -> None:
         self.value = val
 
@@ -301,12 +333,16 @@ class hci_time_10ms(hci_type):
             Typecast object.
 
         """
-        return hci_time_10ms(int.from_bytes(val, byteorder="little", signed=False)*10.0)
+        return hci_time_10ms(
+            int.from_bytes(val, byteorder="little", signed=False) * 10.0
+        )
+
 
 class hci_address(hci_type):
     """
     HCI address type.
     """
+
     def __init__(self, val: List[str]) -> None:
         self.value = val
 
@@ -330,10 +366,12 @@ class hci_address(hci_type):
         """
         return hci_address([hex(x) for x in val])
 
+
 class hci_packet_type(hci_type):
     """
     HCI packet type.
     """
+
     def __init__(self, val: int):
         to_mask = self._packet_type_mask(val)
         self.name = to_mask.name
@@ -373,10 +411,12 @@ class hci_packet_type(hci_type):
         DM5_ALLOWED = 1 << 14
         DH5_ALLOWED = 1 << 15
 
+
 class hci_sync_packet_type(hci_type):
     """
     HCI sync packet type type.
     """
+
     def __init__(self, val: int):
         to_mask = self._sync_packet_type_mask(val)
         self.name = to_mask.name
@@ -400,7 +440,9 @@ class hci_sync_packet_type(hci_type):
             Typecast object.
 
         """
-        return hci_sync_packet_type(int.from_bytes(val, byteorder="little", signed=False))
+        return hci_sync_packet_type(
+            int.from_bytes(val, byteorder="little", signed=False)
+        )
 
     class _sync_packet_type_mask(Flag):
         HV1_ALLOWED = 1 << 0
@@ -414,10 +456,12 @@ class hci_sync_packet_type(hci_type):
         NO_2EV5 = 1 << 8
         NO_3EV5 = 1 << 9
 
+
 class hci_page_scan_repetition_mode(hci_type):
     """
     HCI page scan repetition mode type.
     """
+
     def __init__(self, val: int) -> None:
         self.value = val
 
@@ -441,10 +485,12 @@ class hci_page_scan_repetition_mode(hci_type):
         """
         return hci_page_scan_repetition_mode(int.from_bytes(val, byteorder="little"))
 
+
 class hci_clock_offset(hci_type):
     """
     HCI clock offset type.
     """
+
     def __init__(self, val: int) -> None:
         self.valid = val & 0x8000 > 0
         self.value = val & 0x7FFF
@@ -469,10 +515,12 @@ class hci_clock_offset(hci_type):
         """
         return hci_clock_offset(int.from_bytes(val, byteorder="little"))
 
+
 class hci_status(hci_type):
     """
     HCI status type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._status_codes(val)
         self.name = to_mask.name
@@ -567,7 +615,9 @@ class hci_status(hci_type):
         ADVERTISING_TIMEOUT = 0x3C
         CONNECTION_TERMINATED_DUE_TO_MIC_FAILURE = 0x3D
         CONNECTION_FAILED_TO_BE_ESTABLISHED = 0x3E
-        COARSE_CLOCK_ADJUSTMENT_REJECTED_BUT_WILL_TRY_TO_ADJUST_USING_CLOCK_DRAGGING = 0x40
+        COARSE_CLOCK_ADJUSTMENT_REJECTED_BUT_WILL_TRY_TO_ADJUST_USING_CLOCK_DRAGGING = (
+            0x40
+        )
         TYPE0_SUBMAP_NOT_DEFINED = 0x41
         UNKNOWN_ADVERTISING_IDENTIFIER = 0x42
         LIMIT_REACHED = 0x43
@@ -584,10 +634,12 @@ class hci_status(hci_type):
         LL_PROCEDURE_COLLISION = 0x23
         SYNCHRONIZATION_TIMEOUT = 0x3E
 
+
 class hci_data_status(hci_type):
     """
     HCI data status type.
     """
+
     def __init__(self, val: int) -> None:
         self.value = val
 
@@ -617,10 +669,12 @@ class hci_data_status(hci_type):
         """
         return hci_data_status(int.from_bytes(val, byteorder="little"))
 
+
 class hci_packet_status(hci_type):
     """
     HCI packet status type.
     """
+
     def __init__(self, val: int) -> None:
         self.value = val
 
@@ -650,10 +704,12 @@ class hci_packet_status(hci_type):
         """
         return hci_packet_status(int.from_bytes(val, byteorder="little"))
 
+
 class hci_tx_status(hci_type):
     """
     HCI TX status type.
     """
+
     def __init__(self, val: int) -> None:
         self.value = val
 
@@ -679,10 +735,12 @@ class hci_tx_status(hci_type):
         """
         return hci_tx_status(int.from_bytes(val, byteorder="little"))
 
+
 class hci_role(hci_type):
     """
     HCI role type.
     """
+
     def __init__(self, val: int) -> None:
         self.value = val
 
@@ -708,10 +766,12 @@ class hci_role(hci_type):
         """
         return hci_role(int.from_bytes(val, byteorder="little"))
 
+
 class hci_key_flag(hci_type):
     """
     HCI key flag type.
     """
+
     def __init__(self, val: int) -> None:
         self.value = val
 
@@ -737,14 +797,22 @@ class hci_key_flag(hci_type):
         """
         return hci_key_flag(int.from_bytes(val, byteorder="little"))
 
+
 class hci_voice_setting(hci_type):
     """
     HCI voice setting type.
     """
+
     _AIR_CODING_FORMATS = ["CVSD", "u-law", "A-law", "transparent data"]
     _INPUT_SAMPLE_SIZES = ["8 bits", "16 bits"]
-    _INPUT_DATA_FORMATS = ["1's complement", "2's complement", "sign/magnitude", "unsigned"]
+    _INPUT_DATA_FORMATS = [
+        "1's complement",
+        "2's complement",
+        "sign/magnitude",
+        "unsigned",
+    ]
     _INPUT_CODING_FORMATS = ["linear", "u-law", "A-law", "RESERVED"]
+
     def __init__(self, val: int) -> None:
         self.air_coding_format = self._AIR_CODING_FORMATS[(val >> 0) & 0b0011]
         self.linear_pcm_bit_position = (val >> 2) & 0b0111
@@ -777,10 +845,12 @@ class hci_voice_setting(hci_type):
         """
         return hci_voice_setting(int.from_bytes(val, byteorder="little"))
 
+
 class hci_retransmission_effort(hci_type):
     """
     HCI retransmission effort type.
     """
+
     def __init__(self, val: int) -> None:
         self.value = val
 
@@ -810,10 +880,12 @@ class hci_retransmission_effort(hci_type):
         """
         return hci_retransmission_effort(int.from_bytes(val, byteorder="little"))
 
+
 class hci_codec(hci_type):
     """
     HCI codec type.
     """
+
     def __init__(self, val: int) -> None:
         coding_format = self._coding_formats((val >> 0) & 0xFF)
         self.company_id = None
@@ -862,10 +934,12 @@ class hci_codec(hci_type):
         G_792A = 0x07
         VENDOR_SPECIFIC = 0xFF
 
+
 class hci_coding_format(hci_type):
     """
     HCI coding format type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._coding_formats(val)
         self.name = to_mask.name
@@ -902,10 +976,12 @@ class hci_coding_format(hci_type):
         G_792A = 0x07
         VENDOR_SPECIFIC = 0xFF
 
+
 class hci_pcm_data_format(hci_type):
     """
     HCI PCM data format type.
     """
+
     def __init__(self, val: int) -> None:
         self.value = val
 
@@ -937,10 +1013,12 @@ class hci_pcm_data_format(hci_type):
         """
         return hci_pcm_data_format(int.from_bytes(val, byteorder="little"))
 
+
 class hci_io_capability(hci_type):
     """
     HCI I/O capability type.
     """
+
     def __init__(self, val: int) -> None:
         self.value = val
 
@@ -970,10 +1048,12 @@ class hci_io_capability(hci_type):
         """
         return hci_io_capability(int.from_bytes(val, byteorder="little"))
 
+
 class hci_oob_data_present(hci_type):
     """
     HCI OOB data present type.
     """
+
     def __init__(self, val: int) -> None:
         self.value = val
 
@@ -1005,10 +1085,12 @@ class hci_oob_data_present(hci_type):
         """
         return hci_oob_data_present(int.from_bytes(val, byteorder="little"))
 
+
 class hci_authentication_requirements(hci_type):
     """
     HCI authentication requirements type.
     """
+
     def __init__(self, val: int) -> None:
         self.value = val
 
@@ -1044,10 +1126,12 @@ class hci_authentication_requirements(hci_type):
         """
         return hci_oob_data_present(int.from_bytes(val, byteorder="little"))
 
+
 class hci_bt_channel_map(hci_type):
     """
     HCI BR/EDR channel map type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._bt_channel_map(val)
         self.name = to_mask.name
@@ -1155,10 +1239,12 @@ class hci_bt_channel_map(hci_type):
         CH78 = 1 << 78
         CH79 = 1 << 79
 
+
 class hci_ble_channel_map(hci_type):
     """
     HCI BLE channel map type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._ble_channel_map(val)
         self.name = to_mask.name
@@ -1226,10 +1312,12 @@ class hci_ble_channel_map(hci_type):
         CH38 = 1 << 38
         CH39 = 1 << 39
 
+
 class hci_qos_service(hci_type):
     """
     HCI quality of service type.
     """
+
     def __init__(self, val: int) -> None:
         self.value = val
 
@@ -1259,10 +1347,12 @@ class hci_qos_service(hci_type):
         """
         return hci_qos_service(int.from_bytes(val, byteorder="little"))
 
+
 class hci_link_policy_settings(hci_type):
     """
     HCI link policy settings type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._link_policy_settings(val)
         self.name = to_mask.name
@@ -1294,10 +1384,12 @@ class hci_link_policy_settings(hci_type):
         ENABLE_HOLD_MODE = 1 << 1
         ENABLE_SNIFF_MODE = 1 << 2
 
+
 class hci_datapath(hci_type):
     """
     HCI datapath type.
     """
+
     def __init__(self, val: int) -> None:
         self.value = val
 
@@ -1325,10 +1417,12 @@ class hci_datapath(hci_type):
         """
         return hci_datapath(int.from_bytes(val, byteorder="little"))
 
+
 class hci_event_mask(hci_type):
     """
     HCI controller event mask type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._event_mask(val)
         self.name = to_mask.name
@@ -1405,10 +1499,12 @@ class hci_event_mask(hci_type):
         REMOTE_HOST_SUPPORTED_FEATURES_NOTIFICATION = 1 << 60
         LE_META = 1 << 61
 
+
 class hci_event_mask_page_2(hci_type):
     """
     HCI controller event mask page 2 type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._event_mask_page_2(val)
         self.name = to_mask.name
@@ -1450,10 +1546,12 @@ class hci_event_mask_page_2(hci_type):
         SAM_STATUS_CHANGE = 1 << 24
         ENCRYPTION_CHANGE_V2 = 1 << 25
 
+
 class hci_le_event_mask(hci_type):
     """
     HCI LE event mask type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._le_event_mask(val)
         self.name = to_mask.name
@@ -1534,11 +1632,15 @@ class hci_le_event_mask(hci_type):
         LE_MONITORED_ADVERTISERS_REPORT = 1 << 51
         LE_FRAME_SPACE_UPDATE_COMPLETE = 1 << 52
 
+
 class hci_event_filter(hci_type):
     """
     HCI event filter type.
     """
-    def __init__(self, filter_type: int, condition_type: int, condition: List[int]) -> None:
+
+    def __init__(
+        self, filter_type: int, condition_type: int, condition: List[int]
+    ) -> None:
         self.filter_type = self._filter_types(filter_type)
         self.condition_type = self._condition_types(condition_type)
         self.condition = condition
@@ -1547,7 +1649,9 @@ class hci_event_filter(hci_type):
         rstr = f"FilterType={self.filter_type.name} ({self.filter_type.value})\n"
         if self.filter_type == self._filter_types.CLEAR:
             return rstr
-        rstr += f"ConditionType={self.condition_type.name} ({self.condition_type.value})\n"
+        rstr += (
+            f"ConditionType={self.condition_type.name} ({self.condition_type.value})\n"
+        )
         if self.filter_type == self._filter_types.INQUIRY_RESULT:
             if self.condition_type == self._condition_types.ALL_DEVICES:
                 return rstr
@@ -1625,10 +1729,12 @@ class hci_event_filter(hci_type):
         CLASS_OF_DEVICE = 0x01
         BD_ADDR = 0x02
 
+
 class hci_scan_enable(hci_type):
     """
     HCI scan enable type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._scan_enable(val)
         self.name = to_mask.name
@@ -1658,10 +1764,12 @@ class hci_scan_enable(hci_type):
         INQUIRY_SCAN = 1 << 0
         PAGE_SCAN = 1 << 1
 
+
 class hci_hold_mode_activity(hci_type):
     """
     HCI hold mode activity type.
     """
+
     def __init__(self, val: int) -> None:
         self.value = val
 
@@ -1693,10 +1801,12 @@ class hci_hold_mode_activity(hci_type):
         """
         return hci_hold_mode_activity(int.from_bytes(val, byteorder="little"))
 
+
 class hci_flow_control_enable(hci_type):
     """
     HCI flow control enable type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._flow_control_enable(val)
         self.name = to_mask.name
@@ -1727,10 +1837,12 @@ class hci_flow_control_enable(hci_type):
         ACL_FLOW_CONTROL = 1 << 0
         SYNC_FLOW_CONTROL = 1 << 1
 
+
 class hci_flow_control_mode(hci_type):
     """
     HCI flow control mode type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._flow_control_mode(val)
         self.name = to_mask.name
@@ -1760,10 +1872,12 @@ class hci_flow_control_mode(hci_type):
         PACKET_BASED = 0x00
         DATABLOCK_BASED = 0x01
 
+
 class hci_scan_mode(hci_type):
     """
     HCI scan mode type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._scan_mode(val)
         self.name = to_mask.name
@@ -1793,10 +1907,12 @@ class hci_scan_mode(hci_type):
         STANDARD = 0x00
         INTERLACED = 0x01
 
+
 class hci_inquiry_mode(hci_type):
     """
     HCI inquiry mode type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._inquiry_mode(val)
         self.name = to_mask.name
@@ -1827,10 +1943,12 @@ class hci_inquiry_mode(hci_type):
         INQUIRY_RESULT_WITH_RSSI = 0x01
         EXTENDED_INQUIRY_RESULT = 0x02
 
+
 class hci_keypress_notification(hci_type):
     """
     HCI keypress notification type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._keypress_notification(val)
         self.name = to_mask.name
@@ -1863,10 +1981,12 @@ class hci_keypress_notification(hci_type):
         PASSKEY_CLEARED = 0x03
         PASSKEY_ENTRY_COMPLETED = 0x04
 
+
 class hci_power_read_mode(hci_type):
     """
     HCI power read mode type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._power_read_mode(val)
         self.name = to_mask.name
@@ -1896,10 +2016,12 @@ class hci_power_read_mode(hci_type):
         CURRENT = 0x00
         MAXIMUM = 0x01
 
+
 class hci_mws_channel_type(hci_type):
     """
     HCI MWS channel type type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._mws_channel_type(val)
         self.name = to_mask.name
@@ -1929,10 +2051,12 @@ class hci_mws_channel_type(hci_type):
         TDD = 0x00
         FDD = 0x01
 
+
 class hci_mws_period_type(hci_type):
     """
     HCI MWS period type type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._mws_period_type(val)
         self.name = to_mask.name
@@ -1964,10 +2088,12 @@ class hci_mws_period_type(hci_type):
         BI_DIRECTIONAL = 0x02
         GUARD_PERIOD = 0x03
 
+
 class hci_mws_transport_layer(hci_type):
     """
     HCI MWS transport layer type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._mws_transport_layer(val)
         self.name = to_mask.name
@@ -1998,10 +2124,12 @@ class hci_mws_transport_layer(hci_type):
         WCI_1 = 0x01
         WCI_2 = 0x02
 
+
 class hci_mws_pattern_interval_type(hci_type):
     """
     HCI MWS pattern interval type type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._mws_pattern_interval_type(val)
         self.name = to_mask.name
@@ -2034,10 +2162,12 @@ class hci_mws_pattern_interval_type(hci_type):
         TX_AND_RX_ALLOWED = 0x03
         USE_EXTERNAL_FRAM_CONFIGURATION = 0x04
 
+
 class hci_fragment(hci_type):
     """
     HCI fragment type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._fragment_type(val)
         self.name = to_mask.name
@@ -2070,10 +2200,12 @@ class hci_fragment(hci_type):
         NO_FRAGMENTATION = 0x03
         DATA_UNCHANGED = 0x04
 
+
 class hci_logical_transport_type(hci_type):
     """
     HCI logical transport type type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._logical_transport_type(val)
         self.name = to_mask.name
@@ -2105,10 +2237,12 @@ class hci_logical_transport_type(hci_type):
         BLE_CIS = 0x02
         BLE_DIS = 0x03
 
+
 class hci_clock_select(hci_type):
     """
     HCI clock select type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._clock_select(val)
         self.name = to_mask.name
@@ -2138,10 +2272,12 @@ class hci_clock_select(hci_type):
         LOCAL_CLOCK = 0x00
         PICONET_CLOCK = 0x01
 
+
 class hci_loopback_mode(hci_type):
     """
     HCI loopback mode type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._loopback_mode(val)
         self.name = to_mask.name
@@ -2172,10 +2308,12 @@ class hci_loopback_mode(hci_type):
         LOCAL_LOOPBACK_ENABLED = 0x01
         REMOTE_LOOPBACK_ENABLED = 0x02
 
+
 class hci_advertising_type(hci_type):
     """
     HCI advertising type type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._advertising_type(val)
         self.name = to_mask.name
@@ -2208,10 +2346,12 @@ class hci_advertising_type(hci_type):
         ADV_NONCONN_IND = 0x03
         LOW_DUTY_CYCLE = 0x04
 
+
 class hci_advertising_event_type(hci_type):
     """
     HCI advertising event type type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._advertising_event_type(val)
         self.name = to_mask.name
@@ -2244,10 +2384,12 @@ class hci_advertising_event_type(hci_type):
         ADV_NONCONN_IND = 0x03
         SCAN_RSP = 0x04
 
+
 class hci_ext_advertising_event_type(hci_type):
     """
     HCI extended advertising event type type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._ext_advertising_event_type(val & 0x1F)
         self.name = to_mask.name
@@ -2287,10 +2429,12 @@ class hci_ext_advertising_event_type(hci_type):
         SCAN_RSP = 1 << 3
         LEGACY_PDU = 1 << 4
 
+
 class hci_address_type(hci_type):
     """
     HCI address type type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._address_type(val)
         self.name = to_mask.name
@@ -2322,10 +2466,12 @@ class hci_address_type(hci_type):
         PUBLIC_IDENTITY_ADDRESS = 0x02
         RANDOM_IDENTITY_ADDRESS = 0x03
 
+
 class hci_advertising_channel_map(hci_type):
     """
     HCI advertising channel map type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._advertising_channel_map(val)
         self.name = to_mask.name
@@ -2356,10 +2502,12 @@ class hci_advertising_channel_map(hci_type):
         CH38 = 1 << 1
         CH39 = 1 << 2
 
+
 class hci_advertising_filter_policy(hci_type):
     """
     HCI advertising filter policy type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._advertising_filter_policy(val)
         self.name = to_mask.name
@@ -2391,10 +2539,12 @@ class hci_advertising_filter_policy(hci_type):
         FILTER_SCAN_REQUESTS = 0x02
         FILTER_CONNECTION_AND_SCAN_REQUESTS = 0x03
 
+
 class hci_scan_filter_policy(hci_type):
     """
     HCI scan filter policy type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._scan_filter_policy(val)
         self.name = to_mask.name
@@ -2434,10 +2584,12 @@ class hci_scan_filter_policy(hci_type):
         EXTENDED_UNFILTERED_DECISIONS_ONLY = 0x0E
         EXTENDED_FILTERED_DECISIONS_ONLY = 0x0F
 
+
 class hci_le_scan_type(hci_type):
     """
     HCI LE scan type type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._le_scan_type(val)
         self.name = to_mask.name
@@ -2467,10 +2619,12 @@ class hci_le_scan_type(hci_type):
         PASSIVE_SCANNING = 0x00
         ACTIVE_SCANNING = 0x01
 
+
 class hci_packet_payload(hci_type):
     """
     HCI packet payload type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._packet_payload(val)
         self.name = to_mask.name
@@ -2506,10 +2660,12 @@ class hci_packet_payload(hci_type):
         PLD_00001111 = 0x06
         PLD_01010101 = 0x07
 
+
 class hci_phy_mask(hci_type):
     """
     HCI PHY mask type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._phy_mask(val)
         self.name = to_mask.name
@@ -2540,10 +2696,12 @@ class hci_phy_mask(hci_type):
         LE_2M = 1 << 1
         LE_CODED = 1 << 2
 
+
 class hci_phy_options(hci_type):
     """
     HCI PHY options type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._phy_options(val)
         self.name = to_mask.name
@@ -2576,10 +2734,12 @@ class hci_phy_options(hci_type):
         S2_REQUIRED = 0x03
         S8_REQUIRED = 0x03
 
+
 class hci_phy_preference(hci_type):
     """
     HCI PHY preference type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._phy_preference(val)
         self.name = to_mask.name
@@ -2609,10 +2769,12 @@ class hci_phy_preference(hci_type):
         NO_TX_PREFERENCE = 1 << 0
         NO_RX_PREFERENCE = 1 << 1
 
+
 class hci_phy_select(hci_type):
     """
     HCI PHY select type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._phy_select(val)
         self.name = to_mask.name
@@ -2644,10 +2806,12 @@ class hci_phy_select(hci_type):
         LE_CODED_S8 = 0x03
         LE_CODED_S2 = 0x04
 
+
 class hci_advertising_event_properties(hci_type):
     """
     HCI advertising event properties type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._advertising_event_properties(val)
         self.name = to_mask.name
@@ -2685,10 +2849,12 @@ class hci_advertising_event_properties(hci_type):
         INCLUDES_ADVA = 1 << 8
         INCLUDES_ADI = 1 << 9
 
+
 class hci_fragment_preference(hci_type):
     """
     HCI fragment preference type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._fragment_preference(val)
         self.name = to_mask.name
@@ -2718,10 +2884,12 @@ class hci_fragment_preference(hci_type):
         NO_RESTRICTIONS = 0x00
         MINIMIZE_FRAGMENTATION = 0x01
 
+
 class hci_periodic_advertising_mode(hci_type):
     """
     HCI periodic advertising mode type.
     """
+
     def __init__(self, val: int) -> None:
         self.value = val
 
@@ -2733,7 +2901,9 @@ class hci_periodic_advertising_mode(hci_type):
         if self.value == 0x02:
             return "SyncTransferRcvd sent, AdvReports enabled, DuplicatedFiltering disabled"
         if self.value == 0x03:
-            return "SyncTransferRcvd sent, AdvReports enabled, DuplicatedFiltering enabled"
+            return (
+                "SyncTransferRcvd sent, AdvReports enabled, DuplicatedFiltering enabled"
+            )
 
     @staticmethod
     def from_bytes(val: bytes) -> hci_periodic_advertising_mode:
@@ -2752,10 +2922,12 @@ class hci_periodic_advertising_mode(hci_type):
         """
         return hci_periodic_advertising_mode(int.from_bytes(val, byteorder="little"))
 
+
 class hci_periodic_advertising_properties(hci_type):
     """
     HCI periodic advertising properties type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._periodic_advertising_properties(val)
         self.name = to_mask.name
@@ -2779,15 +2951,19 @@ class hci_periodic_advertising_properties(hci_type):
             Typecast object.
 
         """
-        return hci_periodic_advertising_properties(int.from_bytes(val, byteorder="little"))
+        return hci_periodic_advertising_properties(
+            int.from_bytes(val, byteorder="little")
+        )
 
     class _periodic_advertising_properties(Flag):
         INCLUDE_TX_POWER = 1 << 6
+
 
 class hci_connection_filter_policy(hci_type):
     """
     HCI connection filter policy type.
     """
+
     def __init__(self, val: int) -> None:
         self.value = val
 
@@ -2834,10 +3010,12 @@ class hci_connection_filter_policy(hci_type):
         """
         return hci_connection_filter_policy(int.from_bytes(val, byteorder="little"))
 
+
 class hci_sync_options(hci_type):
     """
     HCI sync options type.
     """
+
     def __init__(self, val: int) -> None:
         self.value = val
 
@@ -2877,17 +3055,19 @@ class hci_sync_options(hci_type):
         """
         return hci_sync_options(int.from_bytes(val, byteorder="little"))
 
+
 class hci_sync_cte_type(hci_type):
     """
     HCI sync CTE type type.
     """
+
     def __init__(self, val: int) -> None:
         self.value = val
 
     def __repr__(self) -> str:
         aoa_cte = "y" if self.value & (1 << 0) == 0 else "n"
-        aod_cte_1us = "y" if self.value & (1 << 1)  == 0 else "n"
-        aod_cte_2us = "y" if self.value & (1 << 2)  == 0 else "n"
+        aod_cte_1us = "y" if self.value & (1 << 1) == 0 else "n"
+        aod_cte_2us = "y" if self.value & (1 << 2) == 0 else "n"
         type3_cte = "y" if self.value & (1 << 3) == 0 else "n"
         cte_required = "n" if self.value & (1 << 4) == 0 else "y"
 
@@ -2916,10 +3096,12 @@ class hci_sync_cte_type(hci_type):
         """
         return hci_sync_cte_type(int.from_bytes(val, byteorder="little"))
 
+
 class hci_privacy_mode(hci_type):
     """
     HCI privacy mode type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._privacy_mode(val)
         self.name = to_mask.name
@@ -2949,10 +3131,12 @@ class hci_privacy_mode(hci_type):
         NETWORK_PRIVACY_MODE = 0x00
         DEVICE_PRIVACY_MODE = 0x01
 
+
 class hci_cte_type_select(hci_type):
     """
     HCI CTE type select type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._cte_type_select(val)
         self.name = to_mask.name
@@ -2984,10 +3168,12 @@ class hci_cte_type_select(hci_type):
         AOD_CTE_2US = 0x02
         NO_CTE = 0xFF
 
+
 class hci_cte_type_mask(hci_type):
     """
     HCI CTE type mask type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._cte_type_mask(val)
         self.name = to_mask.name
@@ -3018,10 +3204,12 @@ class hci_cte_type_mask(hci_type):
         AOD_CTE_1US = 1 << 1
         AOD_CTE_2US = 1 << 2
 
+
 class hci_dh_key_type(hci_type):
     """
     HCI DHKey type type.
     """
+
     def __init__(self, val: int) -> None:
         self.value = val
 
@@ -3049,10 +3237,12 @@ class hci_dh_key_type(hci_type):
         """
         return hci_dh_key_type(int.from_bytes(val, byteorder="little"))
 
+
 class hci_sleep_clock_action(hci_type):
     """
     HCI sleep clock action type.
     """
+
     def __init__(self, val: int) -> None:
         self.value = val
 
@@ -3080,10 +3270,12 @@ class hci_sleep_clock_action(hci_type):
         """
         return hci_sleep_clock_action(int.from_bytes(val, byteorder="little"))
 
+
 class hci_clock_accuracy(hci_type):
     """
     HCI clock accuracy type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._clock_accuracy(val)
         self.name = to_mask.name
@@ -3117,12 +3309,14 @@ class hci_clock_accuracy(hci_type):
         PPM_75 = 0x04
         PPM_50 = 0x05
         PPM_30 = 0x06
-        PPM_20= 0x07
+        PPM_20 = 0x07
+
 
 class hci_clock_accuracy_ranged(hci_type):
     """
     HCI clock accuracy ranged type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._clock_accuracy_ranged(val)
         self.name = to_mask.name
@@ -3156,12 +3350,14 @@ class hci_clock_accuracy_ranged(hci_type):
         PPM_51_TO_75 = 0x04
         PPM_31_TO_50 = 0x05
         PPM_21_TO_30 = 0x06
-        PPM_0_TO_20= 0x07
+        PPM_0_TO_20 = 0x07
+
 
 class hci_packing_mode(hci_type):
     """
     HCI packing mode type.
     """
+
     def __init__(self, val: int) -> None:
         self.value = val
 
@@ -3189,10 +3385,12 @@ class hci_packing_mode(hci_type):
         """
         return hci_packing_mode(int.from_bytes(val, byteorder="little"))
 
+
 class hci_framing_mode(hci_type):
     """
     HCI framing mode type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._framing_mode(val)
         self.name = to_mask.name
@@ -3223,10 +3421,12 @@ class hci_framing_mode(hci_type):
         FRAMED_SEGMENTED = 0x01
         FRAMED_UNSEGMENTED = 0x02
 
+
 class hci_iso_payload_type(hci_type):
     """
     HCI ISO payload type type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._iso_payload_type(val)
         self.name = to_mask.name
@@ -3257,10 +3457,12 @@ class hci_iso_payload_type(hci_type):
         VARIABLE_LENGTH = 0x01
         MAXIMUM_LENGTH = 0x02
 
+
 class hci_address_change_reasons(hci_type):
     """
     HCI address change reasons type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._address_change_reasons(val)
         self.name = to_mask.name
@@ -3290,10 +3492,12 @@ class hci_address_change_reasons(hci_type):
         ADVERTISING_DATA_CHANGE = 1 << 0
         SCAN_RESPONSE_DATA_CHANGE = 1 << 1
 
+
 class hci_decision_flags(hci_type):
     """
     HCI decision flags type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._decision_flags(val)
         self.name = to_mask.name
@@ -3323,10 +3527,12 @@ class hci_decision_flags(hci_type):
         RESOLVABLE_TAG_INCLUDED = 1 << 0
         SCAN_RESPONSE_DATA_CHANGE = 1 << 1
 
+
 class hci_test_flags(hci_type):
     """
     HCI test flags type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._test_flags(val)
         self.name = to_mask.name
@@ -3358,10 +3564,12 @@ class hci_test_flags(hci_type):
         PASS_IF_FIELD_PRESENT_AND_CHECK_FAILS = 1 << 2
         PASS_IF_FIELD_NOT_PRESENT = 1 << 3
 
+
 class hci_test_fields(hci_type):
     """
     HCI test fields type.
     """
+
     def __init__(self, val: int) -> None:
         self.value = val
 
@@ -3403,10 +3611,12 @@ class hci_test_fields(hci_type):
         """
         return hci_test_fields(int.from_bytes(val, byteorder="little"))
 
+
 class hci_cs_role_mask(hci_type):
     """
     HCI CS role mask type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._cs_role_mask(val)
         self.name = to_mask.name
@@ -3436,10 +3646,12 @@ class hci_cs_role_mask(hci_type):
         INITIATOR = 1 << 0
         REFLECTOR = 1 << 1
 
+
 class hci_cs_role_select(hci_type):
     """
     HCI CS role select type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._cs_role_select(val)
         self.name = to_mask.name
@@ -3469,10 +3681,12 @@ class hci_cs_role_select(hci_type):
         INITIATOR = 0x00
         REFLECTOR = 0x01
 
+
 class hci_cs_mode(hci_type):
     """
     HCI CS mode type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._cs_mode(val)
         self.name = to_mask.name
@@ -3501,10 +3715,12 @@ class hci_cs_mode(hci_type):
     class _cs_mode(Flag):
         MODE3 = 1 << 0
 
+
 class hci_rtt_capability(hci_type):
     """
     HCI RTT capability type.
     """
+
     def __init__(self, val: int) -> None:
         self.value = val
 
@@ -3531,10 +3747,12 @@ class hci_rtt_capability(hci_type):
         """
         return hci_rtt_capability(int.from_bytes(val, byteorder="little"))
 
+
 class hci_rtt_type(hci_type):
     """
     HCI RTT type type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._rtt_type(val)
         self.name = to_mask.name
@@ -3569,10 +3787,12 @@ class hci_rtt_type(hci_type):
         RTT_RANDOM_96BITS = 0x05
         RTT_RANDOM_128BITS = 0x06
 
+
 class hci_nadm_sounding_capability(hci_type):
     """
     HCI NADM sounding capability type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._nadm_sounding_capability(val)
         self.name = to_mask.name
@@ -3601,10 +3821,12 @@ class hci_nadm_sounding_capability(hci_type):
     class _nadm_sounding_capability(Flag):
         PHASE_BASED_NADM = 1 << 0
 
+
 class hci_nadm_random_capability(hci_type):
     """
     HCI NADM random capability type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._nadm_random_capability(val)
         self.name = to_mask.name
@@ -3633,10 +3855,12 @@ class hci_nadm_random_capability(hci_type):
     class _nadm_random_capability(Flag):
         PHASE_BASED_NADM = 1 << 0
 
+
 class hci_cs_sync_phy_mask(hci_type):
     """
     HCI CS sync PHY mask type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._cs_sync_phy_mask(val)
         self.name = to_mask.name
@@ -3666,10 +3890,12 @@ class hci_cs_sync_phy_mask(hci_type):
         LE_2M = 1 << 1
         LE_2M_2BT = 1 << 2
 
+
 class hci_cs_sync_phy_select(hci_type):
     """
     HCI CS sync PHY select type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._cs_sync_phy_select(val)
         self.name = to_mask.name
@@ -3700,10 +3926,12 @@ class hci_cs_sync_phy_select(hci_type):
         LE_2M = 0x02
         LE_2M_2BT = 0x03
 
+
 class hci_cs_subfeatures(hci_type):
     """
     HCI CS subfeatures type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._cs_subfeatures(val)
         self.name = to_mask.name
@@ -3734,10 +3962,12 @@ class hci_cs_subfeatures(hci_type):
         CHANNEL_SELECTION_ALGORITHM_3C = 1 << 2
         PHASE_BASED_RANGING = 1 << 3
 
+
 class hci_cs_times(hci_type):
     """
     HCI CS times type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._cs_times(val)
         self.name = to_mask.name
@@ -3774,10 +4004,12 @@ class hci_cs_times(hci_type):
         T_100US = 1 << 7
         T_120US = 1 << 8
 
+
 class hci_cs_times_fcs(hci_type):
     """
     HCI FCS-specific CS times type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._cs_times_fcs(val)
         self.name = to_mask.name
@@ -3814,10 +4046,12 @@ class hci_cs_times_fcs(hci_type):
         T_100US = 1 << 7
         T_120US = 1 << 8
 
+
 class hci_tx_snr_capability(hci_type):
     """
     HCI TX SNR capability type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._tx_snr_capability(val)
         self.name = to_mask.name
@@ -3850,10 +4084,12 @@ class hci_tx_snr_capability(hci_type):
         P_27DB = 1 << 3
         P_30DB = 1 << 4
 
+
 class hci_tx_snr_select(hci_type):
     """
     HCI TX SNR select type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._tx_snr_select(val)
         self.name = to_mask.name
@@ -3887,10 +4123,12 @@ class hci_tx_snr_select(hci_type):
         SNR_CONTROL_ADJUSTMENT_30DB = 0x04
         NO_SNR_CONTROL = 0xFF
 
+
 class hci_cs_fae_table(hci_type):
     """
     HCI CS FAE table type.
     """
+
     def __init__(self, val: List[int]) -> None:
         allowed_ch = [*range(79)]
         allowed_ch.remove(0)
@@ -3928,10 +4166,12 @@ class hci_cs_fae_table(hci_type):
         max_byte_val = 256
         return hci_cs_fae_table([max_byte_val - x for x in val[::-1]])
 
+
 class hci_cs_channel_map(hci_type):
     """
     HCI CS channel map type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._cs_channel_map(val)
         self.name = to_mask.name
@@ -4031,10 +4271,12 @@ class hci_cs_channel_map(hci_type):
         CH75 = 1 << 75
         CH76 = 1 << 76
 
+
 class hci_csa_type(hci_type):
     """
     HCI channel-select algorithm type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._csa_type(val)
         self.name = to_mask.name
@@ -4064,10 +4306,12 @@ class hci_csa_type(hci_type):
         ALGORITHM_1 = 0x00
         ALGORITHM_2 = 0x01
 
+
 class hci_cs_csa_type(hci_type):
     """
     HCI CS channel-select algorithm type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._cs_csa_type(val)
         self.name = to_mask.name
@@ -4097,10 +4341,12 @@ class hci_cs_csa_type(hci_type):
         ALGORITHM_3b = 0x00
         ALGORITHM_3c = 0x01
 
+
 class hci_cs_ch3c_shape(hci_type):
     """
     HCI CS CH3C shape type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._cs_ch3c_shape(val)
         self.name = to_mask.name
@@ -4130,10 +4376,12 @@ class hci_cs_ch3c_shape(hci_type):
         HAT_SHAPE = 0x00
         X_SHAPE = 0x01
 
+
 class hci_antenna_select(hci_type):
     """
     HCI antenna select type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._antenna_select(val)
         self.name = to_mask.name
@@ -4165,10 +4413,12 @@ class hci_antenna_select(hci_type):
         THIRD_ORDERED = 1 << 2
         FOURTH_ORDERED = 1 << 3
 
+
 class hci_cs_override_config(hci_type):
     """
     HCI CS configuration override type.
     """
+
     def __init__(self, val: int) -> None:
         self.value = val
 
@@ -4177,7 +4427,9 @@ class hci_cs_override_config(hci_type):
         if (self.value >> 0) & 0x1 == 0x1:
             rstr.extend(["Channel_Length", "Channel[i]"])
         else:
-            rstr.extend(["Channel_Map", "Channel_Selection_Type", "Ch3c_Shape", "Ch3c_Jump"])
+            rstr.extend(
+                ["Channel_Map", "Channel_Selection_Type", "Ch3c_Shape", "Ch3c_Jump"]
+            )
         if (self.value >> 2) & 0x1 == 0x1:
             rstr.append("Main_Mode_Steps")
         if (self.value >> 3) & 0x1 == 0x1:
@@ -4213,10 +4465,12 @@ class hci_cs_override_config(hci_type):
         """
         return hci_cs_override_config(int.from_bytes(val, byteorder="little"))
 
+
 class hci_spacing_types(hci_type):
     """
     HCI spacing types type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._spacing_types(val)
         self.name = to_mask.name
@@ -4249,10 +4503,12 @@ class hci_spacing_types(hci_type):
         T_IFS_CIS = 1 << 3
         T_MSS_CIS = 1 << 4
 
+
 class hci_link_type(hci_type):
     """
     HCI link type type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._link_type(val)
         self.name = to_mask.name
@@ -4283,10 +4539,12 @@ class hci_link_type(hci_type):
         ACL = 0x01
         E_SCO = 0x02
 
+
 class hci_link_packet_type(hci_type):
     """
     HCI link packet type type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._link_packet_type(val)
         self.name = to_mask.name
@@ -4317,10 +4575,12 @@ class hci_link_packet_type(hci_type):
         ACL = 0x01
         ISO = 0x02
 
+
 class hci_lmp_features(hci_type):
     """
     HCI LMP features type.
     """
+
     def __init__(self, val: int) -> None:
         self.value = val
 
@@ -4344,10 +4604,12 @@ class hci_lmp_features(hci_type):
         """
         return hci_lmp_features(int.from_bytes(val, byteorder="little"))
 
+
 class hci_le_features(hci_type):
     """
     HCI LE features type.
     """
+
     def __init__(self, val: int) -> None:
         self.value = val
 
@@ -4371,10 +4633,12 @@ class hci_le_features(hci_type):
         """
         return hci_le_features(int.from_bytes(val, byteorder="little"))
 
+
 class hci_bt_mode(hci_type):
     """
     HCI BT mode type/
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._bt_mode(val)
         self.name = to_mask.name
@@ -4405,10 +4669,12 @@ class hci_bt_mode(hci_type):
         HOLD = 0x01
         SNIFF = 0x02
 
+
 class hci_link_key_type(hci_type):
     """
     HCI link key type type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._link_key_type(val)
         self.name = to_mask.name
@@ -4443,10 +4709,12 @@ class hci_link_key_type(hci_type):
         P256_UNAUTHENTICATED_COMBINATION = 0x07
         P256_AUTHENTICATED_COMBINATION = 0x08
 
+
 class hci_path_loss_zone(hci_type):
     """
     HCI path loss zone type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._path_loss_zone(val)
         self.name = to_mask.name
@@ -4477,10 +4745,12 @@ class hci_path_loss_zone(hci_type):
         MIDDLE = 0x01
         HIGH = 0x02
 
+
 class hci_tx_power_reporting_reason(hci_type):
     """
     HCI TX power reporting reason type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._tx_power_reporting_reason(val)
         self.name = to_mask.name
@@ -4511,10 +4781,12 @@ class hci_tx_power_reporting_reason(hci_type):
         REMOTE_TX_POWER_CHANGED = 0x01
         LE_READ_REMOTE_TX_POWER_LEVEL_COMMAND_COMPLETED = 0x02
 
+
 class hci_cs_config_action(hci_type):
     """
     HCI CS configuration action type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._cs_config_action(val)
         self.name = to_mask.name
@@ -4544,10 +4816,12 @@ class hci_cs_config_action(hci_type):
         REMOVED = 0x00
         CREATED = 0x01
 
+
 class hci_cs_procedure_done_status(hci_type):
     """
     HCI CS procedure done status type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._cs_procedure_done_status(val)
         self.name = to_mask.name
@@ -4578,10 +4852,12 @@ class hci_cs_procedure_done_status(hci_type):
         MORE_TO_COME = 0x01
         ABORTED = 0x0F
 
+
 class hci_cs_abort_reason(hci_type):
     """
     HCI CS abort reason type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask_proc = self._cs_abort_reason_procedure(val & 0x0F)
         to_mask_sub = self._cs_abort_reason_subevent((val & 0xF0) >> 4)
@@ -4624,10 +4900,12 @@ class hci_cs_abort_reason(hci_type):
         SCHEDULING_CONFLICT_OR_LIMITED_RESOURCES = 0x03
         UNSPECIFIED = 0x0F
 
+
 class hci_monitor_condition(hci_type):
     """
     HCI monitor condition type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._monitor_condition(val)
         self.name = to_mask.name
@@ -4657,10 +4935,12 @@ class hci_monitor_condition(hci_type):
         DEVICE_RSSI_BELOW_LOW_THRESHOLD_LONGER_THAN_TIMEOUT_PERIOD = 0x00
         DEVICE_RSSI_GREATER_THAN_OR_EQUAL_TO_HIGH_THRESHOLD = 0x01
 
+
 class hci_initiator(hci_type):
     """
     HCI initiator type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._initiator(val)
         self.name = to_mask.name
@@ -4691,10 +4971,12 @@ class hci_initiator(hci_type):
         CONTROLLER = 0x01
         PEER = 0x02
 
+
 class hci_codec_transport(hci_type):
     """
     HCI codec transport type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._codec_transport(val)
         self.name = to_mask.name
@@ -4726,10 +5008,12 @@ class hci_codec_transport(hci_type):
         LE_CIS = 1 << 2
         LE_BIS = 1 << 3
 
+
 class hci_simple_pairing_options(hci_type):
     """
     HCI simple pairing options type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._simple_pairing_options(val)
         self.name = to_mask.name
@@ -4758,10 +5042,12 @@ class hci_simple_pairing_options(hci_type):
     class _simple_pairing_options(Flag):
         PERFORM_REMOTE_PUBLIC_KEY_VALIDATION = 1 << 0
 
+
 class hci_switching_sampling_rate(hci_type):
     """
     HCI switching sampling rate type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._switching_sampling_rate(val)
         self.name = to_mask.name
@@ -4790,12 +5076,14 @@ class hci_switching_sampling_rate(hci_type):
     class _switching_sampling_rate(Flag):
         AOD_1US_SWITCHING = 1 << 0
         AOD_1US_SAMPLING = 1 << 0
-        AOA_1US_SWITCHING_SAMPLING = 1<< 2
+        AOA_1US_SWITCHING_SAMPLING = 1 << 2
+
 
 class hci_l2cap_reason(hci_type):
     """
     HCI L2CAP reason type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._l2cap_reason(val)
         self.name = to_mask.name
@@ -4826,10 +5114,12 @@ class hci_l2cap_reason(hci_type):
         SIGNALING_MTU_EXCEEDED = 0x01
         INVALID_CID_IN_REQUEST = 0x02
 
+
 class hci_l2cap_connection_result(hci_type):
     """
     HCI L2CAP connection result type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._l2cap_connection_result(val)
         self.name = to_mask.name
@@ -4864,10 +5154,12 @@ class hci_l2cap_connection_result(hci_type):
         CONNECTION_REFUSED_INVALID_SOURCE_CID = 0x06
         CONNECTION_REFUSED_SOURCE_CID_ALREADY_ALLOCATED = 0x07
 
+
 class hci_l2cap_configure_result(hci_type):
     """
     HCI L2CAP configure result type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._l2cap_configure_result(val)
         self.name = to_mask.name
@@ -4901,10 +5193,12 @@ class hci_l2cap_configure_result(hci_type):
         PENDING = 0x04
         FAILURE_FLOW_SPEC_REJECTED = 0x05
 
+
 class hci_l2cap_credit_connection_result(hci_type):
     """
     HCI L2CAP credit-based connection result type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._l2cap_credit_connection_result(val)
         self.name = to_mask.name
@@ -4928,7 +5222,9 @@ class hci_l2cap_credit_connection_result(hci_type):
             Typecast object.
 
         """
-        return hci_l2cap_credit_connection_result(int.from_bytes(val, byteorder="little"))
+        return hci_l2cap_credit_connection_result(
+            int.from_bytes(val, byteorder="little")
+        )
 
     class _l2cap_credit_connection_result(Enum):
         CONNECTION_SUCCESSFUL = 0x00
@@ -4946,10 +5242,12 @@ class hci_l2cap_credit_connection_result(hci_type):
         CONNECTION_PENDING_AUTHENTICATION_PENDING = 0x0E
         CONNECTION_PENDING_AUTHORIZATION_PENDING = 0x0F
 
+
 class hci_l2cap_credit_reconfigure_result(hci_type):
     """
     HCI L2CAP credit-based connection reconfigure result type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._l2cap_credit_reconfigure_result(val)
         self.name = to_mask.name
@@ -4973,19 +5271,25 @@ class hci_l2cap_credit_reconfigure_result(hci_type):
             Typecast object.
 
         """
-        return hci_l2cap_credit_reconfigure_result(int.from_bytes(val, byteorder="little"))
+        return hci_l2cap_credit_reconfigure_result(
+            int.from_bytes(val, byteorder="little")
+        )
 
     class _l2cap_credit_reconfigure_result(Enum):
         RECONFIGURATION_SUCCESSFUL = 0x00
         RECONFIGURATION_FAILED_REDUCTION_IN_SIZE_OF_MTU_NOT_ALLOWED = 0x01
-        RECONFIGURATION_FAILED_MPS_SIZE_REDUCTION_NOT_ALLOWED_FOR_MULTIPLE_CHANNELS = 0x02
+        RECONFIGURATION_FAILED_MPS_SIZE_REDUCTION_NOT_ALLOWED_FOR_MULTIPLE_CHANNELS = (
+            0x02
+        )
         RECONFIGURATION_FAILED_ONE_OR_MORE_DESTINATION_CIDS_INVALID = 0x03
         RECONFIGURATION_FAILED_OTHER_UNACCEPTABLE_PARAMETERS = 0x04
+
 
 class hci_l2cap_status(hci_type):
     """
     HCI L2CAP status type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._l2cap_status(val)
         self.name = to_mask.name
@@ -5016,10 +5320,12 @@ class hci_l2cap_status(hci_type):
         AUTHENTICATION_PENDING = 0x01
         AUTHORIZATION_PENDING = 0x02
 
+
 class hci_l2cap_info_type(hci_type):
     """
     HCI L2CAP info type type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._l2cap_info_type(val)
         self.name = to_mask.name
@@ -5050,10 +5356,12 @@ class hci_l2cap_info_type(hci_type):
         EXTENDED_FEATURE_MASK = 0x02
         FIXED_CHANNELS_SUPPORTED_OVER_BR_EDR = 0x03
 
+
 class hci_l2cap_info_result_type(hci_type):
     """
     HCI L2CAP info result type.
     """
+
     def __init__(self, val: int) -> None:
         to_mask = self._l2cap_info_result(val)
         self.name = to_mask.name
@@ -5083,10 +5391,12 @@ class hci_l2cap_info_result_type(hci_type):
         SUCCESS = 0x00
         NOT_SUPPORTED = 0x01
 
+
 class hci_l2cap_hex(hci_type):
     """
     HCI L2CAP hex integer type.
     """
+
     def __init__(self, val: int) -> None:
         self.value = val
 
@@ -5108,4 +5418,4 @@ class hci_l2cap_hex(hci_type):
             Typecast object.
 
         """
-        return hci_l2cap_hex(int.from_bytes(val, byteorder='little'))
+        return hci_l2cap_hex(int.from_bytes(val, byteorder="little"))

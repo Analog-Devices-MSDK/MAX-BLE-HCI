@@ -26,6 +26,7 @@ from ..packet_codes.event import EventCode, SubEventCode
 from ..utils._packet_structs.event_stuct import get_params
 from ..utils.params import HciParam, HciParamIdxRef
 
+
 class EventPacket:
     """Event packet deserialized.
 
@@ -57,7 +58,9 @@ class EventPacket:
         Event parameters.
 
     """
+
     PACKET_ID = 0x04
+
     def __init__(self, code: EventCode, length: int, params: bytes) -> None:
         self.code = code
         self.length = length
@@ -104,7 +107,9 @@ class EventPacket:
         self._p_idx = 0
         if self.code == EventCode.COMMAND_COMPLETE:
             rstr += f"NumHciCommand={int.from_bytes(self.params[0:1], byteorder='little')}\n"
-            ogf, ocf = parse_opcode(int.from_bytes(self.params[1:3], byteorder="little"))
+            ogf, ocf = parse_opcode(
+                int.from_bytes(self.params[1:3], byteorder="little")
+            )
             rstr += f"Command={ogf.name}.{ocf.name}\n"
             param_code = (ogf, ocf)
             self._p_idx += 3
@@ -126,7 +131,9 @@ class EventPacket:
             rstr += p_str
         return rstr
 
-    def _parse_param(self, param: Union[HciParam, List[HciParam]], idx: int) -> Tuple[str, int]:
+    def _parse_param(
+        self, param: Union[HciParam, List[HciParam]], idx: int
+    ) -> Tuple[str, int]:
         """
         Parse a single event parameter.
         """
@@ -135,7 +142,9 @@ class EventPacket:
             idxref = param.pop(0)
             maxidx = 0
             if idxref is None:
-                maxidx = int((len(self.params) - self._p_idx)/sum(p.length for p in param))
+                maxidx = int(
+                    (len(self.params) - self._p_idx) / sum(p.length for p in param)
+                )
             else:
                 maxidx = self._p_vals[idx + idxref].value
             for subidx in range(maxidx):
@@ -150,7 +159,7 @@ class EventPacket:
                 p_len = len(self.params) - self._p_idx
             else:
                 p_len = self._p_vals[idx + p_len.ref].value
-        p_val = param.dtype.from_bytes(self.params[self._p_idx:self._p_idx + p_len])
+        p_val = param.dtype.from_bytes(self.params[self._p_idx : self._p_idx + p_len])
         self._p_idx += p_len
         idx += 1
         rstr += f"    {param.label}={p_val}\n"

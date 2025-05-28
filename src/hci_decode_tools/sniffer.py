@@ -51,6 +51,7 @@ from .packets.command_packet import CommandPacket
 from .packets.event_packet import EventPacket
 from .decode import decode_packet
 
+
 @dataclass
 class HciSerialSnifferPortCfg:
     # pylint: disable=too-many-instance-attributes
@@ -119,6 +120,7 @@ class HciSerialSnifferPortCfg:
     inter_byte_timeout: Optional[float] = None
     exclusive: Optional[bool] = False
 
+
 class HciSerialSniffer:
     # pylint: disable=too-many-instance-attributes
     """HCI serial port sniffer.
@@ -156,8 +158,10 @@ class HciSerialSniffer:
         to console.
 
     """
+
     class SniffMode(Enum):
         """Sniffer mode selection."""
+
         BIDIRECTIONAL = 0x00
         CTRL2HOST_ONLY = 0x01
         HOST2CTRL_ONLY = 0x02
@@ -180,6 +184,7 @@ class HciSerialSniffer:
             Direction indicator.
 
         """
+
         def __init__(self, data: bytes, is_from_dev: bool) -> None:
             self.data = data
             self.is_from_dev = is_from_dev
@@ -211,7 +216,7 @@ class HciSerialSniffer:
         port_id: str,
         sniff_mode: SniffMode = SniffMode.BIDIRECTIONAL,
         port_config: Optional[HciSerialSnifferPortCfg] = None,
-        output_file: Optional[str] = None
+        output_file: Optional[str] = None,
     ) -> None:
         if port_config is None:
             port_config = HciSerialSnifferPortCfg()
@@ -229,7 +234,7 @@ class HciSerialSniffer:
             dsrdtr=port_config.dsrdtr,
             write_timeout=port_config.write_timeout,
             inter_byte_timeout=port_config.inter_byte_timeout,
-            exclusive=port_config.exclusive
+            exclusive=port_config.exclusive,
         )
 
         self.mode: self.SniffMode = sniff_mode
@@ -303,19 +308,19 @@ class HciSerialSniffer:
             target=self._monitor_host2ctrl,
             args=(self._kill_evt,),
             daemon=True,
-            name="Host2Controller"
+            name="Host2Controller",
         )
         self._ctrl2host_thread = threading.Thread(
             target=self._monitor_ctrl2host,
             args=(self._kill_evt,),
             daemon=True,
-            name="Controller2Host"
+            name="Controller2Host",
         )
         self._decoder_thread = threading.Thread(
             target=self._decode_packets,
             args=(self._kill_evt,),
             daemon=True,
-            name="Decoder"
+            name="Decoder",
         )
 
     def _monitor_host2ctrl(self, kill_evt: threading.Event) -> None:

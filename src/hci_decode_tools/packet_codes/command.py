@@ -11,16 +11,20 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Tuple, Union
 
+
 class _NopOCF(Enum):
     """
     NOP group Operation Command Fields.
     """
+
     NOP = 0x0
+
 
 class _LinkControlOCF(Enum):
     """
     Link Control group Operation Command Fields.
     """
+
     INQUIRY = 0x1
     INQUIRY_CANCEL = 0x2
     PERIODIC_INQUIRY_MODE = 0x3
@@ -67,10 +71,12 @@ class _LinkControlOCF(Enum):
     RECEIVE_SYNCHRONIZATION_TRAIN = 0x44
     REMOTE_OOB_EXTENDED_DATA_REQUEST_REPLY = 0x45
 
+
 class _LinkPolicyOCF(Enum):
     """
     Link Pol;icy group Operation Command Fields.
     """
+
     HOLD_MODE = 0x1
     SNIFF_MODE = 0x3
     EXIT_SNIFF_MODE = 0x4
@@ -84,10 +90,12 @@ class _LinkPolicyOCF(Enum):
     FLOW_SPECIFICATION = 0x10
     SNIFF_SUBRATING = 0x11
 
+
 class _ControllerOCF(Enum):
     """
     Controller group Operation Command Fields.
     """
+
     SET_EVENT_MASK = 0x1
     RESET = 0x3
     SET_EVENT_FILTER = 0x5
@@ -183,10 +191,12 @@ class _ControllerOCF(Enum):
     CONFIGURE_DATA_PATH = 0x83
     SET_MIN_ENCRYPTION_KEY_SIZE = 0x84
 
+
 class _InformationalOCF(Enum):
     """
     Informational group Operation Command Fields.
     """
+
     READ_LOCAL_VERSION_INFORMATION = 0x1
     READ_LOCAL_SUPPORTED_COMMANDS = 0x2
     READ_LOCAL_SUPPORTED_FEATURES = 0x3
@@ -200,10 +210,12 @@ class _InformationalOCF(Enum):
     READ_LOCAL_SUPPORTED_CODEC_CAPABILITIES = 0xE
     READ_LOCAL_SUPPORTED_CONTROLLER_DELAY = 0xF
 
+
 class _StatusOCF(Enum):
     """
     Status group Operation Command Fields.
     """
+
     READ_FAILED_CONTACT_COUNTER = 0x1
     RESET_FAILED_CONTACT_COUNTER = 0x2
     READ_LINK_QUALITY = 0x3
@@ -214,20 +226,24 @@ class _StatusOCF(Enum):
     GET_MWS_TRANSPORT_LAYER_CONFIGURATION = 0xC
     SET_TRIGGERED_CLOCK_CAPTURE = 0xD
 
+
 class _TestingOCF(Enum):
     """
     Testing group Operation Command Fields.
     """
+
     READ_LOOPBACK_MODE = 0x1
     WRITE_LOOPBACK_MODE = 0x2
     ENABLE_DEVICE_UNDER_TEST_MODE = 0x3
     WRITE_SIMPLE_PAIRING_DEBUG_MODE = 0x4
     WRITE_SECURE_CONNECTIONS_TEST_MODE = 0xA
 
+
 class _LEControllerOCF(Enum):
     """
     LE Controller group Operation Command Fields.
     """
+
     LE_SET_EVENT_MASK = 0x1
     LE_READ_BUFFER_SIZE_V1 = 0x2
     LE_READ_LOCAL_SUPPORTED_FEATURES = 0x3
@@ -385,10 +401,12 @@ class _LEControllerOCF(Enum):
     LE_ENABLE_MONITORING_ADVERTISERS = 0x9C
     LE_FRAME_SPACE_UPDATE = 0x9D
 
+
 class OGF(Enum):
     """
     Command packet Operation Group Fields.
     """
+
     NOP = 0x00
     LINK_CONTROL = 0x01
     LINK_POLICY = 0x02
@@ -398,6 +416,7 @@ class OGF(Enum):
     TESTING = 0x06
     LE_CONTROLLER = 0x08
     VENDOR_SPECIFIC = 0x3F
+
 
 @dataclass(frozen=True, init=False)
 class OCF:
@@ -423,6 +442,7 @@ class OCF:
         LE Controller group OCFs.
 
     """
+
     NOP = _NopOCF
     LINK_CONTROL = _LinkControlOCF
     LINK_POLICY = _LinkPolicyOCF
@@ -431,6 +451,7 @@ class OCF:
     STATUS = _StatusOCF
     TESTING = _TestingOCF
     LE_CONTROLLER = _LEControllerOCF
+
 
 def parse_opcode(opcode: int) -> Tuple[OGF, Union[OCF, int]]:
     """Extract Operation Group/Command Fields from an HCI command opcode.
