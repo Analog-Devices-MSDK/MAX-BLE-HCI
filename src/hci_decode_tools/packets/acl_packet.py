@@ -21,9 +21,10 @@ Example: Decoding an HCI ACL packet
 """
 from __future__ import annotations
 from typing import List, Tuple, Union
-from ..packet_codes.acl import L2CAPSignalingCodes
+from ..packet_codes.acl import L2CAPSignalingCodes, AclChannelIds
 from ..utils._packet_structs.acl_struct import get_params
 from ..utils.params import HciParam, HciParamIdxRef
+from ._att_packet import AttPacket
 
 
 class AclPacket:
@@ -50,7 +51,7 @@ class AclPacket:
         Packet-defined PB flag.
     lengths : Tuple[int, int]
         Data lengths in the format `(packet_length, payload_length)`.
-    channel_id : int
+    channel_id : Union[AclChannelIds, int],
         Packet-defined channel ID.
     packet_data : bytes
         Packet-defined payload data.
@@ -70,7 +71,7 @@ class AclPacket:
         Total packet length.
     payload_length : int
         Packet payload length.
-    channel_id : int
+    channel_id : Union[AclChannelIds, int],
         Channel ID.
     packet_data : bytes
         Packet payload data.
@@ -84,7 +85,7 @@ class AclPacket:
         bc_flag: int,
         pb_flag: int,
         lengths: Tuple[int, int],
-        channel_id: int,
+        channel_id: Union[AclChannelIds, int],
         packet_data: bytes,
     ) -> None:
         self.connection_handle = connection_handle
@@ -122,6 +123,10 @@ class AclPacket:
             int.from_bytes(packet[4:6], byteorder="little"),
         )
         channel_id = int.from_bytes(packet[6:8], byteorder="little")
+        try:
+            channel_id = AclChannelIds(channel_id)
+        except ValueError:
+            pass
         packet_data = packet[8:]
         return AclPacket(
             connection_handle, bc_flag, pb_flag, lengths, channel_id, packet_data
@@ -142,12 +147,16 @@ class AclPacket:
         if self.packet_length == 0:
             return rstr
         rstr += f"PayloadLength={self.payload_length}\n"
-        rstr += f"ChannelId={self.channel_id}\n"
 
-        if not self.channel_id in [0x01, 0x05]:
+        if not isinstance(self.channel_id, AclChannelIds):
+            rstr += f"ChannelId={self.channel_id}\n"
             rstr += (
                 f"PacketData: {int.from_bytes(self.packet_data, byteorder='little')}\n"
             )
+            return rstr
+        rstr += f"ChannelId={self.channel_id.name}\n"
+        if self.channel_id == AclChannelIds.ACL_CHANNEL_ID_ATT:
+            rstr += AttPacket.from_bytes(self.packet_data).parse_packet()
             return rstr
         code = L2CAPSignalingCodes(
             int.from_bytes(self.packet_data[0:1], byteorder="little")

@@ -12,6 +12,14 @@ from __future__ import annotations
 from enum import Enum, Flag
 from typing import List
 
+def _get_name(obj, dtype) -> str:
+    if obj.name is not None:
+        return obj.name
+    names = []
+    for val in dtype:
+        if val in obj:
+            names.append(val.name)
+    return "|".join(names)
 
 class hci_type:
     """
@@ -93,6 +101,33 @@ class hci_uint(hci_type):
         """
         return hci_uint(int.from_bytes(val, byteorder="little", signed=False))
 
+class hci_hexint(hci_type):
+    """
+    HCI hex integer type.
+    """
+
+    def __init__(self, val: int) -> None:
+        self.value = val
+
+    def __repr__(self) -> str:
+        return f"0x{self.value:X}"
+
+    @staticmethod
+    def from_bytes(val: bytes) -> hci_hexint:
+        """Typecast bytes object.
+
+        Parameters
+        ----------
+        val : bytes
+            Bytes object to typecast.
+
+        Returns
+        -------
+        hci_l2cap_hex
+            Typecast object.
+
+        """
+        return hci_hexint(int.from_bytes(val, byteorder="little"))
 
 class hci_str(hci_type):
     """
@@ -121,6 +156,34 @@ class hci_str(hci_type):
 
         """
         return hci_str(int.from_bytes(val, byteorder="big", signed=False))
+
+class hci_hexstr(hci_type):
+    """
+    HCI big-endian hex string type.
+    """
+
+    def __init__(self, val: int) -> None:
+        self.value = val
+
+    def __repr__(self) -> str:
+        return f"0x{self.value:X}"
+
+    @staticmethod
+    def from_bytes(val: bytes) -> hci_hexstr:
+        """Typecast bytes object.
+
+        Parameters
+        ----------
+        val : bytes
+            Bytes object to typecast.
+
+        Results
+        -------
+        hci_hexstr
+            Typecast object.
+
+        """
+        return hci_hexstr(int.from_bytes(val, byteorder="big", signed=False))
 
 
 class hci_bool(hci_type):
@@ -366,7 +429,6 @@ class hci_address(hci_type):
         """
         return hci_address([hex(x) for x in val])
 
-
 class hci_packet_type(hci_type):
     """
     HCI packet type.
@@ -374,7 +436,7 @@ class hci_packet_type(hci_type):
 
     def __init__(self, val: int):
         to_mask = self._packet_type_mask(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._packet_type_mask)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -419,7 +481,7 @@ class hci_sync_packet_type(hci_type):
 
     def __init__(self, val: int):
         to_mask = self._sync_packet_type_mask(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._sync_packet_type_mask)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -821,11 +883,12 @@ class hci_voice_setting(hci_type):
         self.input_coding_format = self._INPUT_CODING_FORMATS[(val >> 8) & 0b0011]
 
     def __repr__(self) -> str:
-        rstr = f"air_coding_format={self.air_coding_format}, "
-        rstr += f"linear_pcm_bit_position={self.linear_pcm_bit_position}, "
-        rstr += f"input_sample_size={self.input_sample_size}, "
-        rstr += f"input_data_format={self.input_data_format}, "
-        rstr += f"input_coding_format={self.input_coding_format}"
+        rstr = "\n"
+        rstr += f"        Air_Coding_Format={self.air_coding_format}\n"
+        rstr += f"        Linear_PCM_Bit_Position={self.linear_pcm_bit_position}\n"
+        rstr += f"        Input_Sample_Size={self.input_sample_size}\n"
+        rstr += f"        Input_Data_Format={self.input_data_format}\n"
+        rstr += f"        Input_Coding_Format={self.input_coding_format}"
         return rstr
 
     @staticmethod
@@ -1134,7 +1197,7 @@ class hci_bt_channel_map(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._bt_channel_map(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._bt_channel_map)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -1247,7 +1310,7 @@ class hci_ble_channel_map(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._ble_channel_map(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._ble_channel_map)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -1355,7 +1418,7 @@ class hci_link_policy_settings(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._link_policy_settings(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._link_policy_settings)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -1425,7 +1488,7 @@ class hci_event_mask(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._event_mask(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._event_mask)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -1507,7 +1570,7 @@ class hci_event_mask_page_2(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._event_mask_page_2(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._event_mask_page_2)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -1554,7 +1617,7 @@ class hci_le_event_mask(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._le_event_mask(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._le_event_mask)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -1646,35 +1709,36 @@ class hci_event_filter(hci_type):
         self.condition = condition
 
     def __repr__(self) -> str:
-        rstr = f"FilterType={self.filter_type.name} ({self.filter_type.value})\n"
+        rstr = "\n"
+        rstr = f"        FilterType={self.filter_type.name} ({self.filter_type.value})\n"
         if self.filter_type == self._filter_types.CLEAR:
             return rstr
         rstr += (
-            f"ConditionType={self.condition_type.name} ({self.condition_type.value})\n"
+            f"        ConditionType={self.condition_type.name} ({self.condition_type.value})\n"
         )
         if self.filter_type == self._filter_types.INQUIRY_RESULT:
             if self.condition_type == self._condition_types.ALL_DEVICES:
                 return rstr
-            rstr += f"Condition:\n"
+            rstr += f"        Condition:\n"
             if self.condition_type == self._condition_types.CLASS_OF_DEVICE:
-                rstr += f"    ClassOfDevice={self.condition[0]}\n"
-                rstr += f"    ClassOfDeviceMask={self.condition[1]}"
+                rstr += f"            ClassOfDevice={self.condition[0]}\n"
+                rstr += f"            ClassOfDeviceMask={self.condition[1]}"
             elif self.condition_type == self._condition_types.BD_ADDR:
-                rstr += f"Condition:\n"
-                rstr += f"    BD_ADDR={self.condition[0]}"
+                rstr += f"        Condition:\n"
+                rstr += f"            BD_ADDR={self.condition[0]}"
         elif self.filter_type == self._filter_types.CONNECTION_SETUP:
             if self.condition_type == self._condition_types.ALL_DEVICES:
-                rstr += f"Condition:\n"
-                rstr += f"    AutoAcceptFlag={self.condition[0]}"
+                rstr += f"        Condition:\n"
+                rstr += f"            AutoAcceptFlag={self.condition[0]}"
             elif self.condition_type == self._condition_types.CLASS_OF_DEVICE:
-                rstr += f"Condition:\n"
-                rstr += f"    ClassOfDevice={self.condition[0]}\n"
-                rstr += f"    ClassOfDeviceMask={self.condition[1]}\n"
-                rstr += f"    AutoAcceptFlag={self.condition[2]}"
+                rstr += f"        Condition:\n"
+                rstr += f"            ClassOfDevice={self.condition[0]}\n"
+                rstr += f"            ClassOfDeviceMask={self.condition[1]}\n"
+                rstr += f"            AutoAcceptFlag={self.condition[2]}"
             elif self.condition_type == self._condition_types.BD_ADDR:
-                rstr += f"Condition:\n"
-                rstr += f"    BD_ADDR={self.condition[0]}\n"
-                rstr += f"    AutoAcceptFlag={self.condition[1]}"
+                rstr += f"        Condition:\n"
+                rstr += f"            BD_ADDR={self.condition[0]}\n"
+                rstr += f"            AutoAcceptFlag={self.condition[1]}"
         return rstr
 
     @staticmethod
@@ -1737,7 +1801,7 @@ class hci_scan_enable(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._scan_enable(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._scan_enable)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -1809,7 +1873,7 @@ class hci_flow_control_enable(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._flow_control_enable(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._flow_control_enable)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -2392,18 +2456,27 @@ class hci_ext_advertising_event_type(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._ext_advertising_event_type(val & 0x1F)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._ext_advertising_event_type)
         self.value = to_mask.value
         self.data_status = (val >> 5) & 0x03
 
     def __repr__(self) -> str:
+        rstr = "\n"
         if self.data_status == 0x00:
-            return f"{self.name} ({self.value})\nDataStatus=Complete"
+            rstr += f"        {self.name} ({self.value})\n"
+            rstr += "        DataStatus=Complete"
+            return rstr
         if self.data_status == 0x01:
-            return f"{self.name} ({self.value})\nDataStatus=Incomplete/Continuing"
+            rstr += f"        {self.name} ({self.value})\n"
+            rstr += "        DataStatus=Incomplete/Continuing"
+            return rstr
         if self.data_status == 0x02:
-            return f"{self.name} ({self.value})\nDataStatus=Incomplete/Truncated"
-        return f"{self.name} ({self.value})\n--Invalid DataStatus--"
+            rstr += f"        {self.name} ({self.value})\n"
+            rstr += "        DataStatus=Incomplete/Truncated"
+            return rstr
+        rstr += f"        {self.name} ({self.value})\n"
+        rstr += "        --Invalid DataStatus--"
+        return rstr
 
     @staticmethod
     def from_bytes(val: int) -> hci_ext_advertising_event_type:
@@ -2474,7 +2547,7 @@ class hci_advertising_channel_map(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._advertising_channel_map(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._advertising_channel_map)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -2668,7 +2741,7 @@ class hci_phy_mask(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._phy_mask(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._phy_mask)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -2742,7 +2815,7 @@ class hci_phy_preference(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._phy_preference(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._phy_preference)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -2814,7 +2887,7 @@ class hci_advertising_event_properties(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._advertising_event_properties(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._advertising_event_properties)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -2930,7 +3003,7 @@ class hci_periodic_advertising_properties(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._periodic_advertising_properties(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._periodic_advertising_properties)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -2968,27 +3041,27 @@ class hci_connection_filter_policy(hci_type):
         self.value = val
 
     def __repr__(self) -> str:
-        rstr = ""
+        rstr = "\n"
         if self.value == 0x00:
-            rstr += "Filter Accept List is not used to determine connections\n"
-            rstr += "Decision PDUs are ignored\n"
-            rstr += "Peer Address Type and Peer Address are used (0x00)"
+            rstr += "        Filter Accept List is not used to determine connections\n"
+            rstr += "        Decision PDUs are ignored\n"
+            rstr += "        Peer Address Type and Peer Address are used (0x00)"
         elif self.value == 0x01:
-            rstr += "Filter Accept List is used to determine connections\n"
-            rstr += "Decision PDUs are ignored\n"
-            rstr += "Peer Address Type and Peer Address are ignored (0x01)"
+            rstr += "        Filter Accept List is used to determine connections\n"
+            rstr += "        Decision PDUs are ignored\n"
+            rstr += "        Peer Address Type and Peer Address are ignored (0x01)"
         elif self.value == 0x02:
-            rstr += "Filter Accept List is not used to determine connections\n"
-            rstr += "Only Decision PDUs are processed\n"
-            rstr += "Peer Address Type and Peer Address are ignored (0x02)"
+            rstr += "        Filter Accept List is not used to determine connections\n"
+            rstr += "        Only Decision PDUs are processed\n"
+            rstr += "        Peer Address Type and Peer Address are ignored (0x02)"
         elif self.value == 0x03:
-            rstr += "Filter Accept List is used to determine connections\n"
-            rstr += "All PDUs are processed\n"
-            rstr += "Peer Address Type and Peer Address are ignored (0x03"
+            rstr += "        Filter Accept List is used to determine connections\n"
+            rstr += "        All PDUs are processed\n"
+            rstr += "        Peer Address Type and Peer Address are ignored (0x03)"
         elif self.value == 0x04:
-            rstr += "All decision PDUs are processed\n"
-            rstr += "Filter Accept List is used to determine others PDUs to process\n"
-            rstr += "Peer Address Type and Peer Address are ignored (0x04)"
+            rstr += "        All decision PDUs are processed\n"
+            rstr += "        Filter Accept List is used to determine others PDUs to process\n"
+            rstr += "        Peer Address Type and Peer Address are ignored (0x04)"
         else:
             rstr += "--Invalid Value--"
         return rstr
@@ -3071,11 +3144,12 @@ class hci_sync_cte_type(hci_type):
         type3_cte = "y" if self.value & (1 << 3) == 0 else "n"
         cte_required = "n" if self.value & (1 << 4) == 0 else "y"
 
-        rstr = f"Sync w/ AoA CTE       -> {aoa_cte}\n"
-        rstr += f"Sync w/ AoD CTE (1us) -> {aod_cte_1us}\n"
-        rstr += f"Sync w/ AoD CTE (2us) -> {aod_cte_2us}\n"
-        rstr += f"Sync w/ Type3 CTE     -> {type3_cte}\n"
-        rstr += f"CTE required for sync -> {cte_required}"
+        rstr = "\n"
+        rstr += f"        Sync w/ AoA CTE       -> {aoa_cte}\n"
+        rstr += f"        Sync w/ AoD CTE (1us) -> {aod_cte_1us}\n"
+        rstr += f"        Sync w/ AoD CTE (2us) -> {aod_cte_2us}\n"
+        rstr += f"        Sync w/ Type3 CTE     -> {type3_cte}\n"
+        rstr += f"        CTE required for sync -> {cte_required}"
 
         return rstr
 
@@ -3139,7 +3213,7 @@ class hci_cte_type_select(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._cte_type_select(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._cte_type_select)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -3176,7 +3250,7 @@ class hci_cte_type_mask(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._cte_type_mask(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._cte_type_mask)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -3465,7 +3539,7 @@ class hci_address_change_reasons(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._address_change_reasons(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._address_change_reasons)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -3500,7 +3574,7 @@ class hci_decision_flags(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._decision_flags(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._decision_flags)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -3535,7 +3609,7 @@ class hci_test_flags(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._test_flags(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._test_flags)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -3619,7 +3693,7 @@ class hci_cs_role_mask(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._cs_role_mask(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._cs_role_mask)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -3689,7 +3763,7 @@ class hci_cs_mode(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._cs_mode(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._cs_mode)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -3725,9 +3799,11 @@ class hci_rtt_capability(hci_type):
         self.value = val
 
     def __repr__(self) -> str:
-        rstr = f"RTT_AA_Only_N={'150ns' if self.value & (1 << 0) == 0 else '10ns'}\n"
-        rstr += f"RTT_Sounding_N={'150ns' if self.value & (1 << 1) == 0 else '10ns'}\n"
-        rstr += f"RTT_Random_Payload_N={'150ns' if self.value & (1 << 2) == 0 else '10ns'}\n"
+        rstr = "\n"
+        rstr += f"        RTT_AA_Only_N={'150ns' if self.value & (1 << 0) == 0 else '10ns'}\n"
+        rstr += f"        RTT_Sounding_N={'150ns' if self.value & (1 << 1) == 0 else '10ns'}\n"
+        rstr += f"        RTT_Random_Payload_N"
+        rstr += f"{'150ns' if self.value & (1 << 2) == 0 else '10ns'}"
         return rstr
 
     @staticmethod
@@ -3795,7 +3871,7 @@ class hci_nadm_sounding_capability(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._nadm_sounding_capability(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._nadm_sounding_capability)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -3829,7 +3905,7 @@ class hci_nadm_random_capability(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._nadm_random_capability(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._nadm_random_capability)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -3863,7 +3939,7 @@ class hci_cs_sync_phy_mask(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._cs_sync_phy_mask(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._cs_sync_phy_mask)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -3934,7 +4010,7 @@ class hci_cs_subfeatures(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._cs_subfeatures(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._cs_subfeatures)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -3970,7 +4046,7 @@ class hci_cs_times(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._cs_times(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._cs_times)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -4012,7 +4088,7 @@ class hci_cs_times_fcs(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._cs_times_fcs(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._cs_times_fcs)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -4054,7 +4130,7 @@ class hci_tx_snr_capability(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._tx_snr_capability(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._tx_snr_capability)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -4142,9 +4218,9 @@ class hci_cs_fae_table(hci_type):
         self.value = val
 
     def __repr__(self) -> str:
-        rstr = ""
+        rstr = "\n"
         for idx, val in enumerate(self.value):
-            rstr += f"CH{self._allowed_ch[idx]}: {val/32:.4f}ppm\n"
+            rstr += f"        CH{self._allowed_ch[idx]}: {val/32:.4f}ppm\n"
         rstr.strip()
         return rstr
 
@@ -4174,7 +4250,7 @@ class hci_cs_channel_map(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._cs_channel_map(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._cs_channel_map)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -4384,7 +4460,7 @@ class hci_antenna_select(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._antenna_select(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._antenna_select)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -4473,7 +4549,7 @@ class hci_spacing_types(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._spacing_types(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._spacing_types)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -4865,8 +4941,9 @@ class hci_cs_abort_reason(hci_type):
         self.value = [to_mask_proc.value, to_mask_sub.value]
 
     def __repr__(self) -> str:
-        rstr = f"Procedure={self.name[0]} ({self.value[0]})\n"
-        rstr += f"Subevent={self.name[1]} ({self.value[1]})"
+        rstr = "\n"
+        rstr += f"        Procedure={self.name[0]} ({self.value[0]})\n"
+        rstr += f"        Subevent={self.name[1]} ({self.value[1]})"
         return rstr
 
     @staticmethod
@@ -4979,7 +5056,7 @@ class hci_codec_transport(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._codec_transport(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._codec_transport)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -5016,7 +5093,7 @@ class hci_simple_pairing_options(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._simple_pairing_options(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._simple_pairing_options)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -5050,7 +5127,7 @@ class hci_switching_sampling_rate(hci_type):
 
     def __init__(self, val: int) -> None:
         to_mask = self._switching_sampling_rate(val)
-        self.name = to_mask.name
+        self.name = _get_name(to_mask, self._switching_sampling_rate)
         self.value = to_mask.value
 
     def __repr__(self) -> str:
@@ -5391,20 +5468,136 @@ class hci_l2cap_info_result_type(hci_type):
         SUCCESS = 0x00
         NOT_SUPPORTED = 0x01
 
-
-class hci_l2cap_hex(hci_type):
+class hci_att_error_code(hci_type):
     """
-    HCI L2CAP hex integer type.
+    HCI ATT protocol error code type.
     """
 
     def __init__(self, val: int) -> None:
+        try:
+            to_mask = self._att_error_code(val)
+            self.name = to_mask.name
+            self.value = to_mask.value
+        except KeyError as err:
+            if 0x80 <= val <= 0x9F:
+                self.name = "APPLICATION_ERROR"
+                self.value = val
+            elif 0xE0 <= val <= 0xFF:
+                self.name = "COMMON_PROFILE_AND_SERVICE_ERROR"
+                self.value = val
+            else:
+                raise ValueError("Error code not defined.") from err
+
+    def __repr__(self) -> str:
+        return f"{self.name} ({self.value})"
+
+    @staticmethod
+    def from_bytes(val: bytes) -> hci_att_error_code:
+        """Typcast bytes object.
+
+        Parameters
+        ----------
+        val : bytes
+            Bytes object to typecast.
+
+        Returns
+        -------
+        hci_att_error_code
+            Typecast object.
+
+        """
+        return hci_att_error_code(int.from_bytes(val, byteorder="little"))
+
+    class _att_error_code(Enum):
+        INVALID_HANDLE = 0x01
+        READ_NOT_PERMITTED = 0x02
+        WRITE_NOT_PERMITTED = 0x03
+        INVALID_PDU = 0x04
+        INSUFFICIENT_AUTHENTICATION = 0x05
+        REQUEST_NOT_SUPPORTED = 0x06
+        INVALID_OFFSET = 0x07
+        INSUFFICIENT_AUTHORIZATION = 0x08
+        PREPARE_QUEUE_FULL = 0x09
+        ATTRIBUTE_NOT_FOUND = 0x0A
+        ATTRIBUTE_NOT_LONG = 0x0B
+        ENCRYPTION_KEY_TOO_SHORT = 0x0C
+        INVALID_ATTRIBUTE_VALUE_LENGTH = 0x0D
+        UNLIKELY_ERROR = 0x0E
+        INSUFFICIENT_ENCRYPTION = 0x0F
+        UNSUPPORTED_GROUP_TYPE = 0x10
+        INSUFFICIENT_RESOURCES = 0x11
+        DATABASE_OUT_OF_SYNC = 0x12
+        VALUE_NOT_ALLOWED = 0x13
+
+class hci_att_info(hci_type):
+    """
+    HCI ATT protocol info type.
+    """
+
+    def __init__(self, fmt: int, hdls: List[int], vals: List[int]) -> None:
+        self.data_format = self._data_format_type(fmt)
+        self.handles = hdls
+        self.data = vals
+
+    def __repr__(self) -> str:
+        rstr = "\n"
+        rstr = f"        Format={self.data_format.name} ({self.data_format.value})\n"
+        for idx, (hdl, val) in enumerate(zip(self.handles, self.data)):
+            rstr += f"        Handle[{idx}]=0x{hdl:2X}\n"
+            if self.data_format == self._data_format_type.UUID_2B:
+                rstr += f"        UUID[{idx}]=0x{val:04X}"
+            else:
+                rstr += f"        UUID[{idx}]=0x{val:032X}"
+        return rstr
+
+    @staticmethod
+    def from_bytes(val: bytes) -> hci_att_info:
+        """Typcast bytes object.
+
+        Parameters
+        ----------
+        val : bytes
+            Bytes object to typecast.
+
+        Returns
+        -------
+        hci_att_info
+            Typecast object.
+
+        """
+        fmt = int.from_bytes(val[0:1], byteorder="little")
+        datalen = 2 if fmt == 0x01 else 16
+        hdls = []
+        data = []
+        idx = 1
+        while idx < len(val):
+            hdls.append(int.from_bytes(val[idx:idx + 2], byteorder="little"))
+            idx += 2
+            data.append(int.from_bytes(val[idx:idx + datalen], byteorder="little"))
+            idx += datalen
+        return hci_att_info(fmt, hdls, data)
+
+    class _data_format_type(Enum):
+        UUID_2B = 0x01
+        UUID_16B = 0x02
+
+class hci_att_data(hci_type):
+    """
+    HCI ATT protocol attribute data type.
+    """
+
+    def __init__(self, hdl: int, val: int) -> None:
+        self.handle = hdl
         self.value = val
 
     def __repr__(self) -> str:
-        return f"0x{self.value:X}"
+        rstr = "\n"
+        rstr += f"        AttributeHandle=0x{self.handle:04X}\n"
+        rstr += f"        AttributeValue=0x{self.value:X}"
+        return rstr
 
     @staticmethod
-    def from_bytes(val: bytes) -> hci_l2cap_hex:
+    def from_bytes(val: bytes) -> hci_att_data:
         """Typecast bytes object.
 
         Parameters
@@ -5414,8 +5607,47 @@ class hci_l2cap_hex(hci_type):
 
         Returns
         -------
-        hci_l2cap_hex
+        hci_att_data
             Typecast object.
 
         """
-        return hci_l2cap_hex(int.from_bytes(val, byteorder="little"))
+        hdl = int.from_bytes(val[0:2], byteorder="little")
+        val = int.from_bytes(val[2:], byteorder="big")
+        return hci_att_data(hdl, val)
+
+class hci_att_group_data(hci_type):
+    """
+    HCI ATT protocol attribute group data type.
+    """
+
+    def __init__(self, hdl: int, end_group: int, val: int) -> None:
+        self.handle = hdl
+        self.end_group = end_group
+        self.value = val
+
+    def __repr__(self) -> str:
+        rstr = "\n"
+        rstr += f"        AttributeHandle=0x{self.handle:04X}\n"
+        rstr += f"        EndGroupHandle=0x{self.end_group:04X}\n"
+        rstr += f"        AttributeValue=0x{self.value:X}"
+        return rstr
+
+    @staticmethod
+    def from_bytes(val: bytes) -> hci_att_group_data:
+        """Typecast bytes object.
+
+        Parameters
+        ----------
+        val : bytes
+            Bytes object to typecast.
+
+        Returns
+        -------
+        hci_att_group_data
+            Typecast object.
+
+        """
+        hdl = int.from_bytes(val[0:2], byteorder="little")
+        end_group = int.from_bytes(val[2:4], byteorder="little")
+        val = int.from_bytes(val[4:], byteorder="big")
+        return hci_att_group_data(hdl, end_group, val)

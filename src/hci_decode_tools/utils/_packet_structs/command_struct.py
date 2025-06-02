@@ -111,7 +111,7 @@ _COMMAND_PACKET_PARAMS: Dict[OGF, Dict[OCF, List[HciParam]]] = {
             HciParam("Max_Latency", 2, hci_uint),
             HciParam("Voice_Setting", 2, hci_voice_setting),
             HciParam("Retransmission_Effort", 1, hci_retransmission_effort),
-            HciParam("Packet_Type", 2, hci_packet_type),
+            HciParam("Packet_Type", 2, hci_sync_packet_type),
         ],
         OCF.LINK_CONTROL.ACCEPT_SYNCHRONOUS_CONNECTION_REQUEST: [
             # DIFF PKT TYPE
@@ -121,7 +121,7 @@ _COMMAND_PACKET_PARAMS: Dict[OGF, Dict[OCF, List[HciParam]]] = {
             HciParam("Max_Latency", 2, hci_uint),
             HciParam("Voice_Setting", 2, hci_voice_setting),
             HciParam("Retransmission_Effort", 1, hci_retransmission_effort),
-            HciParam("Packet_Type", 2, hci_packet_type),
+            HciParam("Packet_Type", 2, hci_sync_packet_type),
         ],
         OCF.LINK_CONTROL.REJECT_SYNCHRONOUS_CONNECTION_REQUEST: [
             HciParam("BD_ADDR", 6, hci_address),
@@ -182,7 +182,7 @@ _COMMAND_PACKET_PARAMS: Dict[OGF, Dict[OCF, List[HciParam]]] = {
             HciParam("Input_Transport_Unit_Size", 1, hci_uint),
             HciParam("Output_Transport_Unit_Size", 1, hci_uint),
             HciParam("Max_Latency", 2, hci_uint),
-            HciParam("Packet_Type", 2, hci_packet_type),
+            HciParam("Packet_Type", 2, hci_sync_packet_type),
             HciParam("Retransmission_Effort", 1, hci_retransmission_effort),
         ],
         OCF.LINK_CONTROL.ENHANCED_ACCEPT_SYNCHRONOUS_CONNECTION_REQUEST: [
@@ -209,7 +209,7 @@ _COMMAND_PACKET_PARAMS: Dict[OGF, Dict[OCF, List[HciParam]]] = {
             HciParam("Input_Transport_Unit_Size", 1, hci_uint),
             HciParam("Output_Transport_Unit_Size", 1, hci_uint),
             HciParam("Max_Latency", 2, hci_uint),
-            HciParam("Packet_Type", 2, hci_packet_type),
+            HciParam("Packet_Type", 2, hci_sync_packet_type),
             HciParam("Retransmission_Effort", 1, hci_retransmission_effort),
         ],
         OCF.LINK_CONTROL.TRUNCATED_PAGE: [
