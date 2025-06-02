@@ -123,6 +123,7 @@ class AttPacket:
         return rstr
 
     def _parse_param(self, param: Union[HciParam, List[HciParam]], idx: int) -> Tuple[str, int]:
+        # pylint: disable=too-many-branches
         """
         Parse a single parameter.
         """

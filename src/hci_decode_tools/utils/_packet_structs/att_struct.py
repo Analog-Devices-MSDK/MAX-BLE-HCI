@@ -13,7 +13,7 @@ from ...packet_codes.acl import ATTProtocolCodes
 from ..types import *
 from ..params import HciParam, HciParamIdxRef
 
-_ACL_ATT_PARAMS = {
+_ACL_ATT_PARAMS: Dict[ATTProtocolCodes, List[HciParam]] = {
     ATTProtocolCodes.ATT_ERROR_RSP: [
         HciParam("Request_Opcode_In_Error", 1, hci_hexint),
         HciParam("Attribute_Handle_In_Error", 2, hci_hexint),
