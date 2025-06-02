@@ -45,6 +45,7 @@ class L2CAPSignalingCodes(Enum):
     L2CAP_CREDIT_BASED_RECONFIGURE_REQ = 0x19
     L2CAP_CREDIT_BASED_RECONFIGURE_RSP = 0x1A
 
+
 class ATTProtocolCodes(Enum):
     """
     ACL packet ATT protocol codes.
