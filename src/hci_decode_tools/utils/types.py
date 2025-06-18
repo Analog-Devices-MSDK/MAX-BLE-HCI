@@ -12,6 +12,7 @@ from __future__ import annotations
 from enum import Enum, Flag
 from typing import List
 
+
 def _get_name(obj, dtype) -> str:
     if obj.name is not None:
         return obj.name
@@ -20,6 +21,7 @@ def _get_name(obj, dtype) -> str:
         if val in obj:
             names.append(val.name)
     return "|".join(names)
+
 
 class hci_type:
     """
@@ -101,6 +103,7 @@ class hci_uint(hci_type):
         """
         return hci_uint(int.from_bytes(val, byteorder="little", signed=False))
 
+
 class hci_hexint(hci_type):
     """
     HCI hex integer type.
@@ -129,6 +132,7 @@ class hci_hexint(hci_type):
         """
         return hci_hexint(int.from_bytes(val, byteorder="little"))
 
+
 class hci_str(hci_type):
     """
     HCI big-endian string type.
@@ -156,6 +160,7 @@ class hci_str(hci_type):
 
         """
         return hci_str(int.from_bytes(val, byteorder="big", signed=False))
+
 
 class hci_hexstr(hci_type):
     """
@@ -1711,12 +1716,12 @@ class hci_event_filter(hci_type):
 
     def __repr__(self) -> str:
         rstr = "\n"
-        rstr = f"        FilterType={self.filter_type.name} ({self.filter_type.value})\n"
+        rstr = (
+            f"        FilterType={self.filter_type.name} ({self.filter_type.value})\n"
+        )
         if self.filter_type == self._filter_types.CLEAR:
             return rstr
-        rstr += (
-            f"        ConditionType={self.condition_type.name} ({self.condition_type.value})\n"
-        )
+        rstr += f"        ConditionType={self.condition_type.name} ({self.condition_type.value})\n"
         if self.filter_type == self._filter_types.INQUIRY_RESULT:
             if self.condition_type == self._condition_types.ALL_DEVICES:
                 return rstr
@@ -5469,6 +5474,7 @@ class hci_l2cap_info_result_type(hci_type):
         SUCCESS = 0x00
         NOT_SUPPORTED = 0x01
 
+
 class hci_att_error_code(hci_type):
     """
     HCI ATT protocol error code type.
@@ -5530,6 +5536,7 @@ class hci_att_error_code(hci_type):
         DATABASE_OUT_OF_SYNC = 0x12
         VALUE_NOT_ALLOWED = 0x13
 
+
 class hci_att_info(hci_type):
     """
     HCI ATT protocol info type.
@@ -5572,15 +5579,16 @@ class hci_att_info(hci_type):
         data = []
         idx = 1
         while idx < len(val):
-            hdls.append(int.from_bytes(val[idx:idx + 2], byteorder="little"))
+            hdls.append(int.from_bytes(val[idx : idx + 2], byteorder="little"))
             idx += 2
-            data.append(int.from_bytes(val[idx:idx + datalen], byteorder="little"))
+            data.append(int.from_bytes(val[idx : idx + datalen], byteorder="little"))
             idx += datalen
         return hci_att_info(fmt, hdls, data)
 
     class _data_format_type(Enum):
         UUID_2B = 0x01
         UUID_16B = 0x02
+
 
 class hci_att_data(hci_type):
     """
@@ -5615,6 +5623,7 @@ class hci_att_data(hci_type):
         hdl = int.from_bytes(val[0:2], byteorder="little")
         val = int.from_bytes(val[2:], byteorder="big")
         return hci_att_data(hdl, val)
+
 
 class hci_att_group_data(hci_type):
     """

@@ -58,7 +58,7 @@ class AttPacket:
         auth_flag: bool,
         cmd_flag: bool,
         params: bytes,
-        auth_signature: Optional[int] = None
+        auth_signature: Optional[int] = None,
     ) -> None:
         self.code = code
         self.auth_flag = auth_flag
@@ -94,7 +94,9 @@ class AttPacket:
         if auth_flag:
             auth_signature = int.from_bytes(packet[-12:], byteorder="little")
             params = packet[1:-12]
-        return AttPacket(code, auth_flag, cmd_flag, params, auth_signature=auth_signature)
+        return AttPacket(
+            code, auth_flag, cmd_flag, params, auth_signature=auth_signature
+        )
 
     def parse_packet(self) -> str:
         """Parse and format a deserialized ATT packet.
@@ -122,7 +124,9 @@ class AttPacket:
             rstr += p_str
         return rstr
 
-    def _parse_param(self, param: Union[HciParam, List[HciParam]], idx: int) -> Tuple[str, int]:
+    def _parse_param(
+        self, param: Union[HciParam, List[HciParam]], idx: int
+    ) -> Tuple[str, int]:
         # pylint: disable=too-many-branches
         """
         Parse a single parameter.
@@ -134,7 +138,7 @@ class AttPacket:
             if idxref is None:
                 try:
                     maxidx = int(
-                        (len(self.params) - self._p_idx)/sum(p.length for p in param)
+                        (len(self.params) - self._p_idx) / sum(p.length for p in param)
                     )
                 except TypeError:
                     subidx = 0
@@ -162,7 +166,7 @@ class AttPacket:
                 p_len = self._p_vals[p_len.ref].value
         if p_len < 0:
             p_len = len(self.params) - self._p_idx - abs(p_len)
-        p_val = param.dtype.from_bytes(self.params[self._p_idx:self._p_idx + p_len])
+        p_val = param.dtype.from_bytes(self.params[self._p_idx : self._p_idx + p_len])
         self._p_idx += p_len
         idx += 1
         rstr += f"    {param.label}={p_val}\n"
