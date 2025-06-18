@@ -8,6 +8,7 @@ it is not intended for external use.
 
 """
 # pylint: disable=wildcard-import, too-many-lines, unused-wildcard-import
+import copy
 from typing import Dict, List, Tuple, Union
 from ...packet_codes.command import OCF, OGF
 from ...packet_codes.event import EventCode, SubEventCode
@@ -1924,7 +1925,7 @@ def get_params(code: Union[EventCode, SubEventCode, Tuple[OGF, OCF]]) -> List[Hc
 
     """
     if isinstance(code, EventCode):
-        return _EVENT_PACKET_RETURN_PARAMS.get(code, None)
+        return copy.deepcopy(_EVENT_PACKET_RETURN_PARAMS.get(code, None))
     if isinstance(code, SubEventCode):
-        return _LE_META_EVENT_RETURN_PARAMS.get(code, None)
-    return _COMMAND_COMPLETE_EVENT_RETURN_PARAMS[code[0]].get(code[1], None)
+        return copy.deepcopy(_LE_META_EVENT_RETURN_PARAMS.get(code, None))
+    return copy.deepcopy(_COMMAND_COMPLETE_EVENT_RETURN_PARAMS[code[0]].get(code[1], None))

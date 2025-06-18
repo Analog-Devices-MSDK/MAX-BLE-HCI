@@ -8,6 +8,7 @@ package, it is not intended for external use.
 
 """
 # pylint: disable=wildcard-import, too-many-lines, unused-wildcard-import
+import copy
 from typing import Dict, List
 from ...packet_codes.acl import ATTProtocolCodes
 from ..types import *
@@ -162,4 +163,4 @@ def get_params(code: ATTProtocolCodes) -> List[HciParam]:
         Packet parameter structure.
 
     """
-    return _ACL_ATT_PARAMS.get(code, None)
+    return copy.deepcopy(_ACL_ATT_PARAMS.get(code, None))

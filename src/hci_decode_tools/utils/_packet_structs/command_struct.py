@@ -8,6 +8,7 @@ package, it is not intended for external use.
 
 """
 # pylint: disable=wildcard-import, too-many-lines, unused-wildcard-import
+import copy
 from typing import Dict, List
 from ...packet_codes.command import OCF, OGF
 from ..types import *
@@ -1492,4 +1493,4 @@ def get_params(ogf: OGF, ocf: OCF) -> List[HciParam]:
         Packet parameter stucture.
 
     """
-    return _COMMAND_PACKET_PARAMS[ogf].get(ocf, None)
+    return copy.deepcopy(_COMMAND_PACKET_PARAMS[ogf].get(ocf, None))

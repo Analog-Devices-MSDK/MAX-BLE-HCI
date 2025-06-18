@@ -429,6 +429,7 @@ class hci_address(hci_type):
         """
         return hci_address([hex(x) for x in val])
 
+
 class hci_packet_type(hci_type):
     """
     HCI packet type.
