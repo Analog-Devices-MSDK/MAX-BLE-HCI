@@ -114,7 +114,9 @@ class EventPacket:
             param_code = (ogf, ocf)
             self._p_idx += 3
         elif self.code == EventCode.LE_META:
-            sub_code = SubEventCode(int.from_bytes(self.params[0:1], byteorder="little"))
+            sub_code = SubEventCode(
+                int.from_bytes(self.params[0:1], byteorder="little")
+            )
             rstr += f"SubEventCode={sub_code.name}\n"
             param_code = sub_code
             self._p_idx += 1

@@ -1928,4 +1928,6 @@ def get_params(code: Union[EventCode, SubEventCode, Tuple[OGF, OCF]]) -> List[Hc
         return copy.deepcopy(_EVENT_PACKET_RETURN_PARAMS.get(code, None))
     if isinstance(code, SubEventCode):
         return copy.deepcopy(_LE_META_EVENT_RETURN_PARAMS.get(code, None))
-    return copy.deepcopy(_COMMAND_COMPLETE_EVENT_RETURN_PARAMS[code[0]].get(code[1], None))
+    return copy.deepcopy(
+        _COMMAND_COMPLETE_EVENT_RETURN_PARAMS[code[0]].get(code[1], None)
+    )
