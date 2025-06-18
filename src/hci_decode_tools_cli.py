@@ -250,7 +250,7 @@ def init_cli() -> argparse.Namespace:
         description=_DESC, formatter_class=argparse.RawTextHelpFormatter
     )
     subparsers = parser.add_subparsers()
-    parser.set_defaults(help_func=parser.print_help)
+    parser.set_defaults(func=lambda _: parser.print_help())
     decode_parser = subparsers.add_parser(
         "packet",
         help="Decode an HCI packet",
@@ -277,10 +277,7 @@ def main() -> None:
     Main function for the hcitools command line interface.
     """
     args = init_cli()
-    try:
-        args.func(args)
-    except AttributeError:
-        args.help_func()
+    args.func(args)
 
 
 if __name__ == "__main__":
