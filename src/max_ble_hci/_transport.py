@@ -344,7 +344,7 @@ class SerialUartTransport:
 
         except serial.SerialException as err:
             self.logger.error("%s: %s", type(err).__name__, err)
-            sys.exit(1)
+            raise ConnectionError from err
 
         except OverflowError as err:
             self.logger.error("Baud rate exception, %i is too large", baud)

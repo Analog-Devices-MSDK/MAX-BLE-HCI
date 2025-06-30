@@ -739,6 +739,9 @@ class VendorSpecificOCF(Enum):
     FGEN = 0x307
     """Function generator command."""
 
+    HDS_EM = 0xFC80
+    """HDS EM command."""
+
 
 @dataclass
 class OCF:

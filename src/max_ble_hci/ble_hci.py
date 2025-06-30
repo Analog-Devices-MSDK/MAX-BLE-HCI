@@ -55,6 +55,7 @@ import logging
 from typing import Any, Callable, Optional, Union
 from alive_progress import alive_bar
 
+from . import utils
 from ._hci_logger import get_formatted_logger
 from ._transport import SerialUartTransport
 from .ad_types import ADType
@@ -547,6 +548,20 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
         evt = self.port.send_command(command, timeout=timeout)
 
         return evt
+
+    def hds_em(self, addr: int, bits: int, write: bool = False, data: int = 0):
+        if write:
+            cmd_str = utils.build_hds_em_wr_cmd_str(addr, bits, data)
+        else:
+            cmd_str = utils.build_hds_em_rd_cmd_str(addr, bits)
+        
+        ret = self.write_command_raw(bytes.fromhex(cmd_str))
+        
+        if not write:
+            res = utils.parse_hds_em_rd_cmd_res(ret.evt_params, bits)
+            return res
+        
+        return ret
 
     def write_command_raw(
         self,
