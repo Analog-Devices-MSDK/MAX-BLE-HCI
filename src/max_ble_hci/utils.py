@@ -352,11 +352,11 @@ def parse_hds_em_rd_cmd_res(data: bytes, bits: int) -> dict:
     # Parse the response data here
     # This is a placeholder implementation and should be replaced with actual parsing logic
     if len(data) > 3:
-    parsed_data = {
-        "status": data[3],
-        "len": data[4],
-        "data": data[5:],
-    }
+        parsed_data = {
+            "status": data[3],
+            "len": data[4],
+            "data": data[5:],
+        }
     else:
         parsed_data = {
             "status": data[0],
