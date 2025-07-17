@@ -390,3 +390,98 @@ def build_hds_em_wr_cmd_str(addr: int, bits: int, data: int) -> str:
     ceva_fmt_len = array_len + 1
     total_payload_len = ceva_fmt_len + 1
     return f"0180fc{total_payload_len:02x}{ceva_fmt_len:02x}{array_len:02x}0102{(addr & 0xFF):02x}{(addr & 0xFF00)>>8:02x}{bits:02x}{data:0{size * 2}x}"
+
+
+def build_hds_reg_rd_cmd_str(addr: int, bits: int) -> str:
+    """Build hds-reg read command string
+
+    Parameters
+    ----------
+    addr : int
+        Address to read from
+    bits : int
+        Number of bits to read from address
+    
+    Returns
+    -------
+    str
+        Command string to send to HDS
+    
+    Example: 01 80fc 07 06 05 03 01 22 11 08
+        01: HCI command
+        80fc: Command opcode (HDS-EM read)
+        07: Total payload length
+        06: CEVA format length
+        05: Array length
+        03: Command ID for hds-reg
+        01: read
+        2211: address 0x1122 to read from
+        08: 8 bits to read
+    """
+    array_len = 5
+    ceva_fmt_len = array_len + 1
+    total_payload_len = ceva_fmt_len + 1
+    return f"0180fc{total_payload_len:02x}{ceva_fmt_len:02x}{array_len:02x}0301{(addr & 0xFF):02x}{(addr & 0xFF00)>>8:02x}{bits:02x}"
+
+
+def parse_hds_reg_rd_cmd_res(data: bytes, bits: int) -> dict:
+    """Parse HDS-REG read command response
+
+    Parameters
+    ----------
+    data : bytes
+        Data to parse
+    bits : int
+        Number of bits to read from address
+
+    Returns
+    -------
+    dict
+        Parsed data
+        
+    Example:
+        INFO - 2025-05-15 20:21:07.251297  DUT>0180fc0706050301034a08
+        INFO - 2025-05-15 20:21:07.264273  DUT<040e060580fc00015c
+        
+    """
+    # Parse the response data here
+    # This is a placeholder implementation and should be replaced with actual parsing logic
+    if len(data) > 3:
+        parsed_data = {
+            "status": data[3],
+            "len": data[4],
+            "data": data[5:],
+        }
+    else:
+        parsed_data = {
+            "status": data[0],
+            "len": 0,
+            "data": data[1:]
+        }
+    
+    return parsed_data
+
+
+def build_hds_reg_wr_cmd_str(addr: int, bits: int, data: int) -> str:
+    """Build hds-reg write command string
+
+    Parameters
+    ----------
+    addr : int
+        Address to write to
+    bits : int
+        Number of bits to write to address
+    data : int
+        Data to write
+
+    Returns
+    -------
+    str
+        Command string to send to HDS
+
+    """
+    size = bits // 8
+    array_len = 5 + size    # 0x01, 0x02, addr LSB, addr MSB, bits, data
+    ceva_fmt_len = array_len + 1
+    total_payload_len = ceva_fmt_len + 1
+    return f"0180fc{total_payload_len:02x}{ceva_fmt_len:02x}{array_len:02x}0302{(addr & 0xFF):02x}{(addr & 0xFF00)>>8:02x}{bits:02x}{data:0{size * 2}x}"

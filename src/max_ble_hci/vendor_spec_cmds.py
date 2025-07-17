@@ -72,7 +72,8 @@ from .packet_codes import StatusCode
 from .packet_defs import OCF, OGF
 from .utils import (
     address_str2int, to_le_nbyte_list, build_hds_em_rd_cmd_str, 
-    build_hds_em_wr_cmd_str, parse_hds_em_rd_cmd_res
+    build_hds_em_wr_cmd_str, parse_hds_em_rd_cmd_res,
+    build_hds_reg_rd_cmd_str, build_hds_reg_wr_cmd_str, parse_hds_reg_rd_cmd_res
 )
 
 
@@ -1825,6 +1826,20 @@ class VendorSpecificCmds:
         
         if not write:
             res = parse_hds_em_rd_cmd_res(ret.evt_params, bits)
+            return res
+        
+        return ret
+
+    def hds_reg(self, addr: int, bits: int, write: bool = False, data: int = 0):
+        if write:
+            cmd_str = build_hds_reg_wr_cmd_str(addr, bits, data)
+        else:
+            cmd_str = build_hds_reg_rd_cmd_str(addr, bits)
+        
+        ret = self.port.send_command_raw(bytes.fromhex(cmd_str))
+        
+        if not write:
+            res = parse_hds_reg_rd_cmd_res(ret.evt_params, bits)
             return res
         
         return ret

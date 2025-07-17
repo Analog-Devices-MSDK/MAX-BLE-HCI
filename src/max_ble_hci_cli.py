@@ -1448,7 +1448,7 @@ Default: {hex(DEFAULT_CE_LEN)}""",
         "--bits",
         type=int,
         default=8,
-        help="read/write operation bits, 8, 16, 32, 64. Default: 8",
+        help="read/write operation bits, 8, 16, 32. Default: 8",
     )
     
     hds_em_parser.add_argument(
@@ -1480,6 +1480,64 @@ Default: {hex(DEFAULT_CE_LEN)}""",
             _hds_em_rd(args)
     
     hds_em_parser.set_defaults(func=_hds_em_func)
+
+    #### HDS-REG PARSER ####
+    hds_reg_parser = subparsers.add_parser(
+        "hds-reg", 
+        help="HUDSON REG command", 
+        formatter_class=RawTextHelpFormatter
+    )
+    
+    hds_reg_parser.add_argument(
+        "addr",
+        type=_hex_int,
+        help="The register address to read/write from/to in HEX format: HHXXXXLL",
+    )
+    
+    hds_reg_parser.add_argument(
+        "-w",
+        "--write",
+        action="store_true",
+        default=False,
+        help="Write operation, Default: False",
+    )
+    
+    hds_reg_parser.add_argument(
+        "--bits",
+        type=int,
+        default=32,
+        help="read/write operation bits, 8, 16, 32. Default: 32",
+    )
+    
+    hds_reg_parser.add_argument(
+        "--data",
+        type=_hex_int,
+        help="data to write in bytes (HEX, LSB first, little-endian): XX, XXXX, or XXXXXXXX",
+    )
+
+    def _hds_reg_rd(args):
+        cmd_str = utils.build_hds_reg_rd_cmd_str(args.addr, args.bits)   # generate the HCI command string
+        ret = hci.write_command_raw(bytes.fromhex(cmd_str))
+        res = utils.parse_hds_reg_rd_cmd_res(ret.evt_params, args.bits)  # parse the response
+        data_str = ' '.join([f'{byte:02X}' for byte in res['data']])     # get the data string
+        logger.info(f'Reading from address 0x{args.addr:04X} with {args.bits} bits: {data_str}')
+    
+    def _hds_reg_func(args):
+        size = args.bits // 4
+        if args.write:
+            _hds_reg_rd(args)    # read the data from the address first
+            
+            # write
+            print(f"Write 0x{args.data} to address 0x{args.addr:04X} with {args.bits} bits")
+            cmd_str = utils.build_hds_reg_wr_cmd_str(args.addr, args.bits, args.data)
+            ret = hci.write_command_raw(bytes.fromhex(cmd_str))
+            
+            # read back to verify
+            _hds_reg_rd(args)
+        else:   # read
+            _hds_reg_rd(args)
+    
+    hds_reg_parser.set_defaults(func=_hds_reg_func)
     
     def _script_runner(script_path):
         print(script_path)
