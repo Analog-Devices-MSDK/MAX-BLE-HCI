@@ -314,7 +314,7 @@ def build_hds_em_rd_cmd_str(addr: int, bits: int) -> str:
     
     Example: 01 80fc 07 06 05 01 01 22 11 08
         01: HCI command
-        80fc: Command opcode (HDS-EM read)
+        80fc: Command opcode (ADI VS Test command)
         07: Total payload length
         06: CEVA format length
         05: Array length
@@ -407,21 +407,22 @@ def build_hds_reg_rd_cmd_str(addr: int, bits: int) -> str:
     str
         Command string to send to HDS
     
-    Example: 01 80fc 07 06 05 03 01 22 11 08
+    Example: 0180fc0908070301d0080e6120
         01: HCI command
-        80fc: Command opcode (HDS-EM read)
-        07: Total payload length
-        06: CEVA format length
-        05: Array length
+        80fc: Command opcode (ADI VS Test command)
+        09: Total payload length
+        08: CEVA format length
+        07: Array length
         03: Command ID for hds-reg
         01: read
-        2211: address 0x1122 to read from
-        08: 8 bits to read
+        610e08d0: address 0x610e08d0 for register BLE RFTESTCNTL
+        20: 32-bit register
     """
-    array_len = 5
+    array_len = 7
     ceva_fmt_len = array_len + 1
     total_payload_len = ceva_fmt_len + 1
-    return f"0180fc{total_payload_len:02x}{ceva_fmt_len:02x}{array_len:02x}0301{(addr & 0xFF):02x}{(addr & 0xFF00)>>8:02x}{bits:02x}"
+    addr_str = f"{(addr & 0xFF):02x}{(addr & 0xFF00)>>8:02x}{(addr & 0xFF0000)>>16:02x}{(addr & 0xFF000000)>>24:02x}"
+    return f"0180fc{total_payload_len:02x}{ceva_fmt_len:02x}{array_len:02x}0301{addr_str}{bits:02x}"
 
 
 def parse_hds_reg_rd_cmd_res(data: bytes, bits: int) -> dict:
@@ -481,7 +482,8 @@ def build_hds_reg_wr_cmd_str(addr: int, bits: int, data: int) -> str:
 
     """
     size = bits // 8
-    array_len = 5 + size    # 0x01, 0x02, addr LSB, addr MSB, bits, data
+    array_len = 7 + size    # 0x03, 0x02, 32-bit address, bits, data
     ceva_fmt_len = array_len + 1
     total_payload_len = ceva_fmt_len + 1
-    return f"0180fc{total_payload_len:02x}{ceva_fmt_len:02x}{array_len:02x}0302{(addr & 0xFF):02x}{(addr & 0xFF00)>>8:02x}{bits:02x}{data:0{size * 2}x}"
+    addr_str = f"{(addr & 0xFF):02x}{(addr & 0xFF00)>>8:02x}{(addr & 0xFF0000)>>16:02x}{(addr & 0xFF000000)>>24:02x}"
+    return f"0180fc{total_payload_len:02x}{ceva_fmt_len:02x}{array_len:02x}0302{addr_str}{bits:02x}{data:0{size * 2}x}"

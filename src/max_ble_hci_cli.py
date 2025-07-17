@@ -58,6 +58,7 @@ Description: CLI Client to use MAX-BLE-HCI
 import argparse
 import logging
 import os
+from pprint import pprint
 import signal
 import secrets
 
@@ -1528,7 +1529,7 @@ Default: {hex(DEFAULT_CE_LEN)}""",
             _hds_reg_rd(args)    # read the data from the address first
             
             # write
-            print(f"Write 0x{args.data} to address 0x{args.addr:04X} with {args.bits} bits")
+            print(f"Write 0x{args.data:08X} to address 0x{args.addr:04X} with {args.bits} bits")
             cmd_str = utils.build_hds_reg_wr_cmd_str(args.addr, args.bits, args.data)
             ret = hci.write_command_raw(bytes.fromhex(cmd_str))
             
