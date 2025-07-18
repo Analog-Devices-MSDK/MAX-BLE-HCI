@@ -486,4 +486,5 @@ def build_hds_reg_wr_cmd_str(addr: int, bits: int, data: int) -> str:
     ceva_fmt_len = array_len + 1
     total_payload_len = ceva_fmt_len + 1
     addr_str = f"{(addr & 0xFF):02x}{(addr & 0xFF00)>>8:02x}{(addr & 0xFF0000)>>16:02x}{(addr & 0xFF000000)>>24:02x}"
-    return f"0180fc{total_payload_len:02x}{ceva_fmt_len:02x}{array_len:02x}0302{addr_str}{bits:02x}{data:0{size * 2}x}"
+    data_str = f"{(data & 0xFF):02x}{(data & 0xFF00)>>8:02x}{(data & 0xFF0000)>>16:02x}{(data & 0xFF000000)>>24:02x}"
+    return f"0180fc{total_payload_len:02x}{ceva_fmt_len:02x}{array_len:02x}0302{addr_str}{bits:02x}{data_str}"
