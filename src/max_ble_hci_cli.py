@@ -1521,7 +1521,7 @@ Default: {hex(DEFAULT_CE_LEN)}""",
         ret = hci.write_command_raw(bytes.fromhex(cmd_str))
         res = utils.parse_hds_reg_rd_cmd_res(ret.evt_params, args.bits)  # parse the response
         data_str = ' '.join([f'{byte:02X}' for byte in res['data']])     # get the data string
-        logger.info(f'Reading from address 0x{args.addr:04X} with {args.bits} bits: {data_str}')
+        logger.info(f'Reading from address 0x{args.addr:04X} with {args.bits} bits: {data_str} (little-endian)')
     
     def _hds_reg_func(args):
         size = args.bits // 4
