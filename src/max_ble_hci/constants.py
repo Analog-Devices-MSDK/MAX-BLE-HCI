@@ -302,3 +302,73 @@ class TxPower(Enum):
             return TxPower.MIN.value
 
         return TxPower.MAX.value
+
+
+class BtTxPacketType(Enum):
+    """Bluetooth Classic TX test packet types"""
+
+    PKT_DM1 = 0x00
+    """DM1 packet type """
+
+    PKT_DH1 = 0x01
+    """DH1 packet type """
+
+    PKT_DM3 = 0x02
+    """DM3 packet type """
+
+    PKT_DH3 = 0x03
+    """DH3 packet type """
+
+    PKT_DM5 = 0x04
+    """DM5 packet type """
+
+    PKT_DH5 = 0x05
+    """DH5 packet type """
+
+    PKT_2DH1 = 0x06
+    """2DH1 packet type """
+
+    PKT_3DH1 = 0x07
+    """3DH1 packet type """
+
+    PKT_2DH3 = 0x08
+    """2DH3 packet type """
+
+    PKT_3DH3 = 0x09
+    """3DH3 packet type """
+
+    PKT_2DH5 = 0x0A
+    """2DH5 packet type """
+
+    PKT_3DH5 = 0x0B
+    """3DH5 packet type """
+
+    PKT_HV1 = 0x0C
+    """HV1 packet type """
+
+    PKT_HV2 = 0x0D
+    """HV2 packet type """
+
+    PKT_HV3 = 0x0E
+    """HV3 packet type """
+
+    PKT_EV3 = 0x0F
+    """EV3 packet type """
+
+    PKT_EV4 = 0x10
+    """EV4 packet type """
+
+    PKT_EV5 = 0x11
+    """EV5 packet type """
+
+    PKT_2EV3 = 0x12
+    """2EV3 packet type """
+
+    PKT_3EV3 = 0x13
+    """3EV3 packet type """
+
+    PKT_2EV5 = 0x14
+    """2EV5 packet type """
+
+    PKT_3EV5 = 0x15
+    """3EV5 packet type """

@@ -57,7 +57,14 @@ from typing import Dict, List, Optional, Tuple, Union
 
 from ._hci_logger import get_formatted_logger
 from ._transport import SerialUartTransport
-from .constants import MAX_U32, MAX_U64, PayloadOption, PhyOption, PubKeyValidateMode
+from .constants import (
+    MAX_U32,
+    MAX_U64,
+    PayloadOption,
+    PhyOption,
+    PubKeyValidateMode,
+    BtTxPacketType,
+)
 from .data_params import (
     AdvPktStats,
     DataPktStats,
@@ -400,6 +407,78 @@ class VendorSpecificCmds:
 
         params.extend(to_le_nbyte_list(num_packets, 2))
         return self.send_vs_command(OCF.VENDOR_SPEC.TX_TEST, params=params)
+
+    def tx_test_bt_vs(
+        self,
+        channel: int = 0,
+        packet_len: int = 0,
+        payload: Union[PayloadOption, int] = PayloadOption.PLD_PRBS9,
+        packet_type: Union[BtTxPacketType, int] = BtTxPacketType.PKT_DM1,
+        tx_power: int = 0,
+        inf_test: bool = False,
+    ) -> StatusCode:
+        """Start a vendor-specific transmitter test.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        start a Bluetooth Classic DTM transmitter test
+        in accordance with the given parameters.
+
+        Parameters
+        ----------
+        channel : int
+            TX channel, range: 0 to 79.
+        packet_len : int
+            Length of test data in bytes, range: 0 to 1021.
+        payload : Union[PayloadOption, int]
+            The packet payload type that should be transmitted.
+        packet_type : Union[PacketType, int]
+            The type of packet to transmit.
+        tx_power : int
+            Transmit power level, -127 to +20 dBm.
+        inf_test: bool
+            Infinite TX modulation, without packets.
+
+        Returns
+        -------
+        StatusCode
+            The return packet status code.
+
+        Raises
+        ------
+        ValueError
+            If `channel` is greater than 79 or less than 0.
+        ValueError
+            If `packet_len` is greater than 1021.
+        ValueError
+            If `packet_type` is greater than 21.
+
+        """
+        if not 0 <= channel < 80:
+            raise ValueError(
+                f"Channel out of bandwidth ({channel}), must be in range [0, 80)."
+            )
+        if packet_len > 1021:
+            raise ValueError(
+                f"Packet length too large ({packet_len}), must be 1021 or less."
+            )
+        if not isinstance(packet_type, BtTxPacketType):
+            if packet_type > 21:
+                raise ValueError(
+                    f"Packet type out of range ({packet_type}), must be 21 or less."
+                )
+
+        print("Parsing BT_TX_TEST")
+
+        payload = payload.value if isinstance(payload, PayloadOption) else payload
+        packet_type = (
+            packet_type.value
+            if isinstance(packet_type, BtTxPacketType)
+            else packet_type
+        )
+        params = [channel]
+        params.extend(to_le_nbyte_list(packet_len, 2))
+        params.extend([payload, packet_type, tx_power, inf_test])
+        return self.send_vs_command(OCF.VENDOR_SPEC.BT_TX_TEST, params=params)
 
     def rx_test_vs(
         self,

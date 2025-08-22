@@ -906,6 +906,7 @@ Default: {hex(DEFAULT_CE_LEN)}""",
         ),
     )
 
+    #### TXTESTVS PARSER ####
     tx_test_vs_parser = subparsers.add_parser(
         "txtestvs",
         aliases=["txvs"],
@@ -974,6 +975,106 @@ Default: {hex(DEFAULT_CE_LEN)}""",
                 payload=args.payload,
                 packet_len=args.packet_length,
                 num_packets=args.num_packets,
+            )
+        )
+    )
+
+    #### TXTESTBTVS PARSER ####
+    tx_test_bt_vs_parser = subparsers.add_parser(
+        "txtestbtvs",
+        aliases=["txbtvs"],
+        help="Execute the Bluetooth Classic vendor-specific transmitter test",
+        formatter_class=RawTextHelpFormatter,
+    )
+    tx_test_bt_vs_parser.add_argument(
+        "-c",
+        "--channel",
+        type=int,
+        dest="channel",
+        default=0,
+        help="Tx test channel. Default: 0",
+    )
+    tx_test_bt_vs_parser.add_argument(
+        "-pl",
+        "--packet-length",
+        dest="packet_length",
+        type=int,
+        default=0,
+        help="Tx packet length, number of bytes per packet, 0-1021. Default: 0",
+    )
+    tx_test_bt_vs_parser.add_argument(
+        "-p",
+        "--payload",
+        dest="payload",
+        type=int,
+        default=0,
+        help="""Tx Test Payload
+        0: PRBS9
+        1: 11110000
+        2: 10101010
+        3: PRBS15
+        4: 11111111
+        5: 00000000
+        6: 00001111
+        7: 01010101
+        Default: PRBS9
+        """,
+    )
+    tx_test_bt_vs_parser.add_argument(
+        "--pt",
+        dest="packet_type",
+        type=int,
+        default=1,
+        help="""Tx Test packet type
+        0: DM1
+        1: DH1
+        2: DM3
+        3: DH3
+        4: DM5
+        5: DH5
+        6: 2DH1
+        7: 3DH1
+        8: 2DH3
+        9: 3DH3
+        10: 2DH5
+        11: 3DH5
+        12: HV1
+        13: HV2
+        14: HV3
+        15: EV3
+        16: EV4
+        17: EV5
+        18: 2EV3
+        19: 3EV3
+        20: 2EV5
+        21: 3EV5
+        Default: DM1""",
+    )
+    tx_test_bt_vs_parser.add_argument(
+        "-t",
+        "--tx-power",
+        dest="tx_power",
+        type=int,
+        default=0,
+        help="Transmit power -127 to 20 dBm. Default: 0",
+    )
+    tx_test_bt_vs_parser.add_argument(
+        "-i",
+        "--infinite",
+        dest="inf_test",
+        default=False,
+        action="store_true",
+        help="Infinite test, constant TX without packets: Default: False",
+    )
+    tx_test_bt_vs_parser.set_defaults(
+        func=lambda args: print(
+            hci.tx_test_bt_vs(
+                channel=args.channel,
+                packet_len=args.packet_length,
+                payload=args.payload,
+                packet_type=args.packet_type,
+                tx_power=args.tx_power,
+                inf_test=args.inf_test,
             )
         )
     )

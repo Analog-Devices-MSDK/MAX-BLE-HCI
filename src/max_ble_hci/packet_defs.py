@@ -739,6 +739,9 @@ class VendorSpecificOCF(Enum):
     FGEN = 0x307
     """Function generator command."""
 
+    BT_TX_TEST = 0x71
+    """Bluetooth Classic transmitter test"""
+
 
 @dataclass
 class OCF:
