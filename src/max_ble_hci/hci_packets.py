@@ -174,7 +174,7 @@ class CommandPacket:
         """
 
         ogf = OGF(opcode >> 10)
-        ocf = opcode & 0x03F
+        ocf = opcode & 0x03FF
 
         if ogf == OGF.NOP:
             ocf = NOpOCF.NOP

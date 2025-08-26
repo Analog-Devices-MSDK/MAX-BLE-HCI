@@ -1,0 +1,46 @@
+# Copyright (c) 2024 Analog Devices, Inc.
+# SPDX-License-Identifier: Apache-2.0
+"""Module defines HCI ACL ATT packet codes.
+
+This module contains the definition of the ATT
+codes used by HCI ACL packets.
+
+"""
+from enum import Enum
+
+
+class AclChannelIds(Enum):
+    """
+    ACL packet channel IDs.
+    """
+
+    ACL_CHANNEL_ID_ACL = 0x01
+    ACL_CHANNEL_ID_ATT = 0x04
+    ACL_CHANNEL_ID_LE = 0x05
+
+
+class L2CAPSignalingCodes(Enum):
+    """
+    ACL packet L2CAP signaling codes.
+    """
+
+    L2CAP_COMMAND_REJECT_RSP = 0x01
+    L2CAP_CONNECTION_REQ = 0x02
+    L2CAP_CONNECTION_RSP = 0x03
+    L2CAP_CONFIGURATION_REQ = 0x04
+    L2CAP_CONFIGURATION_RSP = 0x05
+    L2CAP_DISCONNECTION_REQ = 0x06
+    L2CAP_DISCONNECTION_RSP = 0x07
+    L2CAP_ECHO_REQ = 0x08
+    L2CAP_ECHO_RSP = 0x09
+    L2CAP_INFORMATION_REQ = 0x0A
+    L2CAP_INFORMATION_RSP = 0x0B
+    L2CAP_CONNECTION_PARAMETER_UPDATE_REQ = 0x12
+    L2CAP_CONNECTION_PARAMETER_UPDATE_RSP = 0x13
+    L2CAP_LE_CREDIT_BASED_CONNECTION_REQ = 0x14
+    L2CAP_LE_CREDIT_BASED_CONNECTION_RSP = 0x15
+    L2CAP_FLOW_CONTROL_CREDIT_IND = 0x16
+    L2CAP_CREDIT_BASED_CONNECTION_REQ = 0x17
+    L2CAP_CREDIT_BASED_CONNECTION_RSP = 0x18
+    L2CAP_CREDIT_BASED_RECONFIGURE_REQ = 0x19
+    L2CAP_CREDIT_BASED_RECONFIGURE_RSP = 0x1A

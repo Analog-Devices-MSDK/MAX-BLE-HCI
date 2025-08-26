@@ -258,6 +258,8 @@ class BleHci(BleStandardCmds, VendorSpecificCmds):
 
         for char in adv_name:
             data.append(ord(char))
+        while len(data) < 31:
+            data.append(0)
 
         return self.set_adv_data(data)
 
