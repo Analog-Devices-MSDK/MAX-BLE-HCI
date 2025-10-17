@@ -185,6 +185,233 @@ Or while in the CLI
 >>> run init.txt
 ```
 
+## Decoding Tools
+
+HCI decoding tools are installed by default as part of the package and can be accessed by running
+
+```console
+me@example ~ $ hci_decoder -h
+usage: hci_decoder [-h] {packet,file,sniff} ...
+
+hcitools: HCI decoding tools
+
+positional arguments:
+  {packet,file,sniff}
+    packet             Decode an HCI packet
+    file               Decode HCI packets from a file
+    sniff              Sniff/Decode HCI packets on a serial port (CTRL-C to exit)
+
+optional arguments:
+  -h, --help           show this help message and exit
+```
+
+The CLI can be operated in three modes: packet decoder mode, file decoder mode, and serial sniffing mode. Operation for each of these modes is described in the following sections.
+
+### Packet Decoder Mode
+
+The HCI decoding tools packet decoder takes a single HCI packet as input and outputs the decoded packet information. It can be accessed by running
+
+```console
+me@example ~ $ hci_decoder packet -h
+usage: hci_decoder packet [-h] hci_packet
+
+positional arguments:
+  hci_packet  Hci packet to decode
+
+optional arguments:
+  -h, --help  show this help message and exit
+```
+
+**Usage Example: Reset Command**  
+
+```console
+me@example ~ $ hci_decoder packet 01030c00
+PacketType=Command
+Command=CONTROLLER.RESET
+Length=0
+Params: None
+```
+
+### File Decoder Mode
+
+The HCI decoding tools file decoder works similarly to the packet decoder, with the exception that it takes a filepath as input and parses all HCI commands present in the file. It can be accessed by running
+
+```console
+me@example ~ $ hci_decoder file -h
+usage: hci_decoder file [-h] [-t PKT_TAG] [-c2h C2H_TAG] [-h2c H2C_TAG] [-o OUTPUT_PATH] [--is-bytes] filepath
+
+positional arguments:
+  filepath              Path to the file to decode
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -t PKT_TAG, --tag PKT_TAG
+                        Leading characters on HCI packet lines, can be used more than once
+  -c2h C2H_TAG, --c2h-tag C2H_TAG
+                        Leading characters on ctrl2host HCI packet lines, can replace tags
+  -h2c H2C_TAG, --h2c-tag H2C_TAG
+                        Leading characters on host2ctrl HCI packet lines, can replace tags
+  -o OUTPUT_PATH, --output OUTPUT_PATH
+                        Specify a file in which to write output (default prints to console)
+  --is-bytes            Indicate file to decode is a binary file, tags are ignored
+```
+
+**Usage Example: Text File**  
+
+test.txt:
+```
+DUT>01030c00
+DUT<040e0401030c00
+DUT>0134200400000001
+DUT<040e0401342000
+DUT>011f2000
+DUT<040e06011f20000000
+```
+
+```console
+me@example ~ $ hci_decoder file text.txt -h2c "DUT>" -c2h "DUT<"
+[Host-->Controller]
+PacketType=Command
+Command=CONTROLLER.RESET
+Length=0
+Params: None
+
+[Controller-->Host]
+PacketType=Event
+EventCode=COMMAND_COMPLETE
+Length=4
+NumHciCommand=1
+Command=CONTROLLER.RESET
+Params:
+    Status=SUCCESS (0)
+
+[Host-->Controller]
+PacketType=Command
+Command=LE_CONTROLLER.LE_TRANSMITTER_TEST_V2
+Length=4
+Params:
+    TX_Channel=0
+    Test_Data_Length=0
+    Packet_Payload=PLD_PRBS9 (0)
+    PHY=LE_1M (1)
+
+[Controller-->Host]
+PacketType=Event
+EventCode=COMMAND_COMPLETE
+Length=4
+NumHciCommand=1
+Command=LE_CONTROLLER.LE_TRANSMITTER_TEST_V2
+Params:
+    Status=SUCCESS (0)
+
+[Host-->Controller]
+PacketType=Command
+Command=LE_CONTROLLER.LE_TEST_END
+Length=0
+Params: None
+
+[Controller-->Host]
+PacketType=Event
+EventCode=COMMAND_COMPLETE
+Length=6
+NumHciCommand=1
+Command=LE_CONTROLLER.LE_TEST_END
+Params:
+    Status=SUCCESS (0)
+    Num_Packets=0
+```
+
+### Serial Sniffing Mode
+
+The HCI decoding tools CLI offers a sniffing mode which is capable of decoding HCI communication across a serial connection in real time. It can be accessed by running
+
+```console
+me@example ~ $ hci_decoder sniff -h
+usage: hci_decoder sniff [-h] [-m {ctrl2host,c2h,host2ctrl,h2c,bidirectional,both}] [-o OUTPUT_FILE] [-b BAUD] [-bs {5,6,7,8}] [-p {E,M,N,O,S}] [-s {1,1.5,2}] [-t TIMEOUT] [-w WRITE_TIMEOUT] [-i INTER_BYTE_TIMEOUT] [--xonxoff] [--rtscts]
+                         [--dsrdtr] [--exclusive]
+                         serial_port
+
+positional arguments:
+  serial_port           Serial port to sniff
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -m {ctrl2host,c2h,host2ctrl,h2c,bidirectional,both}, --mode {ctrl2host,c2h,host2ctrl,h2c,bidirectional,both}
+                        IO path to sniff
+  -o OUTPUT_FILE, --output OUTPUT_FILE
+                        Specify a file in which to write output (default prints to console)
+  -b BAUD, --baudrate BAUD
+                        Serial port baud rate
+  -bs {5,6,7,8}, --bytesize {5,6,7,8}
+                        Serial port byte size
+  -p {E,M,N,O,S}, --parity {E,M,N,O,S}
+                        Serial port parity (Even, Mark, None, Odd, or Space)
+  -s {1,1.5,2}, --stopbits {1,1.5,2}
+                        Serial port stop bits
+  -t TIMEOUT, --timeout TIMEOUT
+                        Read timeout in seconds, may interfere with flow control
+  -w WRITE_TIMEOUT, --write-timeout WRITE_TIMEOUT
+                        Write timeout in seconds, may interfere with flow control
+  -i INTER_BYTE_TIMEOUT, --inter-byte-timeout INTER_BYTE_TIMEOUT
+                        Inter character timeout in seconds, may interfere with flow control
+  --xonxoff             Enable software flow control
+  --rtscts              Enable rts/cts hardware flow control
+  --dsrdtr              Enable dsr/dtr hardware flow control
+  --exclusive           Set exclusive access mode
+```
+
+In order to allow for uninterrupted communication across the sniffed serial line, the serial sniffer mode will create a proxy port, which must be used as the primary serial port. See the example below for more information.  
+
+**Usage Example: Serial Sniffer**  
+
+In one console window, start the sniffer CLI.
+
+```console
+me@example ~ $ hci_decoder sniff /dev/ttyUSB0 -b 115200
+=============================================
+Sniffer Proxy Port: /dev/pts/4
+=============================================
+
+```
+
+In a second console window, connect `max_ble_hci` to the proxy port and send an HCI command.  
+
+```console
+me@example ~ $ max_ble_hci /dev/pts/4 -b 115200
+Bluetooth Low Energy HCI tool
+Serial port: /dev/pts/4
+8N1 115200
+>>> reset
+INFO - 2025-05-28 11:59:12.836623  DUT>01030c00
+INFO - 2025-05-28 11:59:12.843363  DUT<040e0401030c00
+StatusCode.SUCCESS
+>>>
+```
+
+You should see the following output on the sniffer terminal.  
+
+```console
+me@example ~ $ hci_decoder sniff /dev/serial/by-id/usb-FTDI_FT230X_Basic_UART_DT03O92E-if00-port0 -b 115200
+=============================================
+Sniffer Proxy Port: /dev/pts/4
+=============================================
+[Host-->Controller]
+PacketType=Command
+Command=CONTROLLER.RESET
+Length=0
+Params: None
+
+[Controller-->Host]
+PacketType=Event
+EventCode=COMMAND_COMPLETE
+Length=4
+NumHciCommand=1
+Command=CONTROLLER.RESET
+Params:
+    Status=SUCCESS (0)
+```
+
+Use `Ctrl-C` to exit the sniffer mode.
 
 ## Contributing
 
