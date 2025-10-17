@@ -4,7 +4,7 @@ Python3 BLE HCI over serial Directed to MAX Vendor Specific Commands
 
 Read the [Docs](https://analog-devices-msdk.github.io/MAX-BLE-HCI/)
 
-## Insatll from PyPi
+## Install from PyPi
 
 MAX-BLE-HCI is hosted via PyPi and can be installed with the following command
 
