@@ -1,22 +1,20 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>max_ble_hci.constants &mdash; MAX BLE HCI 0.1.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=2389946f"></script>
-        <script src="../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=2389946f"></script>
+      <script src="../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -127,10 +125,10 @@
 <span class="c1">#</span>
 <span class="c1">##############################################################################</span>
 <span class="sd">&quot;&quot;&quot;Contains HCI constants definitions.&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span>
 
 <span class="n">ADI_PORT_BAUD_RATE</span> <span class="o">=</span> <span class="mi">115200</span>
 
@@ -142,7 +140,7 @@
 <span class="sd">&quot;&quot;&quot;Maximum value for a 64-bit unsigned integer.&quot;&quot;&quot;</span>
 
 
-<div class="viewcode-block" id="Endian"><a class="viewcode-back" href="../../constants.html#max_ble_hci.constants.Endian">[docs]</a><span class="k">class</span> <span class="nc">Endian</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="Endian"><a class="viewcode-back" href="../../constants.html#max_ble_hci.constants.Endian">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Endian</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Endian byte-order definitions.&quot;&quot;&quot;</span>
 
     <span class="n">LITTLE</span> <span class="o">=</span> <span class="s2">&quot;little&quot;</span>
@@ -152,7 +150,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Big endian byte order.&quot;&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="PhyOption"><a class="viewcode-back" href="../../constants.html#max_ble_hci.constants.PhyOption">[docs]</a><span class="k">class</span> <span class="nc">PhyOption</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="PhyOption"><a class="viewcode-back" href="../../constants.html#max_ble_hci.constants.PhyOption">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">PhyOption</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;BLE-defined PHY options.&quot;&quot;&quot;</span>
 
     <span class="n">PHY_1M</span> <span class="o">=</span> <span class="mh">0x1</span>
@@ -170,7 +168,7 @@
     <span class="n">PHY_CODED_S2</span> <span class="o">=</span> <span class="mh">0x4</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Coded S2 PHY option.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">if</span> <span class="bp">self</span> <span class="o">==</span> <span class="n">PhyOption</span><span class="o">.</span><span class="n">PHY_1M</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;1M&quot;</span>
 
@@ -189,7 +187,7 @@
         <span class="k">return</span> <span class="s2">&quot;&quot;</span>
 
 <div class="viewcode-block" id="PhyOption.to_mask"><a class="viewcode-back" href="../../constants.html#max_ble_hci.constants.PhyOption.to_mask">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">to_mask</span><span class="p">(</span><span class="n">phy</span><span class="p">:</span> <span class="n">PhyOption</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_mask</span><span class="p">(</span><span class="n">phy</span><span class="p">:</span> <span class="n">PhyOption</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert list of phy options to PHY preference mask and PHY option mask</span>
 
 <span class="sd">        Parameters</span>
@@ -216,7 +214,7 @@
         <span class="k">return</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="PhyOption.str_to_enum"><a class="viewcode-back" href="../../constants.html#max_ble_hci.constants.PhyOption.str_to_enum">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">str_to_enum</span><span class="p">(</span><span class="n">phy</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PhyOption</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">str_to_enum</span><span class="p">(</span><span class="n">phy</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PhyOption</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert phy as string to enum</span>
 
 <span class="sd">        Parameters</span>
@@ -249,7 +247,7 @@
         <span class="k">return</span> <span class="n">PhyOption</span><span class="o">.</span><span class="n">PHY_1M</span></div></div>
 
 
-<div class="viewcode-block" id="PayloadOption"><a class="viewcode-back" href="../../constants.html#max_ble_hci.constants.PayloadOption">[docs]</a><span class="k">class</span> <span class="nc">PayloadOption</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="PayloadOption"><a class="viewcode-back" href="../../constants.html#max_ble_hci.constants.PayloadOption">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">PayloadOption</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;BLE-definded payload options.&quot;&quot;&quot;</span>
 
     <span class="n">PLD_PRBS9</span> <span class="o">=</span> <span class="mi">0</span>
@@ -277,7 +275,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;01010101 payload option.&quot;&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="AddrType"><a class="viewcode-back" href="../../constants.html#max_ble_hci.constants.AddrType">[docs]</a><span class="k">class</span> <span class="nc">AddrType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="AddrType"><a class="viewcode-back" href="../../constants.html#max_ble_hci.constants.AddrType">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">AddrType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;BLE-defined peer address types.&quot;&quot;&quot;</span>
 
     <span class="n">PUBLIC</span> <span class="o">=</span> <span class="mi">0</span>
@@ -313,7 +311,7 @@
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="PubKeyValidateMode"><a class="viewcode-back" href="../../constants.html#max_ble_hci.constants.PubKeyValidateMode">[docs]</a><span class="k">class</span> <span class="nc">PubKeyValidateMode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="PubKeyValidateMode"><a class="viewcode-back" href="../../constants.html#max_ble_hci.constants.PubKeyValidateMode">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">PubKeyValidateMode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Public key validation modes.&quot;&quot;&quot;</span>
 
     <span class="n">ALT1</span> <span class="o">=</span> <span class="mh">0x0</span>
@@ -321,6 +319,134 @@
 
     <span class="n">ALT2</span> <span class="o">=</span> <span class="mh">0x1</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;ALT2 validation mode.&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="TxTestMode"><a class="viewcode-back" href="../../constants.html#max_ble_hci.constants.TxTestMode">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">TxTestMode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transmitter Test Modes&quot;&quot;&quot;</span>
+
+    <span class="n">ENHANCED</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transmitter Test Enhanced&quot;&quot;&quot;</span>
+
+    <span class="n">V3</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transmitter Test V4&quot;&quot;&quot;</span>
+
+    <span class="n">V4</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transmitter Test V4&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="CteType"><a class="viewcode-back" href="../../constants.html#max_ble_hci.constants.CteType">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">CteType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Requested CTE Types&quot;&quot;&quot;</span>
+
+    <span class="n">AOA</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;AoA Constant Tone Extension&quot;&quot;&quot;</span>
+    <span class="n">AOD_1_US</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;AoD Constant Tone Extension with 1 us slots&quot;&quot;&quot;</span>
+    <span class="n">AOD_2_US</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;AoD Constant Tone Extension with 2 us slots&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="TxPower"><a class="viewcode-back" href="../../constants.html#max_ble_hci.constants.TxPower">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">TxPower</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transmitter Power Levels&quot;&quot;&quot;</span>
+
+    <span class="n">MAX</span> <span class="o">=</span> <span class="mh">0x7F</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximum power level&quot;&quot;&quot;</span>
+
+    <span class="n">MIN</span> <span class="o">=</span> <span class="mh">0x7E</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Minimum power level&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TxPower.str_to_mask"><a class="viewcode-back" href="../../constants.html#max_ble_hci.constants.TxPower.str_to_mask">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">str_to_mask</span><span class="p">(</span><span class="n">option</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Select a power level.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        option: str</span>
+<span class="sd">            The desired power level.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The power level&#39;s corresponding power symbol.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">option</span> <span class="o">=</span> <span class="n">option</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">option</span> <span class="o">==</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">TxPower</span><span class="o">.</span><span class="n">MAX</span><span class="o">.</span><span class="n">value</span>
+
+        <span class="k">if</span> <span class="n">option</span> <span class="o">==</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">TxPower</span><span class="o">.</span><span class="n">MIN</span><span class="o">.</span><span class="n">value</span>
+
+        <span class="k">return</span> <span class="n">TxPower</span><span class="o">.</span><span class="n">MAX</span><span class="o">.</span><span class="n">value</span></div></div>
+
+
+<div class="viewcode-block" id="BtTxPacketType"><a class="viewcode-back" href="../../constants.html#max_ble_hci.constants.BtTxPacketType">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">BtTxPacketType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Bluetooth Classic TX test packet types&quot;&quot;&quot;</span>
+
+    <span class="n">PKT_DM1</span> <span class="o">=</span> <span class="mh">0x00</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;DM1 packet type &quot;&quot;&quot;</span>
+
+    <span class="n">PKT_DH1</span> <span class="o">=</span> <span class="mh">0x01</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;DH1 packet type &quot;&quot;&quot;</span>
+
+    <span class="n">PKT_DM3</span> <span class="o">=</span> <span class="mh">0x02</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;DM3 packet type &quot;&quot;&quot;</span>
+
+    <span class="n">PKT_DH3</span> <span class="o">=</span> <span class="mh">0x03</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;DH3 packet type &quot;&quot;&quot;</span>
+
+    <span class="n">PKT_DM5</span> <span class="o">=</span> <span class="mh">0x04</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;DM5 packet type &quot;&quot;&quot;</span>
+
+    <span class="n">PKT_DH5</span> <span class="o">=</span> <span class="mh">0x05</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;DH5 packet type &quot;&quot;&quot;</span>
+
+    <span class="n">PKT_2DH1</span> <span class="o">=</span> <span class="mh">0x06</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;2DH1 packet type &quot;&quot;&quot;</span>
+
+    <span class="n">PKT_3DH1</span> <span class="o">=</span> <span class="mh">0x07</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;3DH1 packet type &quot;&quot;&quot;</span>
+
+    <span class="n">PKT_2DH3</span> <span class="o">=</span> <span class="mh">0x08</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;2DH3 packet type &quot;&quot;&quot;</span>
+
+    <span class="n">PKT_3DH3</span> <span class="o">=</span> <span class="mh">0x09</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;3DH3 packet type &quot;&quot;&quot;</span>
+
+    <span class="n">PKT_2DH5</span> <span class="o">=</span> <span class="mh">0x0A</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;2DH5 packet type &quot;&quot;&quot;</span>
+
+    <span class="n">PKT_3DH5</span> <span class="o">=</span> <span class="mh">0x0B</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;3DH5 packet type &quot;&quot;&quot;</span>
+
+    <span class="n">PKT_HV1</span> <span class="o">=</span> <span class="mh">0x0C</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;HV1 packet type &quot;&quot;&quot;</span>
+
+    <span class="n">PKT_HV2</span> <span class="o">=</span> <span class="mh">0x0D</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;HV2 packet type &quot;&quot;&quot;</span>
+
+    <span class="n">PKT_HV3</span> <span class="o">=</span> <span class="mh">0x0E</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;HV3 packet type &quot;&quot;&quot;</span>
+
+    <span class="n">PKT_EV3</span> <span class="o">=</span> <span class="mh">0x0F</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;EV3 packet type &quot;&quot;&quot;</span>
+
+    <span class="n">PKT_EV4</span> <span class="o">=</span> <span class="mh">0x10</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;EV4 packet type &quot;&quot;&quot;</span>
+
+    <span class="n">PKT_EV5</span> <span class="o">=</span> <span class="mh">0x11</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;EV5 packet type &quot;&quot;&quot;</span>
+
+    <span class="n">PKT_2EV3</span> <span class="o">=</span> <span class="mh">0x12</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;2EV3 packet type &quot;&quot;&quot;</span>
+
+    <span class="n">PKT_3EV3</span> <span class="o">=</span> <span class="mh">0x13</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;3EV3 packet type &quot;&quot;&quot;</span>
+
+    <span class="n">PKT_2EV5</span> <span class="o">=</span> <span class="mh">0x14</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;2EV5 packet type &quot;&quot;&quot;</span>
+
+    <span class="n">PKT_3EV5</span> <span class="o">=</span> <span class="mh">0x15</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;3EV5 packet type &quot;&quot;&quot;</span></div>
 </pre></div>
 
            </div>

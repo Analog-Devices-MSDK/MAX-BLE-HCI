@@ -1,22 +1,20 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>max_ble_hci.data_params &mdash; MAX BLE HCI 0.1.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=2389946f"></script>
-        <script src="../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=2389946f"></script>
+      <script src="../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -127,17 +125,17 @@
 <span class="c1">#</span>
 <span class="c1">##############################################################################</span>
 <span class="sd">&quot;&quot;&quot;Contains data classes used for HCI function parameters/returns.&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
 
 <span class="c1"># pylint: disable=too-many-arguments,too-many-locals,too-many-instance-attributes</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
-<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">AddrType</span>
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">to_le_nbyte_list</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">AddrType</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_le_nbyte_list</span>
 
 
 <div class="viewcode-block" id="AdvParams"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.AdvParams">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">AdvParams</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">AdvParams</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Advertising parameters data container.&quot;&quot;&quot;</span>
 
     <span class="n">interval_min</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x60</span>
@@ -164,7 +162,7 @@
     <span class="n">filter_policy</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Advertising filter policy.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="n">print_lns</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -175,7 +173,7 @@
 
 
 <div class="viewcode-block" id="ScanParams"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.ScanParams">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">ScanParams</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ScanParams</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Scan parameters data container.&quot;&quot;&quot;</span>
 
     <span class="n">scan_type</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x1</span>
@@ -193,7 +191,7 @@
     <span class="n">filter_policy</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x0</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Scanning filter policy.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="n">print_lns</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -204,7 +202,7 @@
 
 
 <div class="viewcode-block" id="EstablishConnParams"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.EstablishConnParams">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">EstablishConnParams</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">EstablishConnParams</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Connection parameters data container used when establishing a connection.&quot;&quot;&quot;</span>
 
     <span class="n">peer_addr</span><span class="p">:</span> <span class="nb">int</span>
@@ -243,7 +241,7 @@
     <span class="n">max_ce_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x0F10</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximum connection event length.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="mh">0x4</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scan_interval</span> <span class="o">&lt;=</span> <span class="mh">0x4000</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Scan interval must be between 0x4 - 0x4000&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="mh">0x4</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scan_window</span> <span class="o">&lt;=</span> <span class="mh">0x4000</span><span class="p">:</span>
@@ -272,7 +270,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="mh">0x6</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn_interval_max</span> <span class="o">&lt;=</span> <span class="mh">0xC80</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Connection interval min must be between 0x6 - 0xC80&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="n">print_lns</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -281,7 +279,7 @@
 
         <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">print_lns</span><span class="p">)</span>
 
-<div class="viewcode-block" id="EstablishConnParams.to_payload"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.EstablishConnParams.to_payload">[docs]</a>    <span class="k">def</span> <span class="nf">to_payload</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<div class="viewcode-block" id="EstablishConnParams.to_payload"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.EstablishConnParams.to_payload">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">to_payload</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert struct to payload</span>
 
 <span class="sd">        Returns</span>
@@ -306,7 +304,7 @@
 
 
 <div class="viewcode-block" id="ConnParams"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.ConnParams">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">ConnParams</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ConnParams</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Connection parameters data container used when establishing a connection.&quot;&quot;&quot;</span>
 
     <span class="n">conn_interval_min</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x6</span>
@@ -327,11 +325,11 @@
     <span class="n">max_ce_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mh">0x0F10</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximum connection event length.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="mh">0x6</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn_interval_max</span> <span class="o">&lt;=</span> <span class="mh">0xC80</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Connection interval min must be between 0x6 - 0xC80&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="n">print_lns</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -340,7 +338,7 @@
 
         <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">print_lns</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ConnParams.to_payload"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.ConnParams.to_payload">[docs]</a>    <span class="k">def</span> <span class="nf">to_payload</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="ConnParams.to_payload"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.ConnParams.to_payload">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">to_payload</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;To formatted payload</span>
 
 <span class="sd">        Returns</span>
@@ -358,10 +356,11 @@
         <span class="k">return</span> <span class="n">params</span></div></div>
 
 
-<div class="viewcode-block" id="DataPktStats"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.DataPktStats">[docs]</a><span class="k">class</span> <span class="nc">DataPktStats</span><span class="p">:</span>
+<div class="viewcode-block" id="DataPktStats"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.DataPktStats">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">DataPktStats</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generic data stats container for CM and DTM.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="c1"># pylint-disable=too-many-positional-arguments</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">rx_data</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
         <span class="n">rx_data_crc</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
@@ -400,7 +399,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">tx_isr</span> <span class="o">=</span> <span class="n">tx_isr</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;TX ISR processing watermark in microseconds.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="c1"># pylint-enable=too-many-positional-arguments</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="n">print_lns</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -415,7 +416,7 @@
 
         <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">print_lns</span><span class="p">)</span>
 
-<div class="viewcode-block" id="DataPktStats.per"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.DataPktStats.per">[docs]</a>    <span class="k">def</span> <span class="nf">per</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">peer_tx_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<div class="viewcode-block" id="DataPktStats.per"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.DataPktStats.per">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">per</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">peer_tx_data</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate PER.</span>
 
 <span class="sd">        Calculates the Packet Error Rate of the current set of</span>
@@ -448,7 +449,7 @@
 
 
 <div class="viewcode-block" id="AdvPktStats"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.AdvPktStats">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">AdvPktStats</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">AdvPktStats</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Advertising statistics data container.&quot;&quot;&quot;</span>
 
     <span class="n">tx_adv</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
@@ -490,7 +491,7 @@
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="n">print_lns</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -509,7 +510,7 @@
 
         <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">print_lns</span><span class="p">)</span>
 
-<div class="viewcode-block" id="AdvPktStats.scan_request_rate"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.AdvPktStats.scan_request_rate">[docs]</a>    <span class="k">def</span> <span class="nf">scan_request_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dirty</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<div class="viewcode-block" id="AdvPktStats.scan_request_rate"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.AdvPktStats.scan_request_rate">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">scan_request_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dirty</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the response rate to the advertiser</span>
 <span class="sd">        Measure of how often advertisments get responses</span>
 
@@ -531,7 +532,7 @@
             <span class="k">return</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rx_req</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">tx_adv</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;NaN&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="AdvPktStats.scan_request_timeout_rate"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.AdvPktStats.scan_request_timeout_rate">[docs]</a>    <span class="k">def</span> <span class="nf">scan_request_timeout_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<div class="viewcode-block" id="AdvPktStats.scan_request_timeout_rate"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.AdvPktStats.scan_request_timeout_rate">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">scan_request_timeout_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get rate of scan request timeouts</span>
 
 <span class="sd">        Returns</span>
@@ -544,7 +545,7 @@
 
         <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;NaN&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="AdvPktStats.scan_request_crc_rate"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.AdvPktStats.scan_request_crc_rate">[docs]</a>    <span class="k">def</span> <span class="nf">scan_request_crc_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<div class="viewcode-block" id="AdvPktStats.scan_request_crc_rate"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.AdvPktStats.scan_request_crc_rate">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">scan_request_crc_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get rate of scan request CRCs</span>
 
 <span class="sd">        Returns</span>
@@ -557,7 +558,7 @@
 
         <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;NaN&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="AdvPktStats.scan_req_fulfillment"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.AdvPktStats.scan_req_fulfillment">[docs]</a>    <span class="k">def</span> <span class="nf">scan_req_fulfillment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tx_packets</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<div class="viewcode-block" id="AdvPktStats.scan_req_fulfillment"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.AdvPktStats.scan_req_fulfillment">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">scan_req_fulfillment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tx_packets</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get rate of scan request fulfillments</span>
 <span class="sd">        (i.e how often the dut responds to scan requests)</span>
 
@@ -583,7 +584,7 @@
 
 
 <div class="viewcode-block" id="ScanPktStats"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.ScanPktStats">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">ScanPktStats</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ScanPktStats</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Scanning statistics data container.&quot;&quot;&quot;</span>
 
     <span class="n">rx_adv</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
@@ -643,7 +644,7 @@
 <span class="sd">    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="n">print_lns</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -661,7 +662,7 @@
 
         <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">print_lns</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ScanPktStats.per"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.ScanPktStats.per">[docs]</a>    <span class="k">def</span> <span class="nf">per</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<div class="viewcode-block" id="ScanPktStats.per"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.ScanPktStats.per">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">per</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate PER.</span>
 
 <span class="sd">        Calculates the Packet Error Rate of the current set of</span>
@@ -680,7 +681,7 @@
         <span class="k">except</span> <span class="ne">ZeroDivisionError</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;NaN&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ScanPktStats.scan_response_rate"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.ScanPktStats.scan_response_rate">[docs]</a>    <span class="k">def</span> <span class="nf">scan_response_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<div class="viewcode-block" id="ScanPktStats.scan_response_rate"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.ScanPktStats.scan_response_rate">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">scan_response_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get scan response rate</span>
 
 <span class="sd">        Returns</span>
@@ -693,7 +694,7 @@
 
         <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;NaN&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ScanPktStats.scan_response_timeout_rate"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.ScanPktStats.scan_response_timeout_rate">[docs]</a>    <span class="k">def</span> <span class="nf">scan_response_timeout_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<div class="viewcode-block" id="ScanPktStats.scan_response_timeout_rate"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.ScanPktStats.scan_response_timeout_rate">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">scan_response_timeout_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get scan response timeout rate</span>
 
 <span class="sd">        Returns</span>
@@ -707,7 +708,7 @@
 
         <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;NaN&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ScanPktStats.scan_response_crc_rate"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.ScanPktStats.scan_response_crc_rate">[docs]</a>    <span class="k">def</span> <span class="nf">scan_response_crc_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<div class="viewcode-block" id="ScanPktStats.scan_response_crc_rate"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.ScanPktStats.scan_response_crc_rate">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">scan_response_crc_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get scan response crc rate</span>
 
 <span class="sd">        Returns</span>
@@ -719,7 +720,7 @@
             <span class="k">return</span> <span class="mi">100</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">rx_rsp_crc</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">tx_req</span>
         <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;NaN&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ScanPktStats.scan_request_rate"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.ScanPktStats.scan_request_rate">[docs]</a>    <span class="k">def</span> <span class="nf">scan_request_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<div class="viewcode-block" id="ScanPktStats.scan_request_rate"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.ScanPktStats.scan_request_rate">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">scan_request_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get how often scan requests occur</span>
 
 <span class="sd">        Returns</span>
@@ -734,7 +735,7 @@
 
 
 <div class="viewcode-block" id="MemPktStats"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.MemPktStats">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">MemPktStats</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MemPktStats</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Memory statistics data container.&quot;&quot;&quot;</span>
 
     <span class="n">stack</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
@@ -800,7 +801,7 @@
     <span class="n">cis_ctx_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;CIS context size in bytes.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="n">print_lns</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -811,7 +812,7 @@
 
 
 <div class="viewcode-block" id="PduPktStats"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.PduPktStats">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">PduPktStats</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PduPktStats</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;PDU statistics data container.&quot;&quot;&quot;</span>
 
     <span class="n">fail_pdu</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
@@ -871,7 +872,7 @@
     <span class="n">local_res_addr_pend</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of local address resolutions pended.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="n">print_lns</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -882,7 +883,7 @@
 
 
 <div class="viewcode-block" id="TestReport"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.TestReport">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">TestReport</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">TestReport</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;ISO/ACL test report data container.&quot;&quot;&quot;</span>
 
     <span class="n">rx_pkt_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
@@ -897,7 +898,7 @@
     <span class="n">gen_oct_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of generated octets.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="n">print_lns</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -908,7 +909,7 @@
 
 
 <div class="viewcode-block" id="PoolStats"><a class="viewcode-back" href="../../data_params.html#max_ble_hci.data_params.PoolStats">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">PoolStats</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PoolStats</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Memory pool statistics data container.&quot;&quot;&quot;</span>
 
     <span class="n">buf_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
@@ -926,7 +927,7 @@
     <span class="n">max_req_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximum required length.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="n">print_lns</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">val</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

@@ -1,22 +1,20 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>max_ble_hci.utils &mdash; MAX BLE HCI 0.1.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=2389946f"></script>
-        <script src="../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=2389946f"></script>
+      <script src="../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -133,16 +131,16 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">glob</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
-<span class="kn">import</span> <span class="nn">serial</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">serial</span>
 
 <span class="n">DEFAULT_BAUDRATE</span> <span class="o">=</span> <span class="mi">115200</span>
 
 
-<div class="viewcode-block" id="get_serial_ports"><a class="viewcode-back" href="../../utils.html#max_ble_hci.utils.get_serial_ports">[docs]</a><span class="k">def</span> <span class="nf">get_serial_ports</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="get_serial_ports"><a class="viewcode-back" href="../../utils.html#max_ble_hci.utils.get_serial_ports">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_serial_ports</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Lists serial port names</span>
 
 <span class="sd">    :raises EnvironmentError:</span>
@@ -182,7 +180,7 @@
     <span class="k">return</span> <span class="n">result</span></div>
 
 
-<div class="viewcode-block" id="to_le_nbyte_list"><a class="viewcode-back" href="../../utils.html#max_ble_hci.utils.to_le_nbyte_list">[docs]</a><span class="k">def</span> <span class="nf">to_le_nbyte_list</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_bytes</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+<div class="viewcode-block" id="to_le_nbyte_list"><a class="viewcode-back" href="../../utils.html#max_ble_hci.utils.to_le_nbyte_list">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">to_le_nbyte_list</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_bytes</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a list of little-endian bytes.</span>
 
 <span class="sd">    Converts a multi-byte number into a list of single-byte</span>
@@ -210,7 +208,7 @@
     <span class="k">return</span> <span class="n">little_endian</span></div>
 
 
-<div class="viewcode-block" id="le_list_to_int"><a class="viewcode-back" href="../../utils.html#max_ble_hci.utils.le_list_to_int">[docs]</a><span class="k">def</span> <span class="nf">le_list_to_int</span><span class="p">(</span><span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<div class="viewcode-block" id="le_list_to_int"><a class="viewcode-back" href="../../utils.html#max_ble_hci.utils.le_list_to_int">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">le_list_to_int</span><span class="p">(</span><span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create an integer from a little-endian list.</span>
 
 <span class="sd">    Converts a little-endian list of single byte values</span>
@@ -235,7 +233,7 @@
     <span class="k">return</span> <span class="n">full_num</span></div>
 
 
-<div class="viewcode-block" id="can_represent_as_bytes"><a class="viewcode-back" href="../../utils.html#max_ble_hci.utils.can_represent_as_bytes">[docs]</a><span class="k">def</span> <span class="nf">can_represent_as_bytes</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<div class="viewcode-block" id="can_represent_as_bytes"><a class="viewcode-back" href="../../utils.html#max_ble_hci.utils.can_represent_as_bytes">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">can_represent_as_bytes</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check whether all data can be represented by 1 byte</span>
 
 <span class="sd">    Parameters</span>
@@ -255,7 +253,7 @@
     <span class="k">return</span> <span class="kc">True</span></div>
 
 
-<div class="viewcode-block" id="convert_str_address"><a class="viewcode-back" href="../../utils.html#max_ble_hci.utils.convert_str_address">[docs]</a><span class="k">def</span> <span class="nf">convert_str_address</span><span class="p">(</span><span class="n">addr</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<div class="viewcode-block" id="address_str2int"><a class="viewcode-back" href="../../utils.html#max_ble_hci.utils.address_str2int">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">address_str2int</span><span class="p">(</span><span class="n">addr</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert address as string to integer usable by HCI</span>
 
 <span class="sd">    Parameters</span>
@@ -271,7 +269,61 @@
     <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">addr</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="mi">16</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="byte_length"><a class="viewcode-back" href="../../utils.html#max_ble_hci.utils.byte_length">[docs]</a><span class="k">def</span> <span class="nf">byte_length</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<div class="viewcode-block" id="address_int2str"><a class="viewcode-back" href="../../utils.html#max_ble_hci.utils.address_int2str">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">address_int2str</span><span class="p">(</span><span class="n">addr</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert address as int to str</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    addr : int</span>
+<span class="sd">        Address. Ex: 0x001122334455</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Address converted to str (ex : 00:11:22:33:44:55)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">addr_str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">num_bytes</span> <span class="o">=</span> <span class="mi">6</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_bytes</span><span class="p">):</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">num_bytes</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span>
+        <span class="n">bvalue</span> <span class="o">=</span> <span class="p">(</span><span class="n">addr</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">idx</span> <span class="o">*</span> <span class="mi">8</span><span class="p">))</span> <span class="o">&amp;</span> <span class="mh">0xFF</span>
+
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num_bytes</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">addr_str</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">bvalue</span><span class="si">:</span><span class="s2">02X</span><span class="si">}</span><span class="s2">:&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">addr_str</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">bvalue</span><span class="si">:</span><span class="s2">02X</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="k">return</span> <span class="n">addr_str</span></div>
+
+
+<div class="viewcode-block" id="address_int2list"><a class="viewcode-back" href="../../utils.html#max_ble_hci.utils.address_int2list">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">address_int2list</span><span class="p">(</span><span class="n">addr</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Address converted from int to list of ints</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    addr : int</span>
+<span class="sd">        _description_</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    _type_</span>
+<span class="sd">        _description_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">addr_str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">addr_len</span> <span class="o">=</span> <span class="mi">6</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">addr_len</span><span class="p">):</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">addr_len</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span>
+        <span class="n">bvalue</span> <span class="o">=</span> <span class="p">(</span><span class="n">addr</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">idx</span> <span class="o">*</span> <span class="mi">8</span><span class="p">))</span> <span class="o">&amp;</span> <span class="mh">0xFF</span>
+
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">addr_len</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">addr_str</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">bvalue</span><span class="si">:</span><span class="s2">02X</span><span class="si">}</span><span class="s2">:&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">addr_str</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">bvalue</span><span class="si">:</span><span class="s2">02X</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="k">return</span> <span class="n">addr_str</span></div>
+
+
+<div class="viewcode-block" id="byte_length"><a class="viewcode-back" href="../../utils.html#max_ble_hci.utils.byte_length">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">byte_length</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get number of bytes needed to represent an integer value</span>
 
 <span class="sd">    Parameters</span>
@@ -289,6 +341,35 @@
         <span class="k">return</span> <span class="mi">1</span>
 
     <span class="k">return</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span> <span class="o">+</span> <span class="mi">7</span><span class="p">)</span> <span class="o">//</span> <span class="mi">8</span></div>
+
+
+<div class="viewcode-block" id="unsigned_to_signed"><a class="viewcode-back" href="../../utils.html#max_ble_hci.utils.unsigned_to_signed">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">unsigned_to_signed</span><span class="p">(</span><span class="n">unsigned_value</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">bit_length</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Unsigned int to signed int</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    unsigned_value : int</span>
+<span class="sd">        Unsigned value to convert to signed</span>
+<span class="sd">    bit_length : _type_</span>
+<span class="sd">        Number of bits in value. (Ex 135 needs 8-bits)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    int</span>
+<span class="sd">        Value converted to sign</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Calculate the maximum unsigned value for the given bit length</span>
+    <span class="n">max_unsigned</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="n">bit_length</span>
+    <span class="n">max_signed</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="n">bit_length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># If the unsigned value is greater than or equal to the max signed value,</span>
+    <span class="c1"># convert it to a negative signed integer.</span>
+    <span class="k">if</span> <span class="n">unsigned_value</span> <span class="o">&gt;=</span> <span class="n">max_signed</span><span class="p">:</span>
+        <span class="n">signed_value</span> <span class="o">=</span> <span class="n">unsigned_value</span> <span class="o">-</span> <span class="n">max_unsigned</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">signed_value</span> <span class="o">=</span> <span class="n">unsigned_value</span>
+
+    <span class="k">return</span> <span class="n">signed_value</span></div>
 </pre></div>
 
            </div>

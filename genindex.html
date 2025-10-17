@@ -1,22 +1,20 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Index &mdash; MAX BLE HCI 0.1.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=2389946f"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
-        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=2389946f"></script>
+      <script src="_static/doctools.js?v=888ff710"></script>
+      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" /> 
@@ -112,7 +110,15 @@
 </li>
       <li><a href="packet_defs.html#max_ble_hci.packet_defs.LEControllerOCF.ADD_DEV_WHITE_LIST">ADD_DEV_WHITE_LIST (LEControllerOCF attribute)</a>
 </li>
+      <li><a href="ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.add_device_to_whitelist">add_device_to_whitelist() (BleStandardCmds method)</a>
+</li>
       <li><a href="data_params.html#max_ble_hci.data_params.ScanParams.addr_type">addr_type (ScanParams attribute)</a>
+</li>
+      <li><a href="utils.html#max_ble_hci.utils.address_int2list">address_int2list() (in module max_ble_hci.utils)</a>
+</li>
+      <li><a href="utils.html#max_ble_hci.utils.address_int2str">address_int2str() (in module max_ble_hci.utils)</a>
+</li>
+      <li><a href="utils.html#max_ble_hci.utils.address_str2int">address_str2int() (in module max_ble_hci.utils)</a>
 </li>
       <li><a href="constants.html#max_ble_hci.constants.AddrType">AddrType (class in max_ble_hci.constants)</a>
 </li>
@@ -139,6 +145,12 @@
       <li><a href="constants.html#max_ble_hci.constants.PubKeyValidateMode.ALT1">ALT1 (PubKeyValidateMode attribute)</a>
 </li>
       <li><a href="constants.html#max_ble_hci.constants.PubKeyValidateMode.ALT2">ALT2 (PubKeyValidateMode attribute)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.CteType.AOA">AOA (CteType attribute)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.CteType.AOD_1_US">AOD_1_US (CteType attribute)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.CteType.AOD_2_US">AOD_2_US (CteType attribute)</a>
 </li>
       <li><a href="packet_codes.html#max_ble_hci.packet_codes.EventMask.as_str_list">as_str_list() (EventMask method)</a>
 
@@ -194,6 +206,10 @@
 </li>
       <li><a href="ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds">BleStandardCmds (class in max_ble_hci.ble_standard_cmds)</a>
 </li>
+      <li><a href="packet_defs.html#max_ble_hci.packet_defs.VendorSpecificOCF.BT_TX_TEST">BT_TX_TEST (VendorSpecificOCF attribute)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.BtTxPacketType">BtTxPacketType (class in max_ble_hci.constants)</a>
+</li>
       <li><a href="data_params.html#max_ble_hci.data_params.PoolStats.buf_size">buf_size (PoolStats attribute)</a>
 </li>
       <li><a href="utils.html#max_ble_hci.utils.byte_length">byte_length() (in module max_ble_hci.utils)</a>
@@ -239,6 +255,8 @@
       <li><a href="packet_defs.html#max_ble_hci.packet_defs.LEControllerOCF.CLEAR_RES_LIST">CLEAR_RES_LIST (LEControllerOCF attribute)</a>
 </li>
       <li><a href="packet_defs.html#max_ble_hci.packet_defs.LEControllerOCF.CLEAR_WHITE_LIST">CLEAR_WHITE_LIST (LEControllerOCF attribute)</a>
+</li>
+      <li><a href="ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.clear_whitelist">clear_whitelist() (BleStandardCmds method)</a>
 </li>
       <li><a href="packet_defs.html#max_ble_hci.packet_defs.PacketType.COMMAND">COMMAND (PacketType attribute)</a>
 </li>
@@ -318,8 +336,6 @@
 </li>
       <li><a href="ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.convert_fips197">convert_fips197() (BleStandardCmds method)</a>
 </li>
-      <li><a href="utils.html#max_ble_hci.utils.convert_str_address">convert_str_address() (in module max_ble_hci.utils)</a>
-</li>
       <li><a href="packet_defs.html#max_ble_hci.packet_defs.LEControllerOCF.CREATE_BIG">CREATE_BIG (LEControllerOCF attribute)</a>
 </li>
       <li><a href="packet_codes.html#max_ble_hci.packet_codes.EventSubcode.CREATE_BIG_CMPLT">CREATE_BIG_CMPLT (EventSubcode attribute)</a>
@@ -344,6 +360,8 @@
         <li><a href="packet_codes.html#max_ble_hci.packet_codes.EventSubcode.CTE_REQUEST_FAILED">(EventSubcode attribute)</a>
 </li>
       </ul></li>
+      <li><a href="constants.html#max_ble_hci.constants.CteType">CteType (class in max_ble_hci.constants)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -408,6 +426,8 @@
 </li>
       <li><a href="vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.enable_autogenerate_acl">enable_autogenerate_acl() (VendorSpecificCmds method)</a>
 </li>
+      <li><a href="ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.enable_encryption">enable_encryption() (BleStandardCmds method)</a>
+</li>
       <li><a href="vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.enable_iso_packet_sink">enable_iso_packet_sink() (VendorSpecificCmds method)</a>
 </li>
       <li><a href="ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.enable_scanning">enable_scanning() (BleStandardCmds method)</a>
@@ -432,6 +452,8 @@
 </li>
       <li><a href="constants.html#max_ble_hci.constants.Endian">Endian (class in max_ble_hci.constants)</a>
 </li>
+      <li><a href="constants.html#max_ble_hci.constants.TxTestMode.ENHANCED">ENHANCED (TxTestMode attribute)</a>
+</li>
       <li><a href="packet_codes.html#max_ble_hci.packet_codes.EventSubcode.ENHANCED_CONNECTION_CMPLT">ENHANCED_CONNECTION_CMPLT (EventSubcode attribute)</a>
 </li>
       <li><a href="packet_codes.html#max_ble_hci.packet_codes.EventMaskLE.ENHANCED_CONNECTION_COMPLETE">ENHANCED_CONNECTION_COMPLETE (EventMaskLE attribute)</a>
@@ -442,7 +464,7 @@
 </li>
       <li><a href="packet_defs.html#max_ble_hci.packet_defs.LEControllerOCF.ENHANCED_TRANSMITTER_TEST">ENHANCED_TRANSMITTER_TEST (LEControllerOCF attribute)</a>
 </li>
-      <li><a href="vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.erase_memory">erase_memory() (VendorSpecificCmds method)</a>
+      <li><a href="vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.erase_page">erase_page() (VendorSpecificCmds method)</a>
 </li>
       <li><a href="data_params.html#max_ble_hci.data_params.AdvPktStats.err_adv">err_adv (AdvPktStats attribute)</a>
 </li>
@@ -508,10 +530,10 @@
 </li>
       <li><a href="packet_codes.html#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_LMP_ERR_TRANSACTION_COLLISION">ERROR_CODE_LMP_ERR_TRANSACTION_COLLISION (StatusCode attribute)</a>
 </li>
-      <li><a href="packet_codes.html#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_LMP_LL_RESP_TIMEOUT">ERROR_CODE_LMP_LL_RESP_TIMEOUT (StatusCode attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="packet_codes.html#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_LMP_LL_RESP_TIMEOUT">ERROR_CODE_LMP_LL_RESP_TIMEOUT (StatusCode attribute)</a>
+</li>
       <li><a href="packet_codes.html#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_LMP_PDU_NOT_ALLOWED">ERROR_CODE_LMP_PDU_NOT_ALLOWED (StatusCode attribute)</a>
 </li>
       <li><a href="packet_codes.html#max_ble_hci.packet_codes.StatusCode.ERROR_CODE_MAC_CONN_FAILED">ERROR_CODE_MAC_CONN_FAILED (StatusCode attribute)</a>
@@ -624,12 +646,10 @@
 </li>
       <li><a href="packet_defs.html#max_ble_hci.packet_defs.PacketType.EXTENDED">EXTENDED (PacketType attribute)</a>
 </li>
-      <li><a href="packet_codes.html#max_ble_hci.packet_codes.EventMaskLE.EXTENDED_ADVERTISING_REPORT">EXTENDED_ADVERTISING_REPORT (EventMaskLE attribute)</a>
-
-      <ul>
-        <li><a href="packet_codes.html#max_ble_hci.packet_codes.EventSubcode.EXTENDED_ADVERTISING_REPORT">(EventSubcode attribute)</a>
+      <li><a href="packet_codes.html#max_ble_hci.packet_codes.EventMaskLE.EXTENDED_ADV_REPORT">EXTENDED_ADV_REPORT (EventMaskLE attribute)</a>
 </li>
-      </ul></li>
+      <li><a href="packet_codes.html#max_ble_hci.packet_codes.EventSubcode.EXTENDED_ADVERTISING_REPORT">EXTENDED_ADVERTISING_REPORT (EventSubcode attribute)</a>
+</li>
       <li><a href="packet_codes.html#max_ble_hci.packet_codes.EventMask.EXTENDED_INQUIRY_RESULT">EXTENDED_INQUIRY_RESULT (EventMask attribute)</a>
 </li>
       <li><a href="hci_packets.html#max_ble_hci.hci_packets.ExtendedPacket">ExtendedPacket (class in max_ble_hci.hci_packets)</a>
@@ -657,6 +677,8 @@
       <li><a href="data_params.html#max_ble_hci.data_params.PduPktStats.fail_peer_rpa_verify">fail_peer_rpa_verify (PduPktStats attribute)</a>
 </li>
       <li><a href="data_params.html#max_ble_hci.data_params.PduPktStats.fail_whitelist">fail_whitelist (PduPktStats attribute)</a>
+</li>
+      <li><a href="packet_defs.html#max_ble_hci.packet_defs.VendorSpecificOCF.FGEN">FGEN (VendorSpecificOCF attribute)</a>
 </li>
       <li><a href="data_params.html#max_ble_hci.data_params.AdvParams.filter_policy">filter_policy (AdvParams attribute)</a>
 
@@ -922,10 +944,10 @@
 </li>
       <li><a href="packet_codes.html#max_ble_hci.packet_codes.EventMask.LINK_KEY_REQUEST">LINK_KEY_REQUEST (EventMask attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="packet_codes.html#max_ble_hci.packet_codes.EventMask.LINK_KEY_TYPE_CHANGED">LINK_KEY_TYPE_CHANGED (EventMask attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="packet_defs.html#max_ble_hci.packet_defs.OCF.LINK_POLICY">LINK_POLICY (OCF attribute)</a>
 
       <ul>
@@ -952,6 +974,8 @@
       </ul></li>
       <li><a href="packet_codes.html#max_ble_hci.packet_codes.EventMask.LOOPBACK_COMMAND">LOOPBACK_COMMAND (EventMask attribute)</a>
 </li>
+      <li><a href="ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.ltk_reply">ltk_reply() (BleStandardCmds method)</a>
+</li>
       <li><a href="packet_defs.html#max_ble_hci.packet_defs.LEControllerOCF.LTK_REQ_NEG_REPL">LTK_REQ_NEG_REPL (LEControllerOCF attribute)</a>
 </li>
       <li><a href="packet_defs.html#max_ble_hci.packet_defs.LEControllerOCF.LTK_REQ_REPL">LTK_REQ_REPL (LEControllerOCF attribute)</a>
@@ -974,6 +998,8 @@
         <li><a href="hci_packets.html#max_ble_hci.hci_packets.ExtendedPacket.make_hci_opcode">(ExtendedPacket static method)</a>
 </li>
       </ul></li>
+      <li><a href="constants.html#max_ble_hci.constants.TxPower.MAX">MAX (TxPower attribute)</a>
+</li>
       <li><a href="data_params.html#max_ble_hci.data_params.MemPktStats.max_adv_sets">max_adv_sets (MemPktStats attribute)</a>
 </li>
       <li><a href="data_params.html#max_ble_hci.data_params.PoolStats.max_alloc">max_alloc (PoolStats attribute)</a>
@@ -1054,10 +1080,10 @@
         <li><a href="data_params.html#max_ble_hci.data_params.EstablishConnParams.max_ce_length">(EstablishConnParams attribute)</a>
 </li>
       </ul></li>
-      <li><a href="data_params.html#max_ble_hci.data_params.MemPktStats.max_cig">max_cig (MemPktStats attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="data_params.html#max_ble_hci.data_params.MemPktStats.max_cig">max_cig (MemPktStats attribute)</a>
+</li>
       <li><a href="data_params.html#max_ble_hci.data_params.MemPktStats.max_connections">max_connections (MemPktStats attribute)</a>
 </li>
       <li><a href="data_params.html#max_ble_hci.data_params.ConnParams.max_latency">max_latency (ConnParams attribute)</a>
@@ -1080,9 +1106,9 @@
 </li>
       <li><a href="constants.html#max_ble_hci.constants.MAX_U64">MAX_U64 (in module max_ble_hci.constants)</a>
 </li>
-      <li><a href="packet_defs.html#max_ble_hci.packet_defs.VendorSpecificOCF.MEMORY_ERASE">MEMORY_ERASE (VendorSpecificOCF attribute)</a>
-</li>
       <li><a href="data_params.html#max_ble_hci.data_params.MemPktStats">MemPktStats (class in max_ble_hci.data_params)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.TxPower.MIN">MIN (TxPower attribute)</a>
 </li>
       <li><a href="data_params.html#max_ble_hci.data_params.ConnParams.min_ce_length">min_ce_length (ConnParams attribute)</a>
 
@@ -1189,6 +1215,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="packet_defs.html#max_ble_hci.packet_defs.PacketType">PacketType (class in max_ble_hci.packet_defs)</a>
 </li>
+      <li><a href="packet_defs.html#max_ble_hci.packet_defs.VendorSpecificOCF.PAGE_ERASE">PAGE_ERASE (VendorSpecificOCF attribute)</a>
+</li>
       <li><a href="packet_codes.html#max_ble_hci.packet_codes.EventMask.PAGE_SCAN_REPETITION_MODE_CHANGE">PAGE_SCAN_REPETITION_MODE_CHANGE (EventMask attribute)</a>
 </li>
       <li><a href="hci_packets.html#max_ble_hci.hci_packets.CommandPacket.params">params (CommandPacket attribute)</a>
@@ -1259,8 +1287,6 @@
 </li>
       <li><a href="packet_codes.html#max_ble_hci.packet_codes.EventMaskLE.PERIODIC_ADV_SYNC_EST">PERIODIC_ADV_SYNC_EST (EventMaskLE attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="packet_codes.html#max_ble_hci.packet_codes.EventMaskLE.PERIODIC_ADV_SYNC_LOST">PERIODIC_ADV_SYNC_LOST (EventMaskLE attribute)</a>
 </li>
       <li><a href="packet_codes.html#max_ble_hci.packet_codes.EventMaskLE.PERIODIC_ADV_SYNC_XFER_LOST">PERIODIC_ADV_SYNC_XFER_LOST (EventMaskLE attribute)</a>
@@ -1283,6 +1309,8 @@
 </li>
       <li><a href="constants.html#max_ble_hci.constants.PhyOption.PHY_CODED_S2">PHY_CODED_S2 (PhyOption attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="constants.html#max_ble_hci.constants.PhyOption.PHY_CODED_S8">PHY_CODED_S8 (PhyOption attribute)</a>
 </li>
       <li><a href="packet_codes.html#max_ble_hci.packet_codes.EventSubcode.PHY_UPDATE_CMPLT">PHY_UPDATE_CMPLT (EventSubcode attribute)</a>
@@ -1292,6 +1320,50 @@
       <li><a href="constants.html#max_ble_hci.constants.PhyOption">PhyOption (class in max_ble_hci.constants)</a>
 </li>
       <li><a href="packet_codes.html#max_ble_hci.packet_codes.EventMask.PIN_CODE_REQUEST">PIN_CODE_REQUEST (EventMask attribute)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.BtTxPacketType.PKT_2DH1">PKT_2DH1 (BtTxPacketType attribute)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.BtTxPacketType.PKT_2DH3">PKT_2DH3 (BtTxPacketType attribute)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.BtTxPacketType.PKT_2DH5">PKT_2DH5 (BtTxPacketType attribute)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.BtTxPacketType.PKT_2EV3">PKT_2EV3 (BtTxPacketType attribute)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.BtTxPacketType.PKT_2EV5">PKT_2EV5 (BtTxPacketType attribute)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.BtTxPacketType.PKT_3DH1">PKT_3DH1 (BtTxPacketType attribute)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.BtTxPacketType.PKT_3DH3">PKT_3DH3 (BtTxPacketType attribute)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.BtTxPacketType.PKT_3DH5">PKT_3DH5 (BtTxPacketType attribute)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.BtTxPacketType.PKT_3EV3">PKT_3EV3 (BtTxPacketType attribute)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.BtTxPacketType.PKT_3EV5">PKT_3EV5 (BtTxPacketType attribute)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.BtTxPacketType.PKT_DH1">PKT_DH1 (BtTxPacketType attribute)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.BtTxPacketType.PKT_DH3">PKT_DH3 (BtTxPacketType attribute)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.BtTxPacketType.PKT_DH5">PKT_DH5 (BtTxPacketType attribute)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.BtTxPacketType.PKT_DM1">PKT_DM1 (BtTxPacketType attribute)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.BtTxPacketType.PKT_DM3">PKT_DM3 (BtTxPacketType attribute)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.BtTxPacketType.PKT_DM5">PKT_DM5 (BtTxPacketType attribute)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.BtTxPacketType.PKT_EV3">PKT_EV3 (BtTxPacketType attribute)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.BtTxPacketType.PKT_EV4">PKT_EV4 (BtTxPacketType attribute)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.BtTxPacketType.PKT_EV5">PKT_EV5 (BtTxPacketType attribute)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.BtTxPacketType.PKT_HV1">PKT_HV1 (BtTxPacketType attribute)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.BtTxPacketType.PKT_HV2">PKT_HV2 (BtTxPacketType attribute)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.BtTxPacketType.PKT_HV3">PKT_HV3 (BtTxPacketType attribute)</a>
 </li>
       <li><a href="constants.html#max_ble_hci.constants.PayloadOption.PLD_00000000">PLD_00000000 (PayloadOption attribute)</a>
 </li>
@@ -1423,8 +1495,6 @@
 </li>
       <li><a href="packet_defs.html#max_ble_hci.packet_defs.LEControllerOCF.READ_PHY">READ_PHY (LEControllerOCF attribute)</a>
 </li>
-      <li><a href="vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.read_register">read_register() (VendorSpecificCmds method)</a>
-</li>
       <li><a href="packet_codes.html#max_ble_hci.packet_codes.EventMask.READ_REMOTE_EXTENDED_FEATURES_COMPLETE">READ_REMOTE_EXTENDED_FEATURES_COMPLETE (EventMask attribute)</a>
 </li>
       <li><a href="packet_defs.html#max_ble_hci.packet_defs.LEControllerOCF.READ_REMOTE_FEAT">READ_REMOTE_FEAT (LEControllerOCF attribute)</a>
@@ -1457,20 +1527,18 @@
 </li>
       <li><a href="packet_defs.html#max_ble_hci.packet_defs.LEControllerOCF.READ_WHITE_LIST_SIZE">READ_WHITE_LIST_SIZE (LEControllerOCF attribute)</a>
 </li>
+      <li><a href="ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.read_whitelist_size">read_whitelist_size() (BleStandardCmds method)</a>
+</li>
       <li><a href="packet_defs.html#max_ble_hci.packet_defs.LEControllerOCF.RECEIVER_TEST">RECEIVER_TEST (LEControllerOCF attribute)</a>
 </li>
       <li><a href="packet_defs.html#max_ble_hci.packet_defs.LEControllerOCF.RECEIVER_TEST_V3">RECEIVER_TEST_V3 (LEControllerOCF attribute)</a>
 </li>
-      <li><a href="packet_defs.html#max_ble_hci.packet_defs.VendorSpecificOCF.REG_READ">REG_READ (VendorSpecificOCF attribute)</a>
-</li>
-      <li><a href="packet_defs.html#max_ble_hci.packet_defs.VendorSpecificOCF.REG_WRITE">REG_WRITE (VendorSpecificOCF attribute)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="packet_defs.html#max_ble_hci.packet_defs.LEControllerOCF.REJECT_CIS_REQ">REJECT_CIS_REQ (LEControllerOCF attribute)</a>
 </li>
       <li><a href="packet_defs.html#max_ble_hci.packet_defs.LEControllerOCF.REM_CONN_PARAM_NEG_REP">REM_CONN_PARAM_NEG_REP (LEControllerOCF attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="packet_defs.html#max_ble_hci.packet_defs.LEControllerOCF.REM_CONN_PARAM_REP">REM_CONN_PARAM_REP (LEControllerOCF attribute)</a>
 </li>
       <li><a href="packet_codes.html#max_ble_hci.packet_codes.EventMaskLE.REMOTE_CONN_PARAM_REQ">REMOTE_CONN_PARAM_REQ (EventMaskLE attribute)</a>
@@ -1492,6 +1560,8 @@
       <li><a href="packet_defs.html#max_ble_hci.packet_defs.LEControllerOCF.REMOVE_DEV_RES_LIST">REMOVE_DEV_RES_LIST (LEControllerOCF attribute)</a>
 </li>
       <li><a href="packet_defs.html#max_ble_hci.packet_defs.LEControllerOCF.REMOVE_DEV_WHITE_LIST">REMOVE_DEV_WHITE_LIST (LEControllerOCF attribute)</a>
+</li>
+      <li><a href="ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.remove_device_from_whitelist">remove_device_from_whitelist() (BleStandardCmds method)</a>
 </li>
       <li><a href="packet_defs.html#max_ble_hci.packet_defs.LEControllerOCF.REMOVE_ISO_DATA_PATH">REMOVE_ISO_DATA_PATH (LEControllerOCF attribute)</a>
 </li>
@@ -1779,10 +1849,6 @@
 </li>
       <li><a href="vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.set_extended_advertising_phy_opts">set_extended_advertising_phy_opts() (VendorSpecificCmds method)</a>
 </li>
-      <li><a href="packet_defs.html#max_ble_hci.packet_defs.VendorSpecificOCF.SET_FLASH_ADDR">SET_FLASH_ADDR (VendorSpecificOCF attribute)</a>
-</li>
-      <li><a href="vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.set_flash_addr">set_flash_addr() (VendorSpecificCmds method)</a>
-</li>
       <li><a href="packet_defs.html#max_ble_hci.packet_defs.LEControllerOCF.SET_HOST_CHAN_CLASS">SET_HOST_CHAN_CLASS (LEControllerOCF attribute)</a>
 </li>
       <li><a href="packet_defs.html#max_ble_hci.packet_defs.LEControllerOCF.SET_HOST_FEATURE">SET_HOST_FEATURE (LEControllerOCF attribute)</a>
@@ -1826,6 +1892,8 @@
       <li><a href="packet_defs.html#max_ble_hci.packet_defs.LEControllerOCF.SET_PRIVACY_MODE">SET_PRIVACY_MODE (LEControllerOCF attribute)</a>
 </li>
       <li><a href="packet_defs.html#max_ble_hci.packet_defs.LEControllerOCF.SET_RAND_ADDR">SET_RAND_ADDR (LEControllerOCF attribute)</a>
+</li>
+      <li><a href="ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_random_address">set_random_address() (BleStandardCmds method)</a>
 </li>
       <li><a href="packet_defs.html#max_ble_hci.packet_defs.LEControllerOCF.SET_RES_PRIV_ADDR_TO">SET_RES_PRIV_ADDR_TO (LEControllerOCF attribute)</a>
 </li>
@@ -1878,6 +1946,8 @@
       <li><a href="packet_defs.html#max_ble_hci.packet_defs.StatusOCF">StatusOCF (class in max_ble_hci.packet_defs)</a>
 </li>
       <li><a href="constants.html#max_ble_hci.constants.PhyOption.str_to_enum">str_to_enum() (PhyOption static method)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.TxPower.str_to_mask">str_to_mask() (TxPower static method)</a>
 </li>
       <li><a href="packet_codes.html#max_ble_hci.packet_codes.EventMaskLE.SUBRATE_CHANGE">SUBRATE_CHANGE (EventMaskLE attribute)</a>
 </li>
@@ -1949,10 +2019,12 @@
 </li>
       <li><a href="packet_defs.html#max_ble_hci.packet_defs.LEControllerOCF.TRANSMITTER_TEST_V3">TRANSMITTER_TEST_V3 (LEControllerOCF attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="packet_defs.html#max_ble_hci.packet_defs.LEControllerOCF.TRANSMITTER_TEST_V4">TRANSMITTER_TEST_V4 (LEControllerOCF attribute)</a>
+</li>
       <li><a href="packet_codes.html#max_ble_hci.packet_codes.EventMaskPage2.TRIG_CLK_CAPTURE">TRIG_CLK_CAPTURE (EventMaskPage2 attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="packet_codes.html#max_ble_hci.packet_codes.EventMaskPage2.TRUNCATED_PAGE_CMPLT">TRUNCATED_PAGE_CMPLT (EventMaskPage2 attribute)</a>
 </li>
       <li><a href="data_params.html#max_ble_hci.data_params.AdvPktStats.tx_adv">tx_adv (AdvPktStats attribute)</a>
@@ -1987,7 +2059,13 @@
 </li>
       <li><a href="ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.tx_test">tx_test() (BleStandardCmds method)</a>
 </li>
+      <li><a href="vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.tx_test_bt_vs">tx_test_bt_vs() (VendorSpecificCmds method)</a>
+</li>
       <li><a href="vendor_spec.html#max_ble_hci.vendor_spec_cmds.VendorSpecificCmds.tx_test_vs">tx_test_vs() (VendorSpecificCmds method)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.TxPower">TxPower (class in max_ble_hci.constants)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.TxTestMode">TxTestMode (class in max_ble_hci.constants)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1995,6 +2073,8 @@
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="utils.html#max_ble_hci.utils.unsigned_to_signed">unsigned_to_signed() (in module max_ble_hci.utils)</a>
+</li>
       <li><a href="ble_standard.html#max_ble_hci.ble_standard_cmds.BleStandardCmds.update_connection_params">update_connection_params() (BleStandardCmds method)</a>
 </li>
       <li><a href="data_params.html#max_ble_hci.data_params.MemPktStats.used_mem">used_mem (MemPktStats attribute)</a>
@@ -2013,6 +2093,10 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="constants.html#max_ble_hci.constants.TxTestMode.V3">V3 (TxTestMode attribute)</a>
+</li>
+      <li><a href="constants.html#max_ble_hci.constants.TxTestMode.V4">V4 (TxTestMode attribute)</a>
+</li>
       <li><a href="packet_defs.html#max_ble_hci.packet_defs.VendorSpecificOCF.VALIDATE_PUB_KEY_MODE">VALIDATE_PUB_KEY_MODE (VendorSpecificOCF attribute)</a>
 </li>
       <li><a href="packet_codes.html#max_ble_hci.packet_codes.EventCode.VENDOR_SPEC">VENDOR_SPEC (EventCode attribute)</a>

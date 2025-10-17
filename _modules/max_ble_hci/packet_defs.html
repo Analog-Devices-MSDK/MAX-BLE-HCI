@@ -1,22 +1,20 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>max_ble_hci.packet_defs &mdash; MAX BLE HCI 0.1.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=2389946f"></script>
-        <script src="../../_static/doctools.js?v=888ff710"></script>
-        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=2389946f"></script>
+      <script src="../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -127,11 +125,11 @@
 <span class="c1">#</span>
 <span class="c1">##############################################################################</span>
 <span class="sd">&quot;&quot;&quot;DOCSTRING&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
-<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
 
 
-<div class="viewcode-block" id="PacketType"><a class="viewcode-back" href="../../packet_defs.html#max_ble_hci.packet_defs.PacketType">[docs]</a><span class="k">class</span> <span class="nc">PacketType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="PacketType"><a class="viewcode-back" href="../../packet_defs.html#max_ble_hci.packet_defs.PacketType">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">PacketType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;BT standard packet types.&quot;&quot;&quot;</span>
 
     <span class="n">COMMAND</span> <span class="o">=</span> <span class="mh">0x1</span>
@@ -155,7 +153,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Extended command packet type.&quot;&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="OGF"><a class="viewcode-back" href="../../packet_defs.html#max_ble_hci.packet_defs.OGF">[docs]</a><span class="k">class</span> <span class="nc">OGF</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="OGF"><a class="viewcode-back" href="../../packet_defs.html#max_ble_hci.packet_defs.OGF">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">OGF</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;BLE-defined Opcode Group Field values.&quot;&quot;&quot;</span>
 
     <span class="n">NOP</span> <span class="o">=</span> <span class="mh">0x00</span>
@@ -186,14 +184,14 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Vendor specific group field.&quot;&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="NOpOCF"><a class="viewcode-back" href="../../packet_defs.html#max_ble_hci.packet_defs.NOpOCF">[docs]</a><span class="k">class</span> <span class="nc">NOpOCF</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="NOpOCF"><a class="viewcode-back" href="../../packet_defs.html#max_ble_hci.packet_defs.NOpOCF">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">NOpOCF</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;BLE-defined NOP group Opcode Command Field values.&quot;&quot;&quot;</span>
 
     <span class="n">NOP</span> <span class="o">=</span> <span class="mh">0x00</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;No operation.&quot;&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="LinkControlOCF"><a class="viewcode-back" href="../../packet_defs.html#max_ble_hci.packet_defs.LinkControlOCF">[docs]</a><span class="k">class</span> <span class="nc">LinkControlOCF</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="LinkControlOCF"><a class="viewcode-back" href="../../packet_defs.html#max_ble_hci.packet_defs.LinkControlOCF">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">LinkControlOCF</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;BLE-defined Link Control group Opcode Command Field values&quot;&quot;&quot;</span>
 
     <span class="n">DISCONNECT</span> <span class="o">=</span> <span class="mh">0x06</span>
@@ -203,7 +201,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Read remote version info command.&quot;&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="ControllerOCF"><a class="viewcode-back" href="../../packet_defs.html#max_ble_hci.packet_defs.ControllerOCF">[docs]</a><span class="k">class</span> <span class="nc">ControllerOCF</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="ControllerOCF"><a class="viewcode-back" href="../../packet_defs.html#max_ble_hci.packet_defs.ControllerOCF">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">ControllerOCF</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;BLE-defined Controller group Opcode Command Field values.&quot;&quot;&quot;</span>
 
     <span class="n">SET_EVENT_MASK</span> <span class="o">=</span> <span class="mh">0x01</span>
@@ -237,7 +235,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Configure data path command.&quot;&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="InformationalOCF"><a class="viewcode-back" href="../../packet_defs.html#max_ble_hci.packet_defs.InformationalOCF">[docs]</a><span class="k">class</span> <span class="nc">InformationalOCF</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="InformationalOCF"><a class="viewcode-back" href="../../packet_defs.html#max_ble_hci.packet_defs.InformationalOCF">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">InformationalOCF</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;BLE-defined Information group Opcode Command Field values.&quot;&quot;&quot;</span>
 
     <span class="n">READ_LOCAL_VER_INFO</span> <span class="o">=</span> <span class="mh">0x01</span>
@@ -265,14 +263,14 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Read local supported controller delay command.&quot;&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="StatusOCF"><a class="viewcode-back" href="../../packet_defs.html#max_ble_hci.packet_defs.StatusOCF">[docs]</a><span class="k">class</span> <span class="nc">StatusOCF</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="StatusOCF"><a class="viewcode-back" href="../../packet_defs.html#max_ble_hci.packet_defs.StatusOCF">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">StatusOCF</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;BLE-defined Status group Opcode Command Field values.&quot;&quot;&quot;</span>
 
     <span class="n">READ_RSSI</span> <span class="o">=</span> <span class="mh">0x05</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Read RSSI command.&quot;&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="LEControllerOCF"><a class="viewcode-back" href="../../packet_defs.html#max_ble_hci.packet_defs.LEControllerOCF">[docs]</a><span class="k">class</span> <span class="nc">LEControllerOCF</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="LEControllerOCF"><a class="viewcode-back" href="../../packet_defs.html#max_ble_hci.packet_defs.LEControllerOCF">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">LEControllerOCF</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;BLE-defined LE Controller group Opcode Command Field values.&quot;&quot;&quot;</span>
 
     <span class="n">SET_EVENT_MASK</span> <span class="o">=</span> <span class="mh">0x01</span>
@@ -638,6 +636,9 @@
     <span class="n">SET_TX_POWER_REPORT_ENABLE</span> <span class="o">=</span> <span class="mh">0x7A</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Set TX power reporting enable command.&quot;&quot;&quot;</span>
 
+    <span class="n">TRANSMITTER_TEST_V4</span> <span class="o">=</span> <span class="mh">0x7B</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transmitter test version3 command.&quot;&quot;&quot;</span>
+
     <span class="n">SET_DATA_RELATED_ADDRESS_CHANGES</span> <span class="o">=</span> <span class="mh">0x7C</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Set data related address changes command.&quot;&quot;&quot;</span>
 
@@ -648,16 +649,13 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Subrate request command.&quot;&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="VendorSpecificOCF"><a class="viewcode-back" href="../../packet_defs.html#max_ble_hci.packet_defs.VendorSpecificOCF">[docs]</a><span class="k">class</span> <span class="nc">VendorSpecificOCF</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<div class="viewcode-block" id="VendorSpecificOCF"><a class="viewcode-back" href="../../packet_defs.html#max_ble_hci.packet_defs.VendorSpecificOCF">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">VendorSpecificOCF</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;ADI Vendor Specific group Opcode Command Field values.&quot;&quot;&quot;</span>
-
-    <span class="n">SET_FLASH_ADDR</span> <span class="o">=</span> <span class="mh">0x3C3</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;set flash address pointer&quot;&quot;&quot;</span>
 
     <span class="n">DEVICE_RESET</span> <span class="o">=</span> <span class="mh">0x3C2</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;reset the device&quot;&quot;&quot;</span>
 
-    <span class="n">MEMORY_ERASE</span> <span class="o">=</span> <span class="mh">0x3C1</span>
+    <span class="n">PAGE_ERASE</span> <span class="o">=</span> <span class="mh">0x3C1</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Erase the memory&quot;&quot;&quot;</span>
 
     <span class="n">WRITE_FLASH</span> <span class="o">=</span> <span class="mh">0x3C0</span>
@@ -792,36 +790,36 @@
     <span class="n">SET_CONN_PHY_TX_PWR</span> <span class="o">=</span> <span class="mh">0x3DD</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Set connection PHY TX power command.&quot;&quot;&quot;</span>
 
-    <span class="n">REG_WRITE</span> <span class="o">=</span> <span class="mh">0x300</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Register write command.&quot;&quot;&quot;</span>
-
-    <span class="n">REG_READ</span> <span class="o">=</span> <span class="mh">0x301</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Register read command.&quot;&quot;&quot;</span>
-
-    <span class="n">RESET_CONN_STATS</span> <span class="o">=</span> <span class="mh">0x302</span>
+    <span class="n">RESET_CONN_STATS</span> <span class="o">=</span> <span class="mh">0x300</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Reset connection statistics command.&quot;&quot;&quot;</span>
 
-    <span class="n">TX_TEST</span> <span class="o">=</span> <span class="mh">0x303</span>
+    <span class="n">TX_TEST</span> <span class="o">=</span> <span class="mh">0x301</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Transmitter test command.&quot;&quot;&quot;</span>
 
-    <span class="n">RESET_TEST_STATS</span> <span class="o">=</span> <span class="mh">0x304</span>
+    <span class="n">RESET_TEST_STATS</span> <span class="o">=</span> <span class="mh">0x302</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Reset test statistics command.&quot;&quot;&quot;</span>
 
-    <span class="n">RX_TEST</span> <span class="o">=</span> <span class="mh">0x305</span>
+    <span class="n">RX_TEST</span> <span class="o">=</span> <span class="mh">0x303</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Receiver test command.&quot;&quot;&quot;</span>
 
-    <span class="n">GET_RSSI</span> <span class="o">=</span> <span class="mh">0x306</span>
+    <span class="n">GET_RSSI</span> <span class="o">=</span> <span class="mh">0x304</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get RSSI command.&quot;&quot;&quot;</span>
 
-    <span class="n">RESET_ADV_STATS</span> <span class="o">=</span> <span class="mh">0x307</span>
+    <span class="n">RESET_ADV_STATS</span> <span class="o">=</span> <span class="mh">0x305</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;PHY enable command.&quot;&quot;&quot;</span>
 
-    <span class="n">RESET_SCAN_STATS</span> <span class="o">=</span> <span class="mh">0x308</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;PHY disable command.&quot;&quot;&quot;</span></div>
+    <span class="n">RESET_SCAN_STATS</span> <span class="o">=</span> <span class="mh">0x306</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;PHY disable command.&quot;&quot;&quot;</span>
+
+    <span class="n">FGEN</span> <span class="o">=</span> <span class="mh">0x307</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Function generator command.&quot;&quot;&quot;</span>
+
+    <span class="n">BT_TX_TEST</span> <span class="o">=</span> <span class="mh">0x71</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Bluetooth Classic transmitter test&quot;&quot;&quot;</span></div>
 
 
 <div class="viewcode-block" id="OCF"><a class="viewcode-back" href="../../packet_defs.html#max_ble_hci.packet_defs.OCF">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">OCF</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">OCF</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Supported Opcode Command Field values.&quot;&quot;&quot;</span>
 
     <span class="n">NOP</span> <span class="o">=</span> <span class="n">NOpOCF</span>

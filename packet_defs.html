@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en">
 <head>
@@ -5,19 +7,15 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>max_ble_hci.packet_defs &mdash; MAX BLE HCI 0.1.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=2389946f"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
-        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=2389946f"></script>
+      <script src="_static/doctools.js?v=888ff710"></script>
+      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -204,6 +202,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.TEST_END"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.TEST_END</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.TRANSMITTER_TEST"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.TRANSMITTER_TEST</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.TRANSMITTER_TEST_V3"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.TRANSMITTER_TEST_V3</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.TRANSMITTER_TEST_V4"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.TRANSMITTER_TEST_V4</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.WRITE_DEF_DATA_LEN"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.WRITE_DEF_DATA_LEN</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.LEControllerOCF.WRITE_RF_PATH_COMP"><code class="docutils literal notranslate"><span class="pre">LEControllerOCF.WRITE_RF_PATH_COMP</span></code></a></li>
 </ul>
@@ -254,11 +253,13 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.BT_TX_TEST"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.BT_TX_TEST</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.DEVICE_RESET"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.DEVICE_RESET</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.ENA_ACL_SINK"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.ENA_ACL_SINK</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.ENA_AUTO_GEN_ACL"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.ENA_AUTO_GEN_ACL</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.ENA_AUTO_GEN_ISO"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.ENA_AUTO_GEN_ISO</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.ENA_ISO_SINK"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.ENA_ISO_SINK</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.FGEN"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.FGEN</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GENERATE_ACL"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.GENERATE_ACL</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GENERATE_ISO"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.GENERATE_ISO</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_ACL_TEST_REPORT"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.GET_ACL_TEST_REPORT</span></code></a></li>
@@ -278,9 +279,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_SCAN_STATS"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.GET_SCAN_STATS</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_SYS_STATS"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.GET_SYS_STATS</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_TEST_STATS"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.GET_TEST_STATS</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.MEMORY_ERASE"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.MEMORY_ERASE</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.REG_READ"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.REG_READ</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.REG_WRITE"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.REG_WRITE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.PAGE_ERASE"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.PAGE_ERASE</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.RESET_ADV_STATS"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.RESET_ADV_STATS</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.RESET_CONN_STATS"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.RESET_CONN_STATS</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.RESET_SCAN_STATS"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.RESET_SCAN_STATS</span></code></a></li>
@@ -299,7 +298,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_EXT_ADV_DEF_PHY_OPTS"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.SET_EXT_ADV_DEF_PHY_OPTS</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_EXT_ADV_FRAG_LEN"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.SET_EXT_ADV_FRAG_LEN</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_EXT_ADV_PHY_OPTS"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.SET_EXT_ADV_PHY_OPTS</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_FLASH_ADDR"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.SET_FLASH_ADDR</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_LOCAL_FEAT"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.SET_LOCAL_FEAT</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_LOCAL_MIN_USED_CHAN"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.SET_LOCAL_MIN_USED_CHAN</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_OP_FLAGS"><code class="docutils literal notranslate"><span class="pre">VendorSpecificOCF.SET_OP_FLAGS</span></code></a></li>
@@ -1210,6 +1208,12 @@
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.TRANSMITTER_TEST_V4">
+<span class="sig-name descname"><span class="pre">TRANSMITTER_TEST_V4</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">123</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.TRANSMITTER_TEST_V4" title="Permalink to this definition"></a></dt>
+<dd><p>Transmitter test version3 command.</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="max_ble_hci.packet_defs.LEControllerOCF.WRITE_DEF_DATA_LEN">
 <span class="sig-name descname"><span class="pre">WRITE_DEF_DATA_LEN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">36</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.LEControllerOCF.WRITE_DEF_DATA_LEN" title="Permalink to this definition"></a></dt>
 <dd><p>Write suggested default data length command.</p>
@@ -1444,6 +1448,12 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
 <p>ADI Vendor Specific group Opcode Command Field values.</p>
 <dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.BT_TX_TEST">
+<span class="sig-name descname"><span class="pre">BT_TX_TEST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">113</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.BT_TX_TEST" title="Permalink to this definition"></a></dt>
+<dd><p>Bluetooth Classic transmitter test</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.DEVICE_RESET">
 <span class="sig-name descname"><span class="pre">DEVICE_RESET</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">962</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.DEVICE_RESET" title="Permalink to this definition"></a></dt>
 <dd><p>reset the device</p>
@@ -1471,6 +1481,12 @@
 <dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.ENA_ISO_SINK">
 <span class="sig-name descname"><span class="pre">ENA_ISO_SINK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">983</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.ENA_ISO_SINK" title="Permalink to this definition"></a></dt>
 <dd><p>Enable ISO sink command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.FGEN">
+<span class="sig-name descname"><span class="pre">FGEN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">775</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.FGEN" title="Permalink to this definition"></a></dt>
+<dd><p>Function generator command.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1565,7 +1581,7 @@
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.GET_RSSI">
-<span class="sig-name descname"><span class="pre">GET_RSSI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">774</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_RSSI" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">GET_RSSI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">772</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.GET_RSSI" title="Permalink to this definition"></a></dt>
 <dd><p>Get RSSI command.</p>
 </dd></dl>
 
@@ -1588,50 +1604,38 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.MEMORY_ERASE">
-<span class="sig-name descname"><span class="pre">MEMORY_ERASE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">961</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.MEMORY_ERASE" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.PAGE_ERASE">
+<span class="sig-name descname"><span class="pre">PAGE_ERASE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">961</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.PAGE_ERASE" title="Permalink to this definition"></a></dt>
 <dd><p>Erase the memory</p>
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.REG_READ">
-<span class="sig-name descname"><span class="pre">REG_READ</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">769</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.REG_READ" title="Permalink to this definition"></a></dt>
-<dd><p>Register read command.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.REG_WRITE">
-<span class="sig-name descname"><span class="pre">REG_WRITE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">768</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.REG_WRITE" title="Permalink to this definition"></a></dt>
-<dd><p>Register write command.</p>
-</dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.RESET_ADV_STATS">
-<span class="sig-name descname"><span class="pre">RESET_ADV_STATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">775</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.RESET_ADV_STATS" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">RESET_ADV_STATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">773</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.RESET_ADV_STATS" title="Permalink to this definition"></a></dt>
 <dd><p>PHY enable command.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.RESET_CONN_STATS">
-<span class="sig-name descname"><span class="pre">RESET_CONN_STATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">770</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.RESET_CONN_STATS" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">RESET_CONN_STATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">768</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.RESET_CONN_STATS" title="Permalink to this definition"></a></dt>
 <dd><p>Reset connection statistics command.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.RESET_SCAN_STATS">
-<span class="sig-name descname"><span class="pre">RESET_SCAN_STATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">776</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.RESET_SCAN_STATS" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">RESET_SCAN_STATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">774</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.RESET_SCAN_STATS" title="Permalink to this definition"></a></dt>
 <dd><p>PHY disable command.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.RESET_TEST_STATS">
-<span class="sig-name descname"><span class="pre">RESET_TEST_STATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">772</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.RESET_TEST_STATS" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">RESET_TEST_STATS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">770</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.RESET_TEST_STATS" title="Permalink to this definition"></a></dt>
 <dd><p>Reset test statistics command.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.RX_TEST">
-<span class="sig-name descname"><span class="pre">RX_TEST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">773</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.RX_TEST" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">RX_TEST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">771</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.RX_TEST" title="Permalink to this definition"></a></dt>
 <dd><p>Receiver test command.</p>
 </dd></dl>
 
@@ -1714,12 +1718,6 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.SET_FLASH_ADDR">
-<span class="sig-name descname"><span class="pre">SET_FLASH_ADDR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">963</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_FLASH_ADDR" title="Permalink to this definition"></a></dt>
-<dd><p>set flash address pointer</p>
-</dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.SET_LOCAL_FEAT">
 <span class="sig-name descname"><span class="pre">SET_LOCAL_FEAT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1010</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.SET_LOCAL_FEAT" title="Permalink to this definition"></a></dt>
 <dd><p>Set local features command.</p>
@@ -1763,7 +1761,7 @@
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="max_ble_hci.packet_defs.VendorSpecificOCF.TX_TEST">
-<span class="sig-name descname"><span class="pre">TX_TEST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">771</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.TX_TEST" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">TX_TEST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">769</span></em><a class="headerlink" href="#max_ble_hci.packet_defs.VendorSpecificOCF.TX_TEST" title="Permalink to this definition"></a></dt>
 <dd><p>Transmitter test command.</p>
 </dd></dl>
 

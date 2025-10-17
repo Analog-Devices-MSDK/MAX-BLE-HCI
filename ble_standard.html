@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en">
 <head>
@@ -5,19 +7,15 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>max_ble_hci.ble_standard_cmds &mdash; MAX BLE HCI 0.1.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=2389946f"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
-        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=2389946f"></script>
+      <script src="_static/doctools.js?v=888ff710"></script>
+      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -55,15 +53,21 @@
 <li class="toctree-l3"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.port"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.port</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.logger"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.logger</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.add_device_to_whitelist"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.add_device_to_whitelist()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.clear_whitelist"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.clear_whitelist()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.convert_fips197"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.convert_fips197()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.create_connection"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.create_connection()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.disconnect"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.disconnect()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.enable_adv"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.enable_adv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.enable_encryption"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.enable_encryption()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.enable_scanning"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.enable_scanning()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.encrypt"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.encrypt()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.end_test"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.end_test()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.generate_dhk"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.generate_dhk()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.ltk_reply"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.ltk_reply()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.read_local_p256_pub_key"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.read_local_p256_pub_key()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.read_whitelist_size"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.read_whitelist_size()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.remove_device_from_whitelist"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.remove_device_from_whitelist()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.reset"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.reset()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.rx_test"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.rx_test()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.send_controller_command"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.send_controller_command()</span></code></a></li>
@@ -78,6 +82,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_event_mask"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.set_event_mask()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_event_mask_le"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.set_event_mask_le()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_phy"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.set_phy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_random_address"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.set_random_address()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_scan_params"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.set_scan_params()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_scan_resp_data"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.set_scan_resp_data()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.tx_test"><code class="docutils literal notranslate"><span class="pre">BleStandardCmds.tx_test()</span></code></a></li>
@@ -166,6 +171,43 @@ HCI class.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.add_device_to_whitelist">
+<span class="sig-name descname"><span class="pre">add_device_to_whitelist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">addr_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AddressType</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.add_device_to_whitelist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.add_device_to_whitelist" title="Permalink to this definition"></a></dt>
+<dd><p>Add device to whitelist</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>addr_type</strong> (<em>Union</em><em>[</em><em>AddressType</em><em>, </em><em>int</em><em>]</em>) – Address type of devcie</p></li>
+<li><p><strong>address</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>int</em><em>, </em><em>List</em><em>[</em><em>int</em><em>]</em><em>]</em>) – Address of device
+- str: aa:bb:cc:dd:ee
+- List[int]: [aa, bb, cc, dd, ee, ff]
+- int: 733295205870</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>status of command</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.clear_whitelist">
+<span class="sig-name descname"><span class="pre">clear_whitelist</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.clear_whitelist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.clear_whitelist" title="Permalink to this definition"></a></dt>
+<dd><p>Clear whitelist entirely</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>status of command</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.convert_fips197">
 <span class="sig-name descname"><span class="pre">convert_fips197</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.convert_fips197"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.convert_fips197" title="Permalink to this definition"></a></dt>
 <dd><p>Convert data to fips197 format</p>
@@ -244,6 +286,39 @@ stop advertising based on the the <cite>enable</cite> argument.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.enable_encryption">
+<span class="sig-name descname"><span class="pre">enable_encryption</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ediv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ltk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">typing.Union[bytes,</span> <span class="pre">int,</span> <span class="pre">str]</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.enable_encryption"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.enable_encryption" title="Permalink to this definition"></a></dt>
+<dd><p>Enable encryption command</p>
+<p>Used by the master to enable LL encryption.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> (<em>int</em>) – Connection handle</p></li>
+<li><p><strong>random</strong> (<em>Union</em><em>[</em><em>bytes</em><em>, </em><em>int</em><em>, </em><em>str</em><em>]</em>) – 64 bit random number</p></li>
+<li><p><strong>ediv</strong> (<em>Union</em><em>[</em><em>bytes</em><em>, </em><em>int</em><em>, </em><em>str</em><em>]</em>) – 16 bit encrypted diversifier.</p></li>
+<li><p><strong>ltk</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><em>bytes</em><em>, </em><em>str</em><em>]</em>) – 128 bit Long term Key</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Status</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If ltk is an integer and cannot be represented in 128 bits</p></li>
+<li><p><strong>ValueError</strong> – If ltk is bytes or string an not 16 bytes in length</p></li>
+<li><p><strong>ValueError</strong> – If random cannot be represented ins 64 bits</p></li>
+<li><p><strong>ValueError</strong> – If random bytes or string and more than 8 bytes</p></li>
+<li><p><strong>ValueError</strong> – If ediv cannot be represented ins 16 bits</p></li>
+<li><p><strong>ValueError</strong> – If ediv bytes or string and more than 2 bytes</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -347,6 +422,33 @@ ending a TX test, this value will be 0.</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.ltk_reply">
+<span class="sig-name descname"><span class="pre">ltk_reply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ltk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">typing.Union[bytes,</span> <span class="pre">int,</span> <span class="pre">str]</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.ltk_reply"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.ltk_reply" title="Permalink to this definition"></a></dt>
+<dd><p>LTK Reply command</p>
+<p>Used by the slave to set the LTK for a given connection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> (<em>int</em>) – Connection handle</p></li>
+<li><p><strong>ltk</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><em>bytes</em><em>, </em><em>str</em><em>]</em>) – 128 bit Long term Key</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Status</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If ltk is an integer and cannot be represented in 128 bits</p></li>
+<li><p><strong>ValueError</strong> – If ltk is bytes or string an not 16 bytes in length</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.read_local_p256_pub_key">
 <span class="sig-name descname"><span class="pre">read_local_p256_pub_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="hci_packets.html#max_ble_hci.hci_packets.EventPacket" title="max_ble_hci.hci_packets.EventPacket"><span class="pre">EventPacket</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.read_local_p256_pub_key"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.read_local_p256_pub_key" title="Permalink to this definition"></a></dt>
 <dd><p>Read local P256 Key</p>
@@ -360,6 +462,43 @@ ending a TX test, this value will be 0.</p></li>
 <li><p><strong>NOTE</strong> (<em>Event not enabled for you. Please enable event.</em>)</p></li>
 </ul>
 </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.read_whitelist_size">
+<span class="sig-name descname"><span class="pre">read_whitelist_size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.read_whitelist_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.read_whitelist_size" title="Permalink to this definition"></a></dt>
+<dd><p>Read total spaces in white list</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>number of places in whitelist</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.remove_device_from_whitelist">
+<span class="sig-name descname"><span class="pre">remove_device_from_whitelist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">addr_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AddressType</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.remove_device_from_whitelist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.remove_device_from_whitelist" title="Permalink to this definition"></a></dt>
+<dd><p>Remove device from whitelist</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>addr_type</strong> (<em>Union</em><em>[</em><em>AddressType</em><em>, </em><em>int</em><em>]</em>) – Address type of devcie</p></li>
+<li><p><strong>address</strong> (<em>Union</em><em>[</em><em>str</em><em>, </em><em>int</em><em>, </em><em>List</em><em>[</em><em>int</em><em>]</em><em>]</em>) – Address of device
+- str: aa:bb:cc:dd:ee
+- List[int]: [aa, bb, cc, dd, ee, ff]
+- int: 733295205870</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>status of command</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -661,6 +800,26 @@ bit to <cite>0</cite> disables it.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.set_random_address">
+<span class="sig-name descname"><span class="pre">set_random_address</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">addr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.set_random_address"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_random_address" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the random address.</p>
+<p>Function sets the chip random address. Address can be given
+as either a bytearray or as a list of integer values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>addr</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><em>str</em><em>]</em>) – Desired random address.
+If str, format expected xx:xx:xx:xx:xx</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The return packet status code.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode">StatusCode</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.set_scan_params">
 <span class="sig-name descname"><span class="pre">set_scan_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scan_params:</span> <span class="pre">~max_ble_hci.data_params.ScanParams</span> <span class="pre">=</span> <span class="pre">scan_type:</span>&#160; <span class="pre">1</span> <span class="pre">scan_interval:</span>&#160; <span class="pre">16</span> <span class="pre">scan_window:</span>&#160; <span class="pre">16</span> <span class="pre">addr_type:</span>&#160; <span class="pre">AddrType.PUBLIC</span> <span class="pre">filter_policy:</span>&#160; <span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.set_scan_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.set_scan_params" title="Permalink to this definition"></a></dt>
 <dd><p>Set test board scanning parameters.</p>
@@ -701,17 +860,23 @@ parameters to the given values.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.tx_test">
-<span class="sig-name descname"><span class="pre">tx_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="constants.html#max_ble_hci.constants.PhyOption" title="max_ble_hci.constants.PhyOption"><span class="pre">PhyOption</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PhyOption.PHY_1M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="constants.html#max_ble_hci.constants.PayloadOption" title="max_ble_hci.constants.PayloadOption"><span class="pre">PayloadOption</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PayloadOption.PLD_PRBS9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">packet_len</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.tx_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.tx_test" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">tx_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="constants.html#max_ble_hci.constants.PhyOption" title="max_ble_hci.constants.PhyOption"><span class="pre">PhyOption</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PhyOption.PHY_1M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="constants.html#max_ble_hci.constants.PayloadOption" title="max_ble_hci.constants.PayloadOption"><span class="pre">PayloadOption</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PayloadOption.PLD_PRBS9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">packet_len</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="constants.html#max_ble_hci.constants.TxTestMode" title="max_ble_hci.constants.TxTestMode"><span class="pre">TxTestMode</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">TxTestMode.ENHANCED</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cte_len</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cte_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="constants.html#max_ble_hci.constants.CteType" title="max_ble_hci.constants.CteType"><span class="pre">CteType</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">CteType.AOA</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">power</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="constants.html#max_ble_hci.constants.TxPower" title="max_ble_hci.constants.TxPower"><span class="pre">TxPower</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">TxPower.MAX</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.tx_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.tx_test" title="Permalink to this definition"></a></dt>
 <dd><p>Start a transmitter test.</p>
 <p>Sends a command to the DUT, telling it to start a DTM transmitter
 test in accordance with the given parameters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>mode</strong> (<em>Union</em><em>[</em><a class="reference internal" href="constants.html#max_ble_hci.constants.TxTestMode" title="max_ble_hci.constants.TxTestMode"><em>TxTestMode</em></a><em>, </em><em>int</em><em>]</em>) – The test and set of parameters to be transmitted.</p></li>
 <li><p><strong>channel</strong> (<em>int</em><em>, </em><em>optional</em>) – The channel on which transmission should take place.</p></li>
 <li><p><strong>phy</strong> (<em>Union</em><em>[</em><a class="reference internal" href="constants.html#max_ble_hci.constants.PhyOption" title="max_ble_hci.constants.PhyOption"><em>PhyOption</em></a><em>,</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – The PHY that should be used by the transmitter.</p></li>
 <li><p><strong>payload</strong> (<a class="reference internal" href="constants.html#max_ble_hci.constants.PayloadOption" title="max_ble_hci.constants.PayloadOption"><em>PayloadOption</em></a><em>, </em><em>optional</em>) – The packet payload type that should be used.</p></li>
 <li><p><strong>packet_len</strong> (<em>int</em><em>, </em><em>optional</em>) – The desired length of the transmitted packets.</p></li>
+<li><p><strong>cte_len</strong> (<em>int</em>) – CTE length measureed in units of 8 micro-seconds.</p></li>
+<li><p><strong>cte_type</strong> (<em>Union</em><em>[</em><a class="reference internal" href="constants.html#max_ble_hci.constants.CteType" title="max_ble_hci.constants.CteType"><em>CteType</em></a><em>, </em><em>int</em><em>]</em>) – A CTE type for Angle of Arrival (AoA) selection.</p></li>
+<li><p><strong>switch_pattern_len</strong> (<em>Union</em><em>[</em><em>SwitchPatternLen</em><em>, </em><em>int</em><em>]</em>) – The number of transmitter antennas to be used</p></li>
+<li><p><strong>switch_pattern</strong> (<em>int</em>) – The ID of the transmitter antenna</p></li>
+<li><p><strong>power</strong> (<em>Union</em><em>[</em><a class="reference internal" href="constants.html#max_ble_hci.constants.TxPower" title="max_ble_hci.constants.TxPower"><em>TxPower</em></a><em>, </em><em>str</em><em>]</em>) – The transmitter power level.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -725,7 +890,7 @@ test in accordance with the given parameters.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="max_ble_hci.ble_standard_cmds.BleStandardCmds.update_connection_params">
-<span class="sig-name descname"><span class="pre">update_connection_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handle:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn_params:</span> <span class="pre">~max_ble_hci.data_params.ConnParams</span> <span class="pre">=</span> <span class="pre">conn_interval_min:</span>&#160; <span class="pre">0</span> <span class="pre">conn_interval_max:</span>&#160; <span class="pre">6</span> <span class="pre">max_latency:</span>&#160; <span class="pre">0</span> <span class="pre">sup_timeout:</span>&#160; <span class="pre">100</span> <span class="pre">min_ce_length:</span>&#160; <span class="pre">3856</span> <span class="pre">max_ce_length:</span>&#160; <span class="pre">3856</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.update_connection_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.update_connection_params" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">update_connection_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handle:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn_params:</span> <span class="pre">~max_ble_hci.data_params.ConnParams</span> <span class="pre">=</span> <span class="pre">conn_interval_min:</span>&#160; <span class="pre">0</span> <span class="pre">conn_interval_max:</span>&#160; <span class="pre">6</span> <span class="pre">max_latency:</span>&#160; <span class="pre">0</span> <span class="pre">sup_timeout:</span>&#160; <span class="pre">100</span> <span class="pre">min_ce_length:</span>&#160; <span class="pre">3856</span> <span class="pre">max_ce_length:</span>&#160; <span class="pre">3856</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback:</span> <span class="pre">~typing.Callable</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="packet_codes.html#max_ble_hci.packet_codes.StatusCode" title="max_ble_hci.packet_codes.StatusCode"><span class="pre">StatusCode</span></a></span></span><a class="reference internal" href="_modules/max_ble_hci/ble_standard_cmds.html#BleStandardCmds.update_connection_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#max_ble_hci.ble_standard_cmds.BleStandardCmds.update_connection_params" title="Permalink to this definition"></a></dt>
 <dd><p>Update connection parameters</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
