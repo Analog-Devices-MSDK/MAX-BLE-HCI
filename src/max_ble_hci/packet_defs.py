@@ -739,8 +739,14 @@ class VendorSpecificOCF(Enum):
     FGEN = 0x307
     """Function generator command."""
 
+    BT_RX_TEST = 0x70
+    """Bluetooth Classic receiver test"""
+    
     BT_TX_TEST = 0x71
     """Bluetooth Classic transmitter test"""
+
+    BT_TEST_END = 0x72
+    """Bluetooth Classic test end"""
 
 
 @dataclass

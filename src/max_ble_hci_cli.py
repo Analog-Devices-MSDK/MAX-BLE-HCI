@@ -1079,6 +1079,68 @@ Default: {hex(DEFAULT_CE_LEN)}""",
         )
     )
 
+    #### RXTESTBTVS PARSER ####
+    rx_test_bt_vs_parser = subparsers.add_parser(
+        "rxtestbtvs",
+        aliases=["rxbtvs"],
+        help="Execute the Bluetooth Classic VS RX test",
+        formatter_class=RawTextHelpFormatter,
+    )
+    rx_test_bt_vs_parser.add_argument(
+        "-c",
+        "--channel",
+        type=int,
+        dest="channel",
+        default=0,
+        help="RX test channel. Default: 0",
+    )
+    rx_test_bt_vs_parser.add_argument(
+        "-p",
+        "--packet-type",
+        dest="packet_type",
+        type=int,
+        default=0,
+        help="""RX Test packet type
+        0: DM1
+        1: DH1
+        2: DM3
+        3: DH3
+        4: DM5
+        5: DH5
+        Default: DM1
+        """,
+    )
+    rx_test_bt_vs_parser.add_argument(
+        "-i",
+        "--infinite",
+        dest="inf_test",
+        default=False,
+        action="store_true",
+        help="Infinite test mode. Default: False",
+    )
+    rx_test_bt_vs_parser.set_defaults(
+        func=lambda args: print(
+            hci.rx_test_bt_vs(
+                channel=args.channel,
+                packet_type=args.packet_type,
+                inf_test=args.inf_test,
+            )
+        )
+    )
+
+    #### ENDBTVS PARSER ####
+    test_end_bt_vs_parser = subparsers.add_parser(
+        "endbtvs",
+        aliases=["ebtvs"],
+        help="End the current Bluetooth Classic test and get results",
+        formatter_class=RawTextHelpFormatter,
+    )
+    test_end_bt_vs_parser.set_defaults(
+        func=lambda args: print(
+            hci.test_end_bt_vs()
+        )
+    )
+
     #### RXTEST PARSER ####
     rx_test_parser = subparsers.add_parser(
         "rx-test",

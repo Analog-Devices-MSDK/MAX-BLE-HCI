@@ -480,6 +480,72 @@ class VendorSpecificCmds:
         params.extend([payload, packet_type, tx_power, inf_test])
         return self.send_vs_command(OCF.VENDOR_SPEC.BT_TX_TEST, params=params)
 
+    def rx_test_bt_vs(
+        self,
+        channel: int = 0,
+        packet_type: Union[BtTxPacketType, int] = BtTxPacketType.PKT_DM1,
+        inf_test: bool = False,
+    ) -> StatusCode:
+        """Start a VS receiver test.
+
+        Sends a VS command to the DUT, telling it to
+        start a Bluetooth Classic DTM receiver test.
+
+        Parameters
+        ----------
+        channel : int
+            RX channel, range: 0 to 79.
+        packet_type : Union[BtTxPacketType, int]
+            The type of packet to receive.
+        inf_test: bool
+            Infinite RX test mode.
+
+        Returns
+        -------
+        StatusCode
+            Command execution status.
+
+        Raises
+        ------
+        ValueError
+            If `channel` is greater than 79 or less than 0.
+        ValueError
+            If `packet_type` is greater than 21.
+
+        """
+        if not 0 <= channel < 80:
+            raise ValueError(
+                f"Channel out of bandwidth ({channel}), must be in range [0, 80)."
+            )
+        if not isinstance(packet_type, BtTxPacketType):
+            if packet_type > 21:
+                raise ValueError(
+                    f"Packet type out of range ({packet_type}), must be 21 or less."
+                )
+
+        print("Parsing BT_RX_TEST")
+
+        packet_type = (
+            packet_type.value
+            if isinstance(packet_type, BtTxPacketType)
+            else packet_type
+        )
+        params = [channel, packet_type, inf_test]
+        return self.send_vs_command(OCF.VENDOR_SPEC.BT_RX_TEST, params=params)
+
+    def test_end_bt_vs(self) -> Tuple[int, StatusCode]:
+        """End the current Bluetooth Classic test and get results.
+
+        Returns
+        -------
+        Tuple[int, StatusCode]
+            Status and packet count if successful.
+        """
+        print("Parsing BT_TEST_END")
+        evt = self.send_vs_command(OCF.VENDOR_SPEC.BT_TEST_END, return_evt=True)
+        packet_count = evt.get_return_params()
+        return packet_count, evt.status
+
     def rx_test_vs(
         self,
         channel: int = 0,
