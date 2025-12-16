@@ -62,6 +62,7 @@ from .constants import (
     MAX_U64,
     PayloadOption,
     PhyOption,
+    PatternOption,
     PubKeyValidateMode,
     BtTxPacketType,
 )
@@ -534,6 +535,62 @@ class VendorSpecificCmds:
         params = [channel, phy, modulation_idx]
         params.extend(to_le_nbyte_list(num_packets, 2))
         return self.send_vs_command(OCF.VENDOR_SPEC.RX_TEST, params=params)
+
+    def tx_fgen_vs(
+        self,
+        enable: int = 1,
+        channel: int = 0,
+        pattern_type: Union[PatternOption, int] = PatternOption.PT_CW,
+    ) -> StatusCode:
+        """Start a vendor-specific function generator transmitter test.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        start/stop continuously transmitting a pattern type in accordance
+        with the given parameters.
+
+        Parameters
+        ----------
+        enable : int
+            1 to enable function generator, 0 to disable.
+        channel : int
+            The on pattern should be transmitted. This will be mapped to the frequency in kHz
+            which will be passed to the controller
+        pattern_type : Union[PatternOption, int]
+            The pattern type that should be transmitted.
+
+        Returns
+        -------
+        StatusCode
+            The return packet status code.
+
+        Raises
+        ------
+        ValueError
+            If `enable` is greater than 1 or less than 0.
+        ValueError
+            If `channel` is greater than 39 or less than 0.
+        ValueError
+            If `pattern_type` is greater than 4 or less than 0.
+
+        """
+        if not 0 <= enable <= 1:
+            raise ValueError(f"Enable is an invalid option({enable}), must be 1 or 0.")
+        if not 0 <= channel < 40:
+            raise ValueError(
+                f"Channel out of bandwidth ({channel}), must be in range [0, 40)."
+            )
+
+        pattern_type = (
+            pattern_type.value
+            if isinstance(pattern_type, PatternOption)
+            else pattern_type
+        )
+
+        # the controller expects a frequency to be passed in, map channel to frequency in kHz
+        frequency_khz = 2402000 + (channel * 2000)
+
+        params = [enable, frequency_khz, pattern_type]
+        return self.send_vs_command(OCF.VENDOR_SPEC.FGEN, params=params)
 
     def reset_test_stats(self) -> StatusCode:
         """Reset accumulated test stats.

@@ -173,7 +173,7 @@ class PhyOption(Enum):
 
 
 class PayloadOption(Enum):
-    """BLE-definded payload options."""
+    """BLE-defined payload options."""
 
     PLD_PRBS9 = 0
     """PRBS9 payload option."""
@@ -198,6 +198,25 @@ class PayloadOption(Enum):
 
     PLD_01010101 = 7
     """01010101 payload option."""
+
+
+class PatternOption(Enum):
+    """Vendor-Specific Function Generator Pattern options."""
+
+    PT_CW = 0
+    """Carrier Wave pattern option."""
+
+    PT_PRBS9 = 1
+    """PRBS9 pattern option."""
+
+    PT_PRBS15 = 2
+    """PRBS15 pattern option."""
+
+    PT_DF1 = 3
+    """DF1 pattern option."""
+
+    PT_DF2 = 4
+    """DF2 pattern option."""
 
 
 class AddrType(Enum):

@@ -78,6 +78,7 @@ from max_ble_hci import BleHci
 from max_ble_hci.constants import (
     PayloadOption,
     PhyOption,
+    PatternOption,
     AddrType,
 )
 from max_ble_hci.data_params import (
@@ -1162,6 +1163,60 @@ Default: {hex(DEFAULT_CE_LEN)}""",
                 phy=PhyOption(args.phy),
                 modulation_idx=args.modulationIdx,
                 num_packets=args.num_packets,
+            )
+        ),
+    )
+
+    #### TX_FGEN_VS PARSER ####
+
+    tx_fgen_vs_parser = subparsers.add_parser(
+        "tx-fgen-vs",
+        aliases=["fgen"],
+        help="Execute the vendor-specific function generator",
+        formatter_class=RawTextHelpFormatter,
+    )
+    tx_fgen_vs_parser.add_argument(
+        "-e",
+        "--enable",
+        dest="enable",
+        type=int,
+        default=1,
+        help="Enable or disable Function Generator. Default: 1 (enable)",
+    )
+    tx_fgen_vs_parser.add_argument(
+        "-c",
+        "--channel",
+        dest="channel",
+        type=int,
+        default=0,
+        help="""
+        Channel to transmit continuous function generation on
+        Default: 0
+        Range: 0-39
+        """,
+    )
+    tx_fgen_vs_parser.add_argument(
+        "-p",
+        "--pattern-type",
+        dest="pattern_type",
+        type=int,
+        default=0,
+        help="""
+        Vendor-specific Pattern Type to transmit
+        0: Carrier Wave
+        1: PRBS9
+        2: PRBS15
+        3: DF1
+        4: DF2
+        Default: Carrier Wave
+        """,
+    )
+    tx_fgen_vs_parser.set_defaults(
+        func=lambda args: print(
+            hci.tx_fgen_vs(
+                enable=args.enable,
+                channel=args.channel,
+                pattern_type=PatternOption(args.pattern_type),
             )
         ),
     )
