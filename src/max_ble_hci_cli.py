@@ -1588,14 +1588,6 @@ Default: {hex(DEFAULT_CE_LEN)}""",
     flush_parser = subparsers.add_parser("flush", help="Flush serial port")
     flush_parser.set_defaults(func=lambda _: hci.port.flush())
 
-    def _script_runner(script_path):
-        print(script_path)
-        with open(script_path, "r", encoding="utf-8") as script:
-            commands = script.readlines()
-
-        if commands:
-            _run_input_cmds(commands, terminal)
-
     run_parser = subparsers.add_parser(
         "run",
         help="run command via os",
