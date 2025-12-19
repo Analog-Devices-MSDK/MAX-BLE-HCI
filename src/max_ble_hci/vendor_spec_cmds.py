@@ -553,8 +553,8 @@ class VendorSpecificCmds:
         enable : int
             1 to enable function generator, 0 to disable.
         channel : int
-            The on pattern should be transmitted. This will be mapped to the frequency in kHz
-            which will be passed to the controller
+            The channel on which the pattern should be transmitted. This will
+            be mapped to the frequency in kHz which will be passed to the controller
         pattern_type : Union[PatternOption, int]
             The pattern type that should be transmitted.
 
