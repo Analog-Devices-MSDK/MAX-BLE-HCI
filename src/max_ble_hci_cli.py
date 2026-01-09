@@ -882,13 +882,12 @@ Default: {hex(DEFAULT_CE_LEN)}""",
     )
     tx_test_parser.add_argument(
         "--power",
-        nargs="?",
-        choices=("min", "MIN", "max", "MAX"),
-        default="max",
-        help="""Set the Tx power level
-        min: 0x7F
-        max: 0x7E
-        Default: max""",
+        type=int,
+        default=0,
+        help="""Set the Tx power level, signed int
+        0x7F: min
+        0x7E: max
+        Default: 0""",
     )
 
     tx_test_parser.set_defaults(

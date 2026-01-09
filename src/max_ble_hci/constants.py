@@ -270,40 +270,6 @@ class CteType(Enum):
     """AoD Constant Tone Extension with 2 us slots"""
 
 
-class TxPower(Enum):
-    """Transmitter Power Levels"""
-
-    MAX = 0x7F
-    """Maximum power level"""
-
-    MIN = 0x7E
-    """Minimum power level"""
-
-    @staticmethod
-    def str_to_mask(option: str) -> int:
-        """Select a power level.
-
-        Parameters
-        ----------
-        option: str
-            The desired power level.
-
-        Returns
-        -------
-        int
-            The power level's corresponding power symbol.
-        """
-        option = option.lower()
-
-        if option == "max":
-            return TxPower.MAX.value
-
-        if option == "min":
-            return TxPower.MIN.value
-
-        return TxPower.MAX.value
-
-
 class BtTxPacketType(Enum):
     """Bluetooth Classic TX test packet types"""
 

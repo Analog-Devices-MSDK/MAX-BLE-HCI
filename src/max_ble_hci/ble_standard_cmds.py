@@ -57,7 +57,7 @@ from typing import List, Optional, Tuple, Union, Callable
 
 from ._hci_logger import get_formatted_logger
 from ._transport import SerialUartTransport
-from .constants import PayloadOption, PhyOption, TxTestMode, CteType, TxPower
+from .constants import PayloadOption, PhyOption, TxTestMode, CteType
 from .data_params import AdvParams, ConnParams, EstablishConnParams, ScanParams
 from .hci_packets import CommandPacket, EventPacket
 from .packet_codes import EventMask, EventMaskPage2, EventMaskLE, StatusCode
@@ -594,7 +594,7 @@ class BleStandardCmds:
         mode: Union[TxTestMode, int] = TxTestMode.ENHANCED,
         cte_len: int = 0,
         cte_type: Union[CteType, int] = CteType.AOA,
-        power: Union[TxPower, str] = TxPower.MAX,
+        power: int = 0,
     ) -> StatusCode:
         """Start a transmitter test.
 
@@ -621,7 +621,7 @@ class BleStandardCmds:
             The number of transmitter antennas to be used
         switch_pattern: int
             The ID of the transmitter antenna
-        power: Union[TxPower, str]
+        power: int
             The transmitter power level.
 
         Returns
@@ -639,11 +639,6 @@ class BleStandardCmds:
             phy = phy.value
         if isinstance(cte_type, CteType):
             cte_type = cte_type.value
-
-        if isinstance(power, TxPower):
-            power = power.value
-        if isinstance(power, str):
-            power = TxPower.str_to_mask(power)
 
         if mode == TxTestMode.ENHANCED.value:
             params = [channel, packet_len, payload, phy]
