@@ -31,6 +31,15 @@ On Windows
 install.bat
 ```
 
+With pip
+
+```bash
+python -m venv .venv
+source .venv/bin/activate # Linux
+.\venv\Scripts\activate # Windows
+pip install -r requirements.txt
+```
+
 ## Basic Usage
 
 The BLE-HCI is a mostly generic library, which is capable of driving any BLE devices which can communicate using the UART transport.
@@ -59,7 +68,7 @@ hci.reset()
 
 ## Command Line Interface (CLI)
 
-By default, the CLI capable of driving the BLE-HCI is installed as part of the package and can be accessed by running
+By default, the CLI capable of driving the BLE-HCI is installed as part of the package and can be accessed by running.
 
 ```bash
 max_ble_hci -h
@@ -100,6 +109,12 @@ options:
                                 2: Info/Warning/Error
                                 3: All messages
                                 Default: 3
+```
+
+You can also run the CLI from source.
+
+```bash
+python3 src/max_ble_hci_cli.py -h
 ```
 
 The cli requires a serial port to connect the HCI to and is passed in through the command line.

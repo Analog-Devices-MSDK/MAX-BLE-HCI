@@ -65,7 +65,7 @@ import secrets
 try:
     import readline
 except ImportError:
-    import gnureadline as readline
+    import pyreadline3 as readline
 
 # pylint: enable=unused-import
 import sys
