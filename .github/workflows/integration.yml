@@ -27,8 +27,8 @@ concurrency:
 on:
   # push:
   #   branches: ["main"]
-  pull_request:
-    branches: ["main"]
+  # pull_request:
+  #   branches: ["main"]
   workflow_dispatch:
 env:
   TEST_BOARD: max32655_board3
