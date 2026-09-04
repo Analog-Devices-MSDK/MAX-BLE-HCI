@@ -50,6 +50,7 @@
 #
 ##############################################################################
 """Contains objects used for the creation of HCI packets."""
+
 # pylint: disable=too-many-arguments
 from __future__ import annotations
 

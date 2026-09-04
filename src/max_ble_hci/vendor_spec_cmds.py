@@ -52,6 +52,7 @@
 """
 Module contains definitions for ADI vendor-specific HCI commands.
 """
+
 # pylint: disable=too-many-lines, too-many-arguments, too-many-public-methods
 from typing import Dict, List, Optional, Tuple, Union
 
@@ -65,6 +66,8 @@ from .constants import (
     PatternOption,
     PubKeyValidateMode,
     BtTxPacketType,
+    LEPerCountMode,
+    BTPerCountMode,
 )
 from .data_params import (
     AdvPktStats,
@@ -74,6 +77,7 @@ from .data_params import (
     PoolStats,
     ScanPktStats,
     TestReport,
+    TestStats,
 )
 from .hci_packets import CommandPacket, EventPacket, byte_length
 from .packet_codes import StatusCode
@@ -481,6 +485,89 @@ class VendorSpecificCmds:
         params.extend([payload, packet_type, tx_power, inf_test])
         return self.send_vs_command(OCF.VENDOR_SPEC.BT_TX_TEST, params=params)
 
+    def rx_test_bt_vs(
+        self,
+        channel: int = 0,
+        packet_type: Union[BtTxPacketType, int] = BtTxPacketType.PKT_DM1,
+        inf_test: bool = False,
+        percount_mode: Union[BTPerCountMode, int] = BTPerCountMode.CORRECT,
+    ) -> StatusCode:
+        """Start a vendor-specific Bluetooth Classic receiver test.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        start a Bluetooth Classic DTM receiver test in accordance
+        with the given parameters.
+
+        Parameters
+        ----------
+        channel : int
+            RX channel, range: 0 to 79.
+        packet_type : Union[BtTxPacketType, int]
+            The type of packet to receive.
+        inf_test: bool
+            Infinite RX test mode.
+        percount_mode: Union[BTPerCountMode, int]
+            Percount mode
+
+        Returns
+        -------
+        StatusCode
+            The return packet status code.
+
+        Raises
+        ------
+        ValueError
+            If `channel` is greater than 79 or less than 0.
+        ValueError
+            If `packet_type` is greater than 21.
+
+        """
+        if not 0 <= channel < 80:
+            raise ValueError(
+                f"Channel out of bandwidth ({channel}), must be in range [0, 80)."
+            )
+
+        if not isinstance(packet_type, BtTxPacketType):
+            if packet_type > 21:
+                raise ValueError(
+                    f"Packet type out of range ({packet_type}), must be 21 or less."
+                )
+
+        print("Parsing BT_RX_TEST")
+
+        packet_type = (
+            packet_type.value
+            if isinstance(packet_type, BtTxPacketType)
+            else packet_type
+        )
+
+        if isinstance(percount_mode, BTPerCountMode):
+            percount_mode = percount_mode.value
+
+        params = [channel, packet_type, 0x01 if inf_test else 0x00, percount_mode]
+        return self.send_vs_command(OCF.VENDOR_SPEC.BT_RX_TEST, params=params)
+
+    def test_end_bt_vs(self) -> Tuple[int, StatusCode]:
+        """End a Bluetooth Classic test and get packet count.
+
+        Sends a vendor-specific command to the DUT to stop any
+        running BR/EDR test (TX or RX) and returns the packet count.
+
+        Returns
+        -------
+        Tuple[TestStats, StatusCode]
+            A tuple containing:
+            - The number of packets transmitted/received during the test
+            - The status code of the command
+
+        """
+        print("Parsing BT_TEST_END")
+
+        evt = self.send_vs_command(OCF.VENDOR_SPEC.BT_TEST_END, return_evt=True)
+        nb_packets = evt.get_return_params()
+
+        return nb_packets, evt.status
+
     def rx_test_vs(
         self,
         channel: int = 0,
@@ -535,6 +622,85 @@ class VendorSpecificCmds:
         params = [channel, phy, modulation_idx]
         params.extend(to_le_nbyte_list(num_packets, 2))
         return self.send_vs_command(OCF.VENDOR_SPEC.RX_TEST, params=params)
+
+    def end_ex_test(self) -> Tuple[TestStats, StatusCode]:
+        """End a Bluetooth LE test and get extended metrics.
+
+        Sends a vendor-specific command to the DUT to stop any
+        running BLE test (TX or RX) and returns the number of packets
+        transmitted/received and RSSI measurements
+
+        Returns
+        -------
+        Tuple[Metrics, StatusCode]
+            A tuple containing:
+            - A structure that holds the number of packets,
+              rssi max, min, and average measurements
+            - The status code of the command
+
+        """
+        evt = self.send_vs_command(OCF.VENDOR_SPEC.TEST_ENDEX, return_evt=True)
+        data = evt.get_return_params(param_lens=[2, 1, 1, 1])
+
+        rssi_min = data[1] if data[1] < 128 else data[1] - 256
+        rssi_max = data[2] if data[2] < 128 else data[2] - 256
+        rssi_avg = data[3] if data[3] < 128 else data[3] - 256
+
+        metrics = TestStats(
+            nb_packets=data[0],
+            rssi_min=rssi_min,
+            rssi_max=rssi_max,
+            rssi_avg=rssi_avg,
+        )
+
+        return metrics, evt.status
+
+    def infinite_txrx_vs(self, toggle: bool = False) -> StatusCode:
+        """Enables/Disables Infinite TX/RX.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        enable/disable infinite tx packet/infinite rx window
+
+        Parameters
+        ----------
+        toggle : int
+            1 to enable infinite tx/rx, 0 to disable infinite tx/rx.
+
+        Returns
+        -------
+        StatusCode
+            The return packet status code.
+
+        """
+
+        return self.send_vs_command(
+            OCF.VENDOR_SPEC.SET_INFINITE_TXRX, params=int(toggle)
+        )
+
+    def percount_mode_vs(
+        self, mode: Union[LEPerCountMode, int] = LEPerCountMode.CORRECT
+    ) -> StatusCode:
+        """Sets the per-count mode during a Direct RX Test.
+
+        Sends a vendor-specific command to the DUT, telling it to
+        set the per-count mode during a Direct RX Test
+
+        Parameters
+        ----------
+        mode: Union[PerCountMode, int]
+            The mode selection.
+
+        Returns
+        -------
+        StatusCode
+            The return packet status code.
+
+        """
+
+        if isinstance(mode, LEPerCountMode):
+            mode = mode.value
+
+        return self.send_vs_command(OCF.VENDOR_SPEC.SET_PERCOUNT_MODE, params=mode)
 
     def tx_fgen_vs(
         self,

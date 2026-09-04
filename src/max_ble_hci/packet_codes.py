@@ -50,6 +50,7 @@
 #
 ##############################################################################
 """Contains definitions for BLE standard codes utilized in HCI packet creation/parsing."""
+
 from __future__ import annotations
 
 from enum import Enum, Flag

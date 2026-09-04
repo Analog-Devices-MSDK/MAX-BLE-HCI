@@ -59,6 +59,7 @@ hci_logger : logging.Logger
     Host-controller interface logging object.
 
 """
+
 import logging
 from typing import Dict
 

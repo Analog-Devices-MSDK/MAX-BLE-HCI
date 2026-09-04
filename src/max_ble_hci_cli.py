@@ -55,6 +55,7 @@ max_ble_hci_cli.py
 Description: CLI Client to use MAX-BLE-HCI
 
 """
+
 import argparse
 import logging
 import os
@@ -92,7 +93,6 @@ from max_ble_hci.packet_codes import EventMaskLE, StatusCode, EventCode, EventSu
 from max_ble_hci.hci_packets import EventPacket
 from max_ble_hci.ad_types import AdvReport
 from max_ble_hci import utils
-
 
 # pylint: enable=import-error
 
@@ -195,6 +195,7 @@ def _init_cli():
     parser.add_argument("--version", action="version", version="%(prog)s 1.4.1")
 
     parser.add_argument("serial_port", help="Serial port path or COM#")
+
     parser.add_argument(
         "-b",
         "--baud",
@@ -202,6 +203,13 @@ def _init_cli():
         type=int,
         default=DEFAULT_BAUD,
         help="Serial port baud rate. Default: " + str(DEFAULT_BAUD),
+    )
+
+    parser.add_argument(
+        "--stop-bits",
+        type=int,
+        default=1,
+        help="Number of stop bits. Default: 1",
     )
 
     parser.add_argument(
@@ -219,12 +227,14 @@ def _init_cli():
         default="DUT",
         help="Board ID tag for printing trace messages. Default: None",
     )
+
     parser.add_argument(
         "--timeout",
         default=1.0,
         type=float,
         help="UART RX/TX Timeout",
     )
+
     parser.add_argument(
         "-c",
         "--commands",
@@ -275,6 +285,7 @@ def main():
         async_callback=print,
         evt_callback=print,
         flowcontrol=args.enable_flow_control,
+        stopbits=args.stop_bits,
         recover_on_power_loss=True,
     )
 
@@ -874,12 +885,13 @@ Default: {hex(DEFAULT_CE_LEN)}""",
         "-ct",
         "--cte-type",
         type=int,
-        default=0,
+        default=255,
         help="""CTE length
         0: AOA
         1: AOA with 1 us slots
         2: AOA with 2 us slots
-        Default: AOA""",
+        255: No CTE type
+        Default: No CTE type""",
     )
     tx_test_parser.add_argument(
         "--power",
@@ -1079,6 +1091,98 @@ Default: {hex(DEFAULT_CE_LEN)}""",
         )
     )
 
+    #### RX TEST BT VS PARSER ####
+    rx_test_bt_vs_parser = subparsers.add_parser(
+        "rxtestbtvs",
+        aliases=["rxbtvs"],
+        help="Execute the Bluetooth Classic vendor-specific receiver test",
+        formatter_class=RawTextHelpFormatter,
+    )
+    rx_test_bt_vs_parser.add_argument(
+        "-c",
+        "--channel",
+        type=int,
+        dest="channel",
+        default=0,
+        help="Rx test channel, 0-79. Default: 0",
+    )
+    rx_test_bt_vs_parser.add_argument(
+        "--pt",
+        dest="packet_type",
+        type=int,
+        default=1,
+        help="""Rx Test packet type
+        0: DM1
+        1: DH1
+        2: DM3
+        3: DH3
+        4: DM5
+        5: DH5
+        6: 2DH1
+        7: 3DH1
+        8: 2DH3
+        9: 3DH3
+        10: 2DH5
+        11: 3DH5
+        12: HV1
+        13: HV2
+        14: HV3
+        15: EV3
+        16: EV4
+        17: EV5
+        18: 2EV3
+        19: 3EV3
+        20: 2EV5
+        21: 3EV5
+        Default: DH1""",
+    )
+    rx_test_bt_vs_parser.add_argument(
+        "-i",
+        "--infinite",
+        dest="inf_test",
+        default=False,
+        action="store_true",
+        help="Infinite test mode. Default: False",
+    )
+    rx_test_bt_vs_parser.add_argument(
+        "-pcm",
+        "--percount-mode",
+        dest="percount_mode",
+        type=int,
+        default=0,
+        help="""BT Percount mode configuration.
+         0: Number of correctly received packets (no error)
+         1: Number of Access Address detection error only 
+         2: Number of HEC Error detection only
+         4: Number of CRC Error detection only
+         Default: 0""",
+    )
+    rx_test_bt_vs_parser.set_defaults(
+        func=lambda args: print(
+            hci.rx_test_bt_vs(
+                channel=args.channel,
+                packet_type=args.packet_type,
+                inf_test=args.inf_test,
+                percount_mode=args.percount_mode,
+            )
+        )
+    )
+
+    #### TEST END BT VS PARSER ####
+    test_end_bt_vs_parser = subparsers.add_parser(
+        "testendbtvs",
+        aliases=["endbtvs", "stopbtvs"],
+        help="End the Bluetooth Classic test and get packet count",
+        formatter_class=RawTextHelpFormatter,
+    )
+
+    def _bt_end_test_vs(_args):
+        nb_packets, status = hci.test_end_bt_vs()
+        print(f"TX Transmitted/RX Received: {nb_packets}")
+        print(status)
+
+    test_end_bt_vs_parser.set_defaults(func=_bt_end_test_vs)
+
     #### RXTEST PARSER ####
     rx_test_parser = subparsers.add_parser(
         "rx-test",
@@ -1229,11 +1333,70 @@ Default: {hex(DEFAULT_CE_LEN)}""",
     )
 
     def _end_test(_args):
-        rx_packets, status = hci.end_test()
-        print(f"RX Received: {rx_packets}")
+        nb_packets, status = hci.end_test()
+        print(f"TX Transmitted/RX Received: {nb_packets}")
         print(status)
 
     endtest_parser.set_defaults(func=_end_test)
+
+    #### END EXTENDED VS PARSER ####
+    endex_test_parser = subparsers.add_parser(
+        "endex-test",
+        aliases=["endex"],
+        help="End the TX/RX test, print an extended metrics report from test",
+        formatter_class=RawTextHelpFormatter,
+    )
+
+    def _endex_test_vs(_args):
+        metrics, status = hci.end_ex_test()
+        print(f"TX Transmitted/RX Received: {metrics.nb_packets}")
+        print(f"RX RSSI Minimum: {metrics.rssi_min} dBm")
+        print(f"RX RSSI Maximum: {metrics.rssi_max} dBm")
+        print(f"RX RSSI Average: {metrics.rssi_avg} dBm")
+        print(status)
+
+    endex_test_parser.set_defaults(func=_endex_test_vs)
+
+    #### INFINITE TX/RX PARSER ####
+    infinite_txrx_parser = subparsers.add_parser(
+        "infinite-txrx",
+        aliases=["inftxrx"],
+        help="Set infinite tx/rx on DUT",
+        formatter_class=RawTextHelpFormatter,
+    )
+    infinite_txrx_parser.add_argument(
+        "toggle",
+        type=int,
+        help="Enable or disable infinite tx/rx. Default: 0 (disable)",
+    )
+
+    infinite_txrx_parser.set_defaults(
+        func=lambda args: print(hci.infinite_txrx_vs(args.toggle)),
+    )
+
+    #### PERCOUNT_MODE PARSER ####
+    set_percount_mode_parser = subparsers.add_parser(
+        "set-percount-mode",
+        aliases=["percount-mode"],
+        help="Set percount mode on DUT LE Core",
+        formatter_class=RawTextHelpFormatter,
+    )
+
+    set_percount_mode_parser.add_argument(
+        "mode",
+        type=int,
+        default=0,
+        help="""LE Percount mode configuration.
+         0: Number of correctly received packets (no error)
+         1: Number of Access Address detection error only 
+         2: Number of CRC Error detection only
+         3: Reception Error detected
+         Default: 0""",
+    )
+
+    set_percount_mode_parser.set_defaults(
+        func=lambda args: print(hci.percount_mode_vs(args.mode)),
+    )
 
     #### RESET TEST STATS PARSER ####
     reset_test_stats_parser = subparsers.add_parser(
@@ -1524,6 +1687,7 @@ Default: {hex(DEFAULT_CE_LEN)}""",
     )
     exit_parser.set_defaults(func=lambda _: sys.exit(EXIT_FUNC_MAGIC), which="exit")
 
+    #### LS PARSER ####
     ls_parser = subparsers.add_parser(
         "ls",
         help="List directory",
@@ -1534,6 +1698,8 @@ Default: {hex(DEFAULT_CE_LEN)}""",
     ls_parser.set_defaults(
         func=lambda args: [print(x) for x in os.listdir(args.ls_dir)]
     )
+
+    #### CD PARSER ####
     cd_parser = subparsers.add_parser(
         "cd",
         help="change working directory",
@@ -1542,6 +1708,7 @@ Default: {hex(DEFAULT_CE_LEN)}""",
     cd_parser.add_argument("dir")
     cd_parser.set_defaults(func=lambda args: os.chdir(args.dir))
 
+    #### PWD PARSER ####
     pwd_parser = subparsers.add_parser(
         "pwd",
         help="print working directory",
@@ -1549,7 +1716,7 @@ Default: {hex(DEFAULT_CE_LEN)}""",
     )
     pwd_parser.set_defaults(func=lambda args: print(os.getcwd()))
 
-    # Create the 'make' subparser
+    #### MAKE PARSER ####
     make_parser = subparsers.add_parser(
         "make",
         help="Run make",
@@ -1576,17 +1743,20 @@ Default: {hex(DEFAULT_CE_LEN)}""",
             commands = [command.strip() for command in commands if command != ""]
             _run_input_cmds(commands, terminal)
 
-    run_parser = subparsers.add_parser(
+    #### SHELL PARSER ####
+    shell_parser = subparsers.add_parser(
         "shell",
         help="run command via os shell",
         formatter_class=RawTextHelpFormatter,
     )
-    run_parser.add_argument("shellargs", nargs="+")
-    run_parser.set_defaults(func=lambda args: os.system(" ".join(args.shellargs)))
+    shell_parser.add_argument("shellargs", nargs="+")
+    shell_parser.set_defaults(func=lambda args: os.system(" ".join(args.shellargs)))
 
+    #### FLUSH PARSER ####
     flush_parser = subparsers.add_parser("flush", help="Flush serial port")
     flush_parser.set_defaults(func=lambda _: hci.port.flush())
 
+    #### RUN PARSER ####
     run_parser = subparsers.add_parser(
         "run",
         help="run command via os",

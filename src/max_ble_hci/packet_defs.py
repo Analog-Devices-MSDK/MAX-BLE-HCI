@@ -50,6 +50,7 @@
 #
 ##############################################################################
 """DOCSTRING"""
+
 from dataclasses import dataclass
 from enum import Enum
 
@@ -739,8 +740,23 @@ class VendorSpecificOCF(Enum):
     FGEN = 0x307
     """Function generator command."""
 
+    BT_RX_TEST = 0x70
+    """Bluetooth Classic receiver test"""
+
     BT_TX_TEST = 0x71
     """Bluetooth Classic transmitter test"""
+
+    BT_TEST_END = 0x72
+    """Bluetooth Classic test end"""
+
+    SET_INFINITE_TXRX = 0x77
+    """Set infinite test command"""
+
+    SET_PERCOUNT_MODE = 0x79
+    """Set percount mode command"""
+
+    TEST_ENDEX = 0x85
+    """LE VS test end with more metrics recorded"""
 
 
 @dataclass
